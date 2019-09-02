@@ -30,7 +30,10 @@ public class MainController {
     @ResponseBody
     public  String testDBConnection() {
         try {
-            return dataSource.getConnection().getClientInfo().toString();
+            if(dataSource.getConnection().isValid(10)){
+                return "Valid Connection";
+            }
+            return "Invalid Connection";
         } catch (SQLException e) {
             return e.getSQLState();
         }
