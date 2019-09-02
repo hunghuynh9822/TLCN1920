@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = {
   entry: {
-    vendor: ['semantic-ui-react'],
     material: ['@material-ui/core'],
     material_icons: ['@material-ui/icons']
   },
@@ -31,12 +30,6 @@ const config = {
           name: 'styles',
           test: /\.css$/,
           chunks: 'all',
-          enforce: true
-        },
-        vendor: {
-          chunks: 'initial',
-          test: 'vendor',
-          name: 'vendor',
           enforce: true
         },
         material: {
