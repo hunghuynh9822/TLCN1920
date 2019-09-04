@@ -7,13 +7,19 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 const ColorCircularProgress = withStyles({
     root: {
-        color: 'red',
+        color: 'rgba(0, 116, 194, 0.66)',
     },
 })(CircularProgress);
 
 const styles = theme => ({
     root: {
-        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        minHeight: '100vh',
     },
 });
 

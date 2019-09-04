@@ -25,18 +25,18 @@ import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
-import {TaskManagement} from "./views";
+import {
+  TaskManagement
+} from "./views";
 
-const dashboardRoutes = [
-  {
-    path: "/task",
-    name: "Task Management",
-    rtlName: "Quản lý Task",
-    icon: Dashboard,
-    component: TaskManagement,
-    layout: "",
-    breadcrumb: "TaskManagement"
-  },
-];
+const dashboardRoutes = [{
+  path: "",
+  name: "Task Management",
+  rtlName: "Quản lý Task",
+  icon: Dashboard,
+  component: TaskManagement,
+  layout: "/task",
+  breadcrumb: "TaskManagement"
+}, ];
 
 export default dashboardRoutes;

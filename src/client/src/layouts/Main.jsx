@@ -37,7 +37,7 @@ class Main extends Component {
             <Switch>
                 {
                     routes.map((prop, key) => {
-                        if (prop.layout === "") {
+                        if (prop.layout === "/task") {
                             return (
                                 <Route
                                     path={prop.layout + prop.path}
@@ -49,7 +49,6 @@ class Main extends Component {
                         return null;
                     })
                 }
-                <Redirect from="/" to="/task" />
             </Switch>
         );
     }
