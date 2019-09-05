@@ -11,7 +11,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 @SpringBootApplication
@@ -22,10 +21,9 @@ public class WorkmanagementApplication extends SpringBootServletInitializer {
     }
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    public void onStartup(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
         appContext.setConfigLocation(WorkmanagementApplication.class.getName());
-        appContext.register();
 
         // Dispatcher Servlet
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("SpringDispatcher",

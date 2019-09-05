@@ -18,6 +18,7 @@
         <java.version>1.8</java.version>
         <hiraki.pool.version>3.3.1</hiraki.pool.version>
         <postgresql.version>42.1.4</postgresql.version>
+        <log4j2.version>2.11.1</log4j2.version>
     </properties>
 
     <dependencies>
@@ -48,7 +49,6 @@
             <artifactId>jackson-core</artifactId>
             <version>2.9.2</version>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
@@ -58,7 +58,6 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
