@@ -5,4 +5,6 @@ import java.sql.SQLException;
 
 public interface DataSource {
     Connection getConnection() throws SQLException;
+    void closeConnection();
+    void rollback() throws SQLException;
 }
