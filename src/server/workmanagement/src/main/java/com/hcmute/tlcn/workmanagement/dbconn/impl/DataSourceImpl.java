@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.hcmute.tlcn.workmanagement.dbconn.DataSource;
-import com.zaxxer.hikari.pool.HikariProxyConnection;
-import org.postgresql.PGConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
