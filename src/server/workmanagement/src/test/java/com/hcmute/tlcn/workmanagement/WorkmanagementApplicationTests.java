@@ -2,6 +2,8 @@ package com.hcmute.tlcn.workmanagement;
 
 import com.hcmute.tlcn.workmanagement.common.SpringApplicationContext;
 import com.hcmute.tlcn.workmanagement.dao.EmployeeDao;
+import com.hcmute.tlcn.workmanagement.dao.RoleDao;
+import com.hcmute.tlcn.workmanagement.dao.impl.EmployeeDaoImpl;
 import com.hcmute.tlcn.workmanagement.model.Employee;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,10 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,12 +37,16 @@ public class WorkmanagementApplicationTests {
             Runnable worker = new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 0; i < 100; i++) {
-                        Employee employee = new Employee("Huỳnh", "Lê Hữu", "Hưng");
-                        if (employeeDao.createEmployee(employee)) {
-                            LOGGER.info("SUCCESS");
-                        } else {
-                            LOGGER.info("FAIL");
+                    for (int i = 0; i < 1; i++) {
+                        Employee employee = new Employee("tlcn1920", "tlcn1920@gmail.com", "tlcn1920");
+                        try {
+                            if (employeeDao.createEmployee(employee).isPresent()) {
+                                LOGGER.info("SUCCESS");
+                            } else {
+                                LOGGER.info("FAIL");
+                            }
+                        } catch (SQLException e) {
+                            LOGGER.info("FAIL ROLLBACK {}",e.getMessage());
                         }
                     }
                     latch.countDown();
@@ -50,5 +57,23 @@ public class WorkmanagementApplicationTests {
         latch.await();
         executor.shutdown();
         System.out.println("Finished all threads");
+    }
+
+    @Test
+    public void testInsertRole(){
+        RoleDao roleDao = SpringApplicationContext.getBean(RoleDao.class);
+        List<String> roleNames = Arrays.asList("ROLE_ADMIN","ROLE_EMPLOYEE");
+        for (String roleName : roleNames
+             ) {
+            try {
+                if (roleDao.createRole(roleName)) {
+                    LOGGER.info("SUCCESS");
+                } else {
+                    LOGGER.info("FAIL");
+                }
+            } catch (SQLException e) {
+                LOGGER.info("{}",e.getMessage());
+            }
+        }
     }
 }
