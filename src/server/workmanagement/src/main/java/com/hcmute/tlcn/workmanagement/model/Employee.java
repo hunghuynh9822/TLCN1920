@@ -15,14 +15,36 @@ public class Employee extends DateAudit {
     private Set<Role> roles = new HashSet<>();
 
     private String firstName;
-    private String lastName;
     private String middleName;
+    private String lastName;
 
     public Employee(String username,String email,String password) {
         super();
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    //Create employee
+    public Employee(String username, String email, String password, Set<Role> roles, String firstName, String middleName, String lastName) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+    }
+
+    public Employee(Long id, String username, String email, String password, Set<Role> roles, String firstName, String middleName, String lastName) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
     }
 
     public Long getId() {

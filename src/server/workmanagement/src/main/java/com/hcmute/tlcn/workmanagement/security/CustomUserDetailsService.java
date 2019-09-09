@@ -20,7 +20,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("Employee not found with username or email : " + usernameOrEmail)
                 );
-
         return UserPrincipal.create(employee);
     }
 

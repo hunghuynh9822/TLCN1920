@@ -18,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 
 @Configuration
 @EnableWebSecurity
@@ -55,6 +56,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    RememberMe
+//    @Bean
+//    public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
+//        PersistentTokenBasedRememberMeServices tokenBasedservice = new PersistentTokenBasedRememberMeServices(
+//                "remember-me", customUserDetailsService, tokenRepository);
+//        return tokenBasedservice;
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

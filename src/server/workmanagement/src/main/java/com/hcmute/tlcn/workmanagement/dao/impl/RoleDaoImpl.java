@@ -67,7 +67,7 @@ public class RoleDaoImpl extends BaseDao implements RoleDao {
             ps.setString(1,"%"+name+"%");
             ResultSet rs = ps.executeQuery();
             if(rs != null && rs.next()){
-                return Optional.of(new Role(rs.getLong(1),rs.getString(2),rs.getLong(3),rs.getLong(4)));
+                return Optional.of(new Role(rs.getInt(1),rs.getString(2),rs.getLong(3),rs.getLong(4)));
             }
             throw new SQLException("No result");
         }catch (SQLException ex){
@@ -86,7 +86,7 @@ public class RoleDaoImpl extends BaseDao implements RoleDao {
             ps.setLong(1,id);
             ResultSet rs = ps.executeQuery();
             if(rs != null && rs.next()){
-                return Optional.of(new Role(rs.getLong(1),rs.getString(2),rs.getLong(3),rs.getLong(4)));
+                return Optional.of(new Role(rs.getInt(1),rs.getString(2),rs.getLong(3),rs.getLong(4)));
             }
             throw new SQLException("No result");
         }catch (SQLException ex){
