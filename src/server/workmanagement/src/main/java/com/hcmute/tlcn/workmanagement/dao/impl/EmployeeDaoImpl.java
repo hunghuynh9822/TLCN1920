@@ -27,13 +27,13 @@ public class EmployeeDaoImpl extends BaseDao implements EmployeeDao {
 //    SELECT roles.id,roles.name,employees.* FROM employees INNER JOIN employee_roles ON employees.id = employee_id INNER JOIN roles ON roles.id = role_id
     private static String SQL_SELECT_ROLES_EMPLOYEE = "SELECT id,name FROM roles WHERE id in (SELECT role_id FROM employee_roles WHERE employee_id = ?);";
 
-    private static String SQL_SELECT_EXIST_EMPLOYEE_BY_EMAIL = "SELECET id FROM employees WHERE email = ?";
-    private static String SQL_SELECT_EXIST_EMPLOYEE_BY_USERNAME = "SELECET id FROM employees WHERE username = ?";
+    private static String SQL_SELECT_EXIST_EMPLOYEE_BY_EMAIL = "SELECT id FROM employees WHERE email = ?";
+    private static String SQL_SELECT_EXIST_EMPLOYEE_BY_USERNAME = "SELECT id FROM employees WHERE username = ?";
 
-    private static String SQL_SELECT_EMPLOYEE_BY_USERNAME = "SELECET id,username,password,email,first_name,middle_name,last_name FROM employees WHERE username = ?";
-    private static String SQL_SELECT_EMPLOYEE_BY_EMAIL = "SELECET id,username,password,email,first_name,middle_name,last_name FROM employees WHERE email = ?";
-    private static String SQL_SELECT_EMPLOYEE_BY_USERNAME_OR_EMAIL = "SELECET id,username,password,email,first_name,middle_name,last_name FROM employees WHERE username = ? OR email = ?";
-    private static String SQL_SELECT_EMPLOYEE_BY_ID = "SELECET id,username,password,email,first_name,middle_name,last_name FROM employees WHERE id = ?";
+    private static String SQL_SELECT_EMPLOYEE_BY_USERNAME = "SELECT id,username,password,email,first_name,middle_name,last_name FROM employees WHERE username = ?";
+    private static String SQL_SELECT_EMPLOYEE_BY_EMAIL = "SELECT id,username,password,email,first_name,middle_name,last_name FROM employees WHERE email = ?";
+    private static String SQL_SELECT_EMPLOYEE_BY_USERNAME_OR_EMAIL = "SELECT id,username,password,email,first_name,middle_name,last_name FROM employees WHERE username = ? OR email = ?";
+    private static String SQL_SELECT_EMPLOYEE_BY_ID = "SELECT id,username,password,email,first_name,middle_name,last_name FROM employees WHERE id = ?";
 
     @Autowired
     protected EmployeeDaoImpl(DataSource dataSource) {
@@ -110,32 +110,7 @@ public class EmployeeDaoImpl extends BaseDao implements EmployeeDao {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(SQL_SELECT_ALL_EMPLOYEE)){
             while (rs.next()) {
-                Long id = rs.getLong(1);
-                String username = rs.getString(2);
-                String password = "";
-                String email = rs.getString(4);
-                String first_name = rs.getNString(5);
-                String middle_name = rs.getNString(6);
-                String last_name = rs.getNString(7);
-                Set<Role> roles = new HashSet<>();
-                ResultSet resultSet = null;
-                try(PreparedStatement ps = conn.prepareStatement(SQL_SELECT_ROLES_EMPLOYEE)){
-                    ps.setLong(1,id);
-                    resultSet = ps.executeQuery();
-                    while (resultSet.next()){
-                        Role role = new Role(resultSet.getInt(1),resultSet.getString(2));
-                        roles.add(role);
-                    }
-                    if(roles.isEmpty()){
-                        throw new SQLException("Employee have no role");
-                    }
-                }catch (SQLException e){
-                    throw e;
-                }
-                finally {
-                    resultSet.close();
-                }
-                Employee employee = new Employee(id,username,email,password,roles,first_name,middle_name,last_name);
+                Employee employee = parseEmployee(conn,rs);
                 employeeList.add(employee);
             }
             return employeeList;
@@ -148,22 +123,22 @@ public class EmployeeDaoImpl extends BaseDao implements EmployeeDao {
 
     @Override
     public Optional<Employee> findByEmail(String email) {
-        return null;
+        return getEmployee(SQL_SELECT_EMPLOYEE_BY_EMAIL,email);
     }
 
     @Override
     public Optional<Employee> findByUsername(String username) {
-        return null;
+        return getEmployee(SQL_SELECT_EMPLOYEE_BY_USERNAME,username);
     }
 
     @Override
     public Optional<Employee> findByUsernameOrEmail(String username, String email) {
-        return null;
+        return getEmployee(SQL_SELECT_EMPLOYEE_BY_USERNAME_OR_EMAIL,username,email);
     }
 
     @Override
     public Optional<Employee> findById(Long id) {
-        return null;
+        return getEmployee(SQL_SELECT_EMPLOYEE_BY_ID,id);
     }
 
     private Optional<Employee> getEmployee(String sql,Object... args){
@@ -174,9 +149,7 @@ public class EmployeeDaoImpl extends BaseDao implements EmployeeDao {
             }
             ResultSet rs = ps.executeQuery();
             if(rs != null && rs.next()){
-                Long employeeId = rs.getLong(1);
-
-//                Employee employee = new Employee()
+                return Optional.of(parseEmployee(conn,rs));
             }
             throw new SQLException("No result");
         }catch (SQLException ex){
@@ -185,6 +158,35 @@ public class EmployeeDaoImpl extends BaseDao implements EmployeeDao {
         finally {
             this.dataSource.closeConnection();
         }
+    }
+
+    private Employee parseEmployee(Connection conn,ResultSet rs) throws SQLException {
+        Long id = rs.getLong(1);
+        String username = rs.getString(2);
+        String password = rs.getString(3);
+        String email = rs.getString(4);
+        String first_name = rs.getString(5);
+        String middle_name = rs.getString(6);
+        String last_name = rs.getString(7);
+        Set<Role> roles = new HashSet<>();
+        ResultSet resultSet = null;
+        try(PreparedStatement psRole = conn.prepareStatement(SQL_SELECT_ROLES_EMPLOYEE)){
+            psRole.setLong(1,id);
+            resultSet = psRole.executeQuery();
+            while (resultSet.next()){
+                Role role = new Role(resultSet.getInt(1),resultSet.getString(2));
+                roles.add(role);
+            }
+            if(roles.isEmpty()){
+                throw new SQLException("Employee have no role");
+            }
+        }catch (SQLException e){
+            throw e;
+        }
+        finally {
+            resultSet.close();
+        }
+        return new Employee(id,username,email,password,roles,first_name,middle_name,last_name);
     }
 
     @Override
