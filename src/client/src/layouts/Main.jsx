@@ -8,8 +8,8 @@ import classNames from "classnames";
 import Hidden from "@material-ui/core/Hidden";
 
 // creates a beautiful scrollbar
-import PerfectScrollbar from "perfect-scrollbar";
-import "perfect-scrollbar/css/perfect-scrollbar.css";
+// import PerfectScrollbar from "perfect-scrollbar";
+// import "perfect-scrollbar/css/perfect-scrollbar.css";
 // core components
 import { Navbar, Footer, Sidebar } from "../components";
 
@@ -65,42 +65,7 @@ class Main extends Component {
             changeToMobile();
         }
     };
-    // initialize and destroy the PerfectScrollbar plugin
-    componentDidMount() {
-        if (navigator.platform.indexOf("Win") > -1) {
-            ps = new PerfectScrollbar(this.mainPanel.current, {
-                suppressScrollX: true,
-                suppressScrollY: false
-            });
-            document.body.style.overflow = "hidden";
-        }
-        window.addEventListener("resize", this.resizeFunction);
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            if (navigator.platform.indexOf("Win") > -1) {
-                ps.destroy();
-            }
-            window.removeEventListener("resize", this.resizeFunction);
-        };
-    }
 
-    componentDidUpdate() {
-        if (navigator.platform.indexOf("Win") > -1) {
-            ps = new PerfectScrollbar(this.mainPanel.current, {
-                suppressScrollX: true,
-                suppressScrollY: false
-            });
-            document.body.style.overflow = "hidden";
-        }
-        window.addEventListener("resize", this.resizeFunction);
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            if (navigator.platform.indexOf("Win") > -1) {
-                ps.destroy();
-            }
-            window.removeEventListener("resize", this.resizeFunction);
-        };
-    }
     render() {
         // styles
         const { classes, ...rest } = this.props;
@@ -133,7 +98,9 @@ class Main extends Component {
                         </Hidden>
                         <Footer />
                     </div>
+
                 </div>
+
             </React.Fragment>
         );
     }

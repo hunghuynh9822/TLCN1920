@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 // core components
-import {Task, TaskContainer} from "../../components"
+import { Task, TaskContainer } from "../../components"
 
-import styles from "../../assets/jss/material-react/views/taskManagementStyle";
+import styles from "../../assets/jss/styles/views/taskManagementStyle";
 
 class TaskManagement extends Component {
     constructor(props) {
@@ -18,12 +18,12 @@ class TaskManagement extends Component {
             <React.Fragment>
                 <TaskContainer>
                     <Task />
+                    {/* <Task />
                     <Task />
                     <Task />
                     <Task />
                     <Task />
-                    <Task />
-                    <Task />
+                    <Task /> */}
                 </TaskContainer>
             </React.Fragment>
         );
