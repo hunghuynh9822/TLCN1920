@@ -18,12 +18,12 @@ class TaskManagement extends Component {
             <React.Fragment>
                 <TaskContainer>
                     <Task />
-                    {/* <Task />
                     <Task />
                     <Task />
                     <Task />
                     <Task />
-                    <Task /> */}
+                    <Task />
+                    <Task />
                 </TaskContainer>
             </React.Fragment>
         );

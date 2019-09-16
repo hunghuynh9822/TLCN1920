@@ -11,17 +11,16 @@ const config = {
     publicPath: '/'
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
       },
       {
-        test: /\.(ttf|eot|svg|gif|jpg|png)(\?[\s\S]+)?$/,
+        test: /\.(ttf|eot|svg|gif|jpg|png|woff)(\?[\s\S]+)?$/,
         use: 'file-loader'
       }
-  ]
+    ]
   },
   optimization: {
     splitChunks: {

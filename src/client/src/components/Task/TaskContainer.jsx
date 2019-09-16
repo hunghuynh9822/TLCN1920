@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
+import Slider from "react-slick";
+
 import { withStyles } from '@material-ui/core/styles';
+import classNames from "classnames";
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 
@@ -18,6 +22,9 @@ const styles = theme => ({
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
         transform: 'translateZ(0)',
     },
+    slider: {
+        width: '100%',
+    }
 });
 class TaskContainer extends Component {
     constructor(props) {
@@ -25,12 +32,24 @@ class TaskContainer extends Component {
     }
     render() {
         const { classes } = this.props;
+        const settings = {
+            className: classNames("center", classes.slider),
+            infinite: false,
+            centerPadding: "60px",
+            slidesToShow: 3,
+            swipeToSlide: true,
+            afterChange: function (index) {
+                console.log(
+                    `Slider Changed to: ${index + 1}, background: #222; color: #bada55`
+                );
+            }
+        };
         return (
             <React.Fragment>
                 <div className={classes.root}>
-                    <Grid container className={classes.gridList} spacing={2} direction="row" justify="flex-start">
+                    <Slider {...settings}>
                         {this.props.children}
-                    </Grid>
+                    </Slider>
                 </div>
             </React.Fragment>
         );
