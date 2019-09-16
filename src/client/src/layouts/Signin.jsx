@@ -16,7 +16,7 @@ import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../assets/jss/styles/layouts/signinStyles';
-import { Copyright } from '../components/index'
+import { Copyright } from '../components'
 class SignIn extends Component {
     constructor(props) {
         super(props);

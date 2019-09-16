@@ -30,20 +30,59 @@ class TaskContainer extends Component {
     constructor(props) {
         super(props);
     }
+
     render() {
         const { classes } = this.props;
         const settings = {
             className: classNames("center", classes.slider),
             infinite: false,
-            centerPadding: "40px",
+            centerPadding: "60px",
             slidesToShow: 3,
             swipeToSlide: true,
             adaptiveHeight: true,
             afterChange: function (index) {
                 console.log(
-                    `Slider Changed to: ${index + 1}, background: #222; color: #bada55`
+                    `Slider Changed to: ${index + 1}, ahihi`
                 );
-            }
+            },
+            responsive: [
+                {
+                    breakpoint: 1400,
+                    settings: {
+                        slidesToShow: 3,
+                    }
+                },
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 2.5,
+                    }
+                },
+                {
+                    breakpoint: 1050,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                },
+                {
+                    breakpoint: 950,
+                    settings: {
+                        slidesToShow: 2.5,
+                    }
+                },
+                {
+                    breakpoint: 800,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                },
+                {
+                    breakpoint: 650,
+                    settings: {
+                        slidesToShow: 1,
+                    }
+                }
+            ]
         };
         return (
             <React.Fragment>

@@ -24,9 +24,11 @@ const styles = theme => ({
         flexDirection: 'column',
         position: 'relative',
         display: 'flex',
+        marginLeft: '20px',
+        marginRight: '20px',
     },
     card: {
-        width: 275,
+        width: 'auto',
     },
     card_header: {
         backgroundColor: theme.color.background.blue,
