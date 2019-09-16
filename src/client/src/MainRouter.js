@@ -18,11 +18,18 @@ class MainRouter extends Component {
         LoadingComponent: Loading
       }
     );
+    const AsyncSignIn = importedComponent(
+      () => import(/* webpackChunkName:'signin' */ './layouts/Signin.jsx'),
+      {
+        LoadingComponent: Loading
+      }
+    );
     return (
       <React.Fragment>
         <Switch>
           <Route exact path="/task" component={AsyncMain} />
           <Route exact path="/" render={() => <Redirect to="/task" />} />
+          <Route exact path="/signin" component={AsyncSignIn} />
           <Route component={AsyncNoMatch} />
         </Switch>
       </React.Fragment>

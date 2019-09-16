@@ -7,7 +7,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 const ColorCircularProgress = withStyles({
     root: {
-        color: 'rgba(0, 116, 194, 0.66)',
+        color: '#00acc1',
     },
 })(CircularProgress);
 
