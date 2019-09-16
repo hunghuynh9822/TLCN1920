@@ -44,7 +44,7 @@ class EmployeeManagement extends Component {
                                 resolve();
                                 const data = [...this.state.data];
                                 data.push(newData);
-                                setState({ ...this.state, data });
+                                this.setState({ ...this.state, data });
                             }, 600);
                         }),
                     onRowUpdate: (newData, oldData) =>
@@ -53,7 +53,7 @@ class EmployeeManagement extends Component {
                                 resolve();
                                 const data = [...this.state.data];
                                 data[data.indexOf(oldData)] = newData;
-                                setState({ ...this.state, data });
+                                this.setState({ ...this.state, data });
                             }, 600);
                         }),
                     onRowDelete: oldData =>
@@ -62,7 +62,7 @@ class EmployeeManagement extends Component {
                                 resolve();
                                 const data = [...this.state.data];
                                 data.splice(data.indexOf(oldData), 1);
-                                setState({ ...this.state, data });
+                                this.setState({ ...this.state, data });
                             }, 600);
                         }),
                 }}

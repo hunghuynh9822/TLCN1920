@@ -37,7 +37,8 @@ const appStyle = theme => ({
         minHeight: "calc(100vh - 123px)"
     },
     contentClose: {
-        paddingLeft: "65px",
+        marginLeft: "65px",
+        paddingLeft: "10px",
     },
     container,
     map: {
