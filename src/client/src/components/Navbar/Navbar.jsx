@@ -20,7 +20,7 @@ import styles from "../../assets/jss/material-react/components/headerStyle";
 class Navbar extends Component {
     constructor(props) {
         super(props);
-
+        
     }
     makeBrand() {
         var name;

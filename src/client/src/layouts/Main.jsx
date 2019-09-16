@@ -37,7 +37,7 @@ class Main extends Component {
             <Switch>
                 {
                     routes.map((prop, key) => {
-                        if (prop.layout === "/task") {
+                        if (prop.layout === "/") {
                             return (
                                 <Route
                                     path={prop.layout + prop.path}

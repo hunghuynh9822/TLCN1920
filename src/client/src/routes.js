@@ -26,17 +26,25 @@ import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import {
-  TaskManagement
+  TaskManagement,EmployeeManagement
 } from "./views";
 
 const dashboardRoutes = [{
-  path: "",
+  path: "task",
   name: "Task Management",
   rtlName: "Quản lý Task",
   icon: Dashboard,
   component: TaskManagement,
-  layout: "/task",
+  layout: "/",
   breadcrumb: "TaskManagement"
-}, ];
+}, {
+  path: "human",
+  name: "Human Resources",
+  rtlName: "Nhân sự",
+  icon: Person,
+  component: EmployeeManagement,
+  layout: "/",
+  breadcrumb: "HumanResources"
+}];
 
 export default dashboardRoutes;
