@@ -25,6 +25,9 @@ const headerLinksStyle = theme => ({
       }
     }
   },
+  inputSearch:{
+    color:"#FFF"
+  },
   linkText: {
     zIndex: "4",
     ...defaultFont,

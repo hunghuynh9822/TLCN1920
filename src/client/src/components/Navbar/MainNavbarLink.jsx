@@ -70,9 +70,13 @@ class MainNavbarLink extends Component {
                             className: classes.margin + " " + classes.search
                         }}
                         inputProps={{
+                            // className: classes.inputSearch,
                             placeholder: "Search",
                             inputProps: {
-                                "aria-label": "Search"
+                                "aria-label": "Search",
+                            },
+                            style: {
+                                color: "#FFF",
                             }
                         }}
                     />

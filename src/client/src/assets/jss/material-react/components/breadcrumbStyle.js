@@ -1,3 +1,7 @@
+import {
+    whiteColor,
+    hexToRgb
+  } from "../../material-react.js";
 const breadcrumbStyle = theme => ({
     root: {
         paddingLeft: "15px",
@@ -5,12 +9,19 @@ const breadcrumbStyle = theme => ({
     },
     homeCrumb: {
         fontSize: "medium",
+        textDecoration: "none",
+        color: whiteColor,
     },
     bodycrumb: {
         fontSize: "medium",
+        color: whiteColor,
     },
     lastCrumb: {
         fontSize: "medium",
+        color: whiteColor,
+    },
+    iconNext: {
+        color: whiteColor,
     }
 });
 export default breadcrumbStyle;

@@ -17,10 +17,12 @@ import { CustomButton, MainNavbarLink, RouterBreadcrumbs } from "../"
 
 import styles from "../../assets/jss/material-react/components/headerStyle";
 
+import bgImage from "../../assets/img/navbar.jpg"
+
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        
+
     }
     makeBrand() {
         var name;
@@ -60,8 +62,6 @@ class Navbar extends Component {
                             </IconButton>
                         </Hidden>
                         <RouterBreadcrumbs />
-                        {/* Here we create navbar brand, based on route name */}
-
                     </div>
                     <Hidden smDown implementation="css">
                         <MainNavbarLink />
@@ -75,6 +75,10 @@ class Navbar extends Component {
                             <Menu />
                         </IconButton>
                     </Hidden>
+                    <div
+                        className={classes.background}
+                        style={{ backgroundImage: "url(" + bgImage + ")" }}
+                    />
                 </Toolbar>
             </AppBar>
         );

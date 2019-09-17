@@ -20,8 +20,8 @@ class Breadcrumb extends Component {
         const pathnames = window.location.pathname.split('/').filter(x => x);
         return (
             <div style={{ float: "left" }}>
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="inherit" />} aria-label="breadcrumb" className={classes.root}>
-                    <Link color="inherit" to="/" style={{ textDecoration: "none" }}>
+                <Breadcrumbs separator={<NavigateNextIcon className={classes.iconNext} fontSize="inherit"/>} aria-label="breadcrumb" className={classes.root}>
+                    <Link color="inherit" to="/" className={classes.homeCrumb}>
                         Home
                 </Link>
                     {pathnames.map((value, index) => {
