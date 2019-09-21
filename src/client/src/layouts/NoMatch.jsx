@@ -4,25 +4,8 @@ import Link from '@material-ui/core/Link';
 
 import styles from '../assets/css/notfound.css';
 
-<<<<<<< HEAD
-const stylesTest = theme => ({
-  "notfound__notfound": {
-    "position": "absolute",
-    "left": "50%",
-    "top": "50%",
-    "WebkitTransform": "translate(-50%, -50%)",
-    "MsTransform": "translate(-50%, -50%)",
-    "transform": "translate(-50%, -50%)"
-  },
-});
-
-class NoMatch extends Component {
-  render() {
-    const { classes } = this.props;
-=======
 class NoMatch extends Component{
   render(){
->>>>>>> parent of aea8542... test convert style
     return (
       <div id={styles.notfound}>
         <div className={styles.notfound}>
