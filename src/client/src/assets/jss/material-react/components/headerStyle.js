@@ -47,8 +47,8 @@ const headerStyle = (theme) => ({
       height: "100%",
       content: '""',
       display: "block",
-      background: blackColor,
-      opacity: ".8"
+      // background: blackColor,
+      // opacity: ".8"
     }
   },
   appBarShift: {

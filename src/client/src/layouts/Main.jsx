@@ -28,7 +28,7 @@ class Main extends Component {
         this.mainPanel = React.createRef();
         this.state = ({
             image: bgImage,
-            color: 'blue',
+            color: 'purple',
             fixedClasses: 'dropdown show',
         });
     }

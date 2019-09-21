@@ -77,7 +77,8 @@ class Navbar extends Component {
                     </Hidden>
                     <div
                         className={classes.background}
-                        style={{ backgroundImage: "url(" + bgImage + ")" }}
+                        // style={{ backgroundImage: "url(" + bgImage + ")" }}
+                        style={{ backgroundColor: '#344081' }}
                     />
                 </Toolbar>
             </AppBar>

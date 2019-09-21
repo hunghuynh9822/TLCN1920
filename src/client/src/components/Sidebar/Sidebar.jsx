@@ -138,7 +138,8 @@ class Sidebar extends Component {
                         {image !== undefined ? (
                             <div
                                 className={classes.background}
-                                style={{ backgroundImage: "url(" + image + ")" }}
+                                // style={{ backgroundImage: "url(" + image + ")" }}
+                                style={{backgroundColor: '#0F1642'}}
                             />
                         ) : null}
                     </Drawer>
@@ -165,7 +166,8 @@ class Sidebar extends Component {
                         {image !== undefined ? (
                             <div
                                 className={classes.background}
-                                style={{ backgroundImage: "url(" + image + ")" }}
+                                // style={{ backgroundImage: "url(" + image + ")" }}
+                                style={{backgroundColor: '#0F1642'}}
                             />
                         ) : null}
                     </Drawer>
