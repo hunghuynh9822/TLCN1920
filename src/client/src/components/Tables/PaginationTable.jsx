@@ -31,6 +31,29 @@ const styles = theme => ({
     }
 });
 
+
+const StyledTableCell = withStyles(theme => ({
+    // head: {
+    //     backgroundColor: theme.palette.common.black,
+    //     color: 'inherit',
+    // },
+    body: {
+        color: 'inherit',
+        fontSize: 14,
+    },
+}))(TableCell);
+
+
+const StyledTableRow = withStyles(theme => ({
+    root: {
+        // backgroundColor: 'red',
+        '&:nth-of-type(odd)': {
+            backgroundColor: 'blue',
+            color: 'white'
+        },
+    },
+}))(TableRow);
+
 // function createData(name, calories, fat) {
 //     return { name, calories, fat };
 // }
@@ -153,16 +176,16 @@ class PaginationTable extends Component {
                                 //     <TableCell align="right">{row.calories}</TableCell>
                                 //     <TableCell align="right">{row.fat}</TableCell>
                                 // </TableRow>
-                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                <StyledTableRow role="checkbox" tabIndex={-1} key={row.code}>
                                     {columns.map(column => {
                                         const value = row[column.id];
                                         return (
-                                            <TableCell key={column.id} align={column.align}>
+                                            <StyledTableCell key={column.id} align={column.align}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
-                                            </TableCell>
+                                            </StyledTableCell>
                                         );
                                     })}
-                                </TableRow>
+                                </StyledTableRow>
                             ))}
                             {/* {emptyRows > 0 && (
                                 <TableRow style={{ height: 48 * emptyRows }}>
