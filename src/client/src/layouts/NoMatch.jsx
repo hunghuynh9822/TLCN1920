@@ -2,10 +2,18 @@ import React, { Component } from 'react';
 
 import Link from '@material-ui/core/Link';
 
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+
 import styles from '../assets/css/notfound.css';
 
-class NoMatch extends Component{
-  render(){
+const stylesTest = theme => ({
+
+});
+
+class NoMatch extends Component {
+  render() {
+    const { classes } = this.props;
     return (
       <div id={styles.notfound}>
         <div className={styles.notfound}>
@@ -20,4 +28,7 @@ class NoMatch extends Component{
     );
   }
 }
-export default NoMatch;
+NoMatch.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+export default withStyles(stylesTest)(NoMatch);
