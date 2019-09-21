@@ -26,6 +26,7 @@ const styles = theme => ({
         display: 'flex',
         marginLeft: '20px',
         marginRight: '20px',
+        marginBottom: '10px',
     },
     card: {
         width: 'auto',
