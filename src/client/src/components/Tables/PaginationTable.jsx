@@ -25,7 +25,8 @@ const styles = theme => ({
         overflowX: 'auto',
     },
     stickyHeader: {
-        backgroundColor: "#fff",
+        backgroundColor: '#978cfc',
+        color: 'white',
         position: "sticky",
         top: 0,
     }
@@ -46,7 +47,6 @@ const StyledTableCell = withStyles(theme => ({
 
 const StyledTableRow = withStyles(theme => ({
     root: {
-        // backgroundColor: 'red',
         '&:nth-of-type(odd)': {
             backgroundColor: 'blue',
             color: 'white'
@@ -176,16 +176,16 @@ class PaginationTable extends Component {
                                 //     <TableCell align="right">{row.calories}</TableCell>
                                 //     <TableCell align="right">{row.fat}</TableCell>
                                 // </TableRow>
-                                <StyledTableRow role="checkbox" tabIndex={-1} key={row.code}>
+                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                     {columns.map(column => {
                                         const value = row[column.id];
                                         return (
-                                            <StyledTableCell key={column.id} align={column.align}>
+                                            <TableCell key={column.id} align={column.align}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
-                                            </StyledTableCell>
+                                            </TableCell>
                                         );
                                     })}
-                                </StyledTableRow>
+                                </TableRow>
                             ))}
                             {/* {emptyRows > 0 && (
                                 <TableRow style={{ height: 48 * emptyRows }}>
