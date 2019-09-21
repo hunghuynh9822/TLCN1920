@@ -27,6 +27,7 @@ class MainRouter extends Component {
     return (
       <React.Fragment>
         <Switch>
+          <Route exact path="/abc" component={AsyncMain} />
           <Route exact path="/task" component={AsyncMain} />
           <Route exact path="/human" component={AsyncMain} />
           <Route exact path="/" render={() => <Redirect to="/task" />} />

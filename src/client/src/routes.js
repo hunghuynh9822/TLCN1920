@@ -45,6 +45,15 @@ const dashboardRoutes = [{
   component: EmployeeManagement,
   layout: "/",
   breadcrumb: "HumanResources"
+},
+{
+  path: "abc",
+  name: "Abc",
+  rtlName: "Nhân sự",
+  icon: Person,
+  component: EmployeeManagement,
+  layout: "/",
+  breadcrumb: "HumanResources"
 }];
 
 export default dashboardRoutes;
