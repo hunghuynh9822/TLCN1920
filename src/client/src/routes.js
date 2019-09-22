@@ -30,29 +30,20 @@ import {
 } from "./views";
 
 const dashboardRoutes = [{
-  path: "task",
+  path: "",
   name: "Task Management",
   rtlName: "Quản lý Task",
   icon: Dashboard,
   component: TaskManagement,
-  layout: "/",
+  layout: "/staff",
   breadcrumb: "TaskManagement"
 }, {
-  path: "human",
+  path: "",
   name: "Human Resources",
   rtlName: "Nhân sự",
   icon: Person,
   component: EmployeeManagement,
-  layout: "/",
-  breadcrumb: "HumanResources"
-},
-{
-  path: "abc",
-  name: "Abc",
-  rtlName: "Nhân sự",
-  icon: Person,
-  component: EmployeeManagement,
-  layout: "/",
+  layout: "/hr",
   breadcrumb: "HumanResources"
 }];
 

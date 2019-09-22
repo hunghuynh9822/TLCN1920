@@ -21,7 +21,7 @@ import bgImage from "../assets/img/sidebar-2.jpg";
 import logo from "../assets/img/reactlogo.png";
 
 let ps;
-
+const curLayout = "/staff";
 class Main extends Component {
     constructor(props) {
         super(props);
@@ -37,7 +37,7 @@ class Main extends Component {
             <Switch>
                 {
                     routes.map((prop, key) => {
-                        if (prop.layout === "/") {
+                        if (prop.layout === curLayout) {
                             return (
                                 <Route
                                     path={prop.layout + prop.path}
@@ -49,6 +49,7 @@ class Main extends Component {
                         return null;
                     })
                 }
+                <Redirect to={curLayout} />
             </Switch>
         );
     }
@@ -70,11 +71,13 @@ class Main extends Component {
         // styles
         const { classes, ...rest } = this.props;
         const { mobileOpen, desktopOpen } = this.props;
+        const curRoutes = routes.filter(route => route.layout === "/staff")
+        console.log(curRoutes);
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>
                     <Sidebar
-                        routes={routes}
+                        routes={curRoutes}
                         logoText={"TLCN"}
                         logo={logo}
                         image={this.state.image}
@@ -83,7 +86,7 @@ class Main extends Component {
                     />
                     <div className={classNames(classes.mainPanel, { [" " + classes.mainPanelOpen]: this.props.desktopOpen })} ref={this.mainPanel}>
                         <Navbar
-                            routes={routes}
+                            routes={curRoutes}
                             {...rest}
                         />
                         <Hidden smDown implementation="css">

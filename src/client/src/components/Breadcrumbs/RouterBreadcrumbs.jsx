@@ -28,7 +28,8 @@ class Breadcrumb extends Component {
                         const last = index === pathnames.length - 1;
                         const to = `/${pathnames.slice(0, index + 1).join('/')}`;
                         var prop = routes.filter((prop) => {
-                            let path = prop.path === ""? prop.layout : prop.layout + prop.path;
+                            let path = prop.layout + prop.path;
+                            console.log("path "+path+" to "+to);
                             return path === to;
                         });
                         return last ? (
