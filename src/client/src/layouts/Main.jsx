@@ -40,6 +40,7 @@ class Main extends Component {
                         if (prop.layout === curLayout) {
                             return (
                                 <Route
+                                    exact
                                     path={prop.layout + prop.path}
                                     component={prop.component}
                                     key={key}
@@ -71,8 +72,7 @@ class Main extends Component {
         // styles
         const { classes, ...rest } = this.props;
         const { mobileOpen, desktopOpen } = this.props;
-        const curRoutes = routes.filter(route => route.layout === "/staff")
-        console.log(curRoutes);
+        const curRoutes = routes.filter(route => route.layout === curLayout)
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>
@@ -101,9 +101,7 @@ class Main extends Component {
                         </Hidden>
                         <Footer />
                     </div>
-
                 </div>
-
             </React.Fragment>
         );
     }

@@ -28,7 +28,8 @@ class Sidebar extends Component {
         const { handleDrawerToggleMobile, handleDrawerToggleDesktop, drawerToggleDesktopClose } = this.props;
         // verifies if routeName is the one active (in browser input)
         function activeRoute(routeName) {
-            return window.location.href.indexOf(routeName) > -1 ? true : false;
+            console.log("activeRoute "+window.location.pathname)
+            return window.location.pathname === routeName ? true : false;
         }
         const { color, logo, image, logoText, routes } = this.props;
         var links = (

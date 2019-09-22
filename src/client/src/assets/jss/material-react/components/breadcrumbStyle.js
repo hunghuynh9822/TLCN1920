@@ -14,10 +14,12 @@ const breadcrumbStyle = theme => ({
     },
     bodycrumb: {
         fontSize: "medium",
+        textDecoration: "none",
         color: whiteColor,
     },
     lastCrumb: {
         fontSize: "medium",
+        textDecoration: "none",
         color: whiteColor,
     },
     iconNext: {

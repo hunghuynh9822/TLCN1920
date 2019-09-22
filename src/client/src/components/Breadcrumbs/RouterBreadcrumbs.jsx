@@ -16,22 +16,26 @@ class Breadcrumb extends Component {
     }
     render() {
         const { classes } = this.props;
-        console.log(window.location.pathname);
         const pathnames = window.location.pathname.split('/').filter(x => x);
         return (
             <div style={{ float: "left" }}>
-                <Breadcrumbs separator={<NavigateNextIcon className={classes.iconNext} fontSize="inherit"/>} aria-label="breadcrumb" className={classes.root}>
-                    <Link color="inherit" to="/" className={classes.homeCrumb}>
-                        Home
-                </Link>
+                <Breadcrumbs separator={<NavigateNextIcon className={classes.iconNext} fontSize="inherit" />} aria-label="breadcrumb" className={classes.root}>
                     {pathnames.map((value, index) => {
+                        if (index === 0) {
+                            return (
+                                <Link color="inherit" to="/" className={classes.homeCrumb}>
+                                    Home
+                                </Link>
+                            );
+                        }
                         const last = index === pathnames.length - 1;
                         const to = `/${pathnames.slice(0, index + 1).join('/')}`;
                         var prop = routes.filter((prop) => {
                             let path = prop.layout + prop.path;
-                            console.log("path "+path+" to "+to);
+                            console.log("path " + path + " to " + to);
                             return path === to;
                         });
+                        console.log(prop);
                         return last ? (
                             <Typography color="textPrimary" key={to} className={classes.lastCrumb}>
                                 {prop[0].breadcrumb}

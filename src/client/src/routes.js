@@ -24,9 +24,11 @@ import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
-// core components/views for Admin layout
 import {
-  TaskManagement,EmployeeManagement
+  TaskManagement,
+  EmployeeManagement,
+  Request,
+  Notification
 } from "./views";
 
 const dashboardRoutes = [{
@@ -38,6 +40,22 @@ const dashboardRoutes = [{
   layout: "/staff",
   breadcrumb: "TaskManagement"
 }, {
+  path: "/request",
+  name: "Request",
+  rtlName: "Xin phép nghỉ",
+  icon: LibraryBooks,
+  component: Request,
+  layout: "/staff",
+  breadcrumb: "Request"
+}, {
+  path: "/notification",
+  name: "Notification",
+  rtlName: "Thông báo",
+  icon: Notifications,
+  component: Notification,
+  layout: "/staff",
+  breadcrumb: "Notification"
+}, {
   path: "",
   name: "Human Resources",
   rtlName: "Nhân sự",
@@ -45,6 +63,22 @@ const dashboardRoutes = [{
   component: EmployeeManagement,
   layout: "/hr",
   breadcrumb: "HumanResources"
+}, {
+  path: "/request",
+  name: "Request",
+  rtlName: "Xin phép nghỉ",
+  icon: LibraryBooks,
+  component: Request,
+  layout: "/hr",
+  breadcrumb: "Request"
+}, {
+  path: "/notification",
+  name: "Notification",
+  rtlName: "Thông báo",
+  icon: Notifications,
+  component: Notification,
+  layout: "/hr",
+  breadcrumb: "Notification"
 }];
 
 export default dashboardRoutes;
