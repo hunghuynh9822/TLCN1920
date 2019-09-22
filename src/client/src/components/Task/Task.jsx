@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
-const styles = theme => ({ 
-    "checked": { "color": "orange" }, 
-    "fa": { "fontSize": "10px", "width": "5px" },
-    "root":{
-        "padding":"10px"
+import classNames from "classnames";
+const styles = theme => ({
+    "checked": { "color": "orange" },
+    "fa": { "fontSize": "10px" },
+    "root": {
+        "padding": "10px"
     }
 });
 class Task extends Component {
@@ -18,6 +18,8 @@ class Task extends Component {
     }
     render() {
         const { classes } = this.props;
+        const fa_star_checked = classNames("fa", "fa-star", classes.fa, classes.checked);
+        const fa_star = classNames("fa", "fa-star", classes.fa);
         return (
             <div className={classes.root}>
                 <ul className="list-group">
@@ -43,11 +45,11 @@ class Task extends Component {
                                 </div>
                             </div>
                             <div className="col-4" style={{ float: 'right' }}>
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star" />
-                                <span className="fa fa-star" />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star} />
+                                <span className={fa_star} />
                             </div>
                         </div>
                     </li>
@@ -61,11 +63,11 @@ class Task extends Component {
                                 </div>
                             </div>
                             <div className="col-4" style={{ float: 'right' }}>
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star" />
-                                <span className="fa fa-star" />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star} />
+                                <span className={fa_star} />
                             </div>
                         </div>
                     </li>
@@ -80,11 +82,11 @@ class Task extends Component {
                                 </div>
                             </div>
                             <div className="col-4" style={{ float: 'right' }}>
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star checked" />
-                                <span className="fa fa-star" />
-                                <span className="fa fa-star" />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star_checked} />
+                                <span className={fa_star} />
+                                <span className={fa_star} />
                             </div>
                         </div>
                     </li>
