@@ -21,7 +21,6 @@ import bgImage from "../assets/img/sidebar-2.jpg";
 import logo from "../assets/img/reactlogo.png";
 
 let ps;
-const curLayout = "/staff";
 class Main extends Component {
     constructor(props) {
         super(props);
@@ -32,7 +31,7 @@ class Main extends Component {
             fixedClasses: 'dropdown show',
         });
     }
-    switchRoutes = () => {
+    switchRoutes = (curLayout) => {
         return (
             <Switch>
                 {
@@ -71,8 +70,12 @@ class Main extends Component {
     render() {
         // styles
         const { classes, ...rest } = this.props;
+        const { match, history } = this.props;
+        const curLayout = match.url;
         const { mobileOpen, desktopOpen } = this.props;
         const curRoutes = routes.filter(route => route.layout === curLayout)
+        console.log(match);
+        console.log(history);
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>
@@ -91,12 +94,12 @@ class Main extends Component {
                         />
                         <Hidden smDown implementation="css">
                             <div className={classNames(classes.content, { [" " + classes.contentClose]: !this.props.desktopOpen && this.props.mode === 'desktop' })}>
-                                <div className={classes.container}>{this.switchRoutes()}</div>
+                                <div className={classes.container}>{this.switchRoutes(curLayout)}</div>
                             </div>
                         </Hidden>
                         <Hidden mdUp implementation="css">
                             <div className={classes.content}>
-                                <div className={classes.container}>{this.switchRoutes()}</div>
+                                <div className={classes.container}>{this.switchRoutes(curLayout)}</div>
                             </div>
                         </Hidden>
                         <Footer />

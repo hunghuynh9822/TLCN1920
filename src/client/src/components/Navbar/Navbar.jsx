@@ -61,7 +61,7 @@ class Navbar extends Component {
                                 <MenuIcon />
                             </IconButton>
                         </Hidden>
-                        <RouterBreadcrumbs />
+                        <RouterBreadcrumbs routes={this.props.routes}/>
                     </div>
                     <Hidden smDown implementation="css">
                         <MainNavbarLink />

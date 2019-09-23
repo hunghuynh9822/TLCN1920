@@ -21,9 +21,9 @@ class Footer extends Component {
                     <div className={classes.left}>
                         Demo content
                     </div>
-                    <p className={classes.right}>
+                    <div className={classes.right}>
                         <Copyright/>
-                    </p>
+                    </div>
                 </div>
             </footer>
         );

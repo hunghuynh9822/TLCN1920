@@ -101,15 +101,8 @@ class PaginationTable extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
-                                // <TableRow key={row.name}>
-                                //     <TableCell component="th" scope="row">
-                                //         {row.name}
-                                //     </TableCell>
-                                //     <TableCell align="right">{row.calories}</TableCell>
-                                //     <TableCell align="right">{row.fat}</TableCell>
-                                // </TableRow>
-                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
+                                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                     {columns.map(column => {
                                         const value = row[column.id];
                                         return (
@@ -120,11 +113,6 @@ class PaginationTable extends Component {
                                     })}
                                 </TableRow>
                             ))}
-                            {/* {emptyRows > 0 && (
-                                <TableRow style={{ height: 48 * emptyRows }}>
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )} */}
                         </TableBody>
                     </Table>
                 </div>

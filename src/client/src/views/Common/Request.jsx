@@ -33,7 +33,6 @@ class Request extends Component {
         const { classes } = this.props;
         return (
             <React.Fragment>
-                Request
                 <PaginationTable columns={columns} rows={rows} />
             </React.Fragment>
         );
