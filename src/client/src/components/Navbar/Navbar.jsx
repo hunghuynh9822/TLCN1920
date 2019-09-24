@@ -53,10 +53,10 @@ class Navbar extends Component {
                         <Hidden smDown className={classes.hidden}>
                             <IconButton
                                 edge="start"
-                                color="inherit"
                                 aria-label="open drawer"
                                 onClick={handleDrawerToggleDesktop}
                                 className={classes.menuButton + iconMenuClasses}
+                                style={{color:"white"}}
                             >
                                 <MenuIcon />
                             </IconButton>
@@ -68,9 +68,9 @@ class Navbar extends Component {
                     </Hidden>
                     <Hidden mdUp implementation="css">
                         <IconButton
-                            color="inherit"
                             aria-label="open drawer"
                             onClick={handleDrawerToggleMobile}
+                            style={{color:"white"}}
                         >
                             <Menu />
                         </IconButton>
