@@ -28,24 +28,17 @@ class Sidebar extends Component {
         const { handleDrawerToggleMobile, handleDrawerToggleDesktop, drawerToggleDesktopClose } = this.props;
         // verifies if routeName is the one active (in browser input)
         function activeRoute(routeName) {
-            return window.location.href.indexOf(routeName) > -1 ? true : false;
+            console.log("activeRoute "+window.location.pathname)
+            return window.location.pathname === routeName ? true : false;
         }
         const { color, logo, image, logoText, routes } = this.props;
         var links = (
             <List className={classes.list}>
                 {routes.map((prop, key) => {
                     var activePro = " ";
-                    var listItemClasses;
-                    if (prop.path === "/upgrade-to-pro") {
-                        activePro = classes.activePro + " ";
-                        listItemClasses = classNames({
-                            [" " + classes[color]]: true
-                        });
-                    } else {
-                        listItemClasses = classNames({
+                    var listItemClasses = classNames({
                             [" " + classes[color]]: activeRoute(prop.layout + prop.path)
                         });
-                    }
                     const whiteFontClasses = classNames({
                         [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path)
                     });
@@ -138,7 +131,8 @@ class Sidebar extends Component {
                         {image !== undefined ? (
                             <div
                                 className={classes.background}
-                                style={{ backgroundImage: "url(" + image + ")" }}
+                                // style={{ backgroundImage: "url(" + image + ")" }}
+                                style={{backgroundColor: '#0F1642'}}
                             />
                         ) : null}
                     </Drawer>
@@ -165,7 +159,8 @@ class Sidebar extends Component {
                         {image !== undefined ? (
                             <div
                                 className={classes.background}
-                                style={{ backgroundImage: "url(" + image + ")" }}
+                                // style={{ backgroundImage: "url(" + image + ")" }}
+                                style={{backgroundColor: '#0F1642'}}
                             />
                         ) : null}
                     </Drawer>

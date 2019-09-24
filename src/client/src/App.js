@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from "history";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'

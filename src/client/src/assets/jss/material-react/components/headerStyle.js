@@ -9,6 +9,7 @@ import {
   dangerColor,
   whiteColor,
   grayColor,
+  blackColor,
   drawerWidth
 } from "../../material-react";
 const headerStyle = (theme) => ({
@@ -26,8 +27,29 @@ const headerStyle = (theme) => ({
     borderRadius: "0 !important",
     padding: "0 !important",
     transition: "all 150ms ease 0s",
-    minHeight: "50px",
+    minHeight: "54px",
     display: "block"
+  },
+  background: {
+    position: "absolute",
+    zIndex: "-1",
+    height: "100%",
+    width: "100%",
+    display: "block",
+    top: "0",
+    left: "0",
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
+    "&:after": {
+      position: "absolute",
+      zIndex: "3",
+      width: "100%",
+      height: "100%",
+      content: '""',
+      display: "block",
+      // background: blackColor,
+      // opacity: ".8"
+    }
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -51,7 +73,7 @@ const headerStyle = (theme) => ({
   },
   container: {
     ...container,
-    minHeight: "50px"
+    minHeight: "54px"
   },
   flex: {
     flex: 1

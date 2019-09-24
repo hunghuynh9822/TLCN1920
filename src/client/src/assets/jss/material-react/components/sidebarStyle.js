@@ -61,7 +61,7 @@ const sidebarStyle = theme => ({
       width: "68px",
     },
   },
-  hidden:{
+  hidden: {
     display: "inline !important",
   },
   toolbarIcon: {
@@ -157,8 +157,8 @@ const sidebarStyle = theme => ({
       height: "100%",
       content: '""',
       display: "block",
-      background: blackColor,
-      opacity: ".8"
+      // background: blackColor,
+      // opacity: ".8"
     }
   },
   list: {
@@ -219,10 +219,10 @@ const sidebarStyle = theme => ({
     color: whiteColor
   },
   purple: {
-    backgroundColor: primaryColor[0],
+    backgroundColor: primaryColor[4],
     ...primaryBoxShadow,
     "&:hover,&:focus": {
-      backgroundColor: primaryColor[0],
+      backgroundColor: primaryColor[4],
       ...primaryBoxShadow
     }
   },

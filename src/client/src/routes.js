@@ -24,19 +24,61 @@ import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
-// core components/views for Admin layout
-import {TaskManagement} from "./views";
+import {
+  TaskManagement,
+  EmployeeManagement,
+  Request,
+  Notification
+} from "./views";
 
-const dashboardRoutes = [
-  {
-    path: "/task",
-    name: "Task Management",
-    rtlName: "Quản lý Task",
-    icon: Dashboard,
-    component: TaskManagement,
-    layout: "",
-    breadcrumb: "TaskManagement"
-  },
-];
+const dashboardRoutes = [{
+  path: "",
+  name: "Task Management",
+  rtlName: "Quản lý Task",
+  icon: Dashboard,
+  component: TaskManagement,
+  layout: "/staff",
+  breadcrumb: "TaskManagement"
+}, {
+  path: "/request",
+  name: "Request",
+  rtlName: "Xin phép nghỉ",
+  icon: LibraryBooks,
+  component: Request,
+  layout: "/staff",
+  breadcrumb: "Request"
+}, {
+  path: "/notification",
+  name: "Notification",
+  rtlName: "Thông báo",
+  icon: Notifications,
+  component: Notification,
+  layout: "/staff",
+  breadcrumb: "Notification"
+}, {
+  path: "",
+  name: "Human Resources",
+  rtlName: "Nhân sự",
+  icon: Person,
+  component: EmployeeManagement,
+  layout: "/hr",
+  breadcrumb: "HumanResources"
+}, {
+  path: "/request",
+  name: "Request",
+  rtlName: "Xin phép nghỉ",
+  icon: LibraryBooks,
+  component: Request,
+  layout: "/hr",
+  breadcrumb: "Request"
+}, {
+  path: "/notification",
+  name: "Notification",
+  rtlName: "Thông báo",
+  icon: Notifications,
+  component: Notification,
+  layout: "/hr",
+  breadcrumb: "Notification"
+}];
 
 export default dashboardRoutes;

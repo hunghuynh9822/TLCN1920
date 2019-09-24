@@ -8,8 +8,8 @@ import classNames from "classnames";
 import Hidden from "@material-ui/core/Hidden";
 
 // creates a beautiful scrollbar
-import PerfectScrollbar from "perfect-scrollbar";
-import "perfect-scrollbar/css/perfect-scrollbar.css";
+// import PerfectScrollbar from "perfect-scrollbar";
+// import "perfect-scrollbar/css/perfect-scrollbar.css";
 // core components
 import { Navbar, Footer, Sidebar } from "../components";
 
@@ -21,25 +21,25 @@ import bgImage from "../assets/img/sidebar-2.jpg";
 import logo from "../assets/img/reactlogo.png";
 
 let ps;
-
 class Main extends Component {
     constructor(props) {
         super(props);
         this.mainPanel = React.createRef();
         this.state = ({
             image: bgImage,
-            color: 'blue',
+            color: 'purple',
             fixedClasses: 'dropdown show',
         });
     }
-    switchRoutes = () => {
+    switchRoutes = (curLayout) => {
         return (
             <Switch>
                 {
                     routes.map((prop, key) => {
-                        if (prop.layout === "") {
+                        if (prop.layout === curLayout) {
                             return (
                                 <Route
+                                    exact
                                     path={prop.layout + prop.path}
                                     component={prop.component}
                                     key={key}
@@ -49,7 +49,7 @@ class Main extends Component {
                         return null;
                     })
                 }
-                <Redirect from="/" to="/task" />
+                <Redirect to={curLayout} />
             </Switch>
         );
     }
@@ -66,51 +66,21 @@ class Main extends Component {
             changeToMobile();
         }
     };
-    // initialize and destroy the PerfectScrollbar plugin
-    componentDidMount() {
-        if (navigator.platform.indexOf("Win") > -1) {
-            ps = new PerfectScrollbar(this.mainPanel.current, {
-                suppressScrollX: true,
-                suppressScrollY: false
-            });
-            document.body.style.overflow = "hidden";
-        }
-        window.addEventListener("resize", this.resizeFunction);
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            if (navigator.platform.indexOf("Win") > -1) {
-                ps.destroy();
-            }
-            window.removeEventListener("resize", this.resizeFunction);
-        };
-    }
 
-    componentDidUpdate() {
-        if (navigator.platform.indexOf("Win") > -1) {
-            ps = new PerfectScrollbar(this.mainPanel.current, {
-                suppressScrollX: true,
-                suppressScrollY: false
-            });
-            document.body.style.overflow = "hidden";
-        }
-        window.addEventListener("resize", this.resizeFunction);
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            if (navigator.platform.indexOf("Win") > -1) {
-                ps.destroy();
-            }
-            window.removeEventListener("resize", this.resizeFunction);
-        };
-    }
     render() {
         // styles
         const { classes, ...rest } = this.props;
+        const { match, history } = this.props;
+        const curLayout = match.url;
         const { mobileOpen, desktopOpen } = this.props;
+        const curRoutes = routes.filter(route => route.layout === curLayout)
+        console.log(match);
+        console.log(history);
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>
                     <Sidebar
-                        routes={routes}
+                        routes={curRoutes}
                         logoText={"TLCN"}
                         logo={logo}
                         image={this.state.image}
@@ -119,17 +89,17 @@ class Main extends Component {
                     />
                     <div className={classNames(classes.mainPanel, { [" " + classes.mainPanelOpen]: this.props.desktopOpen })} ref={this.mainPanel}>
                         <Navbar
-                            routes={routes}
+                            routes={curRoutes}
                             {...rest}
                         />
                         <Hidden smDown implementation="css">
                             <div className={classNames(classes.content, { [" " + classes.contentClose]: !this.props.desktopOpen && this.props.mode === 'desktop' })}>
-                                <div className={classes.container}>{this.switchRoutes()}</div>
+                                <div className={classes.container}>{this.switchRoutes(curLayout)}</div>
                             </div>
                         </Hidden>
                         <Hidden mdUp implementation="css">
                             <div className={classes.content}>
-                                <div className={classes.container}>{this.switchRoutes()}</div>
+                                <div className={classes.container}>{this.switchRoutes(curLayout)}</div>
                             </div>
                         </Hidden>
                         <Footer />

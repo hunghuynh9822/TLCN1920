@@ -17,6 +17,8 @@ import { CustomButton, MainNavbarLink, RouterBreadcrumbs } from "../"
 
 import styles from "../../assets/jss/material-react/components/headerStyle";
 
+import bgImage from "../../assets/img/navbar.jpg"
+
 class Navbar extends Component {
     constructor(props) {
         super(props);
@@ -51,30 +53,33 @@ class Navbar extends Component {
                         <Hidden smDown className={classes.hidden}>
                             <IconButton
                                 edge="start"
-                                color="inherit"
                                 aria-label="open drawer"
                                 onClick={handleDrawerToggleDesktop}
                                 className={classes.menuButton + iconMenuClasses}
+                                style={{color:"white"}}
                             >
                                 <MenuIcon />
                             </IconButton>
                         </Hidden>
-                        <RouterBreadcrumbs />
-                        {/* Here we create navbar brand, based on route name */}
-
+                        <RouterBreadcrumbs routes={this.props.routes}/>
                     </div>
                     <Hidden smDown implementation="css">
                         <MainNavbarLink />
                     </Hidden>
                     <Hidden mdUp implementation="css">
                         <IconButton
-                            color="inherit"
                             aria-label="open drawer"
                             onClick={handleDrawerToggleMobile}
+                            style={{color:"white"}}
                         >
                             <Menu />
                         </IconButton>
                     </Hidden>
+                    <div
+                        className={classes.background}
+                        // style={{ backgroundImage: "url(" + bgImage + ")" }}
+                        style={{ backgroundColor: '#344081' }}
+                    />
                 </Toolbar>
             </AppBar>
         );

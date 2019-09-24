@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {withRouter, BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import {withRouter, Switch, Route, Redirect } from "react-router-dom";
 import importedComponent from 'react-imported-component';
 
 import {Loading} from './components';
@@ -12,14 +12,14 @@ class MainRouter extends Component {
         LoadingComponent: Loading
       }
     );
-    const AsyncDashboard = importedComponent(
-      () => import(/* webpackChunkName:'dashboard' */ './test/Dashboard/Dashboard.jsx'),
+    const AsyncNoMatch = importedComponent(
+      () => import(/* webpackChunkName:'nomatch' */ './layouts/NoMatch.jsx'),
       {
         LoadingComponent: Loading
       }
     );
-    const AsyncNoMatch = importedComponent(
-      () => import(/* webpackChunkName:'nomatch' */ './layouts/NoMatch.jsx'),
+    const AsyncSignIn = importedComponent(
+      () => import(/* webpackChunkName:'signin' */ './layouts/Signin.jsx'),
       {
         LoadingComponent: Loading
       }
@@ -27,9 +27,9 @@ class MainRouter extends Component {
     return (
       <React.Fragment>
         <Switch>
-          <Route path="/dashboard" component={AsyncDashboard} />
-          <Route path="/" component={AsyncMain} />
-          <Redirect from="/" to="/task" />
+          <Route exact path="/" component={AsyncSignIn} />
+          <Route path="/hr" component={AsyncMain} />
+          <Route path="/staff" component={AsyncMain} />
           <Route component={AsyncNoMatch} />
         </Switch>
       </React.Fragment>

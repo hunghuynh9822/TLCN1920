@@ -54,6 +54,7 @@ class CustomInput extends Component {
                     </InputLabel>
                 ) : null}
                 <Input
+                    className={inputProps.className}
                     classes={{
                         root: marginTop,
                         disabled: classes.disabled,
