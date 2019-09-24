@@ -11,3 +11,4 @@ export { default as RouterBreadcrumbs} from './Breadcrumbs/RouterBreadcrumbs.jsx
 export {default as Copyright} from './Copyright/Copyright.jsx';
 export {default as MaterialTable} from './Tables/MaterialTable.jsx';
 export {default as PaginationTable} from './Tables/PaginationTable.jsx';
+export {default as Gantt} from './Gantt/Gantt.jsx';
