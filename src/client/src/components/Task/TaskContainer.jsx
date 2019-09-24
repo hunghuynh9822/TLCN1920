@@ -37,15 +37,21 @@ class TaskContainer extends Component {
             className: classNames("center", classes.slider),
             infinite: false,
             centerPadding: "60px",
-            slidesToShow: 3,
+            slidesToShow: 5,
             swipeToSlide: true,
             adaptiveHeight: true,
             afterChange: function (index) {
                 console.log(
-                    `Slider Changed to: ${index + 1}, ahihi`
+                    `Slider Changed to: ${index + 1}`
                 );
             },
             responsive: [
+                {
+                    breakpoint: 1650,
+                    settings: {
+                        slidesToShow: 4,
+                    }
+                },
                 {
                     breakpoint: 1400,
                     settings: {
@@ -53,21 +59,9 @@ class TaskContainer extends Component {
                     }
                 },
                 {
-                    breakpoint: 1200,
-                    settings: {
-                        slidesToShow: 2.5,
-                    }
-                },
-                {
-                    breakpoint: 1050,
+                    breakpoint: 1100,
                     settings: {
                         slidesToShow: 2,
-                    }
-                },
-                {
-                    breakpoint: 950,
-                    settings: {
-                        slidesToShow: 2.5,
                     }
                 },
                 {
