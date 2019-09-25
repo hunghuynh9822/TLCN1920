@@ -33,16 +33,16 @@ const appStyle = theme => ({
     },
     content: {
         marginTop: "55px",
-        padding: "30px 15px",
         minHeight: "calc(100vh - 120px)"
     },
     contentClose: {
         marginLeft: "65px",
         paddingLeft: "10px",
     },
-    container,
-    map: {
-        marginTop: "70px"
+    container: {
+        marginTop: "55px",
+        width:'100%',
+        height:'100%',
     }
 });
 

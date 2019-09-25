@@ -28,57 +28,72 @@ import {
   TaskManagement,
   EmployeeManagement,
   Request,
-  Notification
+  Notification,
+  ProjectsManagement
 } from "./views";
 
-const dashboardRoutes = [{
-  path: "",
-  name: "Task Management",
-  rtlName: "Quản lý Task",
-  icon: Dashboard,
-  component: TaskManagement,
-  layout: "/staff",
-  breadcrumb: "TaskManagement"
-}, {
-  path: "/request",
-  name: "Request",
-  rtlName: "Xin phép nghỉ",
-  icon: LibraryBooks,
-  component: Request,
-  layout: "/staff",
-  breadcrumb: "Request"
-}, {
-  path: "/notification",
-  name: "Notification",
-  rtlName: "Thông báo",
-  icon: Notifications,
-  component: Notification,
-  layout: "/staff",
-  breadcrumb: "Notification"
-}, {
-  path: "",
-  name: "Human Resources",
-  rtlName: "Nhân sự",
-  icon: Person,
-  component: EmployeeManagement,
-  layout: "/hr",
-  breadcrumb: "HumanResources"
-}, {
-  path: "/request",
-  name: "Request",
-  rtlName: "Xin phép nghỉ",
-  icon: LibraryBooks,
-  component: Request,
-  layout: "/hr",
-  breadcrumb: "Request"
-}, {
-  path: "/notification",
-  name: "Notification",
-  rtlName: "Thông báo",
-  icon: Notifications,
-  component: Notification,
-  layout: "/hr",
-  breadcrumb: "Notification"
-}];
+const dashboardRoutes = [
+  //Staff
+  {
+    path: "",
+    name: "Task Management",
+    rtlName: "Quản lý Task",
+    icon: Dashboard,
+    component: TaskManagement,
+    layout: "/staff",
+    breadcrumb: "TaskManagement"
+  }, {
+    path: "/request",
+    name: "Request",
+    rtlName: "Xin phép nghỉ",
+    icon: LibraryBooks,
+    component: Request,
+    layout: "/staff",
+    breadcrumb: "Request"
+  }, {
+    path: "/notification",
+    name: "Notification",
+    rtlName: "Thông báo",
+    icon: Notifications,
+    component: Notification,
+    layout: "/staff",
+    breadcrumb: "Notification"
+  }, {
+    path: "/projects",
+    name: "Projects",
+    rtlName: "Quản lý dự án",
+    icon: Unarchive,
+    component: ProjectsManagement,
+    layout: "/staff",
+    breadcrumb: "Projects"
+  },
+
+  //Human Resource
+  {
+    path: "",
+    name: "Human Resources",
+    rtlName: "Nhân sự",
+    icon: Person,
+    component: EmployeeManagement,
+    layout: "/hr",
+    breadcrumb: "HumanResources"
+  }, {
+    path: "/request",
+    name: "Request",
+    rtlName: "Xin phép nghỉ",
+    icon: LibraryBooks,
+    component: Request,
+    layout: "/hr",
+    breadcrumb: "Request"
+  }, {
+    path: "/notification",
+    name: "Notification",
+    rtlName: "Thông báo",
+    icon: Notifications,
+    component: Notification,
+    layout: "/hr",
+    breadcrumb: "Notification"
+  }
+];
 
 export default dashboardRoutes;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import styles from "../../assets/jss/styles/views/employeeManagementStyle";
+import styles from "../../assets/jss/styles/views/requestStyle";
 
 import { MaterialTable, PaginationTable } from "../../components"
 
@@ -17,7 +17,7 @@ const columns = [
 
 function createData(no, name, position, timestart, timeend, reason) {
     const action = "View | Confirm"
-    return { no, name, position, timestart, timeend, reason ,action};
+    return { no, name, position, timestart, timeend, reason, action };
 }
 
 const rows = [
@@ -32,9 +32,9 @@ class Request extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <React.Fragment>
+            <div className={classes.root}>
                 <PaginationTable columns={columns} rows={rows} />
-            </React.Fragment>
+            </div>
         );
     }
 }

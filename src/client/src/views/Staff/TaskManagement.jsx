@@ -15,7 +15,7 @@ class TaskManagement extends Component {
         // styles
         const { classes } = this.props;
         return (
-            <React.Fragment>
+            <div className={classes.root}>
                 <TaskContainer>
                     <Task />
                     <Task />
@@ -25,7 +25,7 @@ class TaskManagement extends Component {
                     <Task />
                     <Task />
                 </TaskContainer>
-            </React.Fragment>
+            </div>
         );
     }
 }
