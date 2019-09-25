@@ -65,7 +65,7 @@ class Project extends Component {
                             fontSize: '0.7em',
                             fontWeight: '400',
                         }}>
-                            September 14, 2016
+                            September 26, 2019
                         </div>
                     }
                     style={{ padding: '0px' }} />

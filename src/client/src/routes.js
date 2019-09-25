@@ -33,9 +33,52 @@ import {
 } from "./views";
 
 const dashboardRoutes = [
+  //Lead
+  {
+    path: "",
+    name: "Projects",
+    rtlName: "Quản lý dự án",
+    icon: Unarchive,
+    component: ProjectsManagement,
+    layout: "/lead",
+    breadcrumb: "Projects"
+  },{
+    path: "/tasks",
+    name: "Task Management",
+    rtlName: "Quản lý Task",
+    icon: Dashboard,
+    component: TaskManagement,
+    layout: "/lead",
+    breadcrumb: "TaskManagement"
+  },{
+    path: "/request",
+    name: "Request",
+    rtlName: "Xin phép nghỉ",
+    icon: LibraryBooks,
+    component: Request,
+    layout: "/lead",
+    breadcrumb: "Request"
+  }, {
+    path: "/notification",
+    name: "Notification",
+    rtlName: "Thông báo",
+    icon: Notifications,
+    component: Notification,
+    layout: "/lead",
+    breadcrumb: "Notification"
+  },
   //Staff
   {
     path: "",
+    name: "Projects",
+    rtlName: "Quản lý dự án",
+    icon: Unarchive,
+    component: ProjectsManagement,
+    layout: "/staff",
+    breadcrumb: "Projects"
+  },
+  {
+    path: "/tasks",
     name: "Task Management",
     rtlName: "Quản lý Task",
     icon: Dashboard,
@@ -58,16 +101,7 @@ const dashboardRoutes = [
     component: Notification,
     layout: "/staff",
     breadcrumb: "Notification"
-  }, {
-    path: "/projects",
-    name: "Projects",
-    rtlName: "Quản lý dự án",
-    icon: Unarchive,
-    component: ProjectsManagement,
-    layout: "/staff",
-    breadcrumb: "Projects"
-  },
-
+  }, 
   //Human Resource
   {
     path: "",
