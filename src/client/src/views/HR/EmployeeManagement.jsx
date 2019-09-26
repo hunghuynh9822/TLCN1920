@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styles from "../../assets/jss/styles/views/employeeManagementStyle";
 
-import {MaterialTable,PaginationTable} from "../../components"
+import { MaterialTable, PaginationTable } from "../../components"
 
 const columns = [
     { id: 'name', label: 'Name', minWidth: 200 },
@@ -60,9 +60,9 @@ class EmployeeManagement extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <React.Fragment>
-                <PaginationTable columns={columns} rows={rows}/>
-            </React.Fragment>
+            <div className={classes.root}>
+                <PaginationTable columns={columns} rows={rows} />
+            </div>
         );
     }
 }

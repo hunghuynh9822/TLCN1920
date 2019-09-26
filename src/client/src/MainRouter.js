@@ -30,6 +30,7 @@ class MainRouter extends Component {
           <Route exact path="/" component={AsyncSignIn} />
           <Route path="/hr" component={AsyncMain} />
           <Route path="/staff" component={AsyncMain} />
+          <Route path="/lead" component={AsyncMain} />
           <Route component={AsyncNoMatch} />
         </Switch>
       </React.Fragment>
