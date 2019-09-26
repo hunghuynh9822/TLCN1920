@@ -92,16 +92,9 @@ class Main extends Component {
                             routes={curRoutes}
                             {...rest}
                         />
-                        <Hidden smDown implementation="css">
-                            <div className={classNames(classes.content, { [" " + classes.contentClose]: !this.props.desktopOpen && this.props.mode === 'desktop' })}>
-                                <div className={classes.container}>{this.switchRoutes(curLayout)}</div>
-                            </div>
-                        </Hidden>
-                        <Hidden mdUp implementation="css">
-                            <div className={classes.content}>
-                                <div className={classes.container}>{this.switchRoutes(curLayout)}</div>
-                            </div>
-                        </Hidden>
+                        <div className={classNames(classes.content, { [" " + classes.contentClose]: !this.props.desktopOpen && this.props.mode === 'desktop' })}>
+                            <div className={classes.container}>{this.switchRoutes(curLayout)}</div>
+                        </div>
                         <Footer />
                     </div>
                 </div>
