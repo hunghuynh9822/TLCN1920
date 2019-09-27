@@ -31,7 +31,8 @@ import {
   Request,
   Notification,
   ProjectsManagement,
-  TimeKeeping
+  TimeKeeping,
+  Information
 } from "./views";
 
 const dashboardRoutes = [
@@ -119,6 +120,14 @@ const dashboardRoutes = [
     component: Notification,
     layout: "/staff",
     breadcrumb: "Notification"
+  }, {
+    path: "/info",
+    name: "Infomation",
+    rtlName: "Thông tin cá nhân",
+    icon: Person,
+    component: Information,
+    layout: "/staff",
+    breadcrumb: "Information"
   },
   //Human Resource
   {
@@ -137,7 +146,7 @@ const dashboardRoutes = [
     component: Request,
     layout: "/hr",
     breadcrumb: "Request"
-  },{
+  }, {
     path: "/timekeeping",
     name: "Timekeeping",
     rtlName: "Chấm công",
