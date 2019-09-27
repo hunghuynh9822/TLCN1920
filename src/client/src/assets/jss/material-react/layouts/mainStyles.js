@@ -33,7 +33,7 @@ const appStyle = theme => ({
     },
     content: {
         marginTop: "55px",
-        minHeight: "calc(100vh - 120px)"
+        minHeight: "calc(100vh - 110px)"
     },
     contentClose: {
         marginLeft: "65px",
@@ -42,7 +42,7 @@ const appStyle = theme => ({
     container: {
         marginTop: "55px",
         width: '100%',
-        minHeight: "calc(100vh - 120px)",
+        minHeight: "calc(100vh - 110px)",
     }
 });
 
