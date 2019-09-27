@@ -79,7 +79,7 @@ class PaginationTable extends Component {
     }
     render() {
         const { classes } = this.props;
-        const { columns, rows} = this.props;
+        const { columns, rows } = this.props;
         const { page, rowsPerPage } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
         return (
@@ -92,7 +92,7 @@ class PaginationTable extends Component {
                                     <TableCell
                                         key={column.id}
                                         align={column.align}
-                                        style={{ minWidth: column.minWidth }}
+                                        style={{ minWidth: column.minWidth, width: column.width }}
                                         className={classes.stickyHeader}
                                     >
                                         {column.label}
@@ -101,7 +101,7 @@ class PaginationTable extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                     {columns.map(column => {
                                         const value = row[column.id];

@@ -30,7 +30,8 @@ import {
   EmployeeManagement,
   Request,
   Notification,
-  ProjectsManagement
+  ProjectsManagement,
+  TimeKeeping
 } from "./views";
 
 const dashboardRoutes = [
@@ -136,6 +137,14 @@ const dashboardRoutes = [
     component: Request,
     layout: "/hr",
     breadcrumb: "Request"
+  },{
+    path: "/timekeeping",
+    name: "Timekeeping",
+    rtlName: "Chấm công",
+    icon: LibraryBooks,
+    component: TimeKeeping,
+    layout: "/hr",
+    breadcrumb: "Timekeeping"
   }, {
     path: "/notification",
     name: "Notification",
