@@ -5,8 +5,6 @@ import styles from "../../assets/jss/styles/views/requestStyle";
 
 import { MaterialTable, PaginationTable,AddRequest } from "../../components"
 
-import Button from '@material-ui/core/Button';
-
 const columns = [
     { id: 'no', label: 'No.', minWidth: 50 },
     { id: 'name', label: 'Name', minWidth: 200 },
@@ -19,7 +17,7 @@ const columns = [
 
 function createData(no, name, position, timestart, timeend, reason) {
     // const action = "View | Confirm";
-    const action = ['view'];
+    const action = ['view','confirm'];
     return { no, name, position, timestart, timeend, reason, action };
 }
 

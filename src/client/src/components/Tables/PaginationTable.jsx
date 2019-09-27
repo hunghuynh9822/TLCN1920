@@ -83,12 +83,17 @@ class PaginationTable extends Component {
             switch(action){
                 case 'view':
                     return this.showBtnView();
+                case 'confirm':
+                    return this.showBtnConfirm();
+                case 'delete':
+                    return this.showBtnDelete();
             }
         })
     }
     showBtnView() {
         return (
             <Button
+                key='view'
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -99,6 +104,42 @@ class PaginationTable extends Component {
                 }}
             >
                 View
+            </Button>
+        )
+    }
+    showBtnConfirm() {
+        return (
+            <Button
+                key='confirm'
+                type="submit"
+                fullWidth
+                variant="contained"
+                style={{
+                    width: '80px',
+                    margin:'0px 3px',
+                    backgroundColor:'#9ae5e5',
+                    color:'white',
+                }}
+            >
+                Confirm
+            </Button>
+        )
+    }
+    showBtnDelete() {
+        return (
+            <Button
+                key='delete'
+                type="submit"
+                fullWidth
+                variant="contained"
+                style={{
+                    width: '80px',
+                    margin:'0px 3px',
+                    backgroundColor:'#DC3545',
+                    color:'white',
+                }}
+            >
+                Delete
             </Button>
         )
     }

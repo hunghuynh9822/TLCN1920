@@ -35,6 +35,64 @@ import {
   Information
 } from "./views";
 const dashboardRoutes = [
+  //Admin
+  {
+    path: "/projects",
+    name: "Projects",
+    rtlName: "Quản lý dự án",
+    icon: Unarchive,
+    component: ProjectsManagement,
+    layout: "/admin",
+    breadcrumb: "Projects"
+  }, {
+    path: "/tasks",
+    name: "Task Management",
+    rtlName: "Quản lý Task",
+    icon: Dashboard,
+    component: TaskManagement,
+    layout: "/admin",
+    breadcrumb: "TaskManagement"
+  }, {
+    path: "/human",
+    name: "Human Resources",
+    rtlName: "Nhân sự",
+    icon: Person,
+    component: EmployeeManagement,
+    layout: "/admin",
+    breadcrumb: "HumanResources"
+  }, {
+    path: "/request",
+    name: "Request",
+    rtlName: "Xin phép nghỉ",
+    icon: LibraryBooks,
+    component: Request,
+    layout: "/admin",
+    breadcrumb: "Request"
+  }, {
+    path: "/timekeeping",
+    name: "Timekeeping",
+    rtlName: "Chấm công",
+    icon: LibraryBooks,
+    component: TimeKeeping,
+    layout: "/admin",
+    breadcrumb: "Timekeeping"
+  }, {
+    path: "/notification",
+    name: "Notification",
+    rtlName: "Thông báo",
+    icon: Notifications,
+    component: Notification,
+    layout: "/admin",
+    breadcrumb: "Notification"
+  }, {
+    path: "/info",
+    name: "Infomation",
+    rtlName: "Thông tin cá nhân",
+    icon: Person,
+    component: Information,
+    layout: "/admin",
+    breadcrumb: "Information"
+  },
   //Lead
   {
     path: "",
