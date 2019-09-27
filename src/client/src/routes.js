@@ -77,6 +77,14 @@ const dashboardRoutes = [
     component: Notification,
     layout: "/lead",
     breadcrumb: "Notification"
+  }, {
+    path: "/info",
+    name: "Infomation",
+    rtlName: "Thông tin cá nhân",
+    icon: Person,
+    component: Information,
+    layout: "/lead",
+    breadcrumb: "Information"
   },
   //Staff
   {
@@ -162,6 +170,14 @@ const dashboardRoutes = [
     component: Notification,
     layout: "/hr",
     breadcrumb: "Notification"
+  }, {
+    path: "/info",
+    name: "Infomation",
+    rtlName: "Thông tin cá nhân",
+    icon: Person,
+    component: Information,
+    layout: "/hr",
+    breadcrumb: "Information"
   }
 ];
 
