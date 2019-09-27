@@ -10,7 +10,8 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Pagination from "./Pagination.jsx"
+import Pagination from "./Pagination.jsx";
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     root: {
@@ -22,7 +23,7 @@ const styles = theme => ({
     },
     tableWrapper: {
         maxHeight: 407,
-        overflowX: 'auto',
+        overflowX: 'hidden',
     },
     stickyHeader: {
         backgroundColor: '#978cfc',
@@ -77,6 +78,30 @@ class PaginationTable extends Component {
             rowsPerPage: parseInt(event.target.value, 10)
         });
     }
+    showActions(actions){
+        return actions.map((action)=>{
+            switch(action){
+                case 'view':
+                    return this.showBtnView();
+            }
+        })
+    }
+    showBtnView() {
+        return (
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                style={{
+                    width: '60px',
+                    margin:'0px 3px',
+                }}
+            >
+                View
+            </Button>
+        )
+    }
     render() {
         const { classes } = this.props;
         const { columns, rows } = this.props;
@@ -91,7 +116,7 @@ class PaginationTable extends Component {
                                 {columns.map(column => (
                                     <TableCell
                                         key={column.id}
-                                        align={column.align}
+                                        align='center'
                                         style={{ minWidth: column.minWidth, width: column.width }}
                                         className={classes.stickyHeader}
                                     >
@@ -105,8 +130,19 @@ class PaginationTable extends Component {
                                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                     {columns.map(column => {
                                         const value = row[column.id];
+                                        console.log(column.id + " : " + value);
+                                        if (column.id === 'action') {
+                                            return (
+                                                <TableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
+                                                    <div style={{display:'flex', justifyContent:'center'}}>
+                                                        {this.showActions(value)}
+                                                    </div>
+
+                                                </TableCell>
+                                            );
+                                        }
                                         return (
-                                            <TableCell key={column.id} align={column.align}>
+                                            <TableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
                                             </TableCell>
                                         );
