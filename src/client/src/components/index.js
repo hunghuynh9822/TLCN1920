@@ -18,5 +18,4 @@ export {default as MessageArea} from './Gantt/MessageArea.jsx';
 export {default as AddStafftoProject} from './AddStafftoProject/AddStafftoProject';
 export {default as Notifi} from './AddNotifi/Notifi';
 export {default as AddRequest} from './AddRequest/AddRequest';
-export {default as MaterialUIPickers} from './AddRequest/MaterialUIPickers';
-export {default as hour} from './AddRequest/hour';
+export {default as Infomate} from './Infomation/Infomation';
