@@ -34,7 +34,6 @@ import {
   TimeKeeping,
   Information
 } from "./views";
-
 const dashboardRoutes = [
   //Lead
   {
