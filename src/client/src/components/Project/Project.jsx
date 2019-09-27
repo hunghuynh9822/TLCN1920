@@ -11,6 +11,7 @@ import Tune from '@material-ui/icons/Tune';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import AddStafftoProject from '../AddStafftoProject/AddStafftoProject';
 
 const styles = theme => ({
     card: {
@@ -45,7 +46,8 @@ class Project extends Component {
                 <CardHeader
                     action={
                         <div style={{ margin: '20px' }}>
-                            <Tune />
+                            {/* <Tune /> */}
+                            <AddStafftoProject/>
                         </div>
 
                     }

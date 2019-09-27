@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styles from "../../assets/jss/styles/views/notificationStyle";
-
-import { MaterialTable, PaginationTable } from "../../components"
+import { MaterialTable, PaginationTable, Notifi } from "../../components"
 
 const columns = [
     { id: 'no', label: 'No.', minWidth: 50 },
@@ -28,6 +27,9 @@ class Notification extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
+                <div>
+                    <Notifi/>
+                </div>
                 <PaginationTable columns={columns} rows={rows} />
             </div>
         );

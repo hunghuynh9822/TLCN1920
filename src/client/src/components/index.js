@@ -15,3 +15,8 @@ export {default as Project} from './Project/Project.jsx'
 export {default as Gantt} from './Gantt/Gantt.jsx';
 export {default as Toolbar} from './Gantt/Toolbar.jsx';
 export {default as MessageArea} from './Gantt/MessageArea.jsx';
+export {default as AddStafftoProject} from './AddStafftoProject/AddStafftoProject';
+export {default as Notifi} from './AddNotifi/Notifi';
+export {default as AddRequest} from './AddRequest/AddRequest';
+export {default as MaterialUIPickers} from './AddRequest/MaterialUIPickers';
+export {default as hour} from './AddRequest/hour';
