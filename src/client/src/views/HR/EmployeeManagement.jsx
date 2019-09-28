@@ -31,6 +31,7 @@ class EmployeeManagement extends Component {
     }
     render() {
         const { classes } = this.props;
+        console.log(window.location.href);
         return (
             <div className={classes.root}>
                 <PaginationTable columns={columns} rows={rows} />

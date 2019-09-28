@@ -6,3 +6,4 @@ export { default as Notification } from './Common/Notification.jsx';
 export { default as ProjectsManagement} from './Staff/ProjectsManagement.jsx';
 export { default as TimeKeeping} from './HR/TimeKeeping.jsx';
 export {default as Information}from './Common/Infomation.jsx';
+export {default as AdminHumanManagement} from './Admin/AdminHumanManagement.jsx'

@@ -1,7 +1,7 @@
 import color from 'color';
-const projectManagementStyle = theme => ({
+const adminHumanManagementStyle = theme => ({
     root: {
-        padding: '5px 55px 0px 55px',
+        padding: '10px 15px 0px 15px',
         width: '100%',
         minHeight: 'calc(100vh - 110px)',
         backgroundColor: '#f2f2f2'
@@ -24,4 +24,4 @@ const projectManagementStyle = theme => ({
         justifyContent: 'flex-start',
     },
 });
-export default projectManagementStyle;
+export default adminHumanManagementStyle;

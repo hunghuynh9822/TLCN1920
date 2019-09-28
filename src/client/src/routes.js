@@ -32,10 +32,20 @@ import {
   Notification,
   ProjectsManagement,
   TimeKeeping,
-  Information
+  Information,
+  AdminHumanManagement
 } from "./views";
 const dashboardRoutes = [
   //Admin
+  {
+    path: "/",
+    name: "Dashboad",
+    rtlName: "Tổng quan",
+    icon: Dashboard,
+    component: ProjectsManagement,
+    layout: "/admin",
+    breadcrumb: "Dashboard"
+  },
   {
     path: "/projects",
     name: "Projects",
@@ -57,7 +67,7 @@ const dashboardRoutes = [
     name: "Human Resources",
     rtlName: "Nhân sự",
     icon: Person,
-    component: EmployeeManagement,
+    component: AdminHumanManagement,
     layout: "/admin",
     breadcrumb: "HumanResources"
   }, {

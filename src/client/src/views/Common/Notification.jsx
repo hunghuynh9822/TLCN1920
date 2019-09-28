@@ -11,7 +11,7 @@ const columns = [
 ];
 
 function createData(no, title) {
-    const action = "View | Delete"
+    const action = ["view","delete"];
     return { no, title, action };
 }
 
