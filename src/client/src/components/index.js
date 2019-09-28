@@ -19,3 +19,4 @@ export {default as AddStafftoProject} from './AddStafftoProject/AddStafftoProjec
 export {default as Notifi} from './AddNotifi/Notifi';
 export {default as AddRequest} from './AddRequest/AddRequest';
 export {default as Infomate} from './Infomation/Infomation';
+export {default as CustomLineChart} from './Chart/CustomLineChart.jsx';

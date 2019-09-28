@@ -33,16 +33,17 @@ import {
   ProjectsManagement,
   TimeKeeping,
   Information,
-  AdminHumanManagement
+  AdminHumanManagement,
+  AdminDashboard
 } from "./views";
 const dashboardRoutes = [
   //Admin
   {
-    path: "/",
+    path: "",
     name: "Dashboad",
     rtlName: "Tổng quan",
     icon: Dashboard,
-    component: ProjectsManagement,
+    component: AdminDashboard,
     layout: "/admin",
     breadcrumb: "Dashboard"
   },
