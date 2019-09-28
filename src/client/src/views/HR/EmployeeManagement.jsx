@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styles from "../../assets/jss/styles/views/employeeManagementStyle";
 
-import { MaterialTable, PaginationTable } from "../../components"
+import { MaterialTable, PaginationTable , AddStaff} from "../../components"
 
 const columns = [
     { id: 'no', label: 'No.', minWidth: 50 ,align:'center'},
@@ -34,6 +34,9 @@ class EmployeeManagement extends Component {
         console.log(window.location.href);
         return (
             <div className={classes.root}>
+                <div>
+                    <AddStaff/>
+                </div>
                 <PaginationTable columns={columns} rows={rows} />
             </div>
         );

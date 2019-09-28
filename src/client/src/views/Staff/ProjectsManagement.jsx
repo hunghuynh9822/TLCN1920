@@ -4,9 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Icon from '@material-ui/core/Icon';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-
 // core components
-import { Project } from "../../components"
+import { Project,NewProject } from "../../components"
 
 import styles from "../../assets/jss/styles/views/projectManagementStyle";
 
@@ -37,6 +36,7 @@ class ProjectsManagement extends Component {
                         <Project />
                         <Project />
                         <Project />
+                        <NewProject/>
                     </div>
                 </div>
             </div>
