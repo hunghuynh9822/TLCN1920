@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
+import EditStaff from './EditStaff'
 const useStyles = makeStyles({
   card: {
     minWidth: 275,
@@ -97,7 +98,8 @@ export default function Infomation() {
             </div>
       </CardContent>
       <CardActions>
-        <Button size="small" className={classes.buttonSubmit}>Edit</Button>
+        {/* <Button size="small" className={classes.buttonSubmit}>Edit</Button> */}
+        <EditStaff className={classes.buttonSubmit}/>
       </CardActions>
     </Card>
   );
