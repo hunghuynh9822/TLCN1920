@@ -2,9 +2,9 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 
-import Add from '@material-ui/icons/Add';
+import {AddNewProject } from '../../components';
 const useStyles = makeStyles({
   card: {
     width: '245px',
@@ -44,7 +44,7 @@ export default function NewProject() {
   return (
     <Card className={classes.card}>
       <CardActions>
-        <Button size="small" className={classes.buttonSubmit}><Add/>New project</Button>
+        <Button size="small" className={classes.buttonSubmit}><AddNewProject/>New project</Button>
       </CardActions>
     </Card>
   );

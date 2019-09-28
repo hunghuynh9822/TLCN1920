@@ -21,3 +21,4 @@ export {default as Notifi} from './AddNotifi/Notifi';
 export {default as AddRequest} from './AddRequest/AddRequest';
 export {default as Infomate} from './Infomation/Infomation';
 export {default as AddStaff} from './AddStaff/AddStaff';
+export {default as AddNewProject} from './AddStafftoProject/AddNewProject ';
