@@ -36,14 +36,10 @@ const styles = theme => ({
 
 
 const StyledTableCell = withStyles(theme => ({
-    // head: {
-    //     backgroundColor: theme.palette.common.black,
-    //     color: 'inherit',
-    // },
-    body: {
-        color: 'inherit',
-        fontSize: 14,
-    },
+    root:{
+        padding: '14px',
+    }
+    
 }))(TableCell);
 
 
@@ -155,14 +151,14 @@ class PaginationTable extends Component {
                         <TableHead>
                             <TableRow>
                                 {columns.map(column => (
-                                    <TableCell
+                                    <StyledTableCell
                                         key={column.id}
                                         align='center'
                                         style={{ minWidth: column.minWidth, width: column.width }}
                                         className={classes.stickyHeader}
                                     >
                                         {column.label}
-                                    </TableCell>
+                                    </StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
@@ -174,18 +170,18 @@ class PaginationTable extends Component {
                                         console.log(column.id + " : " + value);
                                         if (column.id === 'action') {
                                             return (
-                                                <TableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
+                                                <StyledTableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
                                                     <div style={{display:'flex', justifyContent:'center'}}>
                                                         {this.showActions(value)}
                                                     </div>
 
-                                                </TableCell>
+                                                </StyledTableCell>
                                             );
                                         }
                                         return (
-                                            <TableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
+                                            <StyledTableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
-                                            </TableCell>
+                                            </StyledTableCell>
                                         );
                                     })}
                                 </TableRow>
