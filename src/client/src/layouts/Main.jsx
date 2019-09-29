@@ -31,25 +31,50 @@ class Main extends Component {
             fixedClasses: 'dropdown show',
         });
     }
-    switchRoutes = (curLayout) => {
+
+    switchRoutes = (curRouter) => {
+        console.log("curRouter");
+        console.log(curRouter.routes);
         return (
             <Switch>
                 {
-                    routes.map((prop, key) => {
-                        if (prop.layout === curLayout) {
+                    curRouter.routes.map((route, key) => {
+                        if (route.path === "") {
                             return (
                                 <Route
                                     exact
-                                    path={prop.layout + prop.path}
-                                    component={prop.component}
+                                    path={route.layout + route.path}
+                                    component={route.component}
                                     key={key}
                                 />
                             );
                         }
-                        return null;
+                        if (route.routes === undefined) {
+                            return (
+                                <Route
+                                    exact
+                                    key={key}
+                                    path={route.layout + route.path}
+                                    render={props => (
+                                        // pass the sub-routes down to keep nesting
+                                        <route.component {...props} {...route} />
+                                    )}
+                                />
+                            );
+                        }
+                        return (
+                            <Route
+                                key={key}
+                                path={route.layout + route.path}
+                                render={props => (
+                                    // pass the sub-routes down to keep nesting
+                                    <route.component {...props} {...route} />
+                                )}
+                            />
+                        );
                     })
                 }
-                <Redirect to={curLayout} />
+                {/* <Redirect to={curLayout} /> */}
             </Switch>
         );
     }
@@ -71,16 +96,17 @@ class Main extends Component {
         // styles
         const { classes, ...rest } = this.props;
         const { match, history } = this.props;
-        const curLayout = match.url;
         const { mobileOpen, desktopOpen } = this.props;
-        const curRoutes = routes.filter(route => route.layout === curLayout)
-        console.log(match);
-        console.log(history);
+
+        const curLayout = match.url;
+        const curRouter = routes.filter(route => route.layout === curLayout)[0];
+        console.log(curLayout + " : ");
+        console.log(curRouter);
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>
                     <Sidebar
-                        routes={curRoutes}
+                        router={curRouter}
                         logoText={"TLCN"}
                         logo={logo}
                         image={this.state.image}
@@ -89,11 +115,11 @@ class Main extends Component {
                     />
                     <div className={classNames(classes.mainPanel, { [" " + classes.mainPanelOpen]: this.props.desktopOpen })} ref={this.mainPanel}>
                         <Navbar
-                            routes={curRoutes}
+                            router={curRouter}
                             {...rest}
                         />
                         <div className={classNames(classes.content, { [" " + classes.contentClose]: !this.props.desktopOpen && this.props.mode === 'desktop' })}>
-                            <div className={classes.container}>{this.switchRoutes(curLayout)}</div>
+                            <div className={classes.container}>{this.switchRoutes(curRouter)}</div>
                         </div>
                         <Footer />
                     </div>

@@ -31,11 +31,10 @@ class Sidebar extends Component {
             console.log("activeRoute "+window.location.pathname)
             return window.location.pathname === routeName ? true : false;
         }
-        const { color, logo, image, logoText, routes } = this.props;
+        const { color, logo, image, logoText, router } = this.props;
         var links = (
             <List className={classes.list}>
-                {routes.map((prop, key) => {
-                    var activePro = " ";
+                {router.routes.map((prop, key) => {
                     var listItemClasses = classNames({
                             [" " + classes[color]]: activeRoute(prop.layout + prop.path)
                         });
@@ -45,7 +44,7 @@ class Sidebar extends Component {
                     return (
                         <NavLink
                             to={prop.layout + prop.path}
-                            className={activePro + classes.item}
+                            className={classes.item}
                             activeClassName="active"
                             key={key}
                         >
@@ -124,7 +123,6 @@ class Sidebar extends Component {
                     >
                         {brand}
                         <div className={classes.sidebarWrapper}>
-                            {/* {this.props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />} */}
                             <MainNavbarLink />
                             {links}
                         </div>
@@ -176,7 +174,7 @@ Sidebar.propTypes = {
     logo: PropTypes.string,
     image: PropTypes.string,
     logoText: PropTypes.string,
-    routes: PropTypes.arrayOf(PropTypes.object),
+    router: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

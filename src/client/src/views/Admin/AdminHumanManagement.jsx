@@ -6,7 +6,7 @@ import styles from "../../assets/jss/styles/views/adminHumanManagementStyle";
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import { PaginationTable } from "../../components"
+import { PaginationTable, CollapsibleSection } from "../../components"
 
 const columns = [
     { id: 'no', label: 'No.', minWidth: 50, align: 'center' },
@@ -37,8 +37,8 @@ const rowsNew = [
 ];
 
 const CustomPaginationTable = withStyles(theme => ({
-    root:{
-        marginTop:'0px',
+    root: {
+        marginTop: '0px',
     }
 }))(PaginationTable);
 
@@ -48,24 +48,16 @@ class AdminHumanManagement extends Component {
     }
     render() {
         const { classes } = this.props;
+        const {routes} = this.props;
+        console.log(routes);
         return (
             <div className={classes.root}>
-                <div className={classes.area}>
-                    <div className={classes.bar}>
-                        <ExpandMore /> New Employees
-                    </div>
-                    <div className={classes.container}>
-                        <CustomPaginationTable columns={columns} rows={rowsNew} style={{marginTop:'0px'}}/>
-                    </div>
-                </div>
-                <div className={classes.area}>
-                    <div className={classes.bar}>
-                        <ExpandMore /> All Employees
-                    </div>
-                    <div className={classes.container}>
-                        <CustomPaginationTable columns={columns} rows={rowsAll} style={{marginTop:'0px'}}/>
-                    </div>
-                </div>
+                <CollapsibleSection title="New Employees">
+                    <CustomPaginationTable columns={columns} rows={rowsNew} style={{ marginTop: '0px' }} />
+                </CollapsibleSection>
+                <CollapsibleSection title="All Employees">
+                    <CustomPaginationTable columns={columns} rows={rowsAll} style={{ marginTop: '0px' }} />
+                </CollapsibleSection>
             </div>
         );
     }
