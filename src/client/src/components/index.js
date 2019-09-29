@@ -23,7 +23,6 @@ export {default as Infomate} from './Infomation/Infomation';
 export {default as CustomLineChart} from './Chart/CustomLineChart.jsx';
 export {default as AddStaff} from './AddStaff/AddStaff';
 export {default as AddNewProject} from './AddStafftoProject/AddNewProject ';
-export {default as OverviewProject} from './Project/OverviewProject.jsx';
 export {default as CollapsibleSection}from './Section/CollapsibleSection.jsx';
 export {default as CenteredTabs} from './Tab/CenteredTabs.jsx';
 export {default as TabPanel} from './Tab/TabPanel.jsx';

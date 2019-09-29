@@ -24,9 +24,9 @@ class CenteredTabs extends Component {
                     textColor="primary"
                     centered
                 >
-                    <Tab label="Item One" />
-                    <Tab label="Item Two" />
-                    <Tab label="Item Three" />
+                    {this.props.tabs.map((tab,key)=>(
+                        <Tab key={key} label={tab.name}/>
+                    ))}
                 </Tabs>
             </React.Fragment>
         );
@@ -35,5 +35,6 @@ class CenteredTabs extends Component {
 CenteredTabs.propTypes = {
     classes: PropTypes.object.isRequired,
     value: PropTypes.any.isRequired,
+    tabs: PropTypes.array.isRequired,
 };
 export default withStyles(styles)(CenteredTabs);

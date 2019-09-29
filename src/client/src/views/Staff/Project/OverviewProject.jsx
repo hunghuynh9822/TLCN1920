@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import { CollapsibleSection, Project, NewProject } from '../';
+import { CollapsibleSection, Project, NewProject } from '../../../components';
 
 const styles = theme => ({
-
+    root:{
+        padding: '0px 55px 0px 55px',
+    }
 });
 
 class OverviewProject extends Component {
@@ -15,7 +17,7 @@ class OverviewProject extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <React.Fragment>
+            <div className={classes.root}>
                 <CollapsibleSection title="Recent Projects">
                     <Project />
                     <Project />
@@ -27,7 +29,7 @@ class OverviewProject extends Component {
                     <Project />
                     <NewProject />
                 </CollapsibleSection>
-            </React.Fragment>
+            </div>
         );
     }
 }

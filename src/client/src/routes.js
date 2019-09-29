@@ -35,7 +35,9 @@ import {
   TimeKeeping,
   Information,
   AdminHumanManagement,
-  AdminDashboard
+  AdminDashboard,
+  OverviewProject,
+  ProjectView
 } from "./views";
 
 const manageRoutes = [
@@ -59,7 +61,19 @@ const manageRoutes = [
         icon: FolderOpen,
         component: ProjectsManagement,
         layout: "/admin",
-        breadcrumb: "Projects"
+        breadcrumb: "Projects",
+        routes:[
+          {
+            path: "",
+            component: OverviewProject,
+            layout: "/admin/projects",
+          },
+          {
+            path: "/:idProject",
+            component: ProjectView,
+            layout: "/admin/projects",
+          }
+        ]
       },
       {
         path: "/tasks",
@@ -136,7 +150,19 @@ const manageRoutes = [
         icon: FolderOpen,
         component: ProjectsManagement,
         layout: "/lead",
-        breadcrumb: "Projects"
+        breadcrumb: "Projects",
+        routes:[
+          {
+            path: "",
+            component: OverviewProject,
+            layout: "/lead/projects",
+          },
+          {
+            path: "/:idProject",
+            component: ProjectView,
+            layout: "/lead/projects",
+          }
+        ]
       }, {
         path: "/tasks",
         name: "Tasks Management",
@@ -199,7 +225,19 @@ const manageRoutes = [
         icon: FolderOpen,
         component: ProjectsManagement,
         layout: "/staff",
-        breadcrumb: "Projects"
+        breadcrumb: "Projects",
+        routes:[
+          {
+            path: "",
+            component: OverviewProject,
+            layout: "/staff/projects",
+          },
+          {
+            path: "/:idProject",
+            component: ProjectView,
+            layout: "/staff/projects",
+          }
+        ]
       },
       {
         path: "/tasks",

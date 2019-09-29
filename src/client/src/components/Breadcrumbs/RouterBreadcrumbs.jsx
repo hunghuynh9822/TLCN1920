@@ -32,7 +32,7 @@ class Breadcrumb extends Component {
                         var prop = router.routes.filter((prop) => {
                             let path = prop.layout + prop.path;
                             console.log("path " + path + " to " + to);
-                            return path === to;
+                            return to === path;
                         });
                         if (prop[0] === undefined) {
                             // return (
@@ -46,7 +46,7 @@ class Breadcrumb extends Component {
                                 {prop[0].breadcrumb}
                             </Typography>
                         ) : (
-                                <Link color="inherit" to={to} key={to} className={classes.bodyCrumb}>
+                                <Link color="inherit" to={to} key={to} className={classes.homeCrumb}>
                                     {prop[0].breadcrumb}
                                 </Link>
                             );
