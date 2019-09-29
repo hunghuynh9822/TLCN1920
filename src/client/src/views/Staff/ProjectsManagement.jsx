@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 
-import { withRouter, Switch, Route, Redirect } from "react-router-dom";
+import { withRouter, Switch, Route } from "react-router-dom";
 
 // core components
 import styles from "../../assets/jss/styles/views/projectManagementStyle";

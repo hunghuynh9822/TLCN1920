@@ -10,3 +10,4 @@ export {default as AdminHumanManagement} from './Admin/AdminHumanManagement.jsx'
 export {default as AdminDashboard} from './Admin/AdminDashboard.jsx';
 export {default as OverviewProject} from './Staff/Project/OverviewProject.jsx';
 export {default as ProjectView} from './Staff/Project/ProjectView.jsx';
+export {default as OverviewTask} from './Staff/Task/OverviewTask.jsx';

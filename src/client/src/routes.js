@@ -172,14 +172,6 @@ const manageRoutes = [
         layout: "/lead",
         breadcrumb: "TasksManagement"
       }, {
-        path: "/timeline",
-        name: "TimeLine",
-        rtlName: "Lịch công việc",
-        icon: TimeLine,
-        component: GanttChart,
-        layout: "/lead",
-        breadcrumb: "TimeLine"
-      }, {
         path: "/request",
         name: "Request",
         rtlName: "Xin phép nghỉ",
