@@ -36,6 +36,7 @@
     "react-router-dom": "^5.0.1",
     "react-slick": "^0.25.2",
     "react-spring": "^8.0.27",
+    "react-swipeable-views": "^0.13.3",
     "recharts": "^1.7.1",
     "redux": "^4.0.4",
     "slick-carousel": "^1.8.1"
