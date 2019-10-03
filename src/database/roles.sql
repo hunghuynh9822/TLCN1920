@@ -12,7 +12,7 @@
  Target Server Version : 110005
  File Encoding         : 65001
 
- Date: 09/09/2019 11:34:47
+ Date: 02/10/2019 00:03:13
 */
 
 
@@ -29,7 +29,6 @@ CREATE TABLE "public"."roles" (
 ;
 
 -- ----------------------------
--- Records of roles
+-- Primary Key structure for table roles
 -- ----------------------------
-INSERT INTO "public"."roles" VALUES (5, 'ROLE_ADMIN', 1567937957503, NULL);
-INSERT INTO "public"."roles" VALUES (6, 'ROLE_EMPLOYEE', 1567937962314, NULL);
+ALTER TABLE "public"."roles" ADD CONSTRAINT "roles_pkey" PRIMARY KEY ("id");
