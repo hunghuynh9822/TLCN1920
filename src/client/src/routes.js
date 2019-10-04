@@ -19,132 +19,316 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import ShowChart from "@material-ui/icons/ShowChart";
-import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
-import Unarchive from "@material-ui/icons/Unarchive";
-import Language from "@material-ui/icons/Language";
+import RecentActors from "@material-ui/icons/RecentActors";
+import Assignment from "@material-ui/icons/AssignmentOutlined";
+import Today from "@material-ui/icons/TodayOutlined";
+import FolderOpen from "@material-ui/icons/FolderOpenOutlined";
+import TimeLine from "@material-ui/icons/Timeline";
 import {
   TaskManagement,
   GanttChart,
   EmployeeManagement,
   Request,
   Notification,
-  ProjectsManagement
+  ProjectsManagement,
+  TimeKeeping,
+  Information,
+  AdminHumanManagement,
+  AdminDashboard,
+  OverviewProject,
+  ProjectView
 } from "./views";
 
-const dashboardRoutes = [
-  //Lead
+const manageRoutes = [
+  //Admin
   {
-    path: "",
-    name: "Projects",
-    rtlName: "Quản lý dự án",
-    icon: Unarchive,
-    component: ProjectsManagement,
-    layout: "/lead",
-    breadcrumb: "Projects"
-  }, {
-    path: "/tasks",
-    name: "Task Management",
-    rtlName: "Quản lý Task",
-    icon: Dashboard,
-    component: TaskManagement,
-    layout: "/lead",
-    breadcrumb: "TaskManagement"
-  }, {
-    path: "/timeline",
-    name: "TimeLine",
-    rtlName: "Lịch công việc",
-    icon: ShowChart,
-    component: GanttChart,
-    layout: "/lead",
-    breadcrumb: "TimeLine"
-  }, {
-    path: "/request",
-    name: "Request",
-    rtlName: "Xin phép nghỉ",
-    icon: LibraryBooks,
-    component: Request,
-    layout: "/lead",
-    breadcrumb: "Request"
-  }, {
-    path: "/notification",
-    name: "Notification",
-    rtlName: "Thông báo",
-    icon: Notifications,
-    component: Notification,
-    layout: "/lead",
-    breadcrumb: "Notification"
+    layout: "/admin",
+    routes: [
+      {
+        path: "",
+        name: "Dashboad",
+        rtlName: "Tổng quan",
+        icon: Dashboard,
+        component: AdminDashboard,
+        layout: "/admin",
+        breadcrumb: "Dashboard"
+      },
+      {
+        path: "/projects",
+        name: "Projects",
+        rtlName: "Quản lý dự án",
+        icon: FolderOpen,
+        component: ProjectsManagement,
+        layout: "/admin",
+        breadcrumb: "Projects",
+        routes:[
+          {
+            path: "",
+            component: OverviewProject,
+            layout: "/admin/projects",
+          },
+          {
+            path: "/:idProject",
+            component: ProjectView,
+            layout: "/admin/projects",
+          }
+        ]
+      },
+      {
+        path: "/tasks",
+        name: "Tasks Management",
+        rtlName: "Quản lý Task",
+        icon: Assignment,
+        component: TaskManagement,
+        layout: "/admin",
+        breadcrumb: "TasksManagement"
+      },
+      {
+        path: "/human",
+        name: "Human Resources",
+        rtlName: "Nhân sự",
+        icon: RecentActors,
+        component: AdminHumanManagement,
+        layout: "/admin",
+        breadcrumb: "HumanResources"
+      },
+      {
+        path: "/request",
+        name: "Request",
+        rtlName: "Xin phép nghỉ",
+        icon: LibraryBooks,
+        component: Request,
+        layout: "/admin",
+        breadcrumb: "Request"
+      },
+      {
+        path: "/timekeeping",
+        name: "Timekeeping",
+        rtlName: "Chấm công",
+        icon: Today,
+        component: TimeKeeping,
+        layout: "/admin",
+        breadcrumb: "Timekeeping"
+      },
+      {
+        path: "/notification",
+        name: "Notification",
+        rtlName: "Thông báo",
+        icon: Notifications,
+        component: Notification,
+        layout: "/admin",
+        breadcrumb: "Notification"
+      },
+      {
+        path: "/info",
+        name: "Infomation",
+        rtlName: "Thông tin cá nhân",
+        icon: Person,
+        component: Information,
+        layout: "/admin",
+        breadcrumb: "Information"
+      }
+    ]
   },
-  //Staff
   {
-    path: "",
-    name: "Projects",
-    rtlName: "Quản lý dự án",
-    icon: Unarchive,
-    component: ProjectsManagement,
-    layout: "/staff",
-    breadcrumb: "Projects"
+    layout:"/lead",
+    routes:[
+      {
+        path: "",
+        name: "Dashboard",
+        rtlName: "Tổng quan",
+        icon: Dashboard,
+        component: AdminDashboard,
+        layout: "/lead",
+        breadcrumb: "Dashboard"
+      },
+      {
+        path: "/projects",
+        name: "Projects",
+        rtlName: "Quản lý dự án",
+        icon: FolderOpen,
+        component: ProjectsManagement,
+        layout: "/lead",
+        breadcrumb: "Projects",
+        routes:[
+          {
+            path: "",
+            component: OverviewProject,
+            layout: "/lead/projects",
+          },
+          {
+            path: "/:idProject",
+            component: ProjectView,
+            layout: "/lead/projects",
+          }
+        ]
+      }, {
+        path: "/tasks",
+        name: "Tasks Management",
+        rtlName: "Quản lý Tasks",
+        icon: Assignment,
+        component: TaskManagement,
+        layout: "/lead",
+        breadcrumb: "TasksManagement"
+      }, {
+        path: "/request",
+        name: "Request",
+        rtlName: "Xin phép nghỉ",
+        icon: LibraryBooks,
+        component: Request,
+        layout: "/lead",
+        breadcrumb: "Request"
+      }, {
+        path: "/notification",
+        name: "Notification",
+        rtlName: "Thông báo",
+        icon: Notifications,
+        component: Notification,
+        layout: "/lead",
+        breadcrumb: "Notification"
+      }, {
+        path: "/info",
+        name: "Infomation",
+        rtlName: "Thông tin cá nhân",
+        icon: Person,
+        component: Information,
+        layout: "/lead",
+        breadcrumb: "Information"
+      }
+    ]
   },
   {
-    path: "/tasks",
-    name: "Task Management",
-    rtlName: "Quản lý Task",
-    icon: Dashboard,
-    component: TaskManagement,
-    layout: "/staff",
-    breadcrumb: "TaskManagement"
-  }, {
-    path: "/timeline",
-    name: "TimeLine",
-    rtlName: "Lịch công việc",
-    icon: ShowChart,
-    component: GanttChart,
-    layout: "/staff",
-    breadcrumb: "TimeLine"
-  }, {
-    path: "/request",
-    name: "Request",
-    rtlName: "Xin phép nghỉ",
-    icon: LibraryBooks,
-    component: Request,
-    layout: "/staff",
-    breadcrumb: "Request"
-  }, {
-    path: "/notification",
-    name: "Notification",
-    rtlName: "Thông báo",
-    icon: Notifications,
-    component: Notification,
-    layout: "/staff",
-    breadcrumb: "Notification"
+    layout:"/staff",
+    routes:[
+      {
+        path: "",
+        name: "Dashboard",
+        rtlName: "Tổng quan",
+        icon: Dashboard,
+        component: AdminDashboard,
+        layout: "/staff",
+        breadcrumb: "Dashboard"
+      },
+      {
+        path: "/projects",
+        name: "Projects",
+        rtlName: "Quản lý dự án",
+        icon: FolderOpen,
+        component: ProjectsManagement,
+        layout: "/staff",
+        breadcrumb: "Projects",
+        routes:[
+          {
+            path: "",
+            component: OverviewProject,
+            layout: "/staff/projects",
+          },
+          {
+            path: "/:idProject",
+            component: ProjectView,
+            layout: "/staff/projects",
+          }
+        ]
+      },
+      {
+        path: "/tasks",
+        name: "Tasks Management",
+        rtlName: "Quản lý Tasks",
+        icon: Assignment,
+        component: TaskManagement,
+        layout: "/staff",
+        breadcrumb: "TasksManagement"
+      }, {
+        path: "/timeline",
+        name: "TimeLine",
+        rtlName: "Lịch công việc",
+        icon: TimeLine,
+        component: GanttChart,
+        layout: "/staff",
+        breadcrumb: "TimeLine"
+      }, {
+        path: "/request",
+        name: "Request",
+        rtlName: "Xin phép nghỉ",
+        icon: LibraryBooks,
+        component: Request,
+        layout: "/staff",
+        breadcrumb: "Request"
+      }, {
+        path: "/notification",
+        name: "Notification",
+        rtlName: "Thông báo",
+        icon: Notifications,
+        component: Notification,
+        layout: "/staff",
+        breadcrumb: "Notification"
+      }, {
+        path: "/info",
+        name: "Infomation",
+        rtlName: "Thông tin cá nhân",
+        icon: Person,
+        component: Information,
+        layout: "/staff",
+        breadcrumb: "Information"
+      }
+    ]
   },
-  //Human Resource
   {
-    path: "",
-    name: "Human Resources",
-    rtlName: "Nhân sự",
-    icon: Person,
-    component: EmployeeManagement,
-    layout: "/hr",
-    breadcrumb: "HumanResources"
-  }, {
-    path: "/request",
-    name: "Request",
-    rtlName: "Xin phép nghỉ",
-    icon: LibraryBooks,
-    component: Request,
-    layout: "/hr",
-    breadcrumb: "Request"
-  }, {
-    path: "/notification",
-    name: "Notification",
-    rtlName: "Thông báo",
-    icon: Notifications,
-    component: Notification,
-    layout: "/hr",
-    breadcrumb: "Notification"
+    layout:"/hr",
+    routes:[
+      {
+        path: "",
+        name: "Dashboard",
+        rtlName: "Tổng quan",
+        icon: Dashboard,
+        component: AdminDashboard,
+        layout: "/hr",
+        breadcrumb: "Dashboard"
+      },
+      {
+        path: "/human",
+        name: "Human Resources",
+        rtlName: "Nhân sự",
+        icon: RecentActors,
+        component: EmployeeManagement,
+        layout: "/hr",
+        breadcrumb: "HumanResources"
+      },{
+        path: "/timekeeping",
+        name: "Timekeeping",
+        rtlName: "Chấm công",
+        icon: Today,
+        component: TimeKeeping,
+        layout: "/hr",
+        breadcrumb: "Timekeeping"
+      }, {
+        path: "/request",
+        name: "Request",
+        rtlName: "Xin phép nghỉ",
+        icon: LibraryBooks,
+        component: Request,
+        layout: "/hr",
+        breadcrumb: "Request"
+      },  {
+        path: "/notification",
+        name: "Notification",
+        rtlName: "Thông báo",
+        icon: Notifications,
+        component: Notification,
+        layout: "/hr",
+        breadcrumb: "Notification"
+      }, {
+        path: "/info",
+        name: "Infomation",
+        rtlName: "Thông tin cá nhân",
+        icon: Person,
+        component: Information,
+        layout: "/hr",
+        breadcrumb: "Information"
+      }
+    ]
   }
 ];
 
-export default dashboardRoutes;
+export default manageRoutes;

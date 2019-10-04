@@ -24,17 +24,6 @@ class Navbar extends Component {
         super(props);
 
     }
-    makeBrand() {
-        var name;
-        this.props.routes.map(prop => {
-            console.log('Navbar local : ' + window.location.href);
-            if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
-                name = prop.name;
-            }
-            return "No content";
-        });
-        return name;
-    }
     render() {
         const { classes } = this.props;
         const { handleDrawerToggleMobile, handleDrawerToggleDesktop } = this.props;
@@ -61,7 +50,7 @@ class Navbar extends Component {
                                 <MenuIcon />
                             </IconButton>
                         </Hidden>
-                        <RouterBreadcrumbs routes={this.props.routes}/>
+                        <RouterBreadcrumbs router={this.props.router}/>
                     </div>
                     <Hidden smDown implementation="css">
                         <MainNavbarLink />
@@ -101,6 +90,6 @@ Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
     color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
     rtlActive: PropTypes.bool,
-    routes: PropTypes.arrayOf(PropTypes.object)
+    router: PropTypes.object.isRequired,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Navbar));

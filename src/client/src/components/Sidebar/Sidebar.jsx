@@ -27,25 +27,27 @@ class Sidebar extends Component {
         const { classes } = this.props;
         const { handleDrawerToggleMobile, handleDrawerToggleDesktop, drawerToggleDesktopClose } = this.props;
         // verifies if routeName is the one active (in browser input)
-        function activeRoute(routeName) {
-            console.log("activeRoute "+window.location.pathname)
-            return window.location.pathname === routeName ? true : false;
+        function activeRoute(layout,path) {
+            console.log("active " + window.location.pathname +" route "+layout+path);
+            if(path === ""){
+                return window.location.pathname === layout;
+            }
+            return window.location.pathname.includes(layout+path);
         }
-        const { color, logo, image, logoText, routes } = this.props;
+        const { color, logo, image, logoText, router } = this.props;
         var links = (
             <List className={classes.list}>
-                {routes.map((prop, key) => {
-                    var activePro = " ";
+                {router.routes.map((prop, key) => {
                     var listItemClasses = classNames({
-                            [" " + classes[color]]: activeRoute(prop.layout + prop.path)
-                        });
+                        [" " + classes[color]]: activeRoute(prop.layout,prop.path)
+                    });
                     const whiteFontClasses = classNames({
-                        [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path)
+                        [" " + classes.whiteFont]: activeRoute(prop.layout,prop.path)
                     });
                     return (
                         <NavLink
                             to={prop.layout + prop.path}
-                            className={activePro + classes.item}
+                            className={classes.item}
                             activeClassName="active"
                             key={key}
                         >
@@ -124,7 +126,6 @@ class Sidebar extends Component {
                     >
                         {brand}
                         <div className={classes.sidebarWrapper}>
-                            {/* {this.props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />} */}
                             <MainNavbarLink />
                             {links}
                         </div>
@@ -132,7 +133,7 @@ class Sidebar extends Component {
                             <div
                                 className={classes.background}
                                 // style={{ backgroundImage: "url(" + image + ")" }}
-                                style={{backgroundColor: '#0F1642'}}
+                                style={{ backgroundColor: '#0F1642' }}
                             />
                         ) : null}
                     </Drawer>
@@ -146,8 +147,8 @@ class Sidebar extends Component {
                             paper: classNames(classes.drawerPaper, {
                                 [classes.drawerPaperRTL]: this.props.rtlActive
                             }, {
-                                    [classes.drawerPaperClose]: !this.props.desktopOpen
-                                })
+                                [classes.drawerPaperClose]: !this.props.desktopOpen
+                            })
                         }}
                         onClose={handleDrawerToggleDesktop}
                         ModalProps={{
@@ -160,7 +161,7 @@ class Sidebar extends Component {
                             <div
                                 className={classes.background}
                                 // style={{ backgroundImage: "url(" + image + ")" }}
-                                style={{backgroundColor: '#0F1642'}}
+                                style={{ backgroundColor: '#0F1642' }}
                             />
                         ) : null}
                     </Drawer>
@@ -176,7 +177,7 @@ Sidebar.propTypes = {
     logo: PropTypes.string,
     image: PropTypes.string,
     logoText: PropTypes.string,
-    routes: PropTypes.arrayOf(PropTypes.object),
+    router: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
