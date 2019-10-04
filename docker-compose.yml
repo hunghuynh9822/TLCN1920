@@ -1,0 +1,34 @@
+version: "3"
+services:
+  client:
+    build:
+      context: ./src/client/
+      dockerfile: Dockerfile
+    image: pose/client-reactjs
+    container_name: client-reactjs
+    restart: unless-stopped
+  nginx:
+    build:
+      context: ./src/nginx/
+      dockerfile: Dockerfile
+    image: pose/nginx
+    container_name: nginx
+    restart: unless-stopped
+    links:
+      - client
+    ports:
+      - "80:80"
+  database:
+    build:
+      context: ./src/database
+      dockerfile: Dockerfile
+    image: pose/docker-postgres
+    container_name: docker-postgres
+    restart: unless-stopped
+    volumes:
+      - ./src/database/postgresql:/var/lib/postgresql
+      - ./src/database/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
