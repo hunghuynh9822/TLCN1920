@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from "classnames";
+import AddTask from './AddTask'
 const styles = theme => ({
     "checked": { "color": "orange" },
     "fa": { "fontSize": "10px" },
@@ -25,8 +26,8 @@ class Task extends Component {
                 <ul className="list-group">
                     <li className="list-group-item active">
                         <div className="row">
-                            <div className="col-10"><a>Thái Thanh Liêm</a></div>
-                            <div className="col-2"><i className="fas fa-plus" style={{ float: 'right' }} /></div>
+                            <div className="col-10"><a>Thái Thanh Liêm</a></div>                         
+                            <div className="col-2"><AddTask  style={{ float: 'right' }} /></div>
                         </div>
                     </li>
                     <li className="list-group-item">
@@ -44,6 +45,7 @@ class Task extends Component {
           </label>
                                 </div>
                             </div>
+                            
                             <div className="col-4" style={{ float: 'right' }}>
                                 <span className={fa_star_checked} />
                                 <span className={fa_star_checked} />
@@ -51,6 +53,7 @@ class Task extends Component {
                                 <span className={fa_star} />
                                 <span className={fa_star} />
                             </div>
+                        
                         </div>
                     </li>
                     <li className="list-group-item">

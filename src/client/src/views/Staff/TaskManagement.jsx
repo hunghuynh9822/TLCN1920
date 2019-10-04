@@ -2,29 +2,83 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-// core components
-import { Task, TaskContainer } from "../../components"
+import SwipeableViews from 'react-swipeable-views';
+
+import { CenteredTabs, TabPanel } from '../../components';
+
+import { OverviewTask, AdminDashboard } from '../'
 
 import styles from "../../assets/jss/styles/views/taskManagementStyle";
 
 class TaskManagement extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            value: 0,
+        }
     }
+    a11yProps(index) {
+        return {
+            id: `full-width-tab-${index}`,
+            'aria-controls': `full-width-tabpanel-${index}`,
+        };
+    }
+    handleChange = (event, newValue) => {
+        this.setState({
+            value: newValue,
+        })
+    }
+    handleChangeIndex = index => {
+        this.setState({
+            value: index,
+        })
+    };
     render() {
-        // styles
+        const tabs = [
+            {
+                name: "Overview",
+                component: OverviewTask,
+            },
+            {
+                name: "Analytics",
+                component: AdminDashboard,
+            }
+        ];
         const { classes } = this.props;
+        const { match } = this.props;
+        console.log("TaskManagement : ");
+        console.log(match);
+        console.log(tabs);
         return (
             <div className={classes.root}>
-                <TaskContainer>
-                    <Task />
-                    <Task />
-                    <Task />
-                    <Task />
-                    <Task />
-                    <Task />
-                    <Task />
-                </TaskContainer>
+                <div className={classes.sub_layout_header}>
+                    <div className={classes.sub_header}>
+                        <div className={classes.sub_header_section}>
+
+                        </div>
+                        <div className={classes.sub_header_section}>
+                            <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
+                        </div>
+                        <div className={classes.sub_header_section}>
+
+                        </div>
+                    </div>
+                </div>
+                <div className={classes.content}>
+                    <SwipeableViews
+                        axis={'x'}
+                        index={this.state.value}
+                        onChangeIndex={this.handleChangeIndex}
+                    >
+                        {
+                            tabs.map((tab, key) => (
+                                <TabPanel key={key} value={this.state.value} index={key}>
+                                    <tab.component />
+                                </TabPanel>
+                            ))
+                        }
+                    </SwipeableViews>
+                </div>
             </div>
         );
     }
@@ -33,4 +87,4 @@ class TaskManagement extends Component {
 TaskManagement.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(TaskManagement)
+export default withStyles(styles)(TaskManagement);

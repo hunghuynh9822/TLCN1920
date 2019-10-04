@@ -1,44 +1,70 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Icon from '@material-ui/core/Icon';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+
+
+import { withRouter, Switch, Route } from "react-router-dom";
 
 // core components
-import { Project } from "../../components"
-
 import styles from "../../assets/jss/styles/views/projectManagementStyle";
 
 class ProjectsManagement extends Component {
     constructor(props) {
         super(props);
     }
+    switchRoutes = (routes) => {
+        return (
+            <Switch>
+                {
+                    routes.map((route, key) => {
+                        if (route.path === "") {
+                            return (
+                                <Route
+                                    exact
+                                    path={route.layout + route.path}
+                                    component={route.component}
+                                    key={key}
+                                />
+                            );
+                        }
+                        if (route.routes === undefined) {
+                            return (
+                                <Route
+                                    exact
+                                    key={key}
+                                    path={route.layout + route.path}
+                                    render={props => (
+                                        // pass the sub-routes down to keep nesting
+                                        <route.component {...props} {...route} />
+                                    )}
+                                />
+                            );
+                        }
+                        return (
+                            <Route
+                                key={key}
+                                path={route.layout + route.path}
+                                render={props => (
+                                    // pass the sub-routes down to keep nesting
+                                    <route.component {...props} {...route} />
+                                )}
+                            />
+                        );
+                    })
+                }
+                {/* <Redirect to={curLayout} /> */}
+            </Switch>
+        );
+    }
     render() {
         // styles
-        const { classes } = this.props;
+        const { classes, match } = this.props;
+        const { routes } = this.props;
+        console.log(match);
+        console.log(routes);
         return (
             <div className={classes.root}>
-                <div className={classes.area}>
-                    <div className={classes.bar}>
-                        <ExpandMore /> Recent Projects
-                    </div>
-                    <div className={classes.container}>
-                        <Project />
-                        <Project />
-                        <Project />
-                    </div>
-                </div>
-                <div className={classes.area}>
-                    <div className={classes.bar}>
-                        <ExpandMore /> My Project
-                    </div>
-                    <div className={classes.container}>
-                        <Project />
-                        <Project />
-                        <Project />
-                    </div>
-                </div>
+                {this.switchRoutes(routes)}
             </div>
         );
     }
@@ -47,4 +73,4 @@ class ProjectsManagement extends Component {
 ProjectsManagement.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(ProjectsManagement)
+export default withRouter(withStyles(styles)(ProjectsManagement));

@@ -12,6 +12,17 @@ export {default as Copyright} from './Copyright/Copyright.jsx';
 export {default as MaterialTable} from './Tables/MaterialTable.jsx';
 export {default as PaginationTable} from './Tables/PaginationTable.jsx';
 export {default as Project} from './Project/Project.jsx'
+export {default as NewProject} from './Project/NewProject.jsx'
 export {default as Gantt} from './Gantt/Gantt.jsx';
 export {default as Toolbar} from './Gantt/Toolbar.jsx';
 export {default as MessageArea} from './Gantt/MessageArea.jsx';
+export {default as AddStafftoProject} from './AddStafftoProject/AddStafftoProject';
+export {default as Notifi} from './AddNotifi/Notifi';
+export {default as AddRequest} from './AddRequest/AddRequest';
+export {default as Infomate} from './Infomation/Infomation';
+export {default as CustomLineChart} from './Chart/CustomLineChart.jsx';
+export {default as AddStaff} from './AddStaff/AddStaff';
+export {default as AddNewProject} from './AddStafftoProject/AddNewProject ';
+export {default as CollapsibleSection}from './Section/CollapsibleSection.jsx';
+export {default as CenteredTabs} from './Tab/CenteredTabs.jsx';
+export {default as TabPanel} from './Tab/TabPanel.jsx';

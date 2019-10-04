@@ -31,6 +31,7 @@ class MainNavbarLink extends Component {
     render() {
         const { classes } = this.props;
         const handleClickNotification = event => {
+            console.log(event.target);
             if (this.state.openNotification && this.state.openNotification.contains(event.target)) {
                 this.setState({
                     openNotification: null,
@@ -47,19 +48,20 @@ class MainNavbarLink extends Component {
             })
         };
         const handleClickProfile = event => {
+            console.log(event.target);
             if (this.state.openProfile && this.state.openProfile.contains(event.target)) {
                 this.setState({
-                    openNotification: null,
+                    openProfile: null,
                 })
             } else {
                 this.setState({
-                    openNotification: event.currentTarget,
+                    openProfile: event.currentTarget,
                 })
             }
         };
         const handleCloseProfile = () => {
             this.setState({
-                openNotification: null,
+                openProfile: null,
             })
         };
         return (

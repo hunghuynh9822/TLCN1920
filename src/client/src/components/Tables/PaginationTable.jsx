@@ -10,7 +10,8 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Pagination from "./Pagination.jsx"
+import Pagination from "./Pagination.jsx";
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     root: {
@@ -22,7 +23,7 @@ const styles = theme => ({
     },
     tableWrapper: {
         maxHeight: 407,
-        overflowX: 'auto',
+        overflowX: 'hidden',
     },
     stickyHeader: {
         backgroundColor: '#978cfc',
@@ -35,14 +36,10 @@ const styles = theme => ({
 
 
 const StyledTableCell = withStyles(theme => ({
-    // head: {
-    //     backgroundColor: theme.palette.common.black,
-    //     color: 'inherit',
-    // },
-    body: {
-        color: 'inherit',
-        fontSize: 14,
-    },
+    root:{
+        padding: '14px',
+    }
+    
 }))(TableCell);
 
 
@@ -77,9 +74,74 @@ class PaginationTable extends Component {
             rowsPerPage: parseInt(event.target.value, 10)
         });
     }
+    showActions(actions){
+        return actions.map((action)=>{
+            switch(action){
+                case 'view':
+                    return this.showBtnView();
+                case 'confirm':
+                    return this.showBtnConfirm();
+                case 'delete':
+                    return this.showBtnDelete();
+            }
+        })
+    }
+    showBtnView() {
+        return (
+            <Button
+                key='view'
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                style={{
+                    width: '60px',
+                    margin:'0px 3px',
+                }}
+            >
+                View
+            </Button>
+        )
+    }
+    showBtnConfirm() {
+        return (
+            <Button
+                key='confirm'
+                type="submit"
+                fullWidth
+                variant="contained"
+                style={{
+                    width: '80px',
+                    margin:'0px 3px',
+                    backgroundColor:'#9ae5e5',
+                    color:'white',
+                }}
+            >
+                Confirm
+            </Button>
+        )
+    }
+    showBtnDelete() {
+        return (
+            <Button
+                key='delete'
+                type="submit"
+                fullWidth
+                variant="contained"
+                style={{
+                    width: '80px',
+                    margin:'0px 3px',
+                    backgroundColor:'#DC3545',
+                    color:'white',
+                }}
+            >
+                Delete
+            </Button>
+        )
+    }
     render() {
         const { classes } = this.props;
-        const { columns, rows} = this.props;
+        const { columns, rows } = this.props;
         const { page, rowsPerPage } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
         return (
@@ -89,26 +151,37 @@ class PaginationTable extends Component {
                         <TableHead>
                             <TableRow>
                                 {columns.map(column => (
-                                    <TableCell
+                                    <StyledTableCell
                                         key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
+                                        align='center'
+                                        style={{ minWidth: column.minWidth, width: column.width }}
                                         className={classes.stickyHeader}
                                     >
                                         {column.label}
-                                    </TableCell>
+                                    </StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                     {columns.map(column => {
                                         const value = row[column.id];
+                                        console.log(column.id + " : " + value);
+                                        if (column.id === 'action') {
+                                            return (
+                                                <StyledTableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
+                                                    <div style={{display:'flex', justifyContent:'center'}}>
+                                                        {this.showActions(value)}
+                                                    </div>
+
+                                                </StyledTableCell>
+                                            );
+                                        }
                                         return (
-                                            <TableCell key={column.id} align={column.align}>
+                                            <StyledTableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
-                                            </TableCell>
+                                            </StyledTableCell>
                                         );
                                     })}
                                 </TableRow>
