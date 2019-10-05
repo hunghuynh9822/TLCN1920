@@ -23,9 +23,28 @@ CREATE TABLE IF NOT EXISTS "public"."roles" (
   "updated_at" int8
 )
 ;
-
+ALTER TABLE "public"."roles" ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");
 -- ----------------------------
 -- Records of roles
 -- ----------------------------
 INSERT INTO "public"."roles" VALUES (1,'ROLE_ADMIN', 1567937957503, NULL);
 INSERT INTO "public"."roles" VALUES (2,'ROLE_EMPLOYEE', 1567937962314, NULL);
+
+CREATE TABLE IF NOT EXISTS "public"."employee_roles" (
+  "employee_id" int8 NOT NULL,
+  "role_id" int4 NOT NULL,
+  "create_at" int8 NOT NULL,
+  "update_at" int8
+)
+;
+
+-- ----------------------------
+-- Primary Key structure for table employee_roles
+-- ----------------------------
+ALTER TABLE "public"."employee_roles" ADD CONSTRAINT "employee_roles_pkey" PRIMARY KEY ("employee_id", "role_id");
+
+-- ----------------------------
+-- Foreign Keys structure for table employee_roles
+-- ----------------------------
+ALTER TABLE "public"."employee_roles" ADD CONSTRAINT "employee_id" FOREIGN KEY ("employee_id") REFERENCES "public"."employees" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."employee_roles" ADD CONSTRAINT "role_id" FOREIGN KEY ("role_id") REFERENCES "public"."roles" ("id") ON DELETE SET NULL ON UPDATE CASCADE;

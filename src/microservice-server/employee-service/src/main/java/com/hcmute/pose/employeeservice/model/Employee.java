@@ -2,10 +2,11 @@ package com.hcmute.pose.employeeservice.model;
 
 import com.hcmute.pose.employeeservice.model.audit.DateAudit;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Employee extends DateAudit {
+public class Employee extends DateAudit implements Serializable {
     private Long id;
 
     private String username;
@@ -13,19 +14,19 @@ public class Employee extends DateAudit {
     private String password;
     private Set<Role> roles = new HashSet<>();
 
-    private String firstName;
-    private String middleName;
-    private String lastName;
+    private String first_name;
+    private String middle_name;
+    private String last_name;
 
     public Employee() {
     }
 
-    public Employee(String username, String email, String password) {
-        super();
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
+//    public Employee(String username, String email, String password) {
+//        super();
+//        this.username = username;
+//        this.email = email;
+//        this.password = password;
+//    }
 
     //Create employee
     public Employee(String username, String email, String password, Set<Role> roles, String firstName, String middleName, String lastName) {
@@ -33,20 +34,20 @@ public class Employee extends DateAudit {
         this.email = email;
         this.password = password;
         this.roles = roles;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
+        this.first_name = firstName;
+        this.middle_name = middleName;
+        this.last_name = lastName;
     }
 
-    public Employee(Long id, String username, String email, String password, Set<Role> roles, String firstName, String middleName, String lastName) {
+    public Employee(Long id, String username, String email, String password, String firstName, String middleName, String lastName) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.roles = roles;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
+        this.roles = new HashSet<>();
+        this.first_name = firstName;
+        this.middle_name = middleName;
+        this.last_name = lastName;
     }
 
     public Long getId() {
@@ -89,28 +90,27 @@ public class Employee extends DateAudit {
         this.roles = roles;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getMiddle_name() {
+        return middle_name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setMiddle_name(String middle_name) {
+        this.middle_name = middle_name;
     }
 
-    public String getMiddleName() {
-        return middleName;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
-
 }

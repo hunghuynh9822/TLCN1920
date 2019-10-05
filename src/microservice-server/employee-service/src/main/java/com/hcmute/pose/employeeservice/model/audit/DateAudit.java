@@ -2,24 +2,26 @@ package com.hcmute.pose.employeeservice.model.audit;
 
 import com.google.gson.Gson;
 
-public class DateAudit {
-    protected Long createdAt;
-    protected Long updatedAt;
+import java.io.Serializable;
+
+public class DateAudit implements Serializable {
+    protected Long created_at;
+    protected Long updated_at;
     protected DateAudit(){
-        this.createdAt = System.currentTimeMillis();
-        this.updatedAt = null;
+        this.created_at = System.currentTimeMillis();
+        this.updated_at = null;
     }
 
-    public void setUpdatedAt(Long updateAt) {
-        this.updatedAt = updateAt;
+    public void setUpdated_at(Long updated_at) {
+        this.updated_at = updated_at;
     }
 
-    public Long getCreatedAt() {
-        return createdAt;
+    public Long getCreated_at() {
+        return created_at;
     }
 
-    public Long getUpdatedAt() {
-        return updatedAt;
+    public Long getUpdated_at() {
+        return updated_at;
     }
 
     @Override

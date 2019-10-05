@@ -3,7 +3,9 @@ package com.hcmute.pose.employeeservice.model;
 
 import com.hcmute.pose.employeeservice.model.audit.DateAudit;
 
-public class Role extends DateAudit {
+import java.io.Serializable;
+
+public class Role extends DateAudit implements Serializable {
     private Integer id;
     private String name;
 
@@ -24,11 +26,11 @@ public class Role extends DateAudit {
         this.id = id;
     }
 
-    public Role(Integer id, String name, Long createdAt,Long updatedAt) {
+    public Role(Integer id, String name, Long created_at,Long updated_at) {
         this.id = id;
         this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
     }
 
     public Integer getId() {
