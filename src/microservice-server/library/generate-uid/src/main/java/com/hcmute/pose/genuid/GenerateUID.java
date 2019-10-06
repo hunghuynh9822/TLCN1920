@@ -14,9 +14,9 @@ import java.util.Optional;
 public class GenerateUID {
     private static Logger LOGGER = LoggerFactory.getLogger(GenerateUID.class);
 
-    private final String dbUrl = "jdbc:postgresql://localhost:5432/postgres";
-    private final String dbUsername = "postgres";
-    private final String dbPassword = "postgres";
+    private String dbUrl;
+    private String dbUsername;
+    private String dbPassword;
 
     private final String SQL_SELECT_INDEX = "SELECT index as value FROM genuid WHERE id = ? FOR UPDATE";
     private final String SQL_UPDATE_INDEX = "UPDATE genuid SET index = ?, count = count + 1 WHERE id = ?";
@@ -25,7 +25,10 @@ public class GenerateUID {
     private DataSource dataSource;
     private DatabaseHelper databaseHelper;
     private Integer serviceId;
-    public GenerateUID(Integer serviceId) throws SQLException {
+    public GenerateUID(String dbUrl, String dbUsername,String dbPassword,Integer serviceId) throws SQLException {
+        this.dbUrl = dbUrl;
+        this.dbUsername = dbUsername;
+        this.dbPassword = dbPassword;
         this.serviceId = serviceId;
         dataSource = new DataSourceImpl(dbUrl,dbUsername,dbPassword);
         databaseHelper = new DatabaseHelperImpl(dataSource);

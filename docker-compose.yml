@@ -18,7 +18,9 @@ services:
   #     - client
   #   ports:
   #     - "80:80"
-  database:
+  #   networks:
+  #     - pose
+  postgresql:
     build:
       context: ./src/database
       dockerfile: Dockerfile
@@ -26,8 +28,89 @@ services:
     container_name: docker-postgres
     restart: unless-stopped
     volumes:
-      - ./src/database/postgresql:/var/lib/postgresql
+      - ./docker/database/postgresql:/var/lib/postgresql
     environment:
       - POSTGRES_PASSWORD=postgres
     ports:
       - "5432:5432"
+    networks:
+      - pose
+  discovery:
+    build:
+      context: ./src/microservice-server/discovery-server
+      dockerfile: Dockerfile
+    image: pose/micro/dicovery
+    container_name: docker-micro-dicovery
+    restart: unless-stopped
+    volumes:
+      - ./docker/micro/dicovery/logs:/logs
+    ports:
+      - "8761:8761"
+    networks:
+      - pose
+  gateway:
+    build:
+      context: ./src/microservice-server/gateway-proxy
+      dockerfile: Dockerfile
+    image: pose/micro/service/gateway
+    container_name: docker-micro-gateway-proxy
+    restart: unless-stopped
+    volumes:
+      - ./docker/micro/gateway/logs:/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+    links:
+      - discovery
+    depends_on:
+      - discovery
+    ports:
+      - "8080:8080"
+    networks:
+      - pose
+  employee:
+    build:
+      context: ./src/microservice-server/employee-service
+      dockerfile: Dockerfile
+    image: pose/micro/service/employee
+    container_name: docker-micro-service-employee
+    restart: unless-stopped
+    volumes:
+      - ./docker/micro/service/employee/logs:/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+      - PSQL_URL=jdbc:postgresql://postgresql:5432/postgres
+    links:
+      - postgresql
+      - discovery
+    depends_on:
+      - discovery
+      - postgresql
+    ports:
+      - "8001:8001"
+    networks:
+      - pose
+  tasks:
+    build:
+      context: ./src/microservice-server/task-service
+      dockerfile: Dockerfile
+    image: pose/micro/service/task
+    container_name: docker-micro-service-task
+    restart: unless-stopped
+    volumes:
+      - ./docker/micro/service/employee/logs:/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+      - PSQL_URL=jdbc:postgresql://postgresql:5432/postgres
+    links:
+      - postgresql
+      - discovery
+    depends_on:
+      - discovery
+      - postgresql
+    ports:
+      - "8002:8002"
+    networks:
+      - pose
+networks:
+  pose:
+    driver: bridge

@@ -58,7 +58,7 @@ public class EmployeeConfig {
     private Integer serviceId = 1;
     @Bean
     public GenerateUID generateUID() throws SQLException {
-        return new GenerateUID(serviceId);
+        return new GenerateUID(DBUrl,DBUsername,DBPassword,serviceId);
     }
 
     @Bean
