@@ -7,6 +7,7 @@ import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.model.Employee;
 import com.hcmute.pose.employeeservice.model.Role;
 import com.hcmute.pose.employeeservice.model.map.LongValue;
+import com.hcmute.pose.genuid.GenerateUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,20 +42,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Autowired
     private DatabaseHelper databaseHelper;
 
+    @Autowired
+    private GenerateUID generateUID;
+
     public Optional<Long> getLastId(){
-        Optional<LongValue> value;
-        try {
-            value = databaseHelper.executeQueryObject(LongValue.class,SQL_SELECT_LAST_ID);
-        } catch (SQLException e) {
-            LOGGER.error("[EmployeeDaoImpl]:[getLastId] GOT EXCEPTION ",e);
-            return Optional.empty();
-        }
-        if (value.isPresent()) {
-            Long id = value.get().getValue();
-            Long index = Math.floorMod(id,10) > 8 ? 0L : Math.floorMod(id,10) + 1;
-            return Optional.of(Long.parseLong(String.format("%d%d",System.currentTimeMillis(),index)));
-        }
-        return Optional.of(Long.parseLong(String.format("%d%d",System.currentTimeMillis(),0L)));
+        return generateUID.genUID();
     }
 
     public Optional<Employee> createEmployee(Employee employee) {

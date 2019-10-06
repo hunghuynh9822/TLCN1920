@@ -14,6 +14,7 @@ import com.hcmute.pose.employeeservice.service.EmployeeService;
 import com.hcmute.pose.employeeservice.service.RoleService;
 import com.hcmute.pose.employeeservice.service.impl.EmployeeServiceImpl;
 import com.hcmute.pose.employeeservice.service.impl.RoleServiceImpl;
+import com.hcmute.pose.genuid.GenerateUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +53,12 @@ public class EmployeeConfig {
     @Bean
     public DatabaseHelper databaseHelper(DataSource dataSource){
         return new DatabaseHelperImpl(dataSource);
+    }
+
+    private Integer serviceId = 1;
+    @Bean
+    public GenerateUID generateUID() throws SQLException {
+        return new GenerateUID(serviceId);
     }
 
     @Bean

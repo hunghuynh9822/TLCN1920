@@ -13,4 +13,8 @@ public class SingleValue<T> {
 
     public SingleValue() {
     }
+
+    public SingleValue(T value){
+        this.value = value;
+    }
 }

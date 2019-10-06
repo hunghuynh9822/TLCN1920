@@ -11,11 +11,14 @@
     <modules>
         <module>database-connector</module>
         <module>common</module>
+        <module>generate-uid</module>
     </modules>
     <properties>
         <hiraki.pool.version>3.3.1</hiraki.pool.version>
         <postgresql.version>42.1.4</postgresql.version>
         <slf4j.version>1.7.26</slf4j.version>
+        <database-connector.version>1.0.0</database-connector.version>
+        <common.version>1.0.0</common.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -53,6 +56,18 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>5.1.9.RELEASE</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.hcmute.pose</groupId>
+                <artifactId>database-connector</artifactId>
+                <version>${database-connector.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.hcmute.pose</groupId>
+                <artifactId>common</artifactId>
+                <version>${common.version}</version>
             </dependency>
 
             <dependency>

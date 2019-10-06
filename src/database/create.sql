@@ -48,3 +48,16 @@ ALTER TABLE "public"."employee_roles" ADD CONSTRAINT "employee_roles_pkey" PRIMA
 -- ----------------------------
 ALTER TABLE "public"."employee_roles" ADD CONSTRAINT "employee_id" FOREIGN KEY ("employee_id") REFERENCES "public"."employees" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "public"."employee_roles" ADD CONSTRAINT "role_id" FOREIGN KEY ("role_id") REFERENCES "public"."roles" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+
+CREATE TABLE IF NOT EXISTS "public"."genuid" (
+  "id" int4 NOT NULL,
+  "index" int4,
+  "count" int8
+)
+;
+
+-- ----------------------------
+-- Records of genuid
+-- ----------------------------
+INSERT INTO "public"."genuid" VALUES (1, 0, 0);
