@@ -1,11 +1,9 @@
 package com.hcmute.pose.employeeservice.service.impl;
 
 import com.hcmute.pose.database.connector.exception.TransactionException;
-import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
 import com.hcmute.pose.employeeservice.model.Employee;
-import com.hcmute.pose.employeeservice.model.Role;
 import com.hcmute.pose.employeeservice.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,9 @@
 package com.hcmute.pose.employeeservice.dao.impl;
 
-import com.hcmute.pose.database.connector.DataSource;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.model.Employee;
-import com.hcmute.pose.employeeservice.model.Role;
-import com.hcmute.pose.employeeservice.model.map.LongValue;
 import com.hcmute.pose.genuid.GenerateUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
