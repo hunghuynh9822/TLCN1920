@@ -42,6 +42,17 @@ public class EmployeeRequest {
     public EmployeeRequest() {
     }
 
+    //For test
+    public EmployeeRequest(@NotBlank(message = "Username not allow blank") @Size(max = 255, message = "Username too long") String username, @NotBlank(message = "Email not allow blank") @Email(message = "Email with wrong format") String email, @NotBlank(message = "Password not allow blank") @Size(min = 8, max = 255, message = "Password must be between 8 - 255 ") String password, @NotEmpty(message = "Not set role yet") List<Long> roles, @NotBlank(message = "First name not allow blank") @Size(max = 255, message = "First name too long") String first_name, @NotBlank(message = "Middle name not allow blank") @Size(max = 255, message = "Middle name too long") String middle_name, @NotBlank(message = "Last name not allow blank") @Size(max = 255, message = "Last name too long") String last_name) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.first_name = first_name;
+        this.middle_name = middle_name;
+        this.last_name = last_name;
+    }
+
     public String getUsername() {
         return username;
     }

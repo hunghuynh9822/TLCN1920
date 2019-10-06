@@ -1,5 +1,6 @@
 package com.hcmute.pose.employeeservice.dao.impl;
 
+import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.employeeservice.dao.RoleDao;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
@@ -29,8 +30,8 @@ public class RoleDaoImpl implements RoleDao {
             try{
                 databaseHelper.executeNonQuery(SQL_INSERT_ROLE, Statement.RETURN_GENERATED_KEYS,name,System.currentTimeMillis());
                 return this.findByName(name);
-            } catch (SQLException ex) {
-                LOGGER.error("", ex);
+            } catch (SQLException | TransactionException ex) {
+                LOGGER.error("[RoleDaoImpl]:[createRole] GOT EXCEPTION ", ex);
                 Optional.empty();
             }
         }
@@ -42,7 +43,7 @@ public class RoleDaoImpl implements RoleDao {
         try{
             return this.databaseHelper.executeQueryObject(Role.class,SQL_SELECT_ROLE_BY_NAME,"%"+name+"%");
         }catch (SQLException ex){
-            LOGGER.error("",ex);
+            LOGGER.error("[RoleDaoImpl]:[findByName] GOT EXCEPTION ",ex);
             return Optional.empty();
         }
     }
@@ -52,7 +53,7 @@ public class RoleDaoImpl implements RoleDao {
         try {
             return this.databaseHelper.executeQueryObject(Role.class,SQL_SELECT_ROLE_BY_ID,id);
         }catch (SQLException ex){
-            LOGGER.error("",ex);
+            LOGGER.error("[RoleDaoImpl]:[findByName] GOT EXCEPTION ",ex);
             return Optional.empty();
         }
     }

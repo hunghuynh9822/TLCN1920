@@ -23,12 +23,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         Long employeeId;
         employeeId = employeeDao.getLastId()
                 .orElseThrow(()->
-                        new DatabaseException("Can't get last id employee")
+                        new DatabaseException("[EmployeeServiceImpl]:[createEmployee] Can't get last id employee")
                 );
         Employee employee = new Employee(employeeId,username,email,password,firstName,middleName,lastName);
         return employeeDao.createEmployee(employee)
                 .orElseThrow(()->
-                        new DatabaseException("Can't create employee")
+                        new DatabaseException("[EmployeeServiceImpl]:[createEmployee] Can't create employee")
                 );
     }
 

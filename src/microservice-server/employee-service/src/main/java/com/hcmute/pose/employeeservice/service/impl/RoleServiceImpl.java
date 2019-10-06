@@ -15,16 +15,16 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role createRole(String name) throws DatabaseException {
-        return roleDao.createRole(name).orElseThrow(()->new DatabaseException("Can't create Role"));
+        return roleDao.createRole(name).orElseThrow(()->new DatabaseException("[RoleServiceImpl] Can't create Role"));
     }
 
     @Override
     public Role findByName(String name) throws DatabaseException {
-        return roleDao.findByName(name).orElseThrow(()->new DatabaseException(String.format("Can't find Role by name %s",name)));
+        return roleDao.findByName(name).orElseThrow(()->new DatabaseException(String.format("[RoleServiceImpl] Can't find Role by name %s",name)));
     }
 
     @Override
     public Role findById(Long id) throws DatabaseException {
-        return roleDao.findById(id).orElseThrow(()->new DatabaseException(String.format("Can't find Role by id %s",id)));
+        return roleDao.findById(id).orElseThrow(()->new DatabaseException(String.format("[RoleServiceImpl] Can't find Role by id %s",id)));
     }
 }

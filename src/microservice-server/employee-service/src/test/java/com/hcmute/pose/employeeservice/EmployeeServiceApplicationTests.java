@@ -2,10 +2,12 @@ package com.hcmute.pose.employeeservice;
 
 //import com.hcmute.pose.employeeservice.config.TestConfig;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
+import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
 import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.dao.RoleDao;
 import com.hcmute.pose.employeeservice.model.Employee;
 import com.hcmute.pose.employeeservice.model.RoleName;
+import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -30,9 +33,7 @@ public class EmployeeServiceApplicationTests {
 	@Autowired
 	private DatabaseHelper databaseHelper;
 	@Autowired
-	private EmployeeDao employeeDao;
-	@Autowired
-	private RoleDao roleDao;
+	private EmployeeBuz employeeBuz;
 	@Test
 	public void contextLoads() {
 	}
@@ -47,8 +48,8 @@ public class EmployeeServiceApplicationTests {
 				public void run() {
 					try {
 						for (int i = 0; i < 1; i++) {
-							Employee employee = new Employee("tlcn1920", "tlcn1920@gmail.com", "tlcn1920", Collections.singleton(roleDao.findByName(RoleName.ROLE_ADMIN.name()).orElse(null)), "Huỳnh", "Lê Hữu", "Hưng");
-							if (employeeDao.createEmployee(employee).isPresent()) {
+							EmployeeRequest employee = new EmployeeRequest("tlcn1920", "tlcn1920@gmail.com", "tlcn1920", Arrays.asList(1L), "Huỳnh", "Lê Hữu", "Hưng");
+							if (employeeBuz.createEmployee(employee).isPresent()) {
 								LOGGER.info("SUCCESS");
 							} else {
 								LOGGER.info("FAIL");
