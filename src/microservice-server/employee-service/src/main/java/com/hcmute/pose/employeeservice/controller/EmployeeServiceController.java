@@ -2,6 +2,7 @@ package com.hcmute.pose.employeeservice.controller;
 
 import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
 import com.hcmute.pose.employeeservice.exception.BuzException;
+import com.hcmute.pose.employeeservice.exception.DatabaseException;
 import com.hcmute.pose.employeeservice.model.Employee;
 import com.hcmute.pose.employeeservice.payload.AllEmployeesResponse;
 import com.hcmute.pose.employeeservice.payload.ApiResponse;
@@ -46,5 +47,15 @@ public class EmployeeServiceController {
                     HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(new AllEmployeesResponse(employees),HttpStatus.OK);
+    }
+
+    @GetMapping("/check/{usernameOrEmail}")
+    public ResponseEntity checkValid(@PathVariable("usernameOrEmail") String usernameOrEmail){
+        try {
+            return new ResponseEntity(employeeBuz.checkUsernameOrEmail(usernameOrEmail),HttpStatus.OK);
+        } catch (DatabaseException e) {
+            return new ResponseEntity(new ApiResponse(false, e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 }

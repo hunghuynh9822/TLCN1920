@@ -3,6 +3,7 @@ package com.hcmute.pose.employeeservice.buz.impl;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
+import com.hcmute.pose.employeeservice.exception.BuzException;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
 import com.hcmute.pose.employeeservice.model.Employee;
 import com.hcmute.pose.employeeservice.model.Role;
@@ -30,9 +31,18 @@ public class EmployeeBuzImpl implements EmployeeBuz {
     @Autowired
     private RoleService roleService;
 
-    public Optional<Employee> createEmployee(EmployeeRequest request) {
+    @Override
+    public Optional<Employee> createEmployee(EmployeeRequest request) throws BuzException {
         try{
             databaseHelper.beginTransaction();
+            if(employeeService.existsByUsername(request.getUsername())){
+                LOGGER.error("[EmployeeBuzImpl]:[createEmployee] GOT UNKNOWN EXCEPTION : Username exist");
+                throw new BuzException(String.format("Username %s exist",request.getUsername()));
+            }
+            if(employeeService.existsByEmail(request.getEmail())){
+                LOGGER.error("[EmployeeBuzImpl]:[createEmployee] GOT UNKNOWN EXCEPTION : Email exist");
+                throw new BuzException(String.format("Email %s exist",request.getEmail()));
+            }
             Employee employee = employeeService.createEmployee(request.getUsername(),request.getEmail(),request.getPassword(),request.getFirstName(),request.getMiddleName(),request.getLastName());
             Set<Role> employeeRoles = new HashSet<>();
             for (Long id :request.getRoles()
@@ -66,6 +76,21 @@ public class EmployeeBuzImpl implements EmployeeBuz {
             return new ArrayList<>();
         }finally {
             databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public String checkUsernameOrEmail(String usernameOrEmail) throws DatabaseException {
+        try {
+            if(employeeService.existsByUsername(usernameOrEmail)){
+                return "Exist username";
+            }
+            if(employeeService.existsByEmail(usernameOrEmail)){
+                return "Exist email";
+            }
+            return "OK";
+        } catch (SQLException e) {
+            throw new DatabaseException(String.format("Got exception : %s",e.getMessage()));
         }
     }
 }

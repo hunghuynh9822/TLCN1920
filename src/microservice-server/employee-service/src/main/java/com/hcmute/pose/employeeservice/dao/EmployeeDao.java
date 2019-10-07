@@ -12,10 +12,10 @@ public interface EmployeeDao {
     Optional<Employee> createEmployee(Employee employee);
     void addRoleToEmployee(Long employeeId,Long roleId) throws SQLException, TransactionException;
     List<Employee> getAll() throws SQLException;
-//    Optional<Employee> findByEmail(String email);
-//    Optional<Employee> findByUsername(String username);
-//    Optional<Employee> findByUsernameOrEmail(String username, String email);
-//    Optional<Employee> findById(Long id);
-//    Boolean existsByUsername(String username);
-//    Boolean existsByEmail(String email);
+    Optional<Employee> findByEmail(String email) throws SQLException;
+    Optional<Employee> findByUsername(String username) throws SQLException;
+    Optional<Employee> findByUsernameOrEmail(String username, String email) throws SQLException;
+    Optional<Employee> findById(Long id) throws SQLException;
+    Boolean existsByUsername(String username) throws SQLException;
+    Boolean existsByEmail(String email) throws SQLException;
 }
