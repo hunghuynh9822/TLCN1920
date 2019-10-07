@@ -43,7 +43,7 @@ services:
     container_name: docker-micro-dicovery
     restart: unless-stopped
     volumes:
-      - ./docker/micro/dicovery/logs:/logs
+      - ./docker/micro/dicovery/logs:/docker/server/discovery-server/logs
     ports:
       - "8761:8761"
     networks:
@@ -56,7 +56,7 @@ services:
     container_name: docker-micro-gateway-proxy
     restart: unless-stopped
     volumes:
-      - ./docker/micro/gateway/logs:/logs
+      - ./docker/micro/gateway/logs:/docker/server/gateway-proxy/logs
     environment:
       - EUREKA_URI=http://discovery:8761/eureka/
     links:
@@ -75,7 +75,7 @@ services:
     container_name: docker-micro-service-employee
     restart: unless-stopped
     volumes:
-      - ./docker/micro/service/employee/logs:/logs
+      - ./docker/micro/service/employee/logs:/docker/server/employee-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761/eureka/
       - PSQL_URL=jdbc:postgresql://postgresql:5432/postgres
@@ -97,7 +97,7 @@ services:
     container_name: docker-micro-service-task
     restart: unless-stopped
     volumes:
-      - ./docker/micro/service/employee/logs:/logs
+      - ./docker/micro/service/employee/logs:/docker/server/task-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761/eureka/
       - PSQL_URL=jdbc:postgresql://postgresql:5432/postgres
