@@ -36,12 +36,12 @@ public class EmployeeBuzImpl implements EmployeeBuz {
         try{
             databaseHelper.beginTransaction();
             if(employeeService.existsByUsername(request.getUsername())){
-                LOGGER.error("[EmployeeBuzImpl]:[createEmployee] GOT UNKNOWN EXCEPTION : Username exist");
-                throw new BuzException(String.format("Username %s exist",request.getUsername()));
+                LOGGER.error("[EmployeeBuzImpl]:[createEmployee] GOT UNKNOWN EXCEPTION : Username {} already in use!",request.getUsername());
+                throw new BuzException(String.format("Username %s already in use!",request.getUsername()));
             }
             if(employeeService.existsByEmail(request.getEmail())){
-                LOGGER.error("[EmployeeBuzImpl]:[createEmployee] GOT UNKNOWN EXCEPTION : Email exist");
-                throw new BuzException(String.format("Email %s exist",request.getEmail()));
+                LOGGER.error("[EmployeeBuzImpl]:[createEmployee] GOT UNKNOWN EXCEPTION : Email {} already in use!",request.getEmail());
+                throw new BuzException(String.format("Email %s already in use!",request.getEmail()));
             }
             Employee employee = employeeService.createEmployee(request.getUsername(),request.getEmail(),request.getPassword(),request.getFirstName(),request.getMiddleName(),request.getLastName());
             Set<Role> employeeRoles = new HashSet<>();
@@ -83,10 +83,10 @@ public class EmployeeBuzImpl implements EmployeeBuz {
     public String checkUsernameOrEmail(String usernameOrEmail) throws DatabaseException {
         try {
             if(employeeService.existsByUsername(usernameOrEmail)){
-                return "Exist username";
+                return "Username already in use!";
             }
             if(employeeService.existsByEmail(usernameOrEmail)){
-                return "Exist email";
+                return "Email already in use!";
             }
             return "OK";
         } catch (SQLException e) {
