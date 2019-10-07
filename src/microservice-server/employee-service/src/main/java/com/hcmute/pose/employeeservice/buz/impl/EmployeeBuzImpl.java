@@ -35,7 +35,7 @@ public class EmployeeBuzImpl implements EmployeeBuz {
     public Optional<Employee> createEmployee(EmployeeRequest request) {
         try{
             databaseHelper.beginTransaction();
-            Employee employee = employeeService.createEmployee(request.getUsername(),request.getEmail(),request.getPassword(),request.getFirst_name(),request.getMiddle_name(),request.getLast_name());
+            Employee employee = employeeService.createEmployee(request.getUsername(),request.getEmail(),request.getPassword(),request.getFirstName(),request.getMiddleName(),request.getLastName());
             Set<Role> employeeRoles = new HashSet<>();
             for (Long id :request.getRoles()
             ) {

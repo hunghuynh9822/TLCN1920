@@ -87,6 +87,7 @@ public class DatabaseHelperImpl implements DatabaseHelper {
         LOGGER.info("[DatabaseHelperImpl] COMMITTING...");
         getTransaction().commit();
         removeTransaction();
+        LOGGER.info("[DatabaseHelperImpl] COMMIT SUCCESS");
     }
 
     @Override
