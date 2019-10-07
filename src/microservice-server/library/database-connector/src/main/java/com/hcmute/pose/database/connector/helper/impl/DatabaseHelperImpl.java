@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DatabaseHelperImpl implements DatabaseHelper {
@@ -42,14 +39,14 @@ public class DatabaseHelperImpl implements DatabaseHelper {
     }
 
     @Override
-    public <T extends Serializable> List<T> executeQueryListObject(String sql, Object... args) throws SQLException {
+    public <T extends Serializable> List<T> executeQueryListObject(Class<T[]> target,String sql, Object... args) throws SQLException {
         Connection conn = this.dataSource.getConnection();
         try( PreparedStatement ps = conn.prepareStatement(sql)){
             for (int i = 0; i < args.length; i++){
                 ps.setObject(i+1,args[i]);
             }
             ResultSet rs = ps.executeQuery();
-            return toListObject(convertResultSetToListHashMap(rs));
+            return toListObject(convertResultSetToListHashMap(rs),target);
         }
     }
 
@@ -133,10 +130,11 @@ public class DatabaseHelperImpl implements DatabaseHelper {
         return listObjects;
     }
 
-    private <T extends Serializable> List<T> toListObject(List<HashMap<String,Object>> data){
+    private <T extends Serializable> List<T> toListObject(List<HashMap<String,Object>> data,Class<T[]> target){
         Gson gson = new Gson();
         String json = gson.toJson(data);
-        List<T> objects = gson.fromJson(json,new TypeToken<ArrayList<T>>(){}.getType());
-        return objects;
+        T[] arrays = gson.fromJson(json,target);
+        List<T> list = Arrays.asList(arrays);
+        return list;
     }
 }

@@ -7,6 +7,9 @@ import com.hcmute.pose.employeeservice.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.util.Set;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -26,5 +29,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findById(Long id) throws DatabaseException {
         return roleDao.findById(id).orElseThrow(()->new DatabaseException(String.format("[RoleServiceImpl] Can't find Role by id %s",id)));
+    }
+
+    @Override
+    public Set<Role> getEmployeeRoles(Long employeeId) throws SQLException {
+        return roleDao.getRoleEmployee(employeeId);
     }
 }

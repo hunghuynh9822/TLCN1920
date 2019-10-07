@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class RoleDaoImpl implements RoleDao {
@@ -20,6 +23,7 @@ public class RoleDaoImpl implements RoleDao {
     private static String SQL_INSERT_ROLE = "INSERT INTO roles(name,created_at) VALUES(?,?)";
     private static String SQL_SELECT_ROLE_BY_NAME = "SELECT * FROM roles WHERE name LIKE ?";
     private static String SQL_SELECT_ROLE_BY_ID = "SELECT * FROM roles WHERE id = ?";
+    private static String SQL_SELECT_ROLE_EMPLOYEE = "SELECT * FROM roles WHERE id IN (SELECT role_id FROM employee_roles WHERE employee_id= ? )";
 
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -56,5 +60,16 @@ public class RoleDaoImpl implements RoleDao {
             LOGGER.error("[RoleDaoImpl]:[findByName] GOT EXCEPTION ",ex);
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Set<Role> getRoleEmployee(Long employeeId) throws SQLException {
+        List<Role> roleList = this.databaseHelper.executeQueryListObject(Role[].class,SQL_SELECT_ROLE_EMPLOYEE,employeeId);
+        Set<Role> roles = new HashSet<>();
+        for (Role role:roleList
+             ) {
+            roles.add(role);
+        }
+        return roles;
     }
 }

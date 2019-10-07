@@ -15,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class EmployeeBuzImpl implements EmployeeBuz {
@@ -44,13 +42,30 @@ public class EmployeeBuzImpl implements EmployeeBuz {
             }
             employee.setRoles(employeeRoles);
             databaseHelper.commit();
-            databaseHelper.closeConnection();
             return Optional.of(employee);
         }catch (DatabaseException | TransactionException e){
             return Optional.empty();
         }catch (SQLException e){
             LOGGER.error("[EmployeeBuzImpl]:[createEmployee] GOT UNKNOWN EXCEPTION ",e);
             return Optional.empty();
+        }finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public List<Employee> getEmployees(){
+        try {
+            List<Employee> employees = employeeService.getEmployees();
+            for (Employee employee:employees
+                 ) {
+                employee.setRoles(roleService.getEmployeeRoles(employee.getId()));
+            }
+            return employees;
+        } catch (SQLException e) {
+            return new ArrayList<>();
+        }finally {
+            databaseHelper.closeConnection();
         }
     }
 }

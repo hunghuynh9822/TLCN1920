@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -33,5 +34,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void addRoleToEmployee(Long employeeId,Long roleId) throws SQLException, TransactionException {
         employeeDao.addRoleToEmployee(employeeId,roleId);
+    }
+
+    @Override
+    public List<Employee> getEmployees() throws SQLException {
+        return employeeDao.getAll();
     }
 }

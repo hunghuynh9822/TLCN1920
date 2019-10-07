@@ -3,6 +3,7 @@ package com.hcmute.pose.employeeservice.controller;
 import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
 import com.hcmute.pose.employeeservice.exception.BuzException;
 import com.hcmute.pose.employeeservice.model.Employee;
+import com.hcmute.pose.employeeservice.payload.AllEmployeesResponse;
 import com.hcmute.pose.employeeservice.payload.ApiResponse;
 import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee")
-public class EmployeeController {
+public class EmployeeServiceController {
 
     @Autowired
     private EmployeeBuz employeeBuz;
@@ -34,5 +36,15 @@ public class EmployeeController {
             return new ResponseEntity(new ApiResponse(false, e.getMessage()),
                     HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/")
+    public ResponseEntity getEmployees(){
+        List<Employee> employees = employeeBuz.getEmployees();
+        if(employees.isEmpty()){
+            return new ResponseEntity(new ApiResponse(false, "No employees"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(new AllEmployeesResponse(employees),HttpStatus.OK);
     }
 }
