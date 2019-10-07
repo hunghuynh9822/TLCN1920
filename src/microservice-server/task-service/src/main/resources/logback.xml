@@ -60,7 +60,7 @@
         <appender-ref ref="FILE-ROLLING-TOTAL" />
     </appender>
 
-    <logger name="com.hcmute.pose.taskservice" level="info">
+    <logger name="com.hcmute.pose" level="info">
         <appender-ref ref="ASYNC"/>
     </logger>
 
