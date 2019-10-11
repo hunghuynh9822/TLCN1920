@@ -1,4 +1,4 @@
-package com.hcmute.pose.employeeservice.model.audit;
+package com.hcmute.pose.common.model.audit;
 
 import com.google.gson.Gson;
 

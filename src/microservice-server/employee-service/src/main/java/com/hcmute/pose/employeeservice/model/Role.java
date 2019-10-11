@@ -1,7 +1,7 @@
 package com.hcmute.pose.employeeservice.model;
 
 
-import com.hcmute.pose.employeeservice.model.audit.DateAudit;
+import com.hcmute.pose.common.model.audit.DateAudit;
 
 import java.io.Serializable;
 
