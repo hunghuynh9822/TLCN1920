@@ -23,7 +23,7 @@ public class RoleDaoImpl implements RoleDao {
     private static String SQL_INSERT_ROLE = "INSERT INTO roles(name,created_at) VALUES(?,?)";
     private static String SQL_SELECT_ROLE_BY_NAME = "SELECT * FROM roles WHERE name LIKE ?";
     private static String SQL_SELECT_ROLE_BY_ID = "SELECT * FROM roles WHERE id = ?";
-    private static String SQL_SELECT_ROLE_EMPLOYEE = "SELECT * FROM roles WHERE id IN (SELECT role_id FROM employee_roles WHERE employee_id= ? )";
+    private static String SQL_SELECT_ROLE_USER = "SELECT * FROM roles WHERE id IN (SELECT role_id FROM user_roles WHERE user_id= ? )";
 
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -63,8 +63,8 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
-    public Set<Role> getRoleEmployee(Long employeeId) throws SQLException {
-        List<Role> roleList = this.databaseHelper.executeQueryListObject(Role[].class,SQL_SELECT_ROLE_EMPLOYEE,employeeId);
+    public Set<Role> getRoleUser(Long userId) throws SQLException {
+        List<Role> roleList = this.databaseHelper.executeQueryListObject(Role[].class,SQL_SELECT_ROLE_USER,userId);
         Set<Role> roles = new HashSet<>();
         for (Role role:roleList
              ) {

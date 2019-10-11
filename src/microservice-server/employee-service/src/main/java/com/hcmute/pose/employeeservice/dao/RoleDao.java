@@ -11,5 +11,5 @@ public interface RoleDao {
     Optional<Role> createRole(String name) throws DatabaseException;
     Optional<Role> findByName(String name);
     Optional<Role> findById(Long id);
-    Set<Role> getRoleEmployee(Long employeeId) throws SQLException;
+    Set<Role> getRoleUser(Long userId) throws SQLException;
 }

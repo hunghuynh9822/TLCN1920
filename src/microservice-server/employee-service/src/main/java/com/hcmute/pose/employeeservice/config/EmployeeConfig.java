@@ -8,17 +8,22 @@ import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
 import com.hcmute.pose.employeeservice.buz.impl.EmployeeBuzImpl;
 import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.dao.RoleDao;
+import com.hcmute.pose.employeeservice.dao.UserDao;
 import com.hcmute.pose.employeeservice.dao.impl.EmployeeDaoImpl;
 import com.hcmute.pose.employeeservice.dao.impl.RoleDaoImpl;
+import com.hcmute.pose.employeeservice.dao.impl.UserDaoImpl;
 import com.hcmute.pose.employeeservice.service.EmployeeService;
 import com.hcmute.pose.employeeservice.service.RoleService;
+import com.hcmute.pose.employeeservice.service.UserService;
 import com.hcmute.pose.employeeservice.service.impl.EmployeeServiceImpl;
 import com.hcmute.pose.employeeservice.service.impl.RoleServiceImpl;
+import com.hcmute.pose.employeeservice.service.impl.UserServiceImpl;
 import com.hcmute.pose.genuid.GenerateUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -36,6 +41,11 @@ public class EmployeeConfig {
     @LoadBalanced
     public WebClient.Builder builder(){
         return WebClient.builder();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Value("${psql.url}")
@@ -62,6 +72,11 @@ public class EmployeeConfig {
     }
 
     @Bean
+    public UserDao userDao(){
+        return new UserDaoImpl();
+    }
+
+    @Bean
     public EmployeeDao employeeDao(){
         return new EmployeeDaoImpl();
     }
@@ -69,6 +84,11 @@ public class EmployeeConfig {
     @Bean
     public RoleDao roleDao(){
         return new RoleDaoImpl();
+    }
+
+    @Bean
+    public UserService userService(){
+        return new UserServiceImpl();
     }
 
     @Bean

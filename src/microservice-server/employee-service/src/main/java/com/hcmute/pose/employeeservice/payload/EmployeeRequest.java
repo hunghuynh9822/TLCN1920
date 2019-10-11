@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeRequest {
-    @NotBlank(message = "Username not allow blank")
-    @Size(max = 255,message = "Username too long")
-    private String username;
+    @NotBlank(message = "Phone not allow blank")
+    @Size(max = 10,message = "Phone too long")
+    private String phone;
 
     @NotBlank(message = "Email not allow blank")
     @Email(message = "Email with wrong format")
@@ -40,8 +40,8 @@ public class EmployeeRequest {
 
     //For test
 
-    public EmployeeRequest(@NotBlank(message = "Username not allow blank") @Size(max = 255, message = "Username too long") String username, @NotBlank(message = "Email not allow blank") @Email(message = "Email with wrong format") String email, @NotBlank(message = "Password not allow blank") @Size(min = 8, max = 255, message = "Password must be between 8 - 255 ") String password, @NotEmpty(message = "Not set role yet") List<Long> roles, @NotBlank(message = "First name not allow blank") @Size(max = 255, message = "First name too long") String firstName, @NotBlank(message = "Middle name not allow blank") @Size(max = 255, message = "Middle name too long") String middleName, @NotBlank(message = "Last name not allow blank") @Size(max = 255, message = "Last name too long") String lastName) {
-        this.username = username;
+    public EmployeeRequest(@NotBlank(message = "Phone not allow blank") @Size(max = 255, message = "Phone too long") String phone, @NotBlank(message = "Email not allow blank") @Email(message = "Email with wrong format") String email, @NotBlank(message = "Password not allow blank") @Size(min = 8, max = 255, message = "Password must be between 8 - 255 ") String password, @NotEmpty(message = "Not set role yet") List<Long> roles, @NotBlank(message = "First name not allow blank") @Size(max = 255, message = "First name too long") String firstName, @NotBlank(message = "Middle name not allow blank") @Size(max = 255, message = "Middle name too long") String middleName, @NotBlank(message = "Last name not allow blank") @Size(max = 255, message = "Last name too long") String lastName) {
+        this.phone = phone;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -50,12 +50,12 @@ public class EmployeeRequest {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {

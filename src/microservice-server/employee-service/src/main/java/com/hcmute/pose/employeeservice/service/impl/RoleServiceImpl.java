@@ -32,7 +32,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Set<Role> getEmployeeRoles(Long employeeId) throws SQLException {
-        return roleDao.getRoleEmployee(employeeId);
+    public Set<Role> getEmployeeRoles(Long userId) throws SQLException {
+        return roleDao.getRoleUser(userId);
     }
 }
