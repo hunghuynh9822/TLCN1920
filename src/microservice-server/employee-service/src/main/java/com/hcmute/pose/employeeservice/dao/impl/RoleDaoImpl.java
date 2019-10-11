@@ -66,8 +66,7 @@ public class RoleDaoImpl implements RoleDao {
     public Set<Role> getRoleEmployee(Long employeeId) throws SQLException {
         List<Role> roleList = this.databaseHelper.executeQueryListObject(Role[].class,SQL_SELECT_ROLE_EMPLOYEE,employeeId);
         Set<Role> roles = new HashSet<>();
-        for (Role role:roleList
-             ) {
+        for (Role role:roleList) {
             roles.add(role);
         }
         return roles;

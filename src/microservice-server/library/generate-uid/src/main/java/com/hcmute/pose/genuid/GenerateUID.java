@@ -11,7 +11,10 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class GenerateUID {
+public class
+
+
+ GenerateUID {
     private static Logger LOGGER = LoggerFactory.getLogger(GenerateUID.class);
 
     private String dbUrl;
@@ -50,15 +53,15 @@ public class GenerateUID {
         }
     }
 
-    public void reserGenUID(){
-        try{
-            databaseHelper.beginTransaction();
-            databaseHelper.executeNonQuery(SQL_RESET_INDEX,this.serviceId);
-            databaseHelper.commit();
-        }catch (SQLException | TransactionException e){
-            LOGGER.error("[GenerateUID]:[genUID] GOT EXCEPTION ",e);
-        }finally {
-            databaseHelper.closeConnection();
-        }
-    }
+//    public void resetGenUID(){
+//        try{
+//            databaseHelper.beginTransaction();
+//            databaseHelper.executeNonQuery(SQL_RESET_INDEX,this.serviceId);
+//            databaseHelper.commit();
+//        }catch (SQLException | TransactionException e){
+//            LOGGER.error("[GenerateUID]:[genUID] GOT EXCEPTION ",e);
+//        }finally {
+//            databaseHelper.closeConnection();
+//        }
+//    }
 }
