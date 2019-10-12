@@ -1,25 +1,23 @@
 package com.hcmute.pose.employeeservice.payload;
 
-import com.hcmute.pose.employeeservice.model.Employee;
-
 import java.util.List;
 
 public class AllEmployeesResponse {
-    private List<Employee> employees;
+    private List<EmployeeResponse> employees;
 
     public AllEmployeesResponse() {
 
     }
 
-    public AllEmployeesResponse(List<Employee> employees) {
+    public AllEmployeesResponse(List<EmployeeResponse> employees) {
         this.employees = employees;
     }
 
-    public List<Employee> getEmployees() {
+    public List<EmployeeResponse> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(List<EmployeeResponse> employees) {
         this.employees = employees;
     }
 }

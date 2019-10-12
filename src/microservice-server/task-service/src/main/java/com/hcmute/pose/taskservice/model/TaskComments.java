@@ -12,7 +12,7 @@ public class TaskComments implements Serializable {
 
     public  TaskComments(){}
 
-    public TaskComments(Long id, Long taskID, Long employeeID, Long projectID, Long createTime, String comment) {
+    public TaskComments(Long id, Long taskID, Long employeeID, Long createTime, String comment) {
         this.id = id;
         this.taskId = taskID;
         this.employeeId = employeeID;

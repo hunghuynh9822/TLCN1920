@@ -1,7 +1,6 @@
 package com.hcmute.pose.database.connector.helper.impl;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hcmute.pose.database.connector.DataSource;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;

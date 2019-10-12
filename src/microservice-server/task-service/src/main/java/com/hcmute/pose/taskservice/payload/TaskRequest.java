@@ -39,6 +39,7 @@ public class TaskRequest {
         this.duration = duration;
     }
 
+
     public TaskRequest(@NotBlank(message = "Not null taskId") Long id, @NotBlank(message = "Not null employee") Long employeeId, @NotBlank(message = "Not null projectId") Long projectId, @NotBlank(message = "Not null title") @Size(max = 255, message = "Not long character 255") String title, @NotBlank(message = "Not null ") Integer duration) {
         Id = id;
         this.employeeId = employeeId;
