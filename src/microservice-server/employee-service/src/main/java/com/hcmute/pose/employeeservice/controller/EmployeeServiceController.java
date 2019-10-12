@@ -2,8 +2,6 @@ package com.hcmute.pose.employeeservice.controller;
 
 import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
 import com.hcmute.pose.employeeservice.exception.BuzException;
-import com.hcmute.pose.employeeservice.exception.DatabaseException;
-import com.hcmute.pose.employeeservice.model.Employee;
 import com.hcmute.pose.employeeservice.payload.AllEmployeesResponse;
 import com.hcmute.pose.employeeservice.payload.ApiResponse;
 import com.hcmute.pose.employeeservice.payload.EmployeeRequest;

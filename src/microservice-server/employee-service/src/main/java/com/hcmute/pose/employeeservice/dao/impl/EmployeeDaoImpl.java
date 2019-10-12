@@ -4,8 +4,6 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.model.Employee;
-import com.hcmute.pose.employeeservice.model.map.SingleLong;
-import com.hcmute.pose.genuid.GenerateUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
