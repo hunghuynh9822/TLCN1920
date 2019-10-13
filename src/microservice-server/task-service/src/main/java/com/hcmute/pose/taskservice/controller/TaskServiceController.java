@@ -2,8 +2,11 @@ package com.hcmute.pose.taskservice.controller;
 
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.taskservice.buz.TaskBuz;
+import com.hcmute.pose.taskservice.buz.impl.TaskBuzImpl;
 import com.hcmute.pose.taskservice.model.Task;
 import com.hcmute.pose.taskservice.payload.TaskRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/")
 public class TaskServiceController {
+    private static Logger LOGGER = LoggerFactory.getLogger(TaskServiceController.class);
     @Autowired
     private TaskBuz taskBuz;
 
@@ -45,6 +49,7 @@ public class TaskServiceController {
             taskBuz.updatePoint(id,point);
             return new ResponseEntity("Update point success",HttpStatus.OK);
         }catch (Exception | TransactionException e){
+            LOGGER.error("",e);
             return new ResponseEntity("update point fail",HttpStatus.BAD_REQUEST);
         }
     }

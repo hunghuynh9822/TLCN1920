@@ -5,10 +5,11 @@ import com.hcmute.pose.taskservice.dao.TaskCommentsDao;
 import com.hcmute.pose.taskservice.model.TaskComments;
 import com.hcmute.pose.taskservice.service.TaskCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
-
+@Service
 public class TaskCommentServiceImpl implements TaskCommentService {
 
     @Autowired

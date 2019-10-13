@@ -6,16 +6,19 @@ import com.hcmute.pose.taskservice.buz.TaskBuz;
 import com.hcmute.pose.taskservice.model.Task;
 import com.hcmute.pose.taskservice.payload.TaskRequest;
 import com.hcmute.pose.taskservice.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class TaskBuzImpl implements TaskBuz {
-
+    private static Logger LOGGER = LoggerFactory.getLogger(TaskBuzImpl.class);
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -36,6 +39,7 @@ public class TaskBuzImpl implements TaskBuz {
 
             return Optional.of(task);
         }catch (Exception e) {
+            LOGGER.error("",e);
             return Optional.empty();
 
         }finally {
@@ -58,9 +62,11 @@ public class TaskBuzImpl implements TaskBuz {
     @Override
     public void updatePoint(Long id, Integer point) throws  TransactionException {
         try{
+            databaseHelper.beginTransaction();
             taskService.updatePoint(id,point);
+            databaseHelper.commit();
         }catch (Exception e){
-
+            LOGGER.error("",e);
         }finally {
             databaseHelper.closeConnection();
         }
@@ -69,7 +75,9 @@ public class TaskBuzImpl implements TaskBuz {
     @Override
     public void updateStatus(Long id,Boolean status) {
         try{
+            databaseHelper.beginTransaction();
             taskService.updateStatus(id,status);
+            databaseHelper.commit();
         }catch (Exception | TransactionException e){
 
         }finally {
