@@ -15,9 +15,8 @@ public class PerOfProjectServiceImpl implements PerOfProjectService {
     private PerOfProjectDao perOfProjectDao;
 
     @Override
-    public PerOfProject createPOP(Long id, Long employeeId) throws Exception {
-        Long Id = perOfProjectDao.getLastID().orElseThrow(()-> new Exception("Not get ID"));
-        PerOfProject task = new PerOfProject(Id,employeeId);
+    public PerOfProject createPOP(Long idPro,Long employeeId) throws Exception {
+        PerOfProject task = new PerOfProject(idPro,employeeId);
         return  perOfProjectDao.createPOP(task).orElseThrow(()-> new Exception("Not doing AddTask "));
     }
 
@@ -27,7 +26,7 @@ public class PerOfProjectServiceImpl implements PerOfProjectService {
     }
 
     @Override
-    public void deletePOP(Long id) throws SQLException, TransactionException {
-        perOfProjectDao.deletePOP(id);
+    public void deletePOP(Long id,Long employeeId) throws SQLException, TransactionException {
+        perOfProjectDao.deletePOP(id,employeeId);
     }
 }

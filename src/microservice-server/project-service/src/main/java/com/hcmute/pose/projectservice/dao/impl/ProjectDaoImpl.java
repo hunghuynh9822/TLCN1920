@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class ProjectDaoImpl implements ProjectDao {
     private static Logger LOGGER = LoggerFactory.getLogger(ProjectDao.class);
-    private static String SQL_INSERT_PRO = "INSERT INTO projects(id,listId,title,createTime,employeeId,submit) VALUES(?,?,?,?,?,?)";
+    private static String SQL_INSERT_PRO = "INSERT INTO projects(id,title,createTime,employeeId,submit) VALUES(?,?,?,?,?,?)";
     private static String SQl_GET_LIST_PRO = "SELECT * FROM projects";
     private static String SQL_UPDATE_TITLE = "UPDATE tasks SET title=? WHERE id=? AND employeeId=?";
     private static String SQL_UPDATE_SUBMIT = "UPDATE tasks SET submit=? WHERE id=? AND employeeId=?";
@@ -36,7 +36,6 @@ public class ProjectDaoImpl implements ProjectDao {
         try {
             databaseHelper.executeNonQuery(SQL_INSERT_PRO,
                     project.getId(),
-                    project.getIdListPer(),
                     project.getTitle(),
                     project.getCreateTime(),
                     project.getEmployeeCreate(),

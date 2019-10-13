@@ -15,9 +15,9 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectDao projectDao;
 
     @Override
-    public Project ceratePro(Long idListPer, String title, Long employeeCreate) throws Exception {
+    public Project ceratePro(String title, Long employeeCreate) throws Exception {
         Long Id = projectDao.getLastID().orElseThrow(()-> new Exception("Not get ID"));
-        Project project = new Project(Id,idListPer,title,System.currentTimeMillis(),employeeCreate,false);
+        Project project = new Project(Id,title,System.currentTimeMillis(),employeeCreate,false);
         return  projectDao.ceratePro(project).orElseThrow(()-> new Exception("Not doing AddTask "));
     }
 

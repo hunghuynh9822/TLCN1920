@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface PerOfProjectService {
-    PerOfProject createPOP (Long id, Long employeeId) throws Exception;
+    PerOfProject createPOP (Long idPro,Long employeeId ) throws Exception;
     List<PerOfProject> getListPOP (Long idPro) throws SQLException;
-    void deletePOP (Long id) throws SQLException, TransactionException;
+    void deletePOP (Long id,Long employeeId) throws SQLException, TransactionException;
 }

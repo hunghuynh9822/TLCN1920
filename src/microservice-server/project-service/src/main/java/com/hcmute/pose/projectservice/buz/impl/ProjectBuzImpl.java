@@ -11,6 +11,7 @@ import com.hcmute.pose.projectservice.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,16 +21,13 @@ public class ProjectBuzImpl implements ProjectBuz {
 
     @Autowired
     private ProjectService projectService;
-    @Autowired
-    private PerOfProjectService perOfProjectService;
+
 
     @Override
     public Optional<Project> ceratePro(ProjectRequest projectRequest) throws Exception {
         try{
             databaseHelper.beginTransaction();
-            Project project = projectService.ceratePro(projectRequest.getIdListPer(),projectRequest.getTitle(),projectRequest.getEmployeeCreate());
-            //PerOfProject perOfProject =
-            //Them nhan vien sao dday
+            Project project = projectService.ceratePro(projectRequest.getTitle(),projectRequest.getEmployeeCreate());
             return Optional.of(project);
         }catch (Exception e){
             return Optional.empty();
@@ -40,16 +38,35 @@ public class ProjectBuzImpl implements ProjectBuz {
 
     @Override
     public List<Project> getListPro() throws SQLException {
-        return null;
+        try{
+            List<Project> projectList = projectService.getListPro();
+            return projectList;
+        }catch (Exception e){
+            return new ArrayList<>();
+        }finally {
+            databaseHelper.closeConnection();
+        }
     }
 
     @Override
     public void updateTitle(Long id, Long employeeCre, String title) throws SQLException, TransactionException {
+        try{
+            projectService.updateTitle(id,employeeCre,title);
+        }catch (Exception e){
 
+        }finally {
+            databaseHelper.closeConnection();
+        }
     }
 
     @Override
     public void ipdateSubmit(Long id, Long employeeCre, Boolean submit) throws SQLException, TransactionException {
+        try{
+            projectService.ipdateSubmit(id,employeeCre,submit);
+        }catch (Exception e){
 
+        }finally {
+            databaseHelper.closeConnection();
+        }
     }
 }

@@ -15,9 +15,9 @@ import java.util.Optional;
 
 public class PreOfProjectDaoImpl implements PerOfProjectDao {
     private static Logger LOGGER = LoggerFactory.getLogger(PerOfProjectDao.class);
-    private static String SQL_INSERT_POP = "INSERT INTO perofproject(id,employeeId) VALUES(?,?)";
-    private static String SQl_GET_LIST_POP = "SELECT * FROM tasks WHERE employeeId = ? AND projectId=?";
-    private static String SQL_DELETE_POP = "DELETE FROM perofproject WHERE id=?";
+    private static String SQL_INSERT_POP = "INSERT INTO perofproject(proId,employeeId) VALUES(?,?)";
+    private static String SQl_GET_LIST_POP = "SELECT * FROM tasks WHERE proId =?";
+    private static String SQL_DELETE_POP = "DELETE FROM perofproject WHERE proId=? AND employeeId=?";
 
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -47,7 +47,7 @@ public class PreOfProjectDaoImpl implements PerOfProjectDao {
     @Override
     public List<PerOfProject> getListPOP(Long idPro) throws SQLException {
         try {
-            return databaseHelper.executeQueryListObject(PerOfProject[].class,SQl_GET_LIST_POP);
+            return databaseHelper.executeQueryListObject(PerOfProject[].class,SQl_GET_LIST_POP,idPro);
         } catch (SQLException e) {
             LOGGER.error("[TaskDaoImpl]:[getListTaskByID]",e);
             throw e;
@@ -55,7 +55,7 @@ public class PreOfProjectDaoImpl implements PerOfProjectDao {
     }
 
     @Override
-    public void deletePOP(Long id) throws SQLException, TransactionException {
-        databaseHelper.executeNonQuery(SQL_DELETE_POP,id);
+    public void deletePOP(Long id,Long employeeId) throws SQLException, TransactionException {
+        databaseHelper.executeNonQuery(SQL_DELETE_POP,id,employeeId);
     }
 }

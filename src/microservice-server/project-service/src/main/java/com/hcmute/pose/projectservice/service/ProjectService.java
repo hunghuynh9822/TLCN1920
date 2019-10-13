@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ProjectService {
-    Project ceratePro(Long idListPer, String title, Long employeeCreate) throws Exception;
+    Project ceratePro(String title, Long employeeCreate) throws Exception;
     List<Project> getListPro () throws SQLException;
     void updateTitle (Long id,Long employeeCre, String title) throws SQLException, TransactionException;
     void ipdateSubmit(Long id,Long employeeCre, Boolean submit) throws SQLException, TransactionException;
