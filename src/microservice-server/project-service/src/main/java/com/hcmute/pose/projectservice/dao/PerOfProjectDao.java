@@ -11,5 +11,5 @@ public interface PerOfProjectDao {
     Optional<Long> getLastID ();
     Optional<PerOfProject> createPOP (PerOfProject perOfProject);
     List<PerOfProject> getListPOP (Long idPro) throws SQLException;
-    void deletePOP (Long id) throws SQLException, TransactionException;
+    void deletePOP (Long id,Long employeeId) throws SQLException, TransactionException;
 }
