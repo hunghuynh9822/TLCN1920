@@ -1,13 +1,18 @@
 package com.hcmute.pose.taskservice.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class Task implements Serializable {
     private Long id;
+    @SerializedName("employeeid")
     private Long employeeId;
+    @SerializedName("projectid")
     private Long projectId;
     private String title;
+    @SerializedName("startdate")
     private Long startDate;
     private Integer duration;
     private Boolean status;

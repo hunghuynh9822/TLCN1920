@@ -47,9 +47,7 @@ CREATE TABLE IF NOT EXISTS "public"."employees" (
 ALTER TABLE "public"."employees" ADD CONSTRAINT "employee_position" FOREIGN KEY ("position_id") REFERENCES "public"."positions" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "public"."employees" ADD CONSTRAINT "user_id" FOREIGN KEY ("id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-
-
-CREATE TABLE IF NOT EXISTS "public"."roles" (
+CREATE TABLE IF NOT EXISTS  "public"."roles" (
   "id" int4 NOT NULL,
   "name" varchar COLLATE "pg_catalog"."default" NOT NULL,
   "created_at" int8,
@@ -83,26 +81,23 @@ INSERT INTO "public"."genuid" VALUES (3, 0, 0);
 
 CREATE TABLE IF NOT EXISTS "public"."tasks" (
   "id" int8 NOT NULL,
-  "employee_id" int8,
-  "project_id" int8,
+  "employeeid" int8,
+  "projectid" int8,
   "title" varchar(255) COLLATE "pg_catalog"."default",
-  "start_date" int8,
-  "duraion" int4,
-  "status" bit(1),
-  "point" int4,
-  "created_at" int8,
-  "update_at" int8
+  "startdate" int8,
+  "duration" int4,
+  "status" bool,
+  "point" int4 
 )
 ;
 ALTER TABLE "public"."tasks" ADD CONSTRAINT "tasks_pkey" PRIMARY KEY ("id");
 
 CREATE TABLE IF NOT EXISTS "public"."taskcomments" (
   "id" int8 NOT NULL,
-  "task_id" int8,
-  "employee_id" int8,
+  "taskid" int8,
+  "employeeid" int8,
   "comment" text COLLATE "pg_catalog"."default",
-  "create_at" int8,
-  "update_at" int8
+  "createtime" int8
 )
 ;
 ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "taskcomments_pkey" PRIMARY KEY ("id");
@@ -110,17 +105,16 @@ ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "taskcomments_pkey" PRIMARY K
 CREATE TABLE IF NOT EXISTS "public"."projects" (
   "id" int8 NOT NULL,
   "title" varchar(255) COLLATE "pg_catalog"."default",
-  "employee_id" int8,
-  "created_at" int8,
-  "updated_at" int8,
-  "submit" bit(1)
+  "employeeid" int8,
+  "createtime" int8,
+  "submit" bool
 )
 ;
 ALTER TABLE "public"."projects" ADD CONSTRAINT "projects_pkey" PRIMARY KEY ("id");
 
 CREATE TABLE IF NOT EXISTS "public"."perofproject" (
-  "pro_id" int8 NOT NULL,
-  "employee_id" int8 NOT NULL
+  "proid" int8 NOT NULL,
+  "employeeid" int8 NOT NULL
 )
 ;
 

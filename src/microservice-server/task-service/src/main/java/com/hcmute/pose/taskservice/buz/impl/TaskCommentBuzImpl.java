@@ -7,11 +7,13 @@ import com.hcmute.pose.taskservice.model.TaskComments;
 import com.hcmute.pose.taskservice.payload.TaskCommentRequest;
 import com.hcmute.pose.taskservice.service.TaskCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TaskCommentBuzImpl implements TaskCommentBuz {
 
     @Autowired
@@ -50,7 +52,9 @@ public class TaskCommentBuzImpl implements TaskCommentBuz {
     @Override
     public void updateTC(Long taskId, Long employeeId, String comment) {
         try{
+            databaseHelper.beginTransaction();
             taskCommentService.updateComment(taskId,employeeId,comment);
+            databaseHelper.commit();
         }catch (Exception | TransactionException e){
 
         }finally {

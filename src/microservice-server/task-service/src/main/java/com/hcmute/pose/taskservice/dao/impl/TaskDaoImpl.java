@@ -8,18 +8,19 @@ import com.hcmute.pose.taskservice.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public class TaskDaoImpl implements TaskDao {
     private static Logger LOGGER = LoggerFactory.getLogger(TaskDaoImpl.class);
-    private static String SQL_INSERT_TASK = "INSERT INTO tasks(id,employeeId,projectId,title,startDate,duration,status,point) VALUES(?,?,?,?,?,?,?,?)";
-    private static String SQl_GET_LIST_TASK = "SELECT * FROM tasks WHERE employeeId = ? AND projectId=?";
+    private static String SQL_INSERT_TASK = "INSERT INTO tasks(id,employeeid,projectid,title,startdate,duration,status,point) VALUES(?,?,?,?,?,?,?,?)";
+    private static String SQl_GET_LIST_TASK = "SELECT * FROM tasks WHERE employeeid = ? AND projectid=?";
     private static String SQL_UPDATE_POINT = "UPDATE tasks SET point=? WHERE id=?";
     private static String SQL_UPDATE_STATUS = "UPDATE tasks SET status=? WHERE id=?";
-    private static String SQL_CHECKEXITS_TASK = "SELECT * FROM tasks WHERE employeeId=? AND projectId=? AND title=?";
+    private static String SQL_CHECKEXITS_TASK = "SELECT * FROM tasks WHERE employeeid=? AND projectid=? AND title=?";
     @Autowired
     private DatabaseHelper databaseHelper;
 

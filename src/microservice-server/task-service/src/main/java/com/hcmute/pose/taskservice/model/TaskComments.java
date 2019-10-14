@@ -1,12 +1,17 @@
 package com.hcmute.pose.taskservice.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class TaskComments implements Serializable {
     private Long id;
+    @SerializedName("taskid")
     private Long taskId;
+    @SerializedName("employeeid")
     private Long employeeId;
+    @SerializedName("createtime")
     private Long createTime;
     private String comment;
 

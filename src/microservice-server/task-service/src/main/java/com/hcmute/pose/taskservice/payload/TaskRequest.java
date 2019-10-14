@@ -6,42 +6,33 @@ import java.util.Date;
 
 public class TaskRequest {
 
-    @NotBlank(message = "Not null taskId")
+
     private Long Id;
 
-    @NotBlank(message = "Not null employee")
+
     private Long employeeId;
 
-    @NotBlank(message = "Not null projectId")
+
     private Long projectId;
 
     @NotBlank(message = "Not null title")
     @Size(max = 255,message = "Not long character 255")
     private String title;
 
-    @NotBlank(message = "Not null ")
+
     private Integer duration;
 
-    @NotBlank(message = "Not null status")
+
     private Boolean status;
 
-    @NotBlank(message = "NOt null point")
+
     private Integer point;
 
     public TaskRequest(){
 
     }
 
-    public TaskRequest(@NotBlank(message = "Not null employee") Long employeeId, @NotBlank(message = "Not null employee") Long projectId, @NotBlank(message = "Not null title") @Size(max = 255, message = "Not long character 255") String title, @NotBlank(message = "Not null ") Integer duration) {
-        this.employeeId = employeeId;
-        this.projectId = projectId;
-        this.title = title;
-        this.duration = duration;
-    }
-
-
-    public TaskRequest(@NotBlank(message = "Not null taskId") Long id, @NotBlank(message = "Not null employee") Long employeeId, @NotBlank(message = "Not null projectId") Long projectId, @NotBlank(message = "Not null title") @Size(max = 255, message = "Not long character 255") String title, @NotBlank(message = "Not null ") Integer duration) {
-        Id = id;
+    public TaskRequest(Long employeeId, Long projectId, @NotBlank(message = "Not null title") @Size(max = 255, message = "Not long character 255") String title, Integer duration) {
         this.employeeId = employeeId;
         this.projectId = projectId;
         this.title = title;
@@ -52,35 +43,55 @@ public class TaskRequest {
         return Id;
     }
 
-    public TaskRequest(@NotBlank(message = "Not null status") Boolean status) {
-        this.status = status;
-    }
-
-    public TaskRequest(@NotBlank(message = "NOt null point") Integer point) {
-        this.point = point;
+    public void setId(Long id) {
+        Id = id;
     }
 
     public Long getEmployeeId() {
         return employeeId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public Integer getDuration() {
-        return duration;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public Long getProjectId() {
         return projectId;
     }
 
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
     public Boolean getStatus() {
         return status;
     }
 
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     public Integer getPoint() {
         return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
     }
 }
