@@ -1,9 +1,8 @@
 package com.hcmute.pose.employeeservice.payload;
 
-import com.hcmute.pose.employeeservice.model.Employee;
-import com.hcmute.pose.employeeservice.model.Role;
-import com.hcmute.pose.employeeservice.model.User;
+import com.hcmute.pose.employeeservice.model.*;
 
+import java.util.Date;
 import java.util.Set;
 
 public class EmployeeResponse {
@@ -14,25 +13,29 @@ public class EmployeeResponse {
     private String firstName;
     private String middleName;
     private String lastName;
-
-    public EmployeeResponse(Long id, String email, String phone, Set<Role> roles, String firstName, String middleName, String lastName) {
-        this.id = id;
-        this.email = email;
-        this.phone = phone;
-        this.roles = roles;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-    }
+    private ID identification;
+    private String address;
+    private Position position;
+    private Bank bank;
+    private Date birthday;
+    private Date startTime;
+    private EmployeeStatus status;
 
     public EmployeeResponse(User user, Employee employee){
         this.id = user.getId();
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.roles = user.getRoles();
-        this.firstName = employee.getFirst_name();
-        this.middleName = employee.getMiddle_name();
-        this.lastName = employee.getLast_name();
+        this.firstName = employee.getFirstName();
+        this.middleName = employee.getMiddleName();
+        this.lastName = employee.getLastName();
+        this.identification = employee.getIdentification();
+        this.address = employee.getAddress();
+        this.position = employee.getPosition();
+        this.bank = employee.getBank();
+        this.birthday = new Date(employee.getBirthday());
+        this.startTime = new Date(employee.getStartTime());
+        this.status = employee.getStatus();
     }
 
     public Long getId() {
@@ -89,5 +92,61 @@ public class EmployeeResponse {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public ID getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(ID identification) {
+        this.identification = identification;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public EmployeeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EmployeeStatus status) {
+        this.status = status;
     }
 }

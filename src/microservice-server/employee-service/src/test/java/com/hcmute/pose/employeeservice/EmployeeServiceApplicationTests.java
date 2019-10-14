@@ -1,20 +1,10 @@
 package com.hcmute.pose.employeeservice;
 
 //import com.hcmute.pose.employeeservice.config.TestConfig;
-<<<<<<< HEAD
-import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
-import com.hcmute.pose.employeeservice.dao.EmployeeDao;
-import com.hcmute.pose.employeeservice.dao.RoleDao;
-import com.hcmute.pose.employeeservice.exception.BuzException;
-import com.hcmute.pose.employeeservice.model.Employee;
-import com.hcmute.pose.employeeservice.model.RoleName;
-import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
-=======
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 //import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
 //import com.hcmute.pose.employeeservice.dao.RoleDao;
 //import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
->>>>>>> 6cff259ff322f95b77176b133a07dceb88f9ee01
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -59,11 +49,7 @@ public class EmployeeServiceApplicationTests {
 //								LOGGER.info("FAIL");
 //							}
 //						}
-<<<<<<< HEAD
 //					}catch (Exception | BuzException e){
-=======
-//					}catch (Exception e){
->>>>>>> 6cff259ff322f95b77176b133a07dceb88f9ee01
 //						LOGGER.error("[EmployeeServiceApplicationTests]:[testInsertEmployee]",e);
 //					}finally {
 //

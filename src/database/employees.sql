@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 12/10/2019 00:38:51
+ Date: 13/10/2019 22:13:56
 */
 
 
@@ -26,14 +26,20 @@ CREATE TABLE "public"."employees" (
   "updated_at" int8,
   "first_name" varchar(255) COLLATE "pg_catalog"."default",
   "middle_name" varchar(255) COLLATE "pg_catalog"."default",
-  "last_name" varchar(255) COLLATE "pg_catalog"."default"
+  "last_name" varchar(255) COLLATE "pg_catalog"."default",
+  "id_number" varchar(64) COLLATE "pg_catalog"."default",
+  "id_created" int8,
+  "id_location" text COLLATE "pg_catalog"."default",
+  "address" text COLLATE "pg_catalog"."default",
+  "position_id" int4,
+  "bank_number" varchar(255) COLLATE "pg_catalog"."default",
+  "bank_name" varchar(255) COLLATE "pg_catalog"."default",
+  "bank_branch" varchar(255) COLLATE "pg_catalog"."default",
+  "birthday" int8,
+  "start_time" int8,
+  "status" int4
 )
 ;
-
--- ----------------------------
--- Records of employees
--- ----------------------------
-INSERT INTO "public"."employees" VALUES (15708149825552, 1570814982687, NULL, 'Huỳnh', 'Lê Hữu', 'Hưng');
 
 -- ----------------------------
 -- Primary Key structure for table employees
@@ -43,4 +49,5 @@ ALTER TABLE "public"."employees" ADD CONSTRAINT "Employee_pkey" PRIMARY KEY ("id
 -- ----------------------------
 -- Foreign Keys structure for table employees
 -- ----------------------------
+ALTER TABLE "public"."employees" ADD CONSTRAINT "employee_position" FOREIGN KEY ("position_id") REFERENCES "public"."positions" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "public"."employees" ADD CONSTRAINT "user_id" FOREIGN KEY ("id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -5,12 +5,11 @@ import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
 import com.hcmute.pose.employeeservice.exception.BuzException;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
-import com.hcmute.pose.employeeservice.model.Employee;
-import com.hcmute.pose.employeeservice.model.Role;
-import com.hcmute.pose.employeeservice.model.User;
+import com.hcmute.pose.employeeservice.model.*;
 import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
 import com.hcmute.pose.employeeservice.payload.EmployeeResponse;
 import com.hcmute.pose.employeeservice.service.EmployeeService;
+import com.hcmute.pose.employeeservice.service.PositionService;
 import com.hcmute.pose.employeeservice.service.RoleService;
 import com.hcmute.pose.employeeservice.service.UserService;
 import org.slf4j.Logger;
@@ -37,6 +36,9 @@ public class EmployeeBuzImpl implements EmployeeBuz {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private PositionService positionService;
+
     @Override
     public Optional<EmployeeResponse> createEmployee(EmployeeRequest request) throws BuzException {
         try{
@@ -57,7 +59,16 @@ public class EmployeeBuzImpl implements EmployeeBuz {
                 userRoles.add(roleService.findById(id));
             }
             user.setRoles(userRoles);
-            Employee employee = employeeService.createEmployee(user.getId(),request.getFirstName(),request.getMiddleName(),request.getLastName());
+            Employee employee = employeeService.createEmployee(user.getId(),
+                    request.getFirstName(),
+                    request.getMiddleName(),
+                    request.getLastName(),
+                    new ID(request.getIdNumber(),request.getIdCreated().getTime(),request.getIdLocation()),
+                    request.getAddress(),
+                    positionService.findById(request.getPositionId()),
+                    new Bank(request.getBankNumber(),request.getBankName(),request.getBankBranch()),
+                    request.getBirthday().getTime(),
+                    request.getStartTime().getTime());
             databaseHelper.commit();
             return Optional.of(new EmployeeResponse(user,employee));
         }catch (DatabaseException | TransactionException e){

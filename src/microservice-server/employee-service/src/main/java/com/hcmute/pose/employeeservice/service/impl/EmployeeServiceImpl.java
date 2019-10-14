@@ -2,7 +2,7 @@ package com.hcmute.pose.employeeservice.service.impl;
 
 import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
-import com.hcmute.pose.employeeservice.model.Employee;
+import com.hcmute.pose.employeeservice.model.*;
 import com.hcmute.pose.employeeservice.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDao employeeDao;
 
     @Override
-    public Employee createEmployee(Long employeeId, String firstName, String middleName, String lastName) throws DatabaseException {
-        Employee employee = new Employee(employeeId,firstName,middleName,lastName);
+    public Employee createEmployee(Long employeeId, String firstName, String middleName, String lastName, ID identification, String address, Position position, Bank bank,Long birthday,Long startTime) throws DatabaseException {
+        Employee employee = new Employee(employeeId,firstName,middleName,lastName,identification,address,position,bank,birthday,startTime, EmployeeStatus.CREATED);
         return employeeDao.createEmployee(employee)
                 .orElseThrow(()->
                         new DatabaseException("[EmployeeServiceImpl]:[createEmployee] Can't create employee")

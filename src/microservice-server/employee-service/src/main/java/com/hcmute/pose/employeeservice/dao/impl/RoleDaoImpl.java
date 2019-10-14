@@ -20,6 +20,7 @@ import java.util.Set;
 public class RoleDaoImpl implements RoleDao {
     private static Logger LOGGER = LoggerFactory.getLogger(RoleDaoImpl.class);
 
+    private static String SQL_GET_ALL_ROLES = "SELECT * FROM roles";
     private static String SQL_INSERT_ROLE = "INSERT INTO roles(name,created_at) VALUES(?,?)";
     private static String SQL_SELECT_ROLE_BY_NAME = "SELECT * FROM roles WHERE name LIKE ?";
     private static String SQL_SELECT_ROLE_BY_ID = "SELECT * FROM roles WHERE id = ?";
@@ -27,6 +28,11 @@ public class RoleDaoImpl implements RoleDao {
 
     @Autowired
     private DatabaseHelper databaseHelper;
+
+    @Override
+    public List<Role> getAllRole() throws SQLException {
+        return databaseHelper.executeQueryListObject(Role[].class,SQL_GET_ALL_ROLES);
+    }
 
     @Override
     public Optional<Role> createRole(String name) throws DatabaseException {

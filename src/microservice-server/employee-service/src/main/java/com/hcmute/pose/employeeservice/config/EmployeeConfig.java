@@ -4,20 +4,6 @@ import com.hcmute.pose.database.connector.DataSource;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.database.connector.helper.impl.DatabaseHelperImpl;
 import com.hcmute.pose.database.connector.impl.DataSourceImpl;
-import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
-import com.hcmute.pose.employeeservice.buz.impl.EmployeeBuzImpl;
-import com.hcmute.pose.employeeservice.dao.EmployeeDao;
-import com.hcmute.pose.employeeservice.dao.RoleDao;
-import com.hcmute.pose.employeeservice.dao.UserDao;
-import com.hcmute.pose.employeeservice.dao.impl.EmployeeDaoImpl;
-import com.hcmute.pose.employeeservice.dao.impl.RoleDaoImpl;
-import com.hcmute.pose.employeeservice.dao.impl.UserDaoImpl;
-import com.hcmute.pose.employeeservice.service.EmployeeService;
-import com.hcmute.pose.employeeservice.service.RoleService;
-import com.hcmute.pose.employeeservice.service.UserService;
-import com.hcmute.pose.employeeservice.service.impl.EmployeeServiceImpl;
-import com.hcmute.pose.employeeservice.service.impl.RoleServiceImpl;
-import com.hcmute.pose.employeeservice.service.impl.UserServiceImpl;
 import com.hcmute.pose.genuid.GenerateUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -69,40 +55,5 @@ public class EmployeeConfig {
     @Bean
     public GenerateUID generateUID() throws SQLException {
         return new GenerateUID(DBUrl,DBUsername,DBPassword,serviceId);
-    }
-
-    @Bean
-    public UserDao userDao(){
-        return new UserDaoImpl();
-    }
-
-    @Bean
-    public EmployeeDao employeeDao(){
-        return new EmployeeDaoImpl();
-    }
-
-    @Bean
-    public RoleDao roleDao(){
-        return new RoleDaoImpl();
-    }
-
-    @Bean
-    public UserService userService(){
-        return new UserServiceImpl();
-    }
-
-    @Bean
-    public EmployeeService employeeService(){
-        return new EmployeeServiceImpl();
-    }
-
-    @Bean
-    public RoleService roleService(){
-        return new RoleServiceImpl();
-    }
-
-    @Bean
-    public EmployeeBuz employeeBuz(){
-        return new EmployeeBuzImpl();
     }
 }

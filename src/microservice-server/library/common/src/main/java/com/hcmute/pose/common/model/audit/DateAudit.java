@@ -1,27 +1,30 @@
 package com.hcmute.pose.common.model.audit;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 public class DateAudit implements Serializable {
-    protected Long created_at;
-    protected Long updated_at;
+    @SerializedName("created_at")
+    protected Long createdAt;
+    @SerializedName("updated_at")
+    protected Long updatedAt;
     protected DateAudit(){
-        this.created_at = System.currentTimeMillis();
-        this.updated_at = null;
+        this.createdAt = System.currentTimeMillis();
+        this.updatedAt = null;
     }
 
     public void setUpdated_at(Long updated_at) {
-        this.updated_at = updated_at;
+        this.updatedAt = updated_at;
     }
 
     public Long getCreated_at() {
-        return created_at;
+        return createdAt;
     }
 
     public Long getUpdated_at() {
-        return updated_at;
+        return updatedAt;
     }
 
     @Override

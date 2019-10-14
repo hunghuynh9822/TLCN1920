@@ -12,14 +12,14 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.*;
 
-
 @Repository
 public class EmployeeDaoImpl implements EmployeeDao {
     private static Logger LOGGER = LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
     private static final String DATA_EMPLOYEE = "id,first_name,middle_name,last_name";
+    private static final String INSERT_DATA_EMPLOYEE = "id,first_name,middle_name,last_name,id_number,id_created,id_location,address,position_id,bank_number,bank_name,bank_branch,birthday,start_time,created_at,status";
 
-    private static String SQL_INSERT_EMPLOYEE = "INSERT INTO employees(id,first_name,middle_name,last_name,created_at) VALUES(?,?,?,?,?)";
+    private static String SQL_INSERT_EMPLOYEE = String.format("INSERT INTO employees(%s) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",INSERT_DATA_EMPLOYEE);
     private static String SQL_SELECT_EMPLOYEE_BY_ID = String.format("SELECT %s FROM employees WHERE id = ?",DATA_EMPLOYEE);
 
     @Autowired
@@ -29,10 +29,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
         try {
             databaseHelper.executeNonQuery(SQL_INSERT_EMPLOYEE,
                     employee.getId(),
-                    employee.getFirst_name(),
-                    employee.getMiddle_name(),
-                    employee.getLast_name(),
-                    System.currentTimeMillis()
+                    employee.getFirstName(),
+                    employee.getMiddleName(),
+                    employee.getLastName(),
+                    employee.getIdentification().getIdNumber(),
+                    employee.getIdentification().getIdCreated(),
+                    employee.getIdentification().getIdLocation(),
+                    employee.getAddress(),
+                    employee.getPosition().getId(),
+                    employee.getBank().getBankNumber(),
+                    employee.getBank().getBankName(),
+                    employee.getBank().getBankBranch(),
+                    employee.getBirthday(),
+                    employee.getStartTime(),
+                    System.currentTimeMillis(),
+                    employee.getStatus().ordinal()
             );
             return Optional.of(employee);
         }catch (SQLException | TransactionException ex){

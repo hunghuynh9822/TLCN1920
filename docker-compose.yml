@@ -69,28 +69,28 @@ services:
       - "8003:8003"
     networks:
       - pose
-  employee:
-    build:
-      context: ./src/microservice-server/employee-service
-      dockerfile: Dockerfile
-    image: pose/micro/service/employee
-    container_name: docker-micro-service-employee
-    restart: unless-stopped
-    volumes:
-      - ./docker/micro/service/employee/logs:/docker/server/employee-service/logs
-    environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
-      - PSQL_URL=jdbc:postgresql://postgresql:5432/postgres
-    links:
-      - postgresql
-      - discovery
-    depends_on:
-      - discovery
-      - postgresql
-    ports:
-      - "8001:8001"
-    networks:
-      - pose
+  # employee:
+  #   build:
+  #     context: ./src/microservice-server/employee-service
+  #     dockerfile: Dockerfile
+  #   image: pose/micro/service/employee
+  #   container_name: docker-micro-service-employee
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./docker/micro/service/employee/logs:/docker/server/employee-service/logs
+  #   environment:
+  #     - EUREKA_URI=http://discovery:8761/eureka/
+  #     - PSQL_URL=jdbc:postgresql://postgresql:5432/postgres
+  #   links:
+  #     - postgresql
+  #     - discovery
+  #   depends_on:
+  #     - discovery
+  #     - postgresql
+  #   ports:
+  #     - "8001:8001"
+  #   networks:
+  #     - pose
   # tasks:
   #   build:
   #     context: ./src/microservice-server/task-service

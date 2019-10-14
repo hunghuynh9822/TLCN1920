@@ -1,24 +1,43 @@
 package com.hcmute.pose.employeeservice.model;
 
 
+import com.google.gson.annotations.SerializedName;
 import com.hcmute.pose.common.model.audit.DateAudit;
 
 import java.io.Serializable;
 
 public class Employee extends DateAudit implements Serializable {
     private Long id;
-    private String first_name;
-    private String middle_name;
-    private String last_name;
+    @SerializedName("first_name")
+    private String firstName;
+    @SerializedName("middle_name")
+    private String middleName;
+    @SerializedName("last_name")
+    private String lastName;
+    private ID identification;
+    private String address;
+    private Position position;
+    private Bank bank;
+    private Long birthday;
+    @SerializedName("start_time")
+    private Long startTime;
+    private EmployeeStatus status;
 
     public Employee() {
     }
 
-    public Employee(Long id, String first_name, String middle_name, String last_name) {
+    public Employee(Long id, String firstName, String middleName, String lastName, ID identification, String address, Position position, Bank bank, Long birthday, Long startTime, EmployeeStatus status) {
         this.id = id;
-        this.first_name = first_name;
-        this.middle_name = middle_name;
-        this.last_name = last_name;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.identification = identification;
+        this.address = address;
+        this.position = position;
+        this.bank = bank;
+        this.birthday = birthday;
+        this.startTime = startTime;
+        this.status = status;
     }
 
     public Long getId() {
@@ -29,27 +48,83 @@ public class Employee extends DateAudit implements Serializable {
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getMiddle_name() {
-        return middle_name;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setMiddle_name(String middle_name) {
-        this.middle_name = middle_name;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public ID getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(ID identification) {
+        this.identification = identification;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    public Long getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Long birthday) {
+        this.birthday = birthday;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public EmployeeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EmployeeStatus status) {
+        this.status = status;
     }
 }

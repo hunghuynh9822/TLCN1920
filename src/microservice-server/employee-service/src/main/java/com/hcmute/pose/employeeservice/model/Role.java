@@ -26,11 +26,11 @@ public class Role extends DateAudit implements Serializable {
         this.id = id;
     }
 
-    public Role(Integer id, String name, Long created_at,Long updated_at) {
+    public Role(Integer id, String name, Long createdAt,Long updatedAt) {
         this.id = id;
         this.name = name;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Integer getId() {
