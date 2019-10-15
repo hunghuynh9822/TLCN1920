@@ -7,17 +7,12 @@ import com.hcmute.pose.authservice.model.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -40,12 +35,19 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         // Remember that Spring needs roles to be in this format: "ROLE_" + userRole (i.e. "ROLE_ADMIN")
         // So, we need to set it to that format, so we can verify and compare roles (i.e. hasRole("ADMIN")).
-        List<GrantedAuthority> grantedAuthorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName())
-        ).collect(Collectors.toList());
+//        List<GrantedAuthority> grantedAuthorities = user.getRoles().stream().map(role ->
+//                new SimpleGrantedAuthority(role.getName())
+//        ).collect(Collectors.toList());
         // The "UserModel" class is provided by Spring and represents a model class for user to be returned by UserDetailsService
         // And used by auth manager to verify and check user authentication.
-        return new User(user.getEmail(), user.getPassword(), grantedAuthorities) {
-        };
+//        return new User(user.getEmail(), user.getPassword(), grantedAuthorities) {};
+        return UserPrincipal.create(user);
     }
+
+    // This method is used by JWTAuthenticationFilter
+    public UserDetails loadUserById(Long id) throws DatabaseException, SQLException {
+        UserModel user = userDao.getUserById(id);
+        return UserPrincipal.create(user);
+    }
+
 }

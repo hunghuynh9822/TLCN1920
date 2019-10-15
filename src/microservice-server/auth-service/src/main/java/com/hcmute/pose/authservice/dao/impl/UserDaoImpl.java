@@ -16,10 +16,22 @@ public class UserDaoImpl implements UserDao {
     private static Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private static String SQL_SELECT_USER = "SELECT id,email,phone,password FROM users WHERE email=? OR phone=?";
+    private static String SQL_SELECT_USER_BY_ID = " SELECT id,email,phone,password FROM users WHERE id = ?";
+
 
     @Autowired
     private DatabaseHelper databaseHelper;
 
+    @Override
+    public UserModel getUserById(Long userId) throws DatabaseException, SQLException {
+        try {
+            UserModel user = databaseHelper.executeQueryObject(UserModel.class,SQL_SELECT_USER_BY_ID,userId).orElseThrow(()->new DatabaseException("Can't find user with id"));
+            return user;
+        } catch (SQLException e) {
+            LOGGER.error("[UserDaoImpl]:[getUser] GOT EXCEPTION ",e);
+            throw e;
+        }
+    }
 
     @Override
     public UserModel getUser(String phoneOrEmail) throws DatabaseException, SQLException {

@@ -6,5 +6,6 @@ import com.hcmute.pose.authservice.model.UserModel;
 import java.sql.SQLException;
 
 public interface UserDao {
+    UserModel getUserById(Long userId) throws DatabaseException, SQLException;
     UserModel getUser(String phoneOrEmail) throws DatabaseException, SQLException;
 }
