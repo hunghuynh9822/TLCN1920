@@ -28,7 +28,6 @@ class Sidebar extends Component {
         const { handleDrawerToggleMobile, handleDrawerToggleDesktop, drawerToggleDesktopClose } = this.props;
         // verifies if routeName is the one active (in browser input)
         function activeRoute(layout,path) {
-            console.log("active " + window.location.pathname +" route "+layout+path);
             if(path === ""){
                 return window.location.pathname === layout;
             }
