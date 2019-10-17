@@ -7,12 +7,13 @@ import com.hcmute.pose.projectservice.model.PerOfProject;
 import com.hcmute.pose.projectservice.payload.PerOfProjectRequest;
 import com.hcmute.pose.projectservice.service.PerOfProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class PerOfProjectBuzImpl implements PerOfProjectBuz {
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -52,7 +53,9 @@ public class PerOfProjectBuzImpl implements PerOfProjectBuz {
     @Override
     public void deletePOP(Long id,Long employeeId) throws SQLException, TransactionException {
         try{
+            databaseHelper.beginTransaction();
             perOfProjectService.deletePOP(id,employeeId);
+            databaseHelper.commit();
         }catch (Exception e){
 
         }finally {

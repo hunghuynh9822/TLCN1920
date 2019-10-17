@@ -18,7 +18,7 @@ public class PerOfProjectServiceController {
     @Autowired
     private PerOfProjectBuz perOfProjectBuz;
 
-    @PostMapping("/create")
+    @PostMapping("/createPOP")
     public ResponseEntity createPOP (@Valid @RequestBody PerOfProjectRequest perOfProjectRequest){
         try{
             perOfProjectBuz.createPOP(perOfProjectRequest);
