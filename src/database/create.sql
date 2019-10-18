@@ -3,6 +3,11 @@ CREATE TABLE IF NOT EXISTS "public"."users" (
   "email" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "phone" varchar(10) COLLATE "pg_catalog"."default" NOT NULL,
   "password" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
+  "provider" varchar(255) COLLATE "pg_catalog"."default",
+  "provider_id" varchar(255) COLLATE "pg_catalog"."default",
+  "oauth2_name" varchar(255) COLLATE "pg_catalog"."default",
+  "image_url" varchar(255) COLLATE "pg_catalog"."default",
+  "email_verified" bool,
   "created_at" int8,
   "updated_at" int8
 )
@@ -118,4 +123,4 @@ CREATE TABLE IF NOT EXISTS "public"."perofproject" (
 )
 ;
 
-ALTER TABLE "public"."perofproject" ADD CONSTRAINT "perofproject_pkey" PRIMARY KEY ("pro_id", "employee_id");
+ALTER TABLE "public"."perofproject" ADD CONSTRAINT "perofproject_pkey" PRIMARY KEY ("proid", "employeeid");
