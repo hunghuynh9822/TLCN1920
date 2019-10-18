@@ -1,13 +1,16 @@
 package com.hcmute.pose.projectservice.model;
 
-import org.graalvm.compiler.lir.Variable;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 public class Project implements Serializable {
     private Long id;
     private String title;
+    @SerializedName("createtime")
     private Long createTime;
+    @SerializedName("employeeid")
     private Long employeeCreate;
     private boolean submit;
 

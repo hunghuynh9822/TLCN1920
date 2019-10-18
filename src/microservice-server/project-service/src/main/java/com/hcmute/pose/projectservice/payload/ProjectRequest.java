@@ -7,10 +7,10 @@ public class ProjectRequest {
 
     @NotBlank(message = "Not null title")
     private String title;
-    @NotBlank(message = "Not null employeeCre")
+
     private Long employeeCreate;
 
-    public ProjectRequest(@NotBlank(message = "Not null title") String title, @NotBlank(message = "Not null employeeCre") Long employeeCreate) {
+    public ProjectRequest(@NotBlank(message = "Not null title") String title, Long employeeCreate) {
 
         this.title = title;
         this.employeeCreate = employeeCreate;

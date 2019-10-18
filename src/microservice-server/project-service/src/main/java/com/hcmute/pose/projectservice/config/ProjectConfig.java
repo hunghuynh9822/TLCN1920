@@ -1,4 +1,4 @@
-package com.hcmute.pose.taskservice.config;
+package com.hcmute.pose.projectservice.config;
 
 import com.hcmute.pose.database.connector.DataSource;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
@@ -15,7 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.sql.SQLException;
 
 @Configuration
-public class TaskConfig {
+public class ProjectConfig {
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate(){
@@ -45,7 +45,7 @@ public class TaskConfig {
         return new DatabaseHelperImpl(dataSource);
     }
 
-    private Integer serviceId = 2;
+    private Integer serviceId = 3;
     @Bean
     public GenerateUID generateUID() throws SQLException {
         return new GenerateUID(DBUrl,DBUsername,DBPassword,serviceId);

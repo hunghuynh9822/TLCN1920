@@ -5,10 +5,11 @@ import com.hcmute.pose.projectservice.dao.PerOfProjectDao;
 import com.hcmute.pose.projectservice.model.PerOfProject;
 import com.hcmute.pose.projectservice.service.PerOfProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
-
+@Service
 public class PerOfProjectServiceImpl implements PerOfProjectService {
 
     @Autowired

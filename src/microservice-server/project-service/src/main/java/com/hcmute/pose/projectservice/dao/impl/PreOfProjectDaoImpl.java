@@ -8,16 +8,17 @@ import com.hcmute.pose.projectservice.model.PerOfProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public class PreOfProjectDaoImpl implements PerOfProjectDao {
     private static Logger LOGGER = LoggerFactory.getLogger(PerOfProjectDao.class);
     private static String SQL_INSERT_POP = "INSERT INTO perofproject(proId,employeeId) VALUES(?,?)";
-    private static String SQl_GET_LIST_POP = "SELECT * FROM tasks WHERE proId =?";
-    private static String SQL_DELETE_POP = "DELETE FROM perofproject WHERE proId=? AND employeeId=?";
+    private static String SQl_GET_LIST_POP = "SELECT * FROM perofproject WHERE proid =?";
+    private static String SQL_DELETE_POP = "DELETE FROM perofproject WHERE proid=? AND employeeid=?";
 
     @Autowired
     private DatabaseHelper databaseHelper;

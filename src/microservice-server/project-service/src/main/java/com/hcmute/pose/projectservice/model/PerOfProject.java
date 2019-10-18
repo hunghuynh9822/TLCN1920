@@ -1,9 +1,13 @@
 package com.hcmute.pose.projectservice.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class PerOfProject  implements Serializable {
+    @SerializedName("proid")
     private Long id;
+    @SerializedName("employeeid")
     private Long employeeId;
 
     public PerOfProject(Long id, Long employeeId) {

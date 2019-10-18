@@ -42,6 +42,7 @@ public class ProjectServiceController {
     @PutMapping("/updateTitle/{id}")
     public ResponseEntity updatePoint (@PathVariable("id") Long id ,@RequestParam Long employeeId,@RequestParam String title ){
         try{
+
             projectBuz.updateTitle(id,employeeId,title);
             return new ResponseEntity("Update title success",HttpStatus.OK);
         }catch (Exception | TransactionException e){
