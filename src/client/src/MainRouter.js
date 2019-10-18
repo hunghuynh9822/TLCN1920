@@ -4,9 +4,17 @@ import importedComponent from 'react-imported-component';
 
 import {Loading} from './components';
 
-import {PrivateRoute} from './components'
+import {PrivateRoute,OAuth2RedirectHandler} from './components'
 
 class MainRouter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      authenticated: false,
+      currentUser: null,
+      loading: false
+    }
+  }
   render() {
     const AsyncMain = importedComponent(
       () => import(/* webpackChunkName:'main' */ './layouts/Main.jsx'),
@@ -29,11 +37,12 @@ class MainRouter extends Component {
     return (
       <React.Fragment>
         <Switch>
-          <Route exact path="/" component={AsyncSignIn} />
-          <PrivateRoute path="/admin"><AsyncMain/></PrivateRoute>
-          <PrivateRoute path="/hr"><AsyncMain/></PrivateRoute>
-          <PrivateRoute path="/staff"><AsyncMain/></PrivateRoute>
-          <PrivateRoute path="/lead"><AsyncMain/></PrivateRoute>
+          <Route exact path="/(login|)" component={AsyncSignIn} />
+          <PrivateRoute path="/admin" authenticated={this.state.authenticated} component={AsyncMain}/>
+          <PrivateRoute path="/hr" authenticated={this.state.authenticated} component={AsyncMain}/>
+          <PrivateRoute path="/staff" authenticated={this.state.authenticated} component={AsyncMain}/>
+          <PrivateRoute path="/lead" authenticated={this.state.authenticated} component={AsyncMain}/>
+          <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>
           <Route path="/notfound" component={AsyncNoMatch} />
           <Route component={AsyncNoMatch} />
         </Switch>

@@ -11,19 +11,18 @@ class PrivateRoute extends Component {
         super(props);
     }
     render() {
-        const { children, ...rest } = this.props;
-        const isAuthenticated = true;
+        const { component: Component, authenticated, ...rest } = this.props;
         return (
             <Route
                 {...rest}
-                render={({ location }) =>
-                    isAuthenticated ? (
-                        children
+                render={(props) =>
+                    authenticated ? (
+                        <Component {...rest} {...props} />
                     ) : (
                             <Redirect
                                 to={{
-                                    pathname: "/",
-                                    state: { from: location }
+                                    pathname: '/login',
+                                    state: { from: props.location }
                                 }}
                             />
                         )
@@ -33,6 +32,7 @@ class PrivateRoute extends Component {
     }
 }
 PrivateRoute.propTypes = {
-
+    component: PropTypes.object.isRequired,
+    authenticated: PropTypes.bool.isRequired,
 };
 export default PrivateRoute;

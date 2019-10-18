@@ -27,3 +27,4 @@ export {default as CollapsibleSection}from './Section/CollapsibleSection.jsx';
 export {default as CenteredTabs} from './Tab/CenteredTabs.jsx';
 export {default as TabPanel} from './Tab/TabPanel.jsx';
 export {default as PrivateRoute} from './Route/PrivateRoute.jsx';
+export {default as OAuth2RedirectHandler} from './OAuth2/OAuth2RedirectHandler.jsx';

@@ -13,10 +13,14 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../assets/jss/styles/layouts/signinStyles';
-import { Copyright } from '../components'
+import { Copyright } from '../components';
+import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN } from '../constants';
+
+import googleLogo from '../assets/img/google-logo.png';
 class SignIn extends Component {
     constructor(props) {
         super(props);
@@ -56,10 +60,10 @@ class SignIn extends Component {
                             id="password"
                             autoComplete="current-password"
                         />
-                        <FormControlLabel
+                        {/* <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
-                        />
+                        /> */}
                         <Button
                             type="submit"
                             fullWidth
@@ -69,6 +73,15 @@ class SignIn extends Component {
                         >
                             Sign In
                         </Button>
+                        <div className={classes.orSeparator}>
+                            <span className="orText">OR</span>
+                        </div>
+                        <div className="social-login">
+                            <Button className={classnames(classes.socialBtn, classes.google)} href={GOOGLE_AUTH_URL}>
+                                <img className={classes.socialImg} src={googleLogo} alt="Google" /> 
+                                <span className={classes.socialBtnText}>Log in with Google</span>
+                            </Button>
+                        </div>
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
