@@ -91,9 +91,10 @@ public class EmployeeBuzImpl implements EmployeeBuz {
                 try {
                     Employee employee = employeeService.findById(user.getId()).orElseThrow(() -> new BuzException(String.format("Can't find employee info %d", user.getId())));
                     user.setRoles(roleService.getEmployeeRoles(employee.getId()));
+                    employee.setPosition(positionService.findById(employee.getPosition().getId()));
                     employees.add(new EmployeeResponse(user,employee));
-                }catch (BuzException ex){
-                    LOGGER.error("[EmployeeBuzImpl]:[getEmployees] GOT UNKNOWN EXCEPTION ",ex);
+                }catch (BuzException | DatabaseException ex) {
+                    LOGGER.error("[EmployeeBuzImpl]:[getEmployees] GOT UNKNOWN EXCEPTION ", ex);
                 }
             }
             return employees;

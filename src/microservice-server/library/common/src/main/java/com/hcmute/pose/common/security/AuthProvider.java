@@ -1,8 +1,16 @@
 package com.hcmute.pose.common.security;
 
-public enum AuthProvider {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public enum AuthProvider implements Serializable {
+    @SerializedName("local")
     local,
+    @SerializedName("facebook")
     facebook,
+    @SerializedName("google")
     google,
+    @SerializedName("github")
     github
 }

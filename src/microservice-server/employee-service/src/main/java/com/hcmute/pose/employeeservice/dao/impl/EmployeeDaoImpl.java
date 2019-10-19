@@ -4,6 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.model.Employee;
+import com.hcmute.pose.employeeservice.model.map.EmployeeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.*;
 public class EmployeeDaoImpl implements EmployeeDao {
     private static Logger LOGGER = LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
-    private static final String DATA_EMPLOYEE = "id,first_name,middle_name,last_name";
+    private static final String DATA_EMPLOYEE = "id,first_name,middle_name,last_name,id_number,id_created,id_location,address,position_id,bank_number,bank_name,bank_branch,birthday,start_time,created_at,status";
     private static final String INSERT_DATA_EMPLOYEE = "id,first_name,middle_name,last_name,id_number,id_created,id_location,address,position_id,bank_number,bank_name,bank_branch,birthday,start_time,created_at,status";
 
     private static String SQL_INSERT_EMPLOYEE = String.format("INSERT INTO employees(%s) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",INSERT_DATA_EMPLOYEE);
@@ -54,6 +55,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public Optional<Employee> findById(Long id) throws SQLException {
-        return this.databaseHelper.executeQueryObject(Employee.class,SQL_SELECT_EMPLOYEE_BY_ID,id);
+        Optional<EmployeeMap> employeeMapOptional = this.databaseHelper.executeQueryObject(EmployeeMap.class,SQL_SELECT_EMPLOYEE_BY_ID,id);
+        if(employeeMapOptional.isPresent()){
+            return Optional.of(employeeMapOptional.get().toEmployee());
+        }
+        return Optional.empty();
     }
 }

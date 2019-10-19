@@ -10,21 +10,33 @@ public class DateAudit implements Serializable {
     protected Long createdAt;
     @SerializedName("updated_at")
     protected Long updatedAt;
-    protected DateAudit(){
-        this.createdAt = System.currentTimeMillis();
+    protected DateAudit(Long createdAt){
+        this.createdAt = createdAt;
         this.updatedAt = null;
     }
 
-    public void setUpdated_at(Long updated_at) {
-        this.updatedAt = updated_at;
+    public DateAudit() {
     }
 
-    public Long getCreated_at() {
+    public DateAudit(Long createdAt, Long updatedAt) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public Long getUpdated_at() {
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void setUpdatedAt(Long updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override

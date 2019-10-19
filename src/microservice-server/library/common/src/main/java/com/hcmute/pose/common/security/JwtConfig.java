@@ -16,7 +16,7 @@ public class JwtConfig {
     private String prefix;
 
     @Value("${security.jwt.expiration:86400}")
-    private String expiration;
+    private Integer expiration;
 
     @Value("${security.jwt.secret:JwtSecretKey}")
     private String secret;
@@ -37,7 +37,7 @@ public class JwtConfig {
     }
 
     public Integer getExpiration() {
-        return Integer.parseInt(expiration);
+        return expiration;
     }
 
     public String getSecret() {

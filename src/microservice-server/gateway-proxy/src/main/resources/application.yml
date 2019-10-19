@@ -27,20 +27,20 @@ zuul:
       # Exclude authorization from sensitive headers
       sensitive-headers: Cookie,Set-Cookie
 
-security:
-  jwt:
-    uris: /auth/**,/oauth2/**
-    header: Authorization
-    prefix: Bearer
-    expiration: 32400‬
-    secret: JwtSecretKey
-  oauth2:
-    # After successfully authenticating with the OAuth2 Provider,
-    # we'll be generating an auth token for the user and sending the token to the
-    # redirectUri mentioned by the client in the /oauth2/authorize request.
-    # We're not using cookies because they won't work well in mobile clients.
-    authorizedRedirectUris:
-      - http://localhost:3000/oauth2/redirect
+#security:
+#  jwt:
+#    uris: /auth/**,/oauth2/**
+#    header: Authorization
+#    prefix: Bearer
+#    expiration: 32400‬
+#    secret: JwtSecretKey
+#  oauth2:
+#    # After successfully authenticating with the OAuth2 Provider,
+#    # we'll be generating an auth token for the user and sending the token to the
+#    # redirectUri mentioned by the client in the /oauth2/authorize request.
+#    # We're not using cookies because they won't work well in mobile clients.
+#    authorizedRedirectUris:
+#      - http://localhost:3000/oauth2/redirect
 #Will start the gateway server @8080
 server:
   port: 8080
