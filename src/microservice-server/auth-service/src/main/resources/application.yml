@@ -6,8 +6,9 @@ spring:
       client:
         registration:
           google:
-            clientId: 5014057553-8gm9um6vnli3cle5rgigcdjpdrid14m9.apps.googleusercontent.com
-            clientSecret: tWZKVLxaD_ARWsriiiUFYoIk
+#            https://console.developers.google.com/apis/credentials?project=pose1920
+            clientId: 570332744553-gf7eeqc01cpmjf0rm67jdnc6cmvhvciv.apps.googleusercontent.com
+            clientSecret: -DF9buAhX5IV5QSipbH-BIt6
             redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
