@@ -1,5 +1,6 @@
 package com.hcmute.pose.authservice.security.oauth2;
 
+import com.hcmute.pose.authservice.dao.RoleDao;
 import com.hcmute.pose.authservice.dao.UserDao;
 import com.hcmute.pose.authservice.exception.OAuth2AuthenticationProcessingException;
 import com.hcmute.pose.authservice.model.UserModel;
@@ -29,6 +30,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private static Logger LOGGER = LoggerFactory.getLogger(CustomOAuth2UserService.class);
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private RoleDao roleDao;
 
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -55,6 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         UserModel user;
         if(userOptional.isPresent()) {
             user = userOptional.get();
+            user.setRoles(roleDao.getRoleUser(user.getId()));
             if(!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
                 user = updateExistingUser(user, oAuth2UserRequest, oAuth2UserInfo);
             }

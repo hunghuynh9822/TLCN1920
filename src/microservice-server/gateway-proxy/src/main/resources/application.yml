@@ -26,7 +26,8 @@ zuul:
       strip-prefix: false
       # Exclude authorization from sensitive headers
       sensitive-headers: Cookie,Set-Cookie
-
+  host:
+    connect-timeout-millis: 60000
 #security:
 #  jwt:
 #    uris: /auth/**,/oauth2/**

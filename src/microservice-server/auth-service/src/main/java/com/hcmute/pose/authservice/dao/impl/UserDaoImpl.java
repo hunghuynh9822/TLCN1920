@@ -16,7 +16,7 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
-    private static String SQL_SELECT_USER = "SELECT id,email,phone,password FROM users WHERE email=? OR phone=?";
+    private static String SQL_SELECT_USER = "SELECT id,email,phone,password,oauth2_name,image_url,email_verified,provider,provider_id FROM users WHERE email=? OR phone=?";
     private static String SQL_SELECT_USER_BY_ID = " SELECT id,email,phone,password FROM users WHERE id = ?";
     private static String SQL_UPDATE_USER_OAUTH2 = "UPDATE users SET provider=?,provider_id=?,oauth2_name=?,image_url=?,email_verified=? WHERE id=?";
 

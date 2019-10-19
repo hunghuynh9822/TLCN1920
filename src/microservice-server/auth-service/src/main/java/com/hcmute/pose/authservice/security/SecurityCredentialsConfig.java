@@ -101,11 +101,11 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
         http
                 .oauth2Login()
                     .authorizationEndpoint()
-                        .baseUri("/oauth2/authorize")
+                        .baseUri("/auth/oauth2/authorize")
                         .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                         .and()
                     .redirectionEndpoint()
-                        .baseUri("/oauth2/callback/*")
+                        .baseUri("/auth/oauth2/callback/*")
                         .and()
                     .userInfoEndpoint()
                         .userService(customOAuth2UserService)
