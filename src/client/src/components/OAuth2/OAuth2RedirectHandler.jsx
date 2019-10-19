@@ -11,24 +11,27 @@ class OAuth2RedirectHandler extends Component {
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     };
 
-    render() {        
+    render() {
         const token = this.getUrlParameter('token');
         const error = this.getUrlParameter('error');
 
-        if(token) {
+        console.log(token);
+        console.log(error);
+
+        if (token) {
             localStorage.setItem(ACCESS_TOKEN, token);
             return <Redirect to={{
                 pathname: "/admin",
                 state: { from: this.props.location }
-            }}/>; 
+            }} />;
         } else {
             return <Redirect to={{
                 pathname: "/login",
-                state: { 
+                state: {
                     from: this.props.location,
-                    error: error 
+                    error: error
                 }
-            }}/>; 
+            }} />;
         }
     }
 }
