@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity    // Enable security config. This annotation denotes config for spring security.
@@ -82,6 +83,7 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
                 // An object provided by WebSecurityConfigurerAdapter, used to authenticate the user passing user's credentials
                 // The filter needs this auth manager to authenticate the user.
 //                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig,jwtTokenProvider))
+                .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                     .antMatchers("/",
                             "/error",

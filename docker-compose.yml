@@ -28,25 +28,25 @@ services:
       - "8761:8761"
     networks:
       - pose
-  gateway:
-    build:
-      context: ./src/microservice-server/gateway-proxy
-      dockerfile: Dockerfile
-    image: pose/micro/service/gateway
-    container_name: docker-micro-gateway-proxy
-    restart: unless-stopped
-    volumes:  
-      - ./docker/micro/gateway/logs:/docker/server/gateway-proxy/logs
-    environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
-    links:
-      - discovery
-    depends_on:
-      - discovery
-    ports:
-      - "8080:8080"
-    networks:
-      - pose
+  # gateway:
+  #   build:
+  #     context: ./src/microservice-server/gateway-proxy
+  #     dockerfile: Dockerfile
+  #   image: pose/micro/service/gateway
+  #   container_name: docker-micro-gateway-proxy
+  #   restart: unless-stopped
+  #   volumes:  
+  #     - ./docker/micro/gateway/logs:/docker/server/gateway-proxy/logs
+  #   environment:
+  #     - EUREKA_URI=http://discovery:8761/eureka/
+  #   links:
+  #     - discovery
+  #   depends_on:
+  #     - discovery
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - pose
   # auth:
   #   build:
   #     context: ./src/microservice-server/auth-service

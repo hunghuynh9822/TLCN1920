@@ -1,4 +1,4 @@
-package com.hcmute.pose.gatewayproxy.security;
+package com.hcmute.pose.authservice.security;
 
 import com.hcmute.pose.common.security.JwtConfig;
 import io.jsonwebtoken.*;
