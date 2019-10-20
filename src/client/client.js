@@ -4,6 +4,24 @@ const app = express();
 
 const port = process.env.PORT || process.env.CLIENT_PORT || 3000;
 
+const cors = require('cors');
+
+//app.use(cors());
+
+// app.use(cors({
+//   origin: 'http://localhost:8003',
+//   credentials: false
+// }));
+
+// app.use(function (req, res, next) {
+//   // Website you wish to allow to connect
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8003');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
+
 app.use('/', express.static(`${__dirname}/dist`));
 
 // express will serve up index.html if it doesn't recognize the route

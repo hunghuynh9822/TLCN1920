@@ -67,6 +67,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 });
 
 export default function AddStafftoProject() {
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -108,8 +109,9 @@ export default function AddStafftoProject() {
             <h6>Procject Admin</h6>
             <div>           
             <Fab color="primary" size="small" aria-label="add" className={classes.fab}><AddIcon /></Fab>
-            <Fab variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />Liem</Fab>
-            <Fab variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />Liem</Fab>            
+            <Fab variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />
+              liem
+            </Fab>            
             </div>
             <h6>Procject Member</h6>
             <div>           
