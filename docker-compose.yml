@@ -15,19 +15,19 @@ services:
       - "5432:5432"
     networks:
       - pose
-  discovery:
-    build:
-      context: ./src/microservice-server/discovery-server
-      dockerfile: Dockerfile
-    image: pose/micro/dicovery
-    container_name: docker-micro-dicovery
-    restart: unless-stopped
-    volumes:
-      - ./docker/micro/dicovery/logs:/docker/server/discovery-server/logs
-    ports:
-      - "8761:8761"
-    networks:
-      - pose
+  # discovery:
+  #   build:
+  #     context: ./src/microservice-server/discovery-server
+  #     dockerfile: Dockerfile
+  #   image: pose/micro/dicovery
+  #   container_name: docker-micro-dicovery
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./docker/micro/dicovery/logs:/docker/server/discovery-server/logs
+  #   ports:
+  #     - "8761:8761"
+  #   networks:
+  #     - pose
   # gateway:
   #   build:
   #     context: ./src/microservice-server/gateway-proxy

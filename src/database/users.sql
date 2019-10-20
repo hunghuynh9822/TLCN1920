@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 18/10/2019 23:48:54
+ Date: 20/10/2019 13:07:05
 */
 
 
@@ -25,15 +25,20 @@ CREATE TABLE "public"."users" (
   "email" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "phone" varchar(10) COLLATE "pg_catalog"."default" NOT NULL,
   "password" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-  "created_at" int8,
-  "updated_at" int8,
+  "provider" varchar(255) COLLATE "pg_catalog"."default",
+  "provider_id" varchar(255) COLLATE "pg_catalog"."default",
   "oauth2_name" varchar(255) COLLATE "pg_catalog"."default",
   "image_url" varchar(255) COLLATE "pg_catalog"."default",
   "email_verified" bool,
-  "provider" varchar(255) COLLATE "pg_catalog"."default",
-  "provider_id" varchar(255) COLLATE "pg_catalog"."default"
+  "created_at" int8,
+  "updated_at" int8
 )
 ;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+INSERT INTO "public"."users" VALUES (15714589149401, 'huuhung9822@gmail.com', '0938781162', '$2a$10$uPjQ.ZhoRY1mqiWvSupRUOyXWM0yR7MoHix85oRk.Ls7BY/K8pXIq', 'google', '107889025848008063650', 'Hưng Huỳnh', 'https://lh4.googleusercontent.com/-vao6VCfseGo/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reIFx6E9VfOMlCmZEleSK2kvEAJFg/photo.jpg', 't', 1571458915068, NULL);
 
 -- ----------------------------
 -- Primary Key structure for table users
