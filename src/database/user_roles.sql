@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 12/10/2019 00:39:41
+ Date: 22/10/2019 01:11:03
 */
 
 
@@ -31,8 +31,7 @@ CREATE TABLE "public"."user_roles" (
 -- ----------------------------
 -- Records of user_roles
 -- ----------------------------
-INSERT INTO "public"."user_roles" VALUES (15708149825552, 1, 1570814982677, NULL);
-INSERT INTO "public"."user_roles" VALUES (15708149825552, 2, 1570814982684, NULL);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 1, 1571458915069, NULL);
 
 -- ----------------------------
 -- Primary Key structure for table user_roles

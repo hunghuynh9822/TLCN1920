@@ -4,7 +4,9 @@ import importedComponent from 'react-imported-component';
 
 import { Loading } from './components';
 
-import { PrivateRoute, OAuth2RedirectHandler } from './components'
+import { PrivateRoute, OAuth2RedirectHandler } from './components';
+
+import { getCurrentUser } from './util/APIUtils';
 
 class MainRouter extends Component {
   constructor(props) {
@@ -14,6 +16,8 @@ class MainRouter extends Component {
       currentUser: null,
       loading: false
     }
+    this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
   loadCurrentlyLoggedInUser() {
     this.setState({
@@ -22,6 +26,8 @@ class MainRouter extends Component {
 
     getCurrentUser()
       .then(response => {
+        console.log("Get current user success");
+        console.log(response);
         this.setState({
           currentUser: response,
           authenticated: true,
@@ -65,10 +71,18 @@ class MainRouter extends Component {
         LoadingComponent: Loading
       }
     );
+    console.log("Render");
+    
+    console.log(this.state);
+    if(this.state.loading) {
+      console.log("Render Loading");
+      return <Loading />
+    }
+    console.log("Render Component");
     return (
       <React.Fragment>
         <Switch>
-          <Route exact path="/(login|)" component={AsyncSignIn} />
+          <Route exact path="/(login|)" render={(props) => <AsyncSignIn authenticated={this.state.authenticated} {...props} />} />
           <PrivateRoute path="/admin" authenticated={this.state.authenticated} component={AsyncMain} />
           <PrivateRoute path="/hr" authenticated={this.state.authenticated} component={AsyncMain} />
           <PrivateRoute path="/staff" authenticated={this.state.authenticated} component={AsyncMain} />

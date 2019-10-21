@@ -86,6 +86,10 @@ CREATE TABLE IF NOT EXISTS "public"."user_roles" (
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "employee_roles_pkey" PRIMARY KEY ("user_id", "role_id");
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "role_id" FOREIGN KEY ("role_id") REFERENCES "public"."roles" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "user_id" FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- ----------------------------
+-- Records of user_roles
+-- ----------------------------
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 1, 1571458915069, NULL);
 
 CREATE TABLE IF NOT EXISTS "public"."genuid" (
   "id" int4 NOT NULL,

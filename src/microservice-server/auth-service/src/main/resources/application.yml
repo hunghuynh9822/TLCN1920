@@ -39,10 +39,7 @@ eureka:
   instance:
     preferIpAddress: true
 
-psql:
-  url: ${PSQL_URL:jdbc:postgresql://localhost:5432/postgres}
-  username: postgres
-  password: postgres
+
 
 #security:
 #  jwt:

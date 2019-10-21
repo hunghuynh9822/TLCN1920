@@ -19,12 +19,15 @@ class OAuth2RedirectHandler extends Component {
         console.log(error);
 
         if (token) {
+            console.log("Vô 1");
+            
             localStorage.setItem(ACCESS_TOKEN, token);
             return <Redirect to={{
                 pathname: "/admin",
                 state: { from: this.props.location }
             }} />;
         } else {
+            console.log("Vô 2");
             return <Redirect to={{
                 pathname: "/login",
                 state: {

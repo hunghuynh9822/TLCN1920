@@ -43,6 +43,12 @@ public class AuthController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @GetMapping("/test")
+    public ResponseEntity<?> testCall(){
+        return new ResponseEntity<>(new ApiResponse(true, "Hello world"),
+                HttpStatus.OK);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
