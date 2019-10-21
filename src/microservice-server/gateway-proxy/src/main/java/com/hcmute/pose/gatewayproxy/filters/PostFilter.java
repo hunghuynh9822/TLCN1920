@@ -1,12 +1,13 @@
 package com.hcmute.pose.gatewayproxy.filters;
 
 import com.netflix.zuul.ZuulFilter;
+import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 
 public class PostFilter extends ZuulFilter {
 
     @Override
     public String filterType() {
-        return "post";
+        return FilterConstants.POST_TYPE;
     }
 
     @Override

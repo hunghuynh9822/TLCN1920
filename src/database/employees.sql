@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 13/10/2019 22:13:56
+ Date: 20/10/2019 13:06:46
 */
 
 
@@ -42,9 +42,9 @@ CREATE TABLE "public"."employees" (
 ;
 
 -- ----------------------------
--- Primary Key structure for table employees
+-- Records of employees
 -- ----------------------------
-ALTER TABLE "public"."employees" ADD CONSTRAINT "Employee_pkey" PRIMARY KEY ("id");
+INSERT INTO "public"."employees" VALUES (15714589149401, 1571458915080, NULL, 'Huỳnh', 'Lê Hữu', 'Hưng', '025699321', 1354406400000, 'CA Hồ Chí Minh', 'Số 05 đường 3643A Phạm Thế Hiển, P7, Q8, Tp HCM', 1, '1234 5678 91011', 'BIDV', 'CN Quận 8', 888105600000, 1561939200000, 0);
 
 -- ----------------------------
 -- Foreign Keys structure for table employees

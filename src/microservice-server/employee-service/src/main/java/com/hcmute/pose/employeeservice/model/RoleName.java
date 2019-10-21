@@ -1,5 +1,5 @@
 package com.hcmute.pose.employeeservice.model;
 
 public enum RoleName {
-    ROLE_EMPLOYEE,ROLE_ADMIN
+    ROLE_STAFF,ROLE_LEAD,ROLE_HR,ROLE_ADMIN
 }

@@ -11,6 +11,10 @@ public class Position extends DateAudit implements Serializable {
     public Position() {
     }
 
+    public Position(Long id) {
+        this.id = id;
+    }
+
     public Position(Long id, String name) {
         this.id = id;
         this.name = name;
