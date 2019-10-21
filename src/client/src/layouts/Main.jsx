@@ -35,8 +35,6 @@ class Main extends Component {
     }
 
     switchRoutes = (curRouter) => {
-        console.log("curRouter");
-        console.log(curRouter.routes);
         return (
             <Switch>
                 {
@@ -86,6 +84,9 @@ class Main extends Component {
             console.log(data);
             console.log(data.employees);
         });
+    }
+
+    componentWillUpdate() {
         this.resizeFunction();
     }
 
@@ -104,11 +105,10 @@ class Main extends Component {
         const { classes, ...rest } = this.props;
         const { match, history } = this.props;
         const { mobileOpen, desktopOpen } = this.props;
-
         const curLayout = match.url;
         const curRouter = routes.filter(route => route.layout === curLayout)[0];
         console.log(curLayout + " : ");
-        console.log(curRouter);
+        console.log(curRouter.routes);
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>
