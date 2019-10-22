@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {
     Route,
     Redirect,
@@ -12,8 +13,6 @@ class PrivateRoute extends Component {
     }
     render() {
         const { component: Component, authenticated, ...rest } = this.props;
-        console.log("PrivateRoute");
-        console.log(authenticated);
         return (
             <Route
                 {...rest}
@@ -37,4 +36,17 @@ PrivateRoute.propTypes = {
     component: PropTypes.object.isRequired,
     authenticated: PropTypes.bool.isRequired,
 };
-export default PrivateRoute;
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        authenticated: state.auth.authenticated,
+        currentUser: state.auth.currentUser,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PrivateRoute);

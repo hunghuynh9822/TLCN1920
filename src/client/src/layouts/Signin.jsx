@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -22,40 +22,23 @@ import { Copyright } from '../components';
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN } from '../constants';
 
 import googleLogo from '../assets/img/google-logo.png';
+
+import { redirect } from '../util/AuthUtils';
+
+import { login } from '../action/auth';
+
 class SignIn extends Component {
     constructor(props) {
         super(props);
     }
     render() {
         const { classes } = this.props;
-        const { authenticated, roles } = this.props;
-        if (authenticated && roles) {
-            console.log(authenticated);
-            console.log(roles);
+        const { authenticated, currentUser } = this.props;
+        if (authenticated && currentUser) {
+            let roles = currentUser.roles;
             if (authenticated) {
-                let index = roles[0];
-                let maxRole = roles.filter((role) => role.id <= index.id);
-                switch (maxRole[0].id) {
-                    case 1:
-                        return <Redirect to={{
-                            pathname: "/admin",
-                            state: { from: this.props.location }
-                        }} />;
-                    case 2:
-                        return <Redirect to={{
-                            pathname: "/staff",
-                            state: { from: this.props.location }
-                        }} />;
-                    case 3:
-                        return <Redirect to={{
-                            pathname: "/lead",
-                            state: { from: this.props.location }
-                        }} />;
-                    case 4:
-                        return <Redirect to={{
-                            pathname: "/hr",
-                            state: { from: this.props.location }
-                        }} />;
+                if (roles && roles.length !== 0) {
+                    return redirect(this.props, roles);
                 }
             }
         }
@@ -135,7 +118,21 @@ class SignIn extends Component {
         );
     }
 }
+
 SignIn.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(SignIn);
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        authenticated: state.auth.authenticated,
+        currentUser: state.auth.currentUser,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        login: (authenticated, currentUser) => dispatch(login(authenticated, currentUser)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SignIn));

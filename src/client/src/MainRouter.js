@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Switch, Route, Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
 import importedComponent from 'react-imported-component';
 
 import { Loading } from './components';
@@ -8,12 +9,12 @@ import { PrivateRoute, OAuth2RedirectHandler } from './components';
 
 import { getCurrentUser } from './util/APIUtils';
 
+import { login } from './action/auth'
+
 class MainRouter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      authenticated: false,
-      currentUser: null,
       loading: false
     }
     this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
@@ -23,14 +24,12 @@ class MainRouter extends Component {
     this.setState({
       loading: true
     });
-
     getCurrentUser()
       .then(response => {
         console.log("Get current user success");
         console.log(response);
+        this.props.login(true, response);
         this.setState({
-          currentUser: response,
-          authenticated: true,
           loading: false
         });
       }).catch(error => {
@@ -72,9 +71,9 @@ class MainRouter extends Component {
       }
     );
     console.log("Render");
-    
+
     console.log(this.state);
-    if(this.state.loading) {
+    if (this.state.loading) {
       console.log("Render Loading");
       return <Loading />
     }
@@ -82,11 +81,11 @@ class MainRouter extends Component {
     return (
       <React.Fragment>
         <Switch>
-          <Route exact path="/(login|)" render={(props) => <AsyncSignIn authenticated={this.state.authenticated} roles={this.state.currentUser?this.state.currentUser.roles:[]} {...props} />} />
-          <PrivateRoute path="/admin" authenticated={this.state.authenticated} component={AsyncMain} />
-          <PrivateRoute path="/hr" authenticated={this.state.authenticated} component={AsyncMain} />
-          <PrivateRoute path="/staff" authenticated={this.state.authenticated} component={AsyncMain} />
-          <PrivateRoute path="/lead" authenticated={this.state.authenticated} component={AsyncMain} />
+          <Route exact path="/(login|)" render={(props) => <AsyncSignIn {...props} />} />
+          <PrivateRoute path="/admin" component={AsyncMain} />
+          <PrivateRoute path="/hr" component={AsyncMain} />
+          <PrivateRoute path="/staff" component={AsyncMain} />
+          <PrivateRoute path="/lead" component={AsyncMain} />
           <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>
           <Route path="/notfound" component={AsyncNoMatch} />
           <Route component={AsyncNoMatch} />
@@ -96,4 +95,16 @@ class MainRouter extends Component {
   }
 }
 
-export default withRouter(MainRouter);
+const mapStateToProps = (state, ownProps) => {
+  return {
+    authenticated: state.auth.authenticated,
+    currentUser: state.auth.currentUser,
+  }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    login: (authenticated, currentUser) => dispatch(login(authenticated, currentUser)),
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainRouter));
