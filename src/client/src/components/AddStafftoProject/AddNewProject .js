@@ -16,6 +16,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import PersonIcon from '@material-ui/icons/Person';
 import Add from '@material-ui/icons/Add';
 import clsx from 'clsx';
+import axios from 'axios';
 const useStyles = makeStyles(theme => ({
   modal: {
     display: 'flex',
@@ -42,7 +43,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+
+
+
+
 const Fade = React.forwardRef(function Fade(props, ref) {
+
+  
   const { in: open, children, onEnter, onExited, ...other } = props;
   const style = useSpring({
     from: { opacity: 0 },
@@ -78,6 +85,31 @@ export default function AddStafftoProject() {
     setOpen(false);
   };
 
+  const [title, setTitle] = React.useState('');
+
+  const handleTitle = event => {
+    setTitle(event.target.value);
+  }
+  const [employeeid, setEmployeeid] = React.useState('');
+  const handleEmployeeid = event => {
+    setEmployeeid(event.target.value);
+  }
+  
+  const handleSubmit = event => {
+    event.preventDefault();
+  
+    // const title = {
+    //   title: this.state.title
+    // };
+    // const employeeid = {
+    //   employeeid: this.state.employeeid
+    // };
+    axios.post(`http://localhost:8080/promicro/create`, { title , employeeid })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+  }
   return (
     <div>
       {/* <Button variant="contained" color="primary"  onClick={handleOpen} className={classes.button}>
@@ -97,18 +129,19 @@ export default function AddStafftoProject() {
         }}
       >
         <Fade in={open}>
+        <form onSubmit={handleSubmit}>
           <div className={classes.paper}>
             <h3 id="spring-modal-title" className={classes.title}>New Project</h3>
             <div>
             <FormControl>
             <InputLabel htmlFor="my-input">Name project</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" />
+            <Input id="my-input" aria-describedby="my-helper-text" title="title" onChange={handleTitle}/>
             </FormControl>
             </div>
             <div>
             <FormControl>
             <InputLabel htmlFor="my-input">Descriptions</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" />
+            <Input id="my-input" aria-describedby="my-helper-text" employeeid="employeeid" onChange={handleEmployeeid}/>
             </FormControl>
             </div>
             <h6>Procject Admin</h6>
@@ -125,12 +158,12 @@ export default function AddStafftoProject() {
             </div>
 
             <div>
-            <Button variant="contained" size="small" className={classnames(classes.button,classes.buttonSubmit)}>
+            <Button variant="contained" size="small" type="submit" className={classnames(classes.button,classes.buttonSubmit)}>
             ADD
             </Button>
             </div>
-            
           </div>
+          </form>
         </Fade>
       </Modal>
     </div>

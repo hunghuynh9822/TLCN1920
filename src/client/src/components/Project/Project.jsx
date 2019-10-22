@@ -47,7 +47,7 @@ class Project extends Component {
                     action={
                         <div style={{ margin: '20px' }}>
                             {/* <Tune /> */}
-                            <AddStafftoProject admin={this.props.value.employeeCreate}/>
+                            <AddStafftoProject />
                         </div>
 
                     }
