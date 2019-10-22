@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -27,6 +28,37 @@ class SignIn extends Component {
     }
     render() {
         const { classes } = this.props;
+        const { authenticated, roles } = this.props;
+        if (authenticated && roles) {
+            console.log(authenticated);
+            console.log(roles);
+            if (authenticated) {
+                let index = roles[0];
+                let maxRole = roles.filter((role) => role.id <= index.id);
+                switch (maxRole[0].id) {
+                    case 1:
+                        return <Redirect to={{
+                            pathname: "/admin",
+                            state: { from: this.props.location }
+                        }} />;
+                    case 2:
+                        return <Redirect to={{
+                            pathname: "/staff",
+                            state: { from: this.props.location }
+                        }} />;
+                    case 3:
+                        return <Redirect to={{
+                            pathname: "/lead",
+                            state: { from: this.props.location }
+                        }} />;
+                    case 4:
+                        return <Redirect to={{
+                            pathname: "/hr",
+                            state: { from: this.props.location }
+                        }} />;
+                }
+            }
+        }
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -78,7 +110,7 @@ class SignIn extends Component {
                         </div>
                         <div className="social-login">
                             <Button className={classnames(classes.socialBtn, classes.google)} href={GOOGLE_AUTH_URL}>
-                                <img className={classes.socialImg} src={googleLogo} alt="Google" /> 
+                                <img className={classes.socialImg} src={googleLogo} alt="Google" />
                                 <span className={classes.socialBtnText}>Log in with Google</span>
                             </Button>
                         </div>

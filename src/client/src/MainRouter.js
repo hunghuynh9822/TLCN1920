@@ -82,7 +82,7 @@ class MainRouter extends Component {
     return (
       <React.Fragment>
         <Switch>
-          <Route exact path="/(login|)" render={(props) => <AsyncSignIn authenticated={this.state.authenticated} {...props} />} />
+          <Route exact path="/(login|)" render={(props) => <AsyncSignIn authenticated={this.state.authenticated} roles={this.state.currentUser?this.state.currentUser.roles:[]} {...props} />} />
           <PrivateRoute path="/admin" authenticated={this.state.authenticated} component={AsyncMain} />
           <PrivateRoute path="/hr" authenticated={this.state.authenticated} component={AsyncMain} />
           <PrivateRoute path="/staff" authenticated={this.state.authenticated} component={AsyncMain} />
