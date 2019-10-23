@@ -38,7 +38,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        LOGGER.info("internal filter");
         // 1. get the authentication header. Tokens are supposed to be passed in the authentication header
         String header = request.getHeader(jwtConfig.getHeader());
         // 2. validate the header and check the prefix

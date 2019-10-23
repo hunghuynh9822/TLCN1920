@@ -20,8 +20,6 @@ import styles from "../assets/jss/material-react/layouts/mainStyles";
 import bgImage from "../assets/img/sidebar-2.jpg";
 import logo from "../assets/img/reactlogo.png";
 
-import api from "../callapi/EmployeeAPI";
-
 let ps;
 class Main extends Component {
     constructor(props) {
@@ -79,11 +77,7 @@ class Main extends Component {
         );
     }
     componentWillMount() {
-        api.getAllEmployees().then((data) => {
-            console.log("Test load data");
-            console.log(data);
-            console.log(data.employees);
-        });
+
     }
 
     componentWillUpdate() {

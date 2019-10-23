@@ -1,30 +1,22 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import {ROUTER_MAP} from '../constants'
 
 export function redirect(props, roles) {
     console.log(roles);
-    let index = roles[0];
-    let maxRole = roles.filter((role) => role.id <= index.id);
-    switch (maxRole[0].id) {
-        case 1:
-            return <Redirect to={{
-                pathname: "/admin",
-                state: { from: props.location }
-            }} />;
-        case 2:
-            return <Redirect to={{
-                pathname: "/staff",
-                state: { from: props.location }
-            }} />;
-        case 3:
-            return <Redirect to={{
-                pathname: "/lead",
-                state: { from: props.location }
-            }} />;
-        case 4:
-            return <Redirect to={{
-                pathname: "/hr",
-                state: { from: props.location }
-            }} />;
+    let maxRole = roles[0];
+    var i
+    for (i = 0; i< roles.length; i++){
+        if(maxRole.id > roles[i].id){
+            maxRole = roles[i];
+        }
+    }
+    let path = ROUTER_MAP[maxRole.name];
+    console.log(path);
+    if(path){
+        return <Redirect to={{
+            pathname: path,
+            state: { from: props.location }
+        }} />;
     }
 }

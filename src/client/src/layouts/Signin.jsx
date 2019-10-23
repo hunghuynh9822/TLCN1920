@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
+import Alert from 'react-s-alert';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -25,22 +28,55 @@ import googleLogo from '../assets/img/google-logo.png';
 
 import { redirect } from '../util/AuthUtils';
 
-import { login } from '../action/auth';
+import { login, authenticate } from '../action/auth';
 
 class SignIn extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            phoneOrEmail: '',
+            password: ''
+        };
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
+    handleInputChange(event) {
+        const target = event.target;
+        const inputName = target.name;
+        const inputValue = target.value;
+
+        this.setState({
+            [inputName]: inputValue
+        });
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        const loginRequest = Object.assign({}, this.state);
+        login(loginRequest)
+            .then(response => {
+                console.log(response.tokenType);
+                this.props.authenticate(true, null);
+                localStorage.setItem(ACCESS_TOKEN, response.tokenType);
+                Alert.success("You're successfully logged in!");
+                this.props.history.push("/");
+            }).catch(error => {
+                Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+            });
+    }
+
     render() {
         const { classes } = this.props;
         const { authenticated, currentUser } = this.props;
-        if (authenticated && currentUser) {
-            let roles = currentUser.roles;
-            if (authenticated) {
-                if (roles && roles.length !== 0) {
-                    return redirect(this.props, roles);
-                }
-            }
+        console.log(authenticated);
+        console.log(currentUser);
+        if (authenticated) {
+            return (
+                <Redirect to={{
+                    pathname: '/home',
+                    state: { from: this.props.location }
+                }} />
+            )
         }
         return (
             <Container component="main" maxWidth="xs">
@@ -52,17 +88,19 @@ class SignIn extends Component {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} onSubmit={this.handleSubmit}>
                         <TextField
                             variant="outlined"
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
+                            id="phoneOrEmail"
+                            label="Phone or Email Address"
+                            name="phoneOrEmail"
+                            autoComplete="phoneOrEmail"
                             autoFocus
+                            value={this.state.phoneOrEmail}
+                            onChange={this.handleInputChange}
                         />
                         <TextField
                             variant="outlined"
@@ -74,6 +112,8 @@ class SignIn extends Component {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            value={this.state.password}
+                            onChange={this.handleInputChange}
                         />
                         {/* <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
@@ -131,7 +171,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        login: (authenticated, currentUser) => dispatch(login(authenticated, currentUser)),
+        authenticate: (authenticated, currentUser) => dispatch(authenticate(authenticated, currentUser)),
     }
 }
 

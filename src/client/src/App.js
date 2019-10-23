@@ -4,6 +4,9 @@ import { Provider } from 'react-redux';
 import { createBrowserHistory } from "history";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+
 import MainRouter from './MainRouter';
 
 import store from './store';

@@ -7,9 +7,7 @@ import { Loading } from './components';
 
 import { PrivateRoute, OAuth2RedirectHandler } from './components';
 
-import { getCurrentUser } from './util/APIUtils';
-
-import { login } from './action/auth'
+import { authenticate, getCurrentUser } from './action/auth'
 
 class MainRouter extends Component {
   constructor(props) {
@@ -28,11 +26,12 @@ class MainRouter extends Component {
       .then(response => {
         console.log("Get current user success");
         console.log(response);
-        this.props.login(true, response);
+        this.props.authenticate(true, response);
         this.setState({
           loading: false
         });
       }).catch(error => {
+        console.log(error);
         this.setState({
           loading: false
         });
@@ -51,6 +50,7 @@ class MainRouter extends Component {
   componentDidMount() {
     this.loadCurrentlyLoggedInUser();
   }
+
   render() {
     const AsyncMain = importedComponent(
       () => import(/* webpackChunkName:'main' */ './layouts/Main.jsx'),
@@ -70,8 +70,14 @@ class MainRouter extends Component {
         LoadingComponent: Loading
       }
     );
-    console.log("Render");
 
+    const AsyncHome = importedComponent(
+      () => import(/* webpackChunkName:'home' */ './layouts/Home.jsx'),
+      {
+        LoadingComponent: Loading
+      }
+    );
+    console.log("Render");
     console.log(this.state);
     if (this.state.loading) {
       console.log("Render Loading");
@@ -82,6 +88,7 @@ class MainRouter extends Component {
       <React.Fragment>
         <Switch>
           <Route exact path="/(login|)" render={(props) => <AsyncSignIn {...props} />} />
+          <PrivateRoute path="/home" component={AsyncHome} />
           <PrivateRoute path="/admin" component={AsyncMain} />
           <PrivateRoute path="/hr" component={AsyncMain} />
           <PrivateRoute path="/staff" component={AsyncMain} />
@@ -103,7 +110,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    login: (authenticated, currentUser) => dispatch(login(authenticated, currentUser)),
+    authenticate: (authenticated, currentUser) => dispatch(authenticate(authenticated, currentUser)),
   }
 }
 

@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { ACCESS_TOKEN } from '../../constants';
 import { Redirect } from 'react-router-dom';
 
+import { authenticate } from '../../action/auth';
+
 class OAuth2RedirectHandler extends Component {
+    constructor(props) {
+        super(props);
+    }
     getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -20,8 +26,9 @@ class OAuth2RedirectHandler extends Component {
 
         if (token) {
             localStorage.setItem(ACCESS_TOKEN, token);
+            this.props.authenticate(true, null);
             return <Redirect to={{
-                pathname: "/admin",
+                pathname: "/home",
                 state: { from: this.props.location }
             }} />;
         } else {
@@ -36,4 +43,15 @@ class OAuth2RedirectHandler extends Component {
     }
 }
 
-export default OAuth2RedirectHandler;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        authenticated: state.auth.authenticated,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        authenticate: (authenticated, currentUser) => dispatch(authenticate(authenticated, currentUser)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OAuth2RedirectHandler);
