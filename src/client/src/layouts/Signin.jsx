@@ -26,8 +26,6 @@ import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN } fro
 
 import googleLogo from '../assets/img/google-logo.png';
 
-import { redirect } from '../util/AuthUtils';
-
 import { login, authenticate } from '../action/auth';
 
 class SignIn extends Component {

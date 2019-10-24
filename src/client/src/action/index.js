@@ -19,14 +19,14 @@ export const request = (options) => {
             'Authorization': 'Bearer ' + localStorage.getItem(ACCESS_TOKEN)
         };
     }
-
     const defaults = {
         headers: headers
     };
-    console.log(defaults);
+    console.log("Default header : " + JSON.stringify(defaults));
     options = Object.assign({}, defaults, options);
     return api(options)
         .then(response => {
+            console.log("response from " + options.url);
             console.log(response);
             if (response.status !== 200) {
                 return Promise.reject(response);

@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
-
-import { redirect } from '../util/AuthUtils';
+import { Redirect } from 'react-router-dom';
 
 import { authenticate, getCurrentUser } from '../action/auth'
 
@@ -35,13 +33,13 @@ class Home extends Component {
 
     render() {
         const { classes } = this.props;
-        const { authenticated, currentUser } = this.props;
-        if (authenticated && currentUser) {
-            let roles = currentUser.roles;
+        const { authenticated, currentUser, defaultPath } = this.props;
+        if (authenticated && currentUser && defaultPath) {
             if (authenticated) {
-                if (roles && roles.length !== 0) {
-                    return redirect(this.props, roles);
-                }
+                return <Redirect to={{
+                    pathname: defaultPath,
+                    state: { from: this.props.location }
+                }} />
             }
         }
         return (
@@ -56,6 +54,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         authenticated: state.auth.authenticated,
         currentUser: state.auth.currentUser,
+        defaultPath: state.auth.defaultPath,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

@@ -47,7 +47,7 @@ class MainRouter extends Component {
     Alert.success("You're safely logged out!");
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.loadCurrentlyLoggedInUser();
   }
 
@@ -78,7 +78,7 @@ class MainRouter extends Component {
       }
     );
     console.log("Render");
-    console.log(this.state);
+    console.log("Current MainRouter state : "+JSON.stringify(this.state));
     if (this.state.loading) {
       console.log("Render Loading");
       return <Loading />
@@ -87,7 +87,6 @@ class MainRouter extends Component {
     return (
       <React.Fragment>
         <Switch>
-          <Route exact path="/(login|)" render={(props) => <AsyncSignIn {...props} />} />
           <PrivateRoute path="/home" component={AsyncHome} />
           <PrivateRoute path="/admin" component={AsyncMain} />
           <PrivateRoute path="/hr" component={AsyncMain} />
@@ -95,6 +94,7 @@ class MainRouter extends Component {
           <PrivateRoute path="/lead" component={AsyncMain} />
           <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>
           <Route path="/notfound" component={AsyncNoMatch} />
+          <Route exact path="/(login|)" render={(props) => <AsyncSignIn {...props} />} />
           <Route component={AsyncNoMatch} />
         </Switch>
       </React.Fragment>
