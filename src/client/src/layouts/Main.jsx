@@ -101,8 +101,8 @@ class Main extends Component {
         const { mobileOpen, desktopOpen } = this.props;
         const curLayout = match.url;
         const curRouter = routes.filter(route => route.layout === curLayout)[0];
-        console.log(curLayout + " : ");
-        console.log(curRouter.routes);
+        // console.log(curLayout + " : ");
+        // console.log(curRouter.routes);
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>

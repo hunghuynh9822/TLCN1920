@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from "classnames";
+
+import { connect } from 'react-redux';
+import { withAlert } from 'react-alert'
+
 // @material-ui/core components
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
@@ -18,6 +22,9 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
 // core components
 import { CustomInput, CustomButton } from "../";
+
+import { logout } from '../../action/auth';
+import { ACCESS_TOKEN } from '../../constants'
 
 import styles from "../../assets/jss/material-react/components/headerLinksStyle";
 class MainNavbarLink extends Component {
@@ -64,6 +71,12 @@ class MainNavbarLink extends Component {
                 openProfile: null,
             })
         };
+
+        const handleLogout = () => {
+            this.props.logout();
+            localStorage.removeItem(ACCESS_TOKEN);
+            this.props.alert.success("You're safely logged out!");
+        }
         return (
             <React.Fragment>
                 <div className={classes.searchWrapper}>
@@ -216,7 +229,7 @@ class MainNavbarLink extends Component {
                                 </MenuItem>
                                             <Divider light />
                                             <MenuItem
-                                                onClick={handleCloseProfile}
+                                                onClick={handleLogout}
                                                 className={classes.dropdownItem}
                                             >
                                                 Logout
@@ -235,4 +248,16 @@ class MainNavbarLink extends Component {
 MainNavbarLink.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(MainNavbarLink);
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        logout: () => dispatch(logout()),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withAlert()(withStyles(styles)(MainNavbarLink)));

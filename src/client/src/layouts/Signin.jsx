@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import Alert from 'react-s-alert';
+import { withAlert } from 'react-alert'
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -33,7 +33,8 @@ class SignIn extends Component {
         super(props);
         this.state = {
             phoneOrEmail: '',
-            password: ''
+            password: '',
+            error: null,
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,24 +51,38 @@ class SignIn extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        const { alert } = this.props;
         const loginRequest = Object.assign({}, this.state);
         login(loginRequest)
             .then(response => {
-                console.log(response.tokenType);
+                // console.log(response.tokenType);
                 this.props.authenticate(true, null);
                 localStorage.setItem(ACCESS_TOKEN, response.tokenType);
-                Alert.success("You're successfully logged in!");
-                this.props.history.push("/");
+                alert.success("You're successfully logged in!",{timeout: 1000,});
+                // this.props.history.push("/");
             }).catch(error => {
-                Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+                console.log(error);
+                this.setState({
+                    error: error
+                })
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
             });
     }
+
+    // renderError() {
+    //     const { alert } = this.props;
+    //     if (this.state.error) {
+    //         alert.error("Failed");
+    //         return (
+    //             <div>Đăng nhập thất bại</div>
+    //         )
+    //     }
+    // }
 
     render() {
         const { classes } = this.props;
         const { authenticated, currentUser } = this.props;
-        console.log(authenticated);
-        console.log(currentUser);
         if (authenticated) {
             return (
                 <Redirect to={{
@@ -86,6 +101,7 @@ class SignIn extends Component {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
+                    {/* {this.renderError()} */}
                     <form className={classes.form} onSubmit={this.handleSubmit}>
                         <TextField
                             variant="outlined"
@@ -173,4 +189,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SignIn));
+export default connect(mapStateToProps, mapDispatchToProps)(withAlert()(withStyles(styles)(SignIn)));

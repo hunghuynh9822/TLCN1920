@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = {
   entry: {
     material: ['@material-ui/core'],
-    material_icons: ['@material-ui/icons']
+    material_icons: ['@material-ui/icons'],
   },
   output: {
     path: commonPaths.outputPath,
@@ -42,7 +42,7 @@ const config = {
           test: 'material_icons',
           name: 'material_icons',
           enforce: true
-        }
+        },
       }
     }
   },

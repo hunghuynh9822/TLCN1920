@@ -11,7 +11,9 @@ export function authenticate(authenticated, currentUser) {
     return { type: LOG_IN, authenticated, currentUser};
 }
 
-export function logout(authenticated, currentUser) {
+export function logout() {
+  let authenticated = false;
+  let currentUser = null;
   return { type: LOG_OUT, authenticated, currentUser};
 }
 
@@ -26,7 +28,6 @@ export function getCurrentUser() {
 }
 
 export function login(loginRequest) {
-  console.log(loginRequest);
   return request({
       url: "/auth/login",
       method: 'POST',

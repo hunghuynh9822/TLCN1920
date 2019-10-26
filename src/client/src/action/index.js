@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {
-    API_BASE_URL,
     ACCESS_TOKEN
 } from '../constants';
 
@@ -22,11 +21,12 @@ export const request = (options) => {
     const defaults = {
         headers: headers
     };
-    console.log("Default header : " + JSON.stringify(defaults));
+    // console.log("Default header : " + JSON.stringify(defaults));
     options = Object.assign({}, defaults, options);
+    console.log("Request : " + JSON.stringify(options));
     return api(options)
         .then(response => {
-            console.log("response from " + options.url);
+            console.log("Response from " + options.url);
             console.log(response);
             if (response.status !== 200) {
                 return Promise.reject(response);
