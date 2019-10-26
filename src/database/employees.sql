@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 20/10/2019 13:06:46
+ Date: 26/10/2019 23:58:17
 */
 
 
@@ -36,15 +36,14 @@ CREATE TABLE "public"."employees" (
   "bank_name" varchar(255) COLLATE "pg_catalog"."default",
   "bank_branch" varchar(255) COLLATE "pg_catalog"."default",
   "birthday" int8,
-  "start_time" int8,
-  "status" int4
+  "start_time" int8
 )
 ;
 
 -- ----------------------------
 -- Records of employees
 -- ----------------------------
-INSERT INTO "public"."employees" VALUES (15714589149401, 1571458915080, NULL, 'Huỳnh', 'Lê Hữu', 'Hưng', '025699321', 1354406400000, 'CA Hồ Chí Minh', 'Số 05 đường 3643A Phạm Thế Hiển, P7, Q8, Tp HCM', 1, '1234 5678 91011', 'BIDV', 'CN Quận 8', 888105600000, 1561939200000, 0);
+INSERT INTO "public"."employees" VALUES (15714589149401, 1571458915080, NULL, 'Huỳnh', 'Lê Hữu', 'Hưng', '025699321', 1354406400000, 'CA Hồ Chí Minh', 'Số 05 đường 3643A Phạm Thế Hiển, P7, Q8, Tp HCM', 1, '1234 5678 91011', 'BIDV', 'CN Quận 8', 888105600000, 1561939200000);
 
 -- ----------------------------
 -- Foreign Keys structure for table employees

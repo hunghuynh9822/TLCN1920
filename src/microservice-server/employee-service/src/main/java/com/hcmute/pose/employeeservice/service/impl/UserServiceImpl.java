@@ -5,6 +5,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.employeeservice.dao.UserDao;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
 import com.hcmute.pose.employeeservice.model.User;
+import com.hcmute.pose.employeeservice.model.UserStatus;
 import com.hcmute.pose.employeeservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(()->
                         new DatabaseException("[UserServiceImpl]:[createUser] Can't get last id user")
                 );
-        User user = new User(userId,email,phone,encoder.encode(password));
+        User user = new User(userId,email,phone,encoder.encode(password), UserStatus.CREATED);
         user.setProvider(AuthProvider.local);
         return userDao.createUser(user).orElseThrow(()->
                 new DatabaseException("[UserServiceImpl]:[createUser] Can't create user")

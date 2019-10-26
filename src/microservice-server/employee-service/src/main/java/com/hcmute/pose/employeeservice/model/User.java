@@ -23,13 +23,15 @@ public class User extends DateAudit implements Serializable {
     private AuthProvider provider;
     @SerializedName("provider_id")
     private String providerId;
+    private UserStatus status;
 
-    public User(Long id, String email, String phone, String password) {
+    public User(Long id, String email, String phone, String password, UserStatus status) {
         this.id = id;
         this.email = email;
         this.phone = phone;
         this.password = password;
         this.roles = new HashSet<>();
+        this.status = status;
     }
 
     public User() {
@@ -114,5 +116,13 @@ public class User extends DateAudit implements Serializable {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }

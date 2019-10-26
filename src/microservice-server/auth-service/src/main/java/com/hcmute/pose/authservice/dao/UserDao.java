@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface UserDao {
     Optional<UserModel> getUserById(Long userId) throws SQLException;
-    Optional<UserModel> getUser(String phoneOrEmail) throws SQLException;
+    Optional<UserModel> getUserForLogin(String phoneOrEmail) throws SQLException;
     void updateUser(UserModel user) throws SQLException, TransactionException;
 }

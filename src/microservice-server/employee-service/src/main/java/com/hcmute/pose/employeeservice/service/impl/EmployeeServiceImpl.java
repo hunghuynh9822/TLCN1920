@@ -18,7 +18,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee createEmployee(Long employeeId, String firstName, String middleName, String lastName, ID identification, String address, Position position, Bank bank,Long birthday,Long startTime) throws DatabaseException {
-        Employee employee = new Employee(employeeId,firstName,middleName,lastName,identification,address,position,bank,birthday,startTime, EmployeeStatus.CREATED);
+        Employee employee = new Employee(employeeId,firstName,middleName,lastName,identification,address,position,bank,birthday,startTime);
         return employeeDao.createEmployee(employee)
                 .orElseThrow(()->
                         new DatabaseException("[EmployeeServiceImpl]:[createEmployee] Can't create employee")

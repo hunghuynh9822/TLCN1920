@@ -4,6 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.employeeservice.dao.UserDao;
 import com.hcmute.pose.employeeservice.model.User;
+import com.hcmute.pose.employeeservice.model.UserStatus;
 import com.hcmute.pose.genuid.GenerateUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +19,9 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static Logger LOGGER = LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
-    private static final String DATA_USER = "id,email,phone,oauth2_name,image_url,email_verified,provider,provider_id";
+    private static final String DATA_USER = "id,email,phone,oauth2_name,image_url,email_verified,provider,provider_id,status";
 
-    private static String SQL_INSERT_USER = "INSERT INTO users(id,email,phone,password,provider,email_verified,created_at) VALUES(?,?,?,?,?,?,?)";
+    private static String SQL_INSERT_USER = "INSERT INTO users(id,email,phone,password,provider,email_verified,created_at,status) VALUES(?,?,?,?,?,?,?,?)";
     private static String SQL_INSERT_USER_ROLE = "INSERT INTO user_roles(user_id,role_id,create_at) VALUES(?,?,?)";
 
     private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users",DATA_USER);
@@ -54,7 +55,8 @@ public class UserDaoImpl implements UserDao {
                     user.getPassword(),
                     user.getProvider().name(),
                     false,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis(),
+                    user.getStatus().ordinal()
             );
             return Optional.of(user);
         }catch (SQLException | TransactionException ex){

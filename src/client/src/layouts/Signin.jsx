@@ -52,13 +52,13 @@ class SignIn extends Component {
     handleSubmit(event) {
         event.preventDefault();
         const { alert } = this.props;
-        const loginRequest = Object.assign({}, this.state);
+        const loginRequest = Object.assign({}, {phoneOrEmail:this.state.phoneOrEmail, password:this.state.password});
         login(loginRequest)
             .then(response => {
                 // console.log(response.tokenType);
                 this.props.authenticate(true, null);
                 localStorage.setItem(ACCESS_TOKEN, response.tokenType);
-                alert.success("You're successfully logged in!",{timeout: 1000,});
+                alert.success("You're successfully logged in!", { timeout: 1000, });
                 // this.props.history.push("/");
             }).catch(error => {
                 console.log(error);

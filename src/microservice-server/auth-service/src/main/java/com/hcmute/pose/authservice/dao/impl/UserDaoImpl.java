@@ -2,6 +2,7 @@ package com.hcmute.pose.authservice.dao.impl;
 
 import com.hcmute.pose.authservice.dao.UserDao;
 import com.hcmute.pose.authservice.model.UserModel;
+import com.hcmute.pose.authservice.model.UserStatus;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import org.slf4j.Logger;
@@ -16,8 +17,8 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
 
-    private static String SQL_SELECT_USER = "SELECT id,email,phone,password,oauth2_name,image_url,email_verified,provider,provider_id FROM users WHERE email=? OR phone=?";
-    private static String SQL_SELECT_USER_BY_ID = " SELECT id,email,phone,password FROM users WHERE id = ?";
+    private static String SQL_SELECT_USER = "SELECT id,email,phone,password,oauth2_name,image_url,email_verified,provider,provider_id,status FROM users WHERE ( email=? OR phone=? ) AND status = ?";
+    private static String SQL_SELECT_USER_BY_ID = " SELECT id,email,phone,oauth2_name,image_url,email_verified,provider,provider_id,status FROM users WHERE id = ? AND status = ?";
     private static String SQL_UPDATE_USER_OAUTH2 = "UPDATE users SET provider=?,provider_id=?,oauth2_name=?,image_url=?,email_verified=? WHERE id=?";
 
     @Autowired
@@ -27,7 +28,7 @@ public class UserDaoImpl implements UserDao {
     public Optional<UserModel> getUserById(Long userId) throws SQLException {
         try {
 //            UserModel user = databaseHelper.executeQueryObject(UserModel.class,SQL_SELECT_USER_BY_ID,userId).orElseThrow(()->new DatabaseException("Can't find user with id"));
-            return databaseHelper.executeQueryObject(UserModel.class,SQL_SELECT_USER_BY_ID,userId);
+            return databaseHelper.executeQueryObject(UserModel.class,SQL_SELECT_USER_BY_ID,userId,UserStatus.ACCEPTED.ordinal());
         } catch (SQLException e) {
             LOGGER.error("[UserDaoImpl]:[getUser] GOT EXCEPTION ",e);
             throw e;
@@ -35,10 +36,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public  Optional<UserModel> getUser(String phoneOrEmail) throws SQLException {
+    public  Optional<UserModel> getUserForLogin(String phoneOrEmail) throws SQLException {
         try {
 //            UserModel user = databaseHelper.executeQueryObject(UserModel.class,SQL_SELECT_USER,phoneOrEmail,phoneOrEmail).orElseThrow(()->new DatabaseException("Can't find user with phone or email"));
-            return databaseHelper.executeQueryObject(UserModel.class,SQL_SELECT_USER,phoneOrEmail,phoneOrEmail);
+            return databaseHelper.executeQueryObject(UserModel.class,SQL_SELECT_USER,phoneOrEmail,phoneOrEmail, UserStatus.ACCEPTED.ordinal());
         } catch (SQLException e) {
             LOGGER.error("[UserDaoImpl]:[getUser] GOT EXCEPTION ",e);
             throw e;

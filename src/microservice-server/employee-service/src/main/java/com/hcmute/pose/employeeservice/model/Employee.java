@@ -21,12 +21,11 @@ public class Employee extends DateAudit implements Serializable {
     private Long birthday;
     @SerializedName("start_time")
     private Long startTime;
-    private EmployeeStatus status;
 
     public Employee() {
     }
 
-    public Employee(Long id, String firstName, String middleName, String lastName, ID identification, String address, Position position, Bank bank, Long birthday, Long startTime, EmployeeStatus status) {
+    public Employee(Long id, String firstName, String middleName, String lastName, ID identification, String address, Position position, Bank bank, Long birthday, Long startTime) {
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -37,7 +36,6 @@ public class Employee extends DateAudit implements Serializable {
         this.bank = bank;
         this.birthday = birthday;
         this.startTime = startTime;
-        this.status = status;
     }
 
     public Long getId() {
@@ -118,13 +116,5 @@ public class Employee extends DateAudit implements Serializable {
 
     public void setStartTime(Long startTime) {
         this.startTime = startTime;
-    }
-
-    public EmployeeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(EmployeeStatus status) {
-        this.status = status;
     }
 }

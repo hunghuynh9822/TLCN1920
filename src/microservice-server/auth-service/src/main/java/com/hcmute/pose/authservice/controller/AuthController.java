@@ -4,6 +4,7 @@ import com.hcmute.pose.authservice.payload.ApiResponse;
 import com.hcmute.pose.authservice.payload.AuthResponse;
 import com.hcmute.pose.authservice.payload.EmployeeResponse;
 import com.hcmute.pose.authservice.payload.LoginRequest;
+import com.hcmute.pose.authservice.model.UserStatus;
 import com.hcmute.pose.authservice.security.CurrentUser;
 import com.hcmute.pose.authservice.security.JwtTokenProvider;
 import com.hcmute.pose.common.security.JwtConfig;
@@ -24,8 +25,6 @@ import javax.validation.Valid;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.hcmute.pose.common.security.AuthCommon.USER_ID_HEADER;
 
 @RestController
 @RequestMapping("/auth")
@@ -89,7 +88,11 @@ public class AuthController {
         String url = EMPLOYEE_SERVICE+"{id}";
         Map<String, String> params = new HashMap<>();
         params.put("id", userId);
-        return restTemplate.getForEntity(url,EmployeeResponse.class,params);
+        EmployeeResponse employeeResponse = restTemplate.getForObject(url,EmployeeResponse.class,params);
+        if(employeeResponse.getStatus().equals(UserStatus.ACCEPTED)){
+            return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ApiResponse(false,"User with invalid status"),HttpStatus.BAD_REQUEST);
     }
 
 

@@ -27,11 +27,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         // hard coding the users. All passwords must be encoded.
         UserModel user;
         try {
-            user = userDao.getUser(phoneOrEmail).orElseThrow(()->new DatabaseException("Can't find user with phone or email"));
+            user = userDao.getUserForLogin(phoneOrEmail).orElseThrow(()->new DatabaseException("Can't find user with phone or email"));
             user.setRoles(roleDao.getRoleUser(user.getId()));
         } catch (DatabaseException | SQLException e) {
             LOGGER.error("[CustomUserDetailsService]:[loadUserByUsername] GOT EXCEPTION ",e);
-            throw new UsernameNotFoundException("UserModel not found with phone or email : " + phoneOrEmail);
+            throw new UsernameNotFoundException("User not found with phone or email : " + phoneOrEmail);
         }
         // Remember that Spring needs roles to be in this format: "ROLE_" + userRole (i.e. "ROLE_ADMIN")
         // So, we need to set it to that format, so we can verify and compare roles (i.e. hasRole("ADMIN")).
@@ -43,11 +43,4 @@ public class CustomUserDetailsService implements UserDetailsService {
 //        return new User(user.getEmail(), user.getPassword(), grantedAuthorities) {};
         return UserPrincipal.create(user);
     }
-
-    // This method is used by JWTAuthenticationFilter
-    public UserDetails loadUserById(Long id) throws DatabaseException, SQLException {
-        UserModel user = userDao.getUserById(id).orElseThrow(()->new DatabaseException("Can't find user with id"));;
-        return UserPrincipal.create(user);
-    }
-
 }

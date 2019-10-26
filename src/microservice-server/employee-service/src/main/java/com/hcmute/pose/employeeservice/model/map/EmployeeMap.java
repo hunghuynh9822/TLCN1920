@@ -31,7 +31,6 @@ public class EmployeeMap  implements Serializable {
     private Long birthday;
     @SerializedName("start_time")
     private Long startTime;
-    private EmployeeStatus status;
     @SerializedName("created_at")
     private Long createdAt;
     @SerializedName("updated_at")
@@ -52,7 +51,6 @@ public class EmployeeMap  implements Serializable {
         employee.setBank(new Bank(this.bankNumber,this.bankName,this.bankBranch));
         employee.setBirthday(this.birthday);
         employee.setStartTime(this.startTime);
-        employee.setStatus(this.status);
         employee.setCreatedAt(this.createdAt);
         employee.setUpdatedAt(this.updatedAt);
         return employee;
@@ -170,11 +168,4 @@ public class EmployeeMap  implements Serializable {
         this.startTime = startTime;
     }
 
-    public EmployeeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(EmployeeStatus status) {
-        this.status = status;
-    }
 }
