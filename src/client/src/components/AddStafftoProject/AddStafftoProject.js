@@ -67,7 +67,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   );
 });
 
-export default function AddStafftoProject() {
+export default function AddStafftoProject({title}) {
   
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -105,6 +105,7 @@ export default function AddStafftoProject() {
       "name":"Liem2"
     }]
     setListNewUser(temp)
+
   }
 
   const handleSubmit = event => {
@@ -166,7 +167,7 @@ export default function AddStafftoProject() {
               liem
             </Fab>            
             </div>
-            <h6>Procject Member</h6>
+            <h6>Procject Member {title}</h6>
             <div>           
             <Fab onClick={pushNewUser} color="primary" size="small" aria-label="add" className={classes.fab}><AddIcon /></Fab>
             {

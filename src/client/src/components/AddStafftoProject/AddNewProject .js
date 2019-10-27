@@ -86,7 +86,6 @@ export default function AddStafftoProject() {
   };
 
   const [title, setTitle] = React.useState('');
-
   const handleTitle = event => {
     setTitle(event.target.value);
   }

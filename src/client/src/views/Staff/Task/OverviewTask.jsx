@@ -8,19 +8,24 @@ const styles = theme => ({
 });
 class OverviewTask extends Component {
     constructor(props) {
-        super(props);
+        super(props); 
+             
     }
+    state = {
+        listUser : [
+            { "id": "1", "name" : "Liem" },
+            { "id": "2", "name" : "Hung" }
+        ],
+        
+    }
+    
+
     render() {
         const { classes } = this.props;
+       
         return (
             <TaskContainer>
-                <Task />
-                <Task />
-                <Task />
-                <Task />
-                <Task />
-                <Task />
-                <Task />
+                {this.state.listUser.map(user => <Task user={user}/>)}      
             </TaskContainer>
         );
     }

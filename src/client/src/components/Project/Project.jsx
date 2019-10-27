@@ -4,10 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import { red } from '@material-ui/core/colors';
-import Tune from '@material-ui/icons/Tune';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -47,7 +43,7 @@ class Project extends Component {
                     action={
                         <div style={{ margin: '20px' }}>
                             {/* <Tune /> */}
-                            <AddStafftoProject />
+                            <AddStafftoProject title={this.props.value.title}/>
                         </div>
 
                     }
