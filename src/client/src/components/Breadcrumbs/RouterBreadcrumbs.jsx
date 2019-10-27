@@ -31,7 +31,7 @@ class Breadcrumb extends Component {
                         const to = `/${pathnames.slice(0, index + 1).join('/')}`;
                         var prop = router.routes.filter((prop) => {
                             let path = prop.layout + prop.path;
-                            console.log("path " + path + " to " + to);
+                            // console.log("path " + path + " to " + to);
                             return to === path;
                         });
                         if (prop[0] === undefined) {

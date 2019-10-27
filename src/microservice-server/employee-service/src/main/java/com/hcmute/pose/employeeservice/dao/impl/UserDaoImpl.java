@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
     private static String SQL_INSERT_USER = "INSERT INTO users(id,email,phone,password,provider,email_verified,created_at,status) VALUES(?,?,?,?,?,?,?,?)";
     private static String SQL_INSERT_USER_ROLE = "INSERT INTO user_roles(user_id,role_id,create_at) VALUES(?,?,?)";
 
-    private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users",DATA_USER);
+    private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users WHERE status != ?",DATA_USER);
 
     private static String SQL_SELECT_EXIST_USER_BY_EMAIL = "SELECT id as value FROM users WHERE email = ?";
     private static String SQL_SELECT_EXIST_USER_BY_PHONE = "SELECT id as value FROM users WHERE phone = ?";
@@ -77,7 +77,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAll() throws SQLException {
-        return databaseHelper.executeQueryListObject(User[].class,SQL_SELECT_ALL_USER);
+        return databaseHelper.executeQueryListObject(User[].class,SQL_SELECT_ALL_USER,UserStatus.CREATED.ordinal());
     }
 
     @Override
