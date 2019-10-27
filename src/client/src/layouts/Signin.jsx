@@ -151,7 +151,7 @@ class SignIn extends Component {
                                 <span className={classes.socialBtnText}>Log in with Google</span>
                             </Button>
                         </div>
-                        <Grid container>
+                        {/* <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
                                     Forgot password?
@@ -162,7 +162,7 @@ class SignIn extends Component {
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
-                        </Grid>
+                        </Grid> */}
                     </form>
                 </div>
                 <Box mt={8}>
