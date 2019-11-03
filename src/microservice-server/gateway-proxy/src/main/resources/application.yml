@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: gateway-proxy
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+#Zuul routes. Here for /employee path, we are routing to localhost:8001 with extra path after that.
+zuul:
+  routes:
+    emloyee:
+      path: /emplmicro/**
+      service-id: employee-service
+    tasks:
+      path: /taskmicro/**
+      service-id: task-service
+    auth:
+      path: /auth/**
+      service-id: auth-service
+      # By default, all requests to gallery service for example will start with: "/gallery/"
+      # What will be sent to the gallery service is what comes after the path defined,
+      # So, if request is "/gallery/view/1", gallery service will get "/view/1".
+      # In case of auth, we need to pass the "/auth/" in the path to auth service. So, set strip-prefix to false
+      strip-prefix: false
+      # Exclude authorization from sensitive headers
+      sensitive-headers: Cookie,Set-Cookie
+  host:
+    connect-timeout-millis: 60000
+#security:
+#  jwt:
+#    uris: /auth/**,/oauth2/**
+#    header: Authorization
+#    prefix: Bearer
+#    expiration: 32400‬
+#    secret: JwtSecretKey
+#  oauth2:
+#    # After successfully authenticating with the OAuth2 Provider,
+#    # we'll be generating an auth token for the user and sending the token to the
+#    # redirectUri mentioned by the client in the /oauth2/authorize request.
+#    # We're not using cookies because they won't work well in mobile clients.
+#    authorizedRedirectUris:
+#      - http://localhost:3000/oauth2/redirect
+#Will start the gateway server @8080
+server:
+  port: 8080

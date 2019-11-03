@@ -22,10 +22,9 @@ public class JwtTokenProvider {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long now = System.currentTimeMillis();
         String token = Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(userPrincipal.getId().toString())
                 // Convert to list of strings.
                 // This is important because it affects the way we get them back in the Gateway.
-                .claim("userId",userPrincipal.getId())
                 .claim("authorities", userPrincipal.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .setIssuedAt(new Date(now))

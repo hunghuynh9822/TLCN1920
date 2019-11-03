@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: auth-service
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+#            https://console.developers.google.com/apis/credentials?project=pose1920
+            clientId: 570332744553-gf7eeqc01cpmjf0rm67jdnc6cmvhvciv.apps.googleusercontent.com
+            clientSecret: -DF9buAhX5IV5QSipbH-BIt6
+            redirectUriTemplate: "http://localhost:8000/auth/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+  #          facebook:
+  #            clientId: 121189305185277
+  #            clientSecret: 42ffe5aa7379e8326387e0fe16f34132
+  #            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+  #            scope:
+  #              - email
+  #              - public_profile
+  #          github:
+  #            clientId: d3e47fc2ddd966fa4352
+  #            clientSecret: 3bc0f6b8332f93076354c2a5bada2f5a05aea60d
+  #            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+  #            scope:
+  #              - user:email
+  #              - read:user
+  #        provider:
+  #          facebook:
+  #            authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+  #            tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+  #            userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+
+psql:
+  url: ${PSQL_URL:jdbc:postgresql://localhost:5432/postgres}
+  username: postgres
+  password: postgres
+
+#security:
+#  jwt:
+#    uris: /auth/**,/oauth2/**
+#    header: Authorization
+#    prefix: Bearer
+#    expiration: 32400‬
+#    secret: JwtSecretKey
+#  oauth2:
+#    # After successfully authenticating with the OAuth2 Provider,
+#    # we'll be generating an auth token for the user and sending the token to the
+#    # redirectUri mentioned by the client in the /oauth2/authorize request.
+#    # We're not using cookies because they won't work well in mobile clients.
+#    authorizedRedirectUris:
+#      - http://localhost:3000/oauth2/redirect
+server:
+  port: 8000

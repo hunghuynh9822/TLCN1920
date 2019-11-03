@@ -1,5 +1,6 @@
 package com.hcmute.pose.employeeservice.service.impl;
 
+import com.hcmute.pose.common.security.AuthProvider;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.employeeservice.dao.UserDao;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
                         new DatabaseException("[UserServiceImpl]:[createUser] Can't get last id user")
                 );
         User user = new User(userId,email,phone,encoder.encode(password));
+        user.setProvider(AuthProvider.local);
         return userDao.createUser(user).orElseThrow(()->
                 new DatabaseException("[UserServiceImpl]:[createUser] Can't create user")
         );

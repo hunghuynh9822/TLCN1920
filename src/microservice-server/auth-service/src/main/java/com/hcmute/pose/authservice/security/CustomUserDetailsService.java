@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // hard coding the users. All passwords must be encoded.
         UserModel user;
         try {
-            user = userDao.getUser(phoneOrEmail);
+            user = userDao.getUser(phoneOrEmail).orElseThrow(()->new DatabaseException("Can't find user with phone or email"));
             user.setRoles(roleDao.getRoleUser(user.getId()));
         } catch (DatabaseException | SQLException e) {
             LOGGER.error("[CustomUserDetailsService]:[loadUserByUsername] GOT EXCEPTION ",e);
@@ -46,7 +46,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     // This method is used by JWTAuthenticationFilter
     public UserDetails loadUserById(Long id) throws DatabaseException, SQLException {
-        UserModel user = userDao.getUserById(id);
+        UserModel user = userDao.getUserById(id).orElseThrow(()->new DatabaseException("Can't find user with id"));;
         return UserPrincipal.create(user);
     }
 

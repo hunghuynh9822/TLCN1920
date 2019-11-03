@@ -18,9 +18,9 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static Logger LOGGER = LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
-    private static final String DATA_USER = "id,email,phone";
+    private static final String DATA_USER = "id,email,phone,oauth2_name,image_url,email_verified,provider,provider_id";
 
-    private static String SQL_INSERT_USER = "INSERT INTO users(id,email,phone,password,created_at) VALUES(?,?,?,?,?)";
+    private static String SQL_INSERT_USER = "INSERT INTO users(id,email,phone,password,provider,email_verified,created_at) VALUES(?,?,?,?,?,?,?)";
     private static String SQL_INSERT_USER_ROLE = "INSERT INTO user_roles(user_id,role_id,create_at) VALUES(?,?,?)";
 
     private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users",DATA_USER);
@@ -52,6 +52,8 @@ public class UserDaoImpl implements UserDao {
                     user.getEmail(),
                     user.getPhone(),
                     user.getPassword(),
+                    user.getProvider().name(),
+                    false,
                     System.currentTimeMillis()
             );
             return Optional.of(user);

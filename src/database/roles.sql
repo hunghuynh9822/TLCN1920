@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 12/10/2019 00:39:23
+ Date: 20/10/2019 13:06:55
 */
 
 
@@ -32,7 +32,9 @@ CREATE TABLE "public"."roles" (
 -- Records of roles
 -- ----------------------------
 INSERT INTO "public"."roles" VALUES (1, 'ROLE_ADMIN', 1567937957503, NULL);
-INSERT INTO "public"."roles" VALUES (2, 'ROLE_EMPLOYEE', 1567937962314, NULL);
+INSERT INTO "public"."roles" VALUES (2, 'ROLE_STAFF', 1567937962314, NULL);
+INSERT INTO "public"."roles" VALUES (3, 'ROLE_LEAD', 1567937962314, NULL);
+INSERT INTO "public"."roles" VALUES (4, 'ROLE_HR', 1567937962314, NULL);
 
 -- ----------------------------
 -- Primary Key structure for table roles
