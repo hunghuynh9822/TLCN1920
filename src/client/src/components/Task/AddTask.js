@@ -75,7 +75,24 @@ export default function AddTask() {
     setOpen(false);
   };
 
+  const [nametask, setNametask] = React.useState('');
+  const handleNametask = event => {
+    setNametask(event.target.value);
+  }
+  const [descript, setDescript] = React.useState('');
+  const handleDescript = event => {
+    setDescript(event.target.value);
+  }
 
+  const handleSubmit = event => {
+    event.preventDefault();
+    
+    console.log("day la name : " + nametask);
+    console.log("day la descript : " + descript);
+    
+ 
+  }
+   
   return (
     <div>
       {/* <Button variant="contained" color="primary"  onClick={handleOpen} className={classes.button}>
@@ -95,18 +112,19 @@ export default function AddTask() {
         }}
       >
         <Fade in={open}>
+        <form onSubmit={handleSubmit}>
           <div className={classes.paper}>
             <h2 id="spring-modal-title" className={classes.title}>Add Task</h2>
             <div>
             <FormControl className={classes.buttonSubmit}>
-            <InputLabel htmlFor="my-input">Name Task</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" />
+            <InputLabel htmlFor="my-input" >Name Task</InputLabel>
+            <Input id="my-input" aria-describedby="my-helper-text" nametask="nametask" onChange={handleNametask}/>
             </FormControl>
             </div>
             <div>
             <FormControl className={classes.buttonSubmit}>
             <InputLabel htmlFor="my-input">Description</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" />
+            <Input id="my-input" aria-describedby="my-helper-text" descript="descript" onChange={handleDescript}/>
             </FormControl>
             </div>
             <h4>Time start</h4>
@@ -128,11 +146,12 @@ export default function AddTask() {
             </div>
             </div>
             <div>
-            <Button variant="contained" color="primary" className={classnames(classes.button,classes.buttonSubmit)}>
+            <Button type="submit" variant="contained" color="primary" className={classnames(classes.button,classes.buttonSubmit)}>
             Add
             </Button>
             </div>   
           </div>
+          </form>
         </Fade>
       </Modal>
     </div>

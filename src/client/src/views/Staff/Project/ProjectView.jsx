@@ -77,7 +77,7 @@ class ProjectView extends Component {
                     </div>
                 </div>
                 <div className={classes.content}>
-                    <SwipeableViews
+                    <SwipeableViews 
                         axis={'x'}
                         index={this.state.value}
                         onChangeIndex={this.handleChangeIndex}

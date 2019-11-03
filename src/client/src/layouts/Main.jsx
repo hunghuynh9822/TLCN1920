@@ -79,11 +79,11 @@ class Main extends Component {
         );
     }
     componentWillMount() {
-        api.getAllEmployees().then((data) => {
-            console.log("Test load data");
-            console.log(data);
-            console.log(data.employees);
-        });
+        // api.getAllEmployees().then((data) => {
+        //     console.log("Test load data");
+        //     console.log(data);
+        //     console.log(data.employees);
+        // });
     }
 
     componentWillUpdate() {
