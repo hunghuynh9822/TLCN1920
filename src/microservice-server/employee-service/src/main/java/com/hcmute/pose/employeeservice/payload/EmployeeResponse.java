@@ -20,7 +20,7 @@ public class EmployeeResponse {
     private Bank bank;
     private Date birthday;
     private Date startTime;
-    private EmployeeStatus status;
+    private UserStatus status;
     private String oauth2Name;
     private String imageUrl;
     private Boolean emailVerified;
@@ -48,7 +48,7 @@ public class EmployeeResponse {
         this.bank = employee.getBank();
         this.birthday = new Date(employee.getBirthday());
         this.startTime = new Date(employee.getStartTime());
-        this.status = employee.getStatus();
+        this.status = user.getStatus();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
     }
@@ -157,11 +157,11 @@ public class EmployeeResponse {
         this.startTime = startTime;
     }
 
-    public EmployeeStatus getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(EmployeeStatus status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 

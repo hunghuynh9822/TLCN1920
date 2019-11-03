@@ -21,7 +21,7 @@ public class RoleDaoImpl implements RoleDao {
     private static Logger LOGGER = LoggerFactory.getLogger(RoleDaoImpl.class);
 
     private static String SQL_GET_ALL_ROLES = "SELECT * FROM roles";
-    private static String SQL_INSERT_ROLE = "INSERT INTO roles(name,created_at) VALUES(?,?)";
+    private static String SQL_INSERT_ROLE = "INSERT INTO roles(name,created_at,updated_at) VALUES(?,?)";
     private static String SQL_SELECT_ROLE_BY_NAME = "SELECT * FROM roles WHERE name LIKE ?";
     private static String SQL_SELECT_ROLE_BY_ID = "SELECT * FROM roles WHERE id = ?";
     private static String SQL_SELECT_ROLE_USER = "SELECT * FROM roles WHERE id IN (SELECT role_id FROM user_roles WHERE user_id= ? )";
@@ -38,7 +38,7 @@ public class RoleDaoImpl implements RoleDao {
     public Optional<Role> createRole(String name) throws DatabaseException {
         if(this.findByName(name) == null) {
             try{
-                databaseHelper.executeNonQuery(SQL_INSERT_ROLE, Statement.RETURN_GENERATED_KEYS,name,System.currentTimeMillis());
+                databaseHelper.executeNonQuery(SQL_INSERT_ROLE, Statement.RETURN_GENERATED_KEYS, name, System.currentTimeMillis(), System.currentTimeMillis());
                 return this.findByName(name);
             } catch (SQLException | TransactionException ex) {
                 LOGGER.error("[RoleDaoImpl]:[createRole] GOT EXCEPTION ", ex);

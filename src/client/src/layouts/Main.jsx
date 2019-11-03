@@ -20,8 +20,6 @@ import styles from "../assets/jss/material-react/layouts/mainStyles";
 import bgImage from "../assets/img/sidebar-2.jpg";
 import logo from "../assets/img/reactlogo.png";
 
-import api from "../callapi/EmployeeAPI";
-
 let ps;
 class Main extends Component {
     constructor(props) {
@@ -79,11 +77,6 @@ class Main extends Component {
         );
     }
     componentWillMount() {
-        // api.getAllEmployees().then((data) => {
-        //     console.log("Test load data");
-        //     console.log(data);
-        //     console.log(data.employees);
-        // });
     }
 
     componentWillUpdate() {
@@ -107,8 +100,8 @@ class Main extends Component {
         const { mobileOpen, desktopOpen } = this.props;
         const curLayout = match.url;
         const curRouter = routes.filter(route => route.layout === curLayout)[0];
-        console.log(curLayout + " : ");
-        console.log(curRouter.routes);
+        // console.log(curLayout + " : ");
+        // console.log(curRouter.routes);
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>

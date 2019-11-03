@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 20/10/2019 13:07:05
+ Date: 26/10/2019 23:57:44
 */
 
 
@@ -31,14 +31,15 @@ CREATE TABLE "public"."users" (
   "image_url" varchar(255) COLLATE "pg_catalog"."default",
   "email_verified" bool,
   "created_at" int8,
-  "updated_at" int8
+  "updated_at" int8,
+  "status" int4
 )
 ;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO "public"."users" VALUES (15714589149401, 'huuhung9822@gmail.com', '0938781162', '$2a$10$uPjQ.ZhoRY1mqiWvSupRUOyXWM0yR7MoHix85oRk.Ls7BY/K8pXIq', 'google', '107889025848008063650', 'Hưng Huỳnh', 'https://lh4.googleusercontent.com/-vao6VCfseGo/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reIFx6E9VfOMlCmZEleSK2kvEAJFg/photo.jpg', 't', 1571458915068, NULL);
+INSERT INTO "public"."users" VALUES (15714589149401, 'huuhung9822@gmail.com', '0938781162', '$2a$10$uPjQ.ZhoRY1mqiWvSupRUOyXWM0yR7MoHix85oRk.Ls7BY/K8pXIq', 'google', '107889025848008063650', 'Hưng Huỳnh', 'https://lh4.googleusercontent.com/-vao6VCfseGo/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reIFx6E9VfOMlCmZEleSK2kvEAJFg/photo.jpg', 't', 1571458915068, NULL, 1);
 
 -- ----------------------------
 -- Primary Key structure for table users

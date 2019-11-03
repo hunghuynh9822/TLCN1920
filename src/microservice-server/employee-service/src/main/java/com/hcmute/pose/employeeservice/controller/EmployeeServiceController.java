@@ -1,6 +1,6 @@
 package com.hcmute.pose.employeeservice.controller;
 
-import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
+import com.hcmute.pose.employeeservice.buz.EmployeeServiceBuz;
 import com.hcmute.pose.employeeservice.exception.BuzException;
 import com.hcmute.pose.employeeservice.payload.AllEmployeesResponse;
 import com.hcmute.pose.employeeservice.payload.ApiResponse;
@@ -15,27 +15,29 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/employees")
 public class EmployeeServiceController {
 
     @Autowired
-    private EmployeeBuz employeeBuz;
+    private EmployeeServiceBuz employeeServiceBuz;
 
     @GetMapping("/")
-    public ResponseEntity getEmployees(){
-        List<EmployeeResponse> employees = employeeBuz.getEmployees();
-        if(employees.isEmpty()){
-            return new ResponseEntity(new ApiResponse(false, "No employees"),
+    public ResponseEntity getEmployees() {
+        List<EmployeeResponse> employees = employeeServiceBuz.getEmployees();
+
+        if (employees.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(false, "No employees"),
                     HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(new AllEmployeesResponse(employees),HttpStatus.OK);
+
+        return new ResponseEntity<>(new AllEmployeesResponse(employees), HttpStatus.OK);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public ResponseEntity createEmployee(@Valid @RequestBody  EmployeeRequest employeeRequest){
         EmployeeResponse employee;
         try {
-            employee = employeeBuz.createEmployee(employeeRequest).orElseThrow(()->new BuzException("Can't create employee"));
+            employee = employeeServiceBuz.createEmployee(employeeRequest).orElseThrow(()->new BuzException("Can't create employee"));
             return new ResponseEntity(employee,HttpStatus.OK);
         } catch (BuzException e) {
             return new ResponseEntity(new ApiResponse(false, e.getMessage()),
@@ -46,7 +48,7 @@ public class EmployeeServiceController {
     @GetMapping("/{employeeId}")
     public ResponseEntity getEmployee(@PathVariable("employeeId") Long employeeId){
         try {
-            EmployeeResponse employee = employeeBuz.getEmployee(employeeId).orElseThrow(()->new BuzException(""));
+            EmployeeResponse employee = employeeServiceBuz.getEmployee(employeeId).orElseThrow(()->new BuzException(""));
             return new ResponseEntity(employee,HttpStatus.OK);
         } catch (BuzException e) {
             return new ResponseEntity(new ApiResponse(false, e.getMessage()),
@@ -54,8 +56,8 @@ public class EmployeeServiceController {
         }
     }
 
-    @GetMapping("/check/{phoneOrEmail}")
-    public ResponseEntity checkValid(@PathVariable("phoneOrEmail") String phoneOrEmail){
-        return new ResponseEntity(employeeBuz.checkPhoneOrEmail(phoneOrEmail),HttpStatus.OK);
+    @GetMapping("/exist/{phoneOrEmail}")
+    public ResponseEntity<String> checkValid(@PathVariable("phoneOrEmail") String phoneOrEmail){
+        return new ResponseEntity<>(employeeServiceBuz.checkPhoneOrEmail(phoneOrEmail),HttpStatus.OK);
     }
 }

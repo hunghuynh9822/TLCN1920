@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JwtConfig {
-    @Value("${security.jwt.uris:/auth/**,/oauth2**}")
+    @Value("${security.jwt.uris:/auth/**,/auth/oauth2/**}")
     private String[] uris;
 
     @Value("${security.jwt.header:Authorization}")

@@ -21,5 +21,30 @@ const signinStyle = theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    orSeparator: {
+        textAlign: 'center',
+    },
+    socialLogin: {
+
+    },
+    socialBtn: {
+        width: '100%',
+        marginBottom: '15px',
+        fontWeight: 400,
+        fontSize: '16px',
+    },
+    socialBtnText: {
+        marginTop: '5px',
+        marginBottom: '5px',
+    },
+    socialImg: {
+        height: '32px',
+        float: 'left',
+        marginTop: '5px',
+        marginBottom: '5px',
+    },
+    google: {
+        marginTop: '7px',
+    }
 });
 export default signinStyle;

@@ -1,5 +1,6 @@
 package com.hcmute.pose.authservice.payload;
 
+import com.hcmute.pose.authservice.model.UserStatus;
 import com.hcmute.pose.authservice.payload.map.*;
 import com.hcmute.pose.common.security.AuthProvider;
 
@@ -14,7 +15,7 @@ public class EmployeeResponse {
     private String middleName;
     private String lastName;
     private Position position;
-    private EmployeeStatus status;
+    private UserStatus status;
     private String oauth2Name;
     private String imageUrl;
     private Boolean emailVerified;
@@ -90,11 +91,11 @@ public class EmployeeResponse {
         this.position = position;
     }
 
-    public EmployeeStatus getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(EmployeeStatus status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 

@@ -23,7 +23,7 @@ public class EmployeeRequest {
     @Size(min = 8,max = 255,message = "Password must be between 8 - 255 ")
     private String password;
 
-    @NotEmpty(message = "Not set role yet")
+//    @NotEmpty(message = "Not set role yet")
     private List<Long> roles = new ArrayList<>();
 
     @NotBlank(message = "First name not allow blank")

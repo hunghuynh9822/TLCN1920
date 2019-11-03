@@ -21,6 +21,7 @@ public class UserModel implements Serializable {
     private AuthProvider provider;
     @SerializedName("provider_id")
     private String providerId;
+    private UserStatus status;
 
     public Long getId() {
         return id;
@@ -100,5 +101,13 @@ public class UserModel implements Serializable {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }

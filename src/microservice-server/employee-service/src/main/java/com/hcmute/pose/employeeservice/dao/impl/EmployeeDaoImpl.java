@@ -17,8 +17,8 @@ import java.util.*;
 public class EmployeeDaoImpl implements EmployeeDao {
     private static Logger LOGGER = LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
-    private static final String DATA_EMPLOYEE = "id,first_name,middle_name,last_name,id_number,id_created,id_location,address,position_id,bank_number,bank_name,bank_branch,birthday,start_time,created_at,status";
-    private static final String INSERT_DATA_EMPLOYEE = "id,first_name,middle_name,last_name,id_number,id_created,id_location,address,position_id,bank_number,bank_name,bank_branch,birthday,start_time,created_at,status";
+    private static final String DATA_EMPLOYEE = "id,first_name,middle_name,last_name,id_number,id_created,id_location,address,position_id,bank_number,bank_name,bank_branch,birthday,start_time";
+    private static final String INSERT_DATA_EMPLOYEE = "id,first_name,middle_name,last_name,id_number,id_created,id_location,address,position_id,bank_number,bank_name,bank_branch,birthday,start_time,created_at,updated_at";
 
     private static String SQL_INSERT_EMPLOYEE = String.format("INSERT INTO employees(%s) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",INSERT_DATA_EMPLOYEE);
     private static String SQL_SELECT_EMPLOYEE_BY_ID = String.format("SELECT %s FROM employees WHERE id = ?",DATA_EMPLOYEE);
@@ -44,7 +44,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     employee.getBirthday(),
                     employee.getStartTime(),
                     System.currentTimeMillis(),
-                    employee.getStatus().ordinal()
+                    System.currentTimeMillis()
             );
             return Optional.of(employee);
         }catch (SQLException | TransactionException ex){

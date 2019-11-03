@@ -9,14 +9,15 @@ CREATE TABLE IF NOT EXISTS "public"."users" (
   "image_url" varchar(255) COLLATE "pg_catalog"."default",
   "email_verified" bool,
   "created_at" int8,
-  "updated_at" int8
+  "updated_at" int8,
+  "status" int4 NOT NULL
 )
 ;
 ALTER TABLE "public"."users" ADD CONSTRAINT "users_pkey" PRIMARY KEY ("id");
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO "public"."users" VALUES (15714589149401, 'huuhung9822@gmail.com', '0938781162', '$2a$10$uPjQ.ZhoRY1mqiWvSupRUOyXWM0yR7MoHix85oRk.Ls7BY/K8pXIq', 'google', '107889025848008063650', 'Hưng Huỳnh', 'https://lh4.googleusercontent.com/-vao6VCfseGo/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reIFx6E9VfOMlCmZEleSK2kvEAJFg/photo.jpg', 't', 1571458915068, NULL);
+INSERT INTO "public"."users" VALUES (15714589149401, 'huuhung9822@gmail.com', '0938781162', '$2a$10$uPjQ.ZhoRY1mqiWvSupRUOyXWM0yR7MoHix85oRk.Ls7BY/K8pXIq', 'google', '107889025848008063650', 'Hưng Huỳnh', 'https://lh4.googleusercontent.com/-vao6VCfseGo/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reIFx6E9VfOMlCmZEleSK2kvEAJFg/photo.jpg', 't', 1571458915068, NULL, 1);
 
 CREATE TABLE IF NOT EXISTS "public"."positions" (
   "id" int4 NOT NULL,
@@ -34,7 +35,7 @@ INSERT INTO "public"."positions" VALUES (3, 'Human Resource', 1567937957503, NUL
 INSERT INTO "public"."positions" VALUES (4, 'Staff', 1567937957503, NULL);
 
 CREATE TABLE IF NOT EXISTS "public"."employees" (
-    "id" int8 NOT NULL,
+  "id" int8 NOT NULL,
   "created_at" int8 NOT NULL,
   "updated_at" int8,
   "first_name" varchar(255) COLLATE "pg_catalog"."default",
@@ -49,8 +50,7 @@ CREATE TABLE IF NOT EXISTS "public"."employees" (
   "bank_name" varchar(255) COLLATE "pg_catalog"."default",
   "bank_branch" varchar(255) COLLATE "pg_catalog"."default",
   "birthday" int8,
-  "start_time" int8,
-  "status" int4
+  "start_time" int8
 )
 ;
 ALTER TABLE "public"."employees" ADD CONSTRAINT "employee_position" FOREIGN KEY ("position_id") REFERENCES "public"."positions" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -58,7 +58,7 @@ ALTER TABLE "public"."employees" ADD CONSTRAINT "user_id" FOREIGN KEY ("id") REF
 -- ----------------------------
 -- Records of employees
 -- ----------------------------
-INSERT INTO "public"."employees" VALUES (15714589149401, 1571458915080, NULL, 'Huỳnh', 'Lê Hữu', 'Hưng', '025699321', 1354406400000, 'CA Hồ Chí Minh', 'Số 05 đường 3643A Phạm Thế Hiển, P7, Q8, Tp HCM', 1, '1234 5678 91011', 'BIDV', 'CN Quận 8', 888105600000, 1561939200000, 0);
+INSERT INTO "public"."employees" VALUES (15714589149401, 1571458915080, NULL, 'Huỳnh', 'Lê Hữu', 'Hưng', '025699321', 1354406400000, 'CA Hồ Chí Minh', 'Số 05 đường 3643A Phạm Thế Hiển, P7, Q8, Tp HCM', 1, '1234 5678 91011', 'BIDV', 'CN Quận 8', 888105600000, 1561939200000);
 
 CREATE TABLE IF NOT EXISTS  "public"."roles" (
   "id" int4 NOT NULL,
@@ -71,21 +71,28 @@ ALTER TABLE "public"."roles" ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");
 -- ----------------------------
 -- Records of roles
 -- ----------------------------
-INSERT INTO "public"."roles" VALUES (1, 'ROLE_ADMIN', 1567937957503, NULL);
-INSERT INTO "public"."roles" VALUES (2, 'ROLE_STAFF', 1567937962314, NULL);
-INSERT INTO "public"."roles" VALUES (3, 'ROLE_LEAD', 1567937962314, NULL);
-INSERT INTO "public"."roles" VALUES (4, 'ROLE_HR', 1567937962314, NULL);
+INSERT INTO "public"."roles" VALUES (1, 'ROLE_ADMIN', 1567937957503, 1567937957503);
+INSERT INTO "public"."roles" VALUES (2, 'ROLE_STAFF', 1567937962314, 1567937962314);
+INSERT INTO "public"."roles" VALUES (3, 'ROLE_LEAD', 1567937962314, 1567937962314);
+INSERT INTO "public"."roles" VALUES (4, 'ROLE_HR', 1567937962314, 1567937962314);
 
 CREATE TABLE IF NOT EXISTS "public"."user_roles" (
   "user_id" int8 NOT NULL,
   "role_id" int4 NOT NULL,
-  "create_at" int8 NOT NULL,
-  "update_at" int8
+  "created_at" int8 NOT NULL,
+  "updated_at" int8
 )
 ;
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "employee_roles_pkey" PRIMARY KEY ("user_id", "role_id");
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "role_id" FOREIGN KEY ("role_id") REFERENCES "public"."roles" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "user_id" FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- ----------------------------
+-- Records of user_roles
+-- ----------------------------
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 1, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 3, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 2, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 4, 1571458915069, 1571458915069);
 
 CREATE TABLE IF NOT EXISTS "public"."genuid" (
   "id" int4 NOT NULL,
