@@ -20,3 +20,10 @@ export function getEmployees() {
     });
 }
 
+export function getAdminEmployees() {
+    return request({
+        url: superUrl + "/",
+        method: 'GET',
+    });
+}
+
