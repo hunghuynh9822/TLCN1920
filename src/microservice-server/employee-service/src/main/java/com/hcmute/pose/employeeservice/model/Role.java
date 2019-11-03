@@ -1,9 +1,11 @@
 package com.hcmute.pose.employeeservice.model;
 
 
-import com.hcmute.pose.employeeservice.model.audit.DateAudit;
+import com.hcmute.pose.common.model.audit.DateAudit;
 
-public class Role extends DateAudit {
+import java.io.Serializable;
+
+public class Role extends DateAudit implements Serializable {
     private Integer id;
     private String name;
 

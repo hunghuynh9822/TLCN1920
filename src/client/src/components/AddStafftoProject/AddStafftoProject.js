@@ -16,6 +16,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import PersonIcon from '@material-ui/icons/Person';
 import Tune from '@material-ui/icons/Tune';
 import clsx from 'clsx';
+import axios from 'axios';
 const useStyles = makeStyles(theme => ({
   modal: {
     display: 'flex',
@@ -66,7 +67,8 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   );
 });
 
-export default function AddStafftoProject() {
+export default function AddStafftoProject({title}) {
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -77,6 +79,58 @@ export default function AddStafftoProject() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const [list , setList] = React.useState([]);
+
+  const handleListEmploy = event => {
+    setList(event.target.value);
+  }
+ 
+
+  const [listNewUesr , setListNewUser] = React.useState([]);
+  const listUser = [
+    {
+      "id":"1",
+      "name":"Liem"
+    },
+    {
+      "id":"2",
+      "name":"Hung"
+    }
+  ]
+    
+  const pushNewUser = event => {
+    let temp = [...listNewUesr,{
+      "id":"3",
+      "name":"Liem2"
+    }]
+    setListNewUser(temp)
+
+  }
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    console.log("Da vo submit");
+    let request = {
+      "idPro": "1",
+      "idListPer": list
+    }
+//     let idPro = "1";
+//     let idListPer= [1 ,2 ,3];
+
+    // const title = {
+    //   title: this.state.title
+    // };
+    // const employeeid = {
+    //   employeeid: this.state.employeeid
+    // };
+    axios.post(`http://localhost:8080/promicro/createPOP`, { request })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+  }
+
 
   return (
     <div>
@@ -97,6 +151,7 @@ export default function AddStafftoProject() {
         }}
       >
         <Fade in={open}>
+        <form onSubmit={handleSubmit}>
           <div className={classes.paper}>
             <h3 id="spring-modal-title" className={classes.title}>Settings</h3>
             <div>
@@ -108,24 +163,33 @@ export default function AddStafftoProject() {
             <h6>Procject Admin</h6>
             <div>           
             <Fab color="primary" size="small" aria-label="add" className={classes.fab}><AddIcon /></Fab>
-            <Fab variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />Liem</Fab>
-            <Fab variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />Liem</Fab>            
+            <Fab variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />
+              liem
+            </Fab>            
             </div>
-            <h6>Procject Member</h6>
+            <h6>Procject Member {title}</h6>
             <div>           
-            <Fab color="primary" size="small" aria-label="add" className={classes.fab}><AddIcon /></Fab>
-            <Fab variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />Liem</Fab>
-            <Fab variant="extended"  size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />Liem</Fab>            
+            <Fab onClick={pushNewUser} color="primary" size="small" aria-label="add" className={classes.fab}><AddIcon /></Fab>
+            {
+              listUser.map((user,i)=>{
+              return <Fab key={i} variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />{user.name}</Fab>
+            })
+            }
+              {
+              listNewUesr.map((user,i)=>{
+              return <Fab key={i} variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />{user.name}</Fab>
+            })
+            }          
             </div>
 
             <div>
-            <Button variant="contained" size="small" className={classnames(classes.button,classes.buttonSubmit)}>
-            <SaveIcon className={clsx(classes.leftIcon, classes.iconSmall)} />
+            <Button type="submit" variant="contained" size="small" className={classnames(classes.button,classes.buttonSubmit)}>
+            <SaveIcon  className={clsx(classes.leftIcon, classes.iconSmall)} />
             Save
             </Button>
             </div>
-            
           </div>
+          </form>
         </Fade>
       </Modal>
     </div>

@@ -20,6 +20,8 @@ import styles from "../assets/jss/material-react/layouts/mainStyles";
 import bgImage from "../assets/img/sidebar-2.jpg";
 import logo from "../assets/img/reactlogo.png";
 
+import api from "../callapi/EmployeeAPI";
+
 let ps;
 class Main extends Component {
     constructor(props) {
@@ -33,8 +35,6 @@ class Main extends Component {
     }
 
     switchRoutes = (curRouter) => {
-        console.log("curRouter");
-        console.log(curRouter.routes);
         return (
             <Switch>
                 {
@@ -79,6 +79,14 @@ class Main extends Component {
         );
     }
     componentWillMount() {
+        // api.getAllEmployees().then((data) => {
+        //     console.log("Test load data");
+        //     console.log(data);
+        //     console.log(data.employees);
+        // });
+    }
+
+    componentWillUpdate() {
         this.resizeFunction();
     }
 
@@ -97,11 +105,10 @@ class Main extends Component {
         const { classes, ...rest } = this.props;
         const { match, history } = this.props;
         const { mobileOpen, desktopOpen } = this.props;
-
         const curLayout = match.url;
         const curRouter = routes.filter(route => route.layout === curLayout)[0];
         console.log(curLayout + " : ");
-        console.log(curRouter);
+        console.log(curRouter.routes);
         return (
             <React.Fragment>
                 <div className={classes.wrapper}>

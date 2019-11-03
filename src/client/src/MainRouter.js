@@ -4,6 +4,8 @@ import importedComponent from 'react-imported-component';
 
 import {Loading} from './components';
 
+import {PrivateRoute} from './components'
+
 class MainRouter extends Component {
   render() {
     const AsyncMain = importedComponent(
@@ -28,10 +30,11 @@ class MainRouter extends Component {
       <React.Fragment>
         <Switch>
           <Route exact path="/" component={AsyncSignIn} />
-          <Route path="/admin" component={AsyncMain} />
-          <Route path="/hr" component={AsyncMain} />
-          <Route path="/staff" component={AsyncMain} />
-          <Route path="/lead" component={AsyncMain} />
+          <PrivateRoute path="/admin"><AsyncMain/></PrivateRoute>
+          <PrivateRoute path="/hr"><AsyncMain/></PrivateRoute>
+          <PrivateRoute path="/staff"><AsyncMain/></PrivateRoute>
+          <PrivateRoute path="/lead"><AsyncMain/></PrivateRoute>
+          <Route path="/notfound" component={AsyncNoMatch} />
           <Route component={AsyncNoMatch} />
         </Switch>
       </React.Fragment>

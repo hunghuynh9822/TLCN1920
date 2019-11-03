@@ -1,18 +1,18 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Heroku
+ Source Server         : Home
  Source Server Type    : PostgreSQL
- Source Server Version : 110005
- Source Host           : ec2-174-129-227-205.compute-1.amazonaws.com:5432
- Source Catalog        : dfhgvfgs5qcedi
+ Source Server Version : 100010
+ Source Host           : localhost:5432
+ Source Catalog        : postgres
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 110005
+ Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 09/09/2019 11:33:02
+ Date: 13/10/2019 22:13:56
 */
 
 
@@ -22,14 +22,22 @@
 DROP TABLE IF EXISTS "public"."employees";
 CREATE TABLE "public"."employees" (
   "id" int8 NOT NULL,
-  "username" varchar(255) COLLATE "pg_catalog"."default",
-  "password" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-  "email" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "created_at" int8 NOT NULL,
   "updated_at" int8,
   "first_name" varchar(255) COLLATE "pg_catalog"."default",
   "middle_name" varchar(255) COLLATE "pg_catalog"."default",
-  "last_name" varchar(255) COLLATE "pg_catalog"."default"
+  "last_name" varchar(255) COLLATE "pg_catalog"."default",
+  "id_number" varchar(64) COLLATE "pg_catalog"."default",
+  "id_created" int8,
+  "id_location" text COLLATE "pg_catalog"."default",
+  "address" text COLLATE "pg_catalog"."default",
+  "position_id" int4,
+  "bank_number" varchar(255) COLLATE "pg_catalog"."default",
+  "bank_name" varchar(255) COLLATE "pg_catalog"."default",
+  "bank_branch" varchar(255) COLLATE "pg_catalog"."default",
+  "birthday" int8,
+  "start_time" int8,
+  "status" int4
 )
 ;
 
@@ -37,3 +45,9 @@ CREATE TABLE "public"."employees" (
 -- Primary Key structure for table employees
 -- ----------------------------
 ALTER TABLE "public"."employees" ADD CONSTRAINT "Employee_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table employees
+-- ----------------------------
+ALTER TABLE "public"."employees" ADD CONSTRAINT "employee_position" FOREIGN KEY ("position_id") REFERENCES "public"."positions" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "public"."employees" ADD CONSTRAINT "user_id" FOREIGN KEY ("id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;

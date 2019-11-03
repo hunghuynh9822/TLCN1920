@@ -1,18 +1,18 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Heroku
+ Source Server         : Home
  Source Server Type    : PostgreSQL
- Source Server Version : 110005
- Source Host           : ec2-174-129-227-205.compute-1.amazonaws.com:5432
- Source Catalog        : dfhgvfgs5qcedi
+ Source Server Version : 100010
+ Source Host           : localhost:5432
+ Source Catalog        : postgres
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 110005
+ Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 02/10/2019 00:03:13
+ Date: 12/10/2019 00:39:23
 */
 
 
@@ -29,6 +29,12 @@ CREATE TABLE "public"."roles" (
 ;
 
 -- ----------------------------
+-- Records of roles
+-- ----------------------------
+INSERT INTO "public"."roles" VALUES (1, 'ROLE_ADMIN', 1567937957503, NULL);
+INSERT INTO "public"."roles" VALUES (2, 'ROLE_EMPLOYEE', 1567937962314, NULL);
+
+-- ----------------------------
 -- Primary Key structure for table roles
 -- ----------------------------
-ALTER TABLE "public"."roles" ADD CONSTRAINT "roles_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."roles" ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");

@@ -1,0 +1,64 @@
+package com.hcmute.pose.projectservice.model;
+
+
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class Project implements Serializable {
+    private Long id;
+    private String title;
+    @SerializedName("createtime")
+    private Long createTime;
+    @SerializedName("employeeid")
+    private Long employeeCreate;
+    private boolean submit;
+
+    public Project(Long id, String title, Long createTime, Long employeeCreate, boolean submit) {
+        this.id = id;
+        this.title = title;
+        this.createTime = createTime;
+        this.employeeCreate = employeeCreate;
+        this.submit = submit;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
+    public boolean isSubmit() {
+        return submit;
+    }
+
+    public void setSubmit(boolean submit) {
+        this.submit = submit;
+    }
+
+    public Long getEmployeeCreate() {
+        return employeeCreate;
+    }
+
+    public void setEmployeeCreate(Long employeeCreate) {
+        this.employeeCreate = employeeCreate;
+    }
+}

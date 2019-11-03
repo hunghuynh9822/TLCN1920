@@ -29,7 +29,7 @@
         </rollingPolicy>
         <encoder>
             <pattern>
-                ${FILE_LOG_PATTERN_JSON:-{"timestamp":"%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}","level":"${LOG_LEVEL_PATTERN:-%5p}","PID":"${PID:- }","thread":"%t","class":"%logger{40}","message":"%m${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"}%n}
+                ${FILE_LOG_PATTERN_JSON:-{"timestamp":"%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}","level":"${LOG_LEVEL_PATTERN:-%5p}","PID":"${PID:- }","thread":"%t","class":"%logger{100}","message":"%m${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"}%n}
             </pattern>
         </encoder>
     </appender>
@@ -47,7 +47,7 @@
         </rollingPolicy>
         <encoder>
             <pattern>
-                ${FILE_LOG_PATTERN_JSON:-{"timestamp":"%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}","level":"${LOG_LEVEL_PATTERN:-%5p}","PID":"${PID:- }","thread":"%t","class":"%logger{40}","message":"%m${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"}%n}
+                ${FILE_LOG_PATTERN_JSON:-{"timestamp":"%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}","level":"${LOG_LEVEL_PATTERN:-%5p}","PID":"${PID:- }","thread":"%t","class":"%logger{100}","message":"%m${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"}%n}
             </pattern>
         </encoder>
     </appender>
@@ -60,7 +60,7 @@
         <appender-ref ref="FILE-ROLLING-TOTAL" />
     </appender>
 
-    <logger name="com.hcmute.pose.taskservice" level="info">
+    <logger name="com.hcmute.pose" level="info">
         <appender-ref ref="ASYNC"/>
     </logger>
 
