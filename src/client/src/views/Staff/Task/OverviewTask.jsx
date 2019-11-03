@@ -13,9 +13,17 @@ class OverviewTask extends Component {
     }
     state = {
         listUser : [
-            { "id": "1", "name" : "Liem" },
-            { "id": "2", "name" : "Hung" }
-        ],
+            // { "id": "1", "name" : "Liem" },
+            // { "id": "2", "name" : "Hung" }
+        ],   
+    }
+    componentDidMount() {
+        var listU = [{ "id": "1", "name" : "Liem" },
+                    { "id": "2", "name" : "Hung" }];
+
+        
+        this.setState({listUser : listU});
+        
         
     }
     
