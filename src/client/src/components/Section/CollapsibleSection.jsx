@@ -54,8 +54,8 @@ class CollapsibleSection extends Component {
             })
         }
         return (
-            <div className={classes.area} onClick={closeBar}>
-                <div className={classnames(classes.bar, { [classes.hiddenBar]: this.state.close })}>
+            <div className={classes.area}>
+                <div className={classnames(classes.bar, { [classes.hiddenBar]: this.state.close })}  onClick={closeBar}>
                     {this.state.close ? <ChevronRight /> : <ExpandMore />} {title}
                 </div>
                 <div className={classnames(classes.container, { [classes.hidden]: this.state.close })}>
