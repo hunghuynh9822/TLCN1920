@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 22/10/2019 01:11:03
+ Date: 03/11/2019 12:12:06
 */
 
 
@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS "public"."user_roles";
 CREATE TABLE "public"."user_roles" (
   "user_id" int8 NOT NULL,
   "role_id" int4 NOT NULL,
-  "create_at" int8 NOT NULL,
-  "update_at" int8
+  "created_at" int8 NOT NULL,
+  "updated_at" int8
 )
 ;
 
@@ -32,6 +32,9 @@ CREATE TABLE "public"."user_roles" (
 -- Records of user_roles
 -- ----------------------------
 INSERT INTO "public"."user_roles" VALUES (15714589149401, 1, 1571458915069, NULL);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 3, 1571458915069, NULL);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 2, 1571458915069, NULL);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 4, 1571458915069, NULL);
 
 -- ----------------------------
 -- Primary Key structure for table user_roles

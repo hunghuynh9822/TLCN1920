@@ -8,6 +8,24 @@ const api = axios.create({
     baseURL: serverUrl
 });
 
+export const generatePassword = (length) => {
+    const data = '9JqVyX2ANTEWIvzOeQhfgwkKsnp5ZotHYUxR7l1jDLcm038PC4FBG6uriMaSdb';
+    let result = '';
+    if (length > data.length) {
+        return data;
+    }
+    for (let ma = 0; ma < length; ma++) {
+        let char = data[Math.floor(Math.random() * data.length)];
+        if (result.includes(char)) {
+            ma--;
+        } else {
+            result += char
+        }
+    }
+    console.log(result);
+    return result;
+}
+
 export const request = (options) => {
     let headers = {
         'Content-Type': 'application/json',

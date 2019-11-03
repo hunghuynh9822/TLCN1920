@@ -19,12 +19,14 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static Logger LOGGER = LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
-    private static final String DATA_USER = "id,email,phone,oauth2_name,image_url,email_verified,provider,provider_id,status";
+    private static final String DATA_USER = "id, email, phone, oauth2_name, image_url, email_verified, provider, provider_id, status, created_at, updated_at";
 
-    private static String SQL_INSERT_USER = "INSERT INTO users(id,email,phone,password,provider,email_verified,created_at,status) VALUES(?,?,?,?,?,?,?,?)";
-    private static String SQL_INSERT_USER_ROLE = "INSERT INTO user_roles(user_id,role_id,create_at) VALUES(?,?,?)";
+    private static String SQL_INSERT_USER = "INSERT INTO users(id,email,phone,password,provider,email_verified,created_at,updated_at,status) VALUES(?,?,?,?,?,?,?,?,?)";
+    private static String SQL_INSERT_USER_ROLE = "INSERT INTO user_roles(user_id, role_id, created_at, updated_at) VALUES( ?, ?, ?, ?)";
 
     private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users WHERE status != ?",DATA_USER);
+
+    private static String SQL_SELECT_ALL_USER_WAITING = String.format("SELECT %s FROM users WHERE status = ?",DATA_USER);
 
     private static String SQL_SELECT_EXIST_USER_BY_EMAIL = "SELECT id as value FROM users WHERE email = ?";
     private static String SQL_SELECT_EXIST_USER_BY_PHONE = "SELECT id as value FROM users WHERE phone = ?";
@@ -33,6 +35,8 @@ public class UserDaoImpl implements UserDao {
     private static String SQL_SELECT_USER_BY_EMAIL = String.format("SELECT %s FROM users WHERE email = ?",DATA_USER);
     private static String SQL_SELECT_USER_BY_PHONE_OR_EMAIL = String.format("SELECT %s FROM users WHERE phone = ? OR email = ?",DATA_USER);
     private static String SQL_SELECT_USER_BY_ID = String.format("SELECT %s FROM users WHERE id = ?",DATA_USER);
+
+    private static String SQL_UPDATE_USER_STATUS = "UPDATE users SET status = ?, updated_at = ? WHERE id = ?";
 
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -56,6 +60,7 @@ public class UserDaoImpl implements UserDao {
                     user.getProvider().name(),
                     false,
                     System.currentTimeMillis(),
+                    System.currentTimeMillis(),
                     user.getStatus().ordinal()
             );
             return Optional.of(user);
@@ -68,7 +73,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void addRoleToUser(Long userId, Long roleId) throws SQLException, TransactionException {
         try {
-            databaseHelper.executeNonQuery(SQL_INSERT_USER_ROLE, userId, roleId, System.currentTimeMillis());
+            databaseHelper.executeNonQuery(SQL_INSERT_USER_ROLE, userId, roleId, System.currentTimeMillis(), System.currentTimeMillis());
         } catch (SQLException | TransactionException e) {
             LOGGER.error("[UserDaoImpl]:[addRoleToUser]",e);
             throw e;
@@ -78,6 +83,20 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAll() throws SQLException {
         return databaseHelper.executeQueryListObject(User[].class,SQL_SELECT_ALL_USER,UserStatus.CREATED.ordinal());
+    }
+
+    @Override
+    public List<User> getAllWaiting() throws SQLException {
+        return databaseHelper.executeQueryListObject(User[].class,SQL_SELECT_ALL_USER_WAITING,UserStatus.CREATED.ordinal());
+    }
+
+    public void updateStatus(Long userId, UserStatus status) throws SQLException, TransactionException {
+        try {
+            databaseHelper.executeNonQuery(SQL_UPDATE_USER_STATUS,status.ordinal(),System.currentTimeMillis(),userId);
+        } catch (SQLException | TransactionException e) {
+            LOGGER.error("[UserDaoImpl]:[updateStatus]",e);
+            throw e;
+        }
     }
 
     @Override

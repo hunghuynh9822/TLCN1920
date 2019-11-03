@@ -2,7 +2,7 @@ package com.hcmute.pose.employeeservice;
 
 //import com.hcmute.pose.employeeservice.config.TestConfig;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
-//import com.hcmute.pose.employeeservice.buz.EmployeeBuz;
+//import com.hcmute.pose.employeeservice.buz.EmployeeServiceBuz;
 //import com.hcmute.pose.employeeservice.dao.RoleDao;
 //import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class EmployeeServiceApplicationTests {
 //	@Autowired
 //	private DatabaseHelper databaseHelper;
 //	@Autowired
-//	private EmployeeBuz employeeBuz;
+//	private EmployeeServiceBuz employeeBuz;
 //	@Test
 //	public void contextLoads() {
 //	}

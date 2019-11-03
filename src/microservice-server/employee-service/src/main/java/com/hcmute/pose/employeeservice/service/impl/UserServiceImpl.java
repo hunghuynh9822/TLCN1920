@@ -51,6 +51,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getUsersWaiting() throws SQLException {
+        return userDao.getAllWaiting();
+    }
+
+    @Override
+    public void updateStatus(Long userId, UserStatus status) throws SQLException, TransactionException {
+        userDao.updateStatus(userId, status);
+    }
+
+    @Override
     public Optional<User> findByEmail(String email) throws SQLException {
         return userDao.findByEmail(email);
     }

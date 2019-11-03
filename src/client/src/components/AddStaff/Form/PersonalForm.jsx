@@ -8,20 +8,33 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const styles = theme => ({
+import {
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
 
+const styles = theme => ({
+    subTitle: {
+        margin: '10px 0px -12px 10px',
+        width: '100%'
+    }
 });
 class PersonalForm extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { classes } = this.props;
+        const { classes, handleInputChange, handleDatePickerChange, request } = this.props;
+        const handleBirthday = (date) => {
+            handleDatePickerChange('birthday', date);
+        }
+        const handleIdCreatedAt = (date) => {
+            handleDatePickerChange('idCreated', date);
+        }
         return (
             <React.Fragment>
-                <Typography variant="h6" gutterBottom>
+                {/* <Typography variant="h6" gutterBottom>
                     Personal Information
-                </Typography>
+                </Typography> */}
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={8}>
                         <TextField
@@ -31,22 +44,29 @@ class PersonalForm extends Component {
                             label="Address information"
                             fullWidth
                             autoComplete="address"
+                            value={request.address}
+                            onChange={handleInputChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <TextField
-                            required
+                        <KeyboardDatePicker
+                            disableToolbar
+                            // variant="inline"
+                            format="yyyy-MM-dd"
                             id="birthday"
                             name="birthday"
-                            label="Birthday"
-                            fullWidth
-                            autoComplete="birthday"
+                            label="DOB"
+                            value={request.birthday}
+                            onChange={handleBirthday}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
                         />
                     </Grid>
-                    <Typography variant="h6" gutterBottom>
-                                Identification
-                            </Typography>
                     <Grid item container xs={12} spacing={3}>
+                        <Typography variant="h6" className={classes.subTitle} gutterBottom>
+                            Identification
+                        </Typography>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
@@ -55,6 +75,8 @@ class PersonalForm extends Component {
                                 label="Number"
                                 fullWidth
                                 autoComplete="idNumber"
+                                value={request.idNumber}
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -65,23 +87,31 @@ class PersonalForm extends Component {
                                 label="Location"
                                 fullWidth
                                 autoComplete="idLocation"
+                                value={request.idLocation}
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
+                            <KeyboardDatePicker
+                                disableToolbar
+                                // variant="inline"
+                                format="yyyy-MM-dd"
                                 id="idCreated"
                                 name="idCreated"
                                 label="Created at"
-                                fullWidth
-                                autoComplete="idCreated"
+                                value={request.idCreated}
+                                onChange={handleIdCreatedAt}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
                             />
                         </Grid>
                     </Grid>
-                    <Typography variant="h6" gutterBottom>
-                                Banking
-                            </Typography>
+
                     <Grid item container xs={12} spacing={3}>
+                        <Typography variant="h6" className={classes.subTitle} gutterBottom>
+                            Banking
+                        </Typography>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
@@ -90,6 +120,8 @@ class PersonalForm extends Component {
                                 label="Number"
                                 fullWidth
                                 autoComplete="bankNumber"
+                                value={request.bankNumber}
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -100,6 +132,8 @@ class PersonalForm extends Component {
                                 label="Name"
                                 fullWidth
                                 autoComplete="bankName"
+                                value={request.bankName}
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -110,6 +144,8 @@ class PersonalForm extends Component {
                                 label="Branch"
                                 fullWidth
                                 autoComplete="bankBranch"
+                                value={request.bankBranch}
+                                onChange={handleInputChange}
                             />
                         </Grid>
                     </Grid>
@@ -120,5 +156,8 @@ class PersonalForm extends Component {
 }
 PersonalForm.propTypes = {
     classes: PropTypes.object.isRequired,
+    request: PropTypes.object.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
+    handleDatePickerChange: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(PersonalForm);

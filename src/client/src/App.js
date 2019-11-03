@@ -4,6 +4,11 @@ import { Provider } from 'react-redux';
 import { createBrowserHistory } from "history";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic'
 
@@ -49,13 +54,15 @@ class App extends Component {
     })
     return (
       <Router history={hist}>
-        <Provider store={store}>
-          <AlertProvider template={AlertTemplate} {...options}>
-            <MuiThemeProvider theme={theme}>
-              <MainRouter />
-            </MuiThemeProvider>
-          </AlertProvider>
-        </Provider>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Provider store={store}>
+            <AlertProvider template={AlertTemplate} {...options}>
+              <MuiThemeProvider theme={theme}>
+                <MainRouter />
+              </MuiThemeProvider>
+            </AlertProvider>
+          </Provider>
+        </MuiPickersUtilsProvider>
       </Router>
     );
   };

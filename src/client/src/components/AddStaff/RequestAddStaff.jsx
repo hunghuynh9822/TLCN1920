@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { withAlert } from 'react-alert'
 
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -20,7 +21,9 @@ import Typography from '@material-ui/core/Typography';
 
 import { AccountForm, PersonalForm, Review } from './Form';
 
-import { Fade } from '../'
+import { create } from '../../action/employee'
+
+import { generatePassword } from '../../action'
 const styles = theme => ({
     modal: {
         // display: 'flex',
@@ -67,26 +70,104 @@ class RequestAddStaff extends Component {
             activeStep: 0,
             scroll: 'body',
             steps: ['Account Information', 'Personal Information', 'Summary'],
-            submitted: false
+            submitted: false,
+            error: null,
+            request: {
+                id: '',
+                firstName: '',
+                middleName: '',
+                lastName: '',
+                phone: '',
+                email: '',
+                positionId: '',
+                startTime: new Date(),
+                address: '',
+                birthday: new Date(),
+                idNumber: '',
+                idLocation: '',
+                idCreated: new Date(),
+                bankNumber: '',
+                bankName: '',
+                bankBranch: '',
+                password: ''
+            }
         }
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.getStepContent = this.getStepContent.bind(this);
+        this.handleDatePickerChange = this.handleDatePickerChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     getStepContent(step) {
         switch (step) {
             case 0:
-                return <AccountForm />;
+                return <AccountForm request={this.state.request} handleInputChange={this.handleInputChange} handleDatePickerChange={this.handleDatePickerChange} />;
             case 1:
-                return <PersonalForm />;
+                return <PersonalForm request={this.state.request} handleInputChange={this.handleInputChange} handleDatePickerChange={this.handleDatePickerChange} />;
             case 2:
-                return <Review />;
+                return <Review request={this.state.request} />;
             default:
                 throw new Error('Unknown step');
         }
     }
 
+    handleInputChange(event) {
+        const { name, value } = event.target;
+        console.log(`handleInputChange - Name : ${name} value : ${value}`);
+        this.setState(prevState => {
+            let request = Object.assign({}, prevState.request);
+            request[name] = value;
+            return { request };
+        })
+    }
+
+    handleDatePickerChange(name, date) {
+        console.log(`handleInputChange - Name : ${name} value : ${date}`);
+        this.setState(prevState => {
+            let request = Object.assign({}, prevState.request);
+            request[name] = date;
+            return { request };
+        })
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        // this.setState(prevState => {
+        //     let request = Object.assign({}, prevState.request);
+        //     request.password = generatePassword(8);
+        //     return { request };
+        // })
+        const { alert } = this.props;
+        let createRequest = this.state.request;
+        createRequest.password = generatePassword(8);
+        console.log("Submit " + JSON.stringify(createRequest));
+        create(createRequest)
+            .then(response => {
+                console.log(response);
+                alert.success("Create user successfully!", { timeout: 1000, });
+                this.setState({
+                    request: { ...this.state.request, id: response.id },
+                    activeStep: this.state.activeStep + 1,
+                    submitted: true,
+                    error: null
+                })
+            }).catch(error => {
+                console.log(error);
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+                this.setState({
+                    activeStep: this.state.activeStep + 1,
+                    // submitted: true,
+                    error: error
+                })
+            });
+
+    }
+
     render() {
         const { classes } = this.props;
-        const { activeStep, open, scroll, steps, submitted } = this.state;
+        const { scroll, steps } = this.state;
+        const { activeStep, open, submitted, error } = this.state;
 
         const handleOpen = () => {
             this.setState({
@@ -100,6 +181,26 @@ class RequestAddStaff extends Component {
                     submitted: false,
                     open: false,
                     activeStep: 0,
+                    error: null,
+                    request: {
+                        id: '',
+                        firstName: '',
+                        middleName: '',
+                        lastName: '',
+                        phone: '',
+                        email: '',
+                        positionId: '',
+                        startTime: new Date(),
+                        address: '',
+                        birthday: new Date(),
+                        idNumber: '',
+                        idLocation: '',
+                        idCreated: new Date(),
+                        bankNumber: '',
+                        bankName: '',
+                        bankBranch: '',
+                        password: ''
+                    }
                 })
             } else {
                 this.setState({
@@ -120,32 +221,6 @@ class RequestAddStaff extends Component {
             })
         }
 
-        const handleSubmit = (event) => {
-            event.preventDefault();
-            console.log("Submit " + this.state.activeStep);
-            // const { alert } = this.props;
-            // const loginRequest = Object.assign({}, { phoneOrEmail: this.state.phoneOrEmail, password: this.state.password });
-            // login(loginRequest)
-            //     .then(response => {
-            //         // console.log(response.tokenType);
-            //         this.props.authenticate(true, null);
-            //         localStorage.setItem(ACCESS_TOKEN, response.tokenType);
-            //         alert.success("You're successfully logged in!", { timeout: 1000, });
-            //         // this.props.history.push("/");
-            //     }).catch(error => {
-            //         console.log(error);
-            //         this.setState({
-            //             error: error
-            //         })
-            //         //(error && error.message) || 
-            //         alert.error('Oops! Something went wrong. Please try again!');
-            //     });
-            this.setState({
-                activeStep: this.state.activeStep + 1,
-                submitted: true
-            })
-        }
-
         const renderAction = () => {
             if (activeStep === steps.length) {
                 if (submitted) {
@@ -153,6 +228,19 @@ class RequestAddStaff extends Component {
                         <Button onClick={handleClose} className={classes.button}>
                             Close
                         </Button>
+                    )
+                } else {
+                    return (
+                        <React.Fragment>
+                            <Button onClick={handleClose} className={classes.button}>
+                                Close
+                            </Button>
+                            {activeStep !== 0 && (
+                                <Button onClick={handleBack} className={classes.button}>
+                                    Back
+                                </Button>
+                            )}
+                        </React.Fragment>
                     )
                 }
             } else {
@@ -171,7 +259,7 @@ class RequestAddStaff extends Component {
                                 variant="contained"
                                 color="primary"
                                 className={classes.button}
-                                onClick={handleSubmit}
+                                onClick={this.handleSubmit}
                             >
                                 Submit
                                 </Button>
@@ -187,7 +275,35 @@ class RequestAddStaff extends Component {
                             )
                         }
                     </React.Fragment>
+                )
+            }
+        };
 
+        const renderResponse = () => {
+            if (activeStep === steps.length) {
+                if (error) {
+                    return (
+                        <Typography variant="h5" gutterBottom>
+                            Register employee failed
+                        </Typography>
+                    )
+                } else {
+                    return (
+                        <React.Fragment>
+                            <Typography variant="h5" gutterBottom>
+                                Register employee successfully
+                                    </Typography>
+                            <Typography variant="subtitle1">
+                                Your employee id is #{this.state.request.id}. Your generate password is <strong>{this.state.request.password}</strong>
+                            </Typography>
+                        </React.Fragment>
+                    )
+                }
+            } else {
+                return (
+                    <React.Fragment>
+                        {this.getStepContent(this.state.activeStep)}
+                    </React.Fragment>
                 )
             }
         };
@@ -218,20 +334,7 @@ class RequestAddStaff extends Component {
                         </Stepper>
 
                         <React.Fragment>
-                            {activeStep === steps.length ? (
-                                <React.Fragment>
-                                    <Typography variant="h5" gutterBottom>
-                                        Register employee successfully
-                                        </Typography>
-                                    <Typography variant="subtitle1">
-                                        Your employee id is #1212334534. Your generate password is <strong>asuhausdh</strong>
-                                        </Typography>
-                                </React.Fragment>
-                            ) : (
-                                    <React.Fragment>
-                                        {this.getStepContent(this.state.activeStep)}
-                                    </React.Fragment>
-                                )}
+                            {renderResponse()}
                         </React.Fragment>
                     </Paper>
                     <DialogActions className={classes.buttons}>
@@ -245,4 +348,4 @@ class RequestAddStaff extends Component {
 RequestAddStaff.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(RequestAddStaff);
+export default withStyles(styles)(withAlert()(RequestAddStaff));

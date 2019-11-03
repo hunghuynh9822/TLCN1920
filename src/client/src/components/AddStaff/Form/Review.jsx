@@ -8,15 +8,46 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const styles = theme => ({
+import {
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
 
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+const styles = theme => ({
+    subTitle: {
+        margin: '10px 0px -12px 10px',
+        width: '100%'
+    }
 });
 class Review extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { classes } = this.props;
+        const { classes, request } = this.props;
+        const data = {
+            positions: [
+                // {
+                //     id: 1,
+                //     name: 'Management'
+                // },
+                {
+                    id: 2,
+                    name: 'Team Leader'
+                }, {
+                    id: 3,
+                    name: 'Human Resource'
+                }, {
+                    id: 4,
+                    name: 'Staff'
+                }
+            ]
+        }
         return (
             <React.Fragment>
                 <Grid container spacing={3} >
@@ -25,7 +56,7 @@ class Review extends Component {
                             required
                             label="First name"
                             fullWidth
-                            defaultValue="Hello World"
+                            value={request.firstName}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -36,7 +67,7 @@ class Review extends Component {
                             required
                             label="Middle name"
                             fullWidth
-                            defaultValue="Hello World"
+                            value={request.middleName}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -47,7 +78,7 @@ class Review extends Component {
                             required
                             label="Last name"
                             fullWidth
-                            defaultValue="Hello World"
+                            value={request.lastName}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -57,7 +88,7 @@ class Review extends Component {
                         <TextField
                             label="Address information"
                             fullWidth
-                            defaultValue="Hello World"
+                            value={request.address}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -65,12 +96,15 @@ class Review extends Component {
                     </Grid>
 
                     <Grid item xs={12} sm={4}>
-                        <TextField
+                        <KeyboardDatePicker
+                            disableToolbar
+                            // variant="inline"
+                            format="yyyy-MM-dd"
                             label="Birthday"
-                            fullWidth
-                            defaultValue="Hello World"
-                            InputProps={{
-                                readOnly: true,
+                            value={request.birthday}
+                            readOnly
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
                             }}
                         />
                     </Grid>
@@ -79,7 +113,7 @@ class Review extends Component {
                         <TextField
                             label="Phone number"
                             fullWidth
-                            defaultValue="Hello World"
+                            value={request.phone}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -89,43 +123,57 @@ class Review extends Component {
                         <TextField
                             label="Email"
                             fullWidth
-                            defaultValue="Hello World"
+                            value={request.email}
                             InputProps={{
                                 readOnly: true,
                             }}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
-                            label="Position"
-                            fullWidth
-                            defaultValue="Hello World"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />
+                        <FormControl required fullWidth className={classes.formControl}>
+                            <InputLabel htmlFor="position-required">Position</InputLabel>
+                            <Select
+                                value={request.positionId}
+                                name="positionId"
+                                inputProps={{
+                                    name:"positionId",
+                                    id: 'position-required',
+                                    readOnly: true,
+                                }}
+                                className={classes.selectEmpty}
+                            >
+                                <MenuItem key={0} value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                {data.positions.map((value) => (
+                                    <MenuItem key={value.id} value={value.id}>{value.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
+                        <KeyboardDatePicker
+                            disableToolbar
+                            // variant="inline"
+                            format="yyyy-MM-dd"
                             label="Start Time"
-                            fullWidth
-                            defaultValue="Hello World"
-                            InputProps={{
-                                readOnly: true,
+                            value={request.startTime}
+                            readOnly
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
                             }}
                         />
                     </Grid>
 
-                    
-                    <Typography variant="h6" gutterBottom>
-                                Identification
-                            </Typography>
                     <Grid item container xs={12} spacing={3}>
+                        <Typography variant="h6" className={classes.subTitle} gutterBottom>
+                            Identification
+                        </Typography>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Number"
                                 fullWidth
-                                defaultValue="Hello World"
+                                value={request.idNumber}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -135,33 +183,36 @@ class Review extends Component {
                             <TextField
                                 label="Location"
                                 fullWidth
-                                defaultValue="Hello World"
+                                value={request.idLocation}
                                 InputProps={{
                                     readOnly: true,
                                 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField
+                            <KeyboardDatePicker
+                                disableToolbar
+                                // variant="inline"
+                                format="yyyy-MM-dd"
                                 label="Created at"
-                                fullWidth
-                                defaultValue="Hello World"
-                                InputProps={{
-                                    readOnly: true,
+                                value={request.idCreated}
+                                readOnly
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
                                 }}
                             />
                         </Grid>
                     </Grid>
 
-                    <Typography variant="h6" gutterBottom>
-                                Banking
-                            </Typography>
                     <Grid item container xs={12} spacing={3}>
+                        <Typography variant="h6" className={classes.subTitle} gutterBottom>
+                            Banking
+                        </Typography>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Number"
                                 fullWidth
-                                defaultValue="Hello World"
+                                value={request.bankNumber}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -171,7 +222,7 @@ class Review extends Component {
                             <TextField
                                 label="Name"
                                 fullWidth
-                                defaultValue="Hello World"
+                                value={request.bankName}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -181,7 +232,7 @@ class Review extends Component {
                             <TextField
                                 label="Branch"
                                 fullWidth
-                                defaultValue="Hello World"
+                                value={request.bankBranch}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -195,5 +246,6 @@ class Review extends Component {
 }
 Review.propTypes = {
     classes: PropTypes.object.isRequired,
+    request: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(Review);

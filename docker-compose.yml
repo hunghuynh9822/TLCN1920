@@ -91,8 +91,8 @@ services:
       - discovery
       - postgresql
       - gateway
-    ports:
-      - "8001:8001"
+    # ports:
+    #   - "8001:8001"
     networks:
       - pose
   # tasks:

@@ -8,20 +8,56 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const styles = theme => ({
+import {
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
 
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+const styles = theme => ({
+    formControl: {
+        // margin: theme.spacing(1),
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
 });
 class AccountForm extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { classes } = this.props;
+        const { classes, handleInputChange, handleDatePickerChange, request } = this.props;
+        const handleStartTime = (date) => {
+            handleDatePickerChange('startTime', date);
+        }
+        const data = {
+            positions:[
+                // {
+                //     id: 1,
+                //     name: 'Management'
+                // },
+                {
+                    id: 2,
+                    name: 'Team Leader'
+                },{
+                    id: 3,
+                    name: 'Human Resource'
+                },{
+                    id: 4,
+                    name: 'Staff'
+                }
+            ]
+        }
         return (
             <React.Fragment>
-                <Typography variant="h6" gutterBottom>
+                {/* <Typography variant="h6" gutterBottom>
                     Account Information
-                </Typography>
+                </Typography> */}
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={4}>
                         <TextField
@@ -31,6 +67,8 @@ class AccountForm extends Component {
                             label="First name"
                             fullWidth
                             autoComplete="firstName"
+                            value={request.firstName}
+                            onChange={handleInputChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={4}>
@@ -41,6 +79,8 @@ class AccountForm extends Component {
                             label="Middle name"
                             fullWidth
                             autoComplete="middleName"
+                            value={request.middleName}
+                            onChange={handleInputChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={4}>
@@ -51,6 +91,8 @@ class AccountForm extends Component {
                             label="Last name"
                             fullWidth
                             autoComplete="lastName"
+                            value={request.lastName}
+                            onChange={handleInputChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -61,6 +103,8 @@ class AccountForm extends Component {
                             label="Phone number"
                             fullWidth
                             autoComplete="phone"
+                            value={request.phone}
+                            onChange={handleInputChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -71,26 +115,45 @@ class AccountForm extends Component {
                             label="Email"
                             fullWidth
                             autoComplete="email"
+                            value={request.email}
+                            onChange={handleInputChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            id="positionId"
-                            name="positionId"
-                            label="Position"
-                            fullWidth
-                            autoComplete="positionId"
-                        />
+                        <FormControl required fullWidth className={classes.formControl}>
+                            <InputLabel htmlFor="position-required">Position</InputLabel>
+                            <Select
+                                value={request.positionId}
+                                onChange={handleInputChange}
+                                name="positionId"
+                                
+                                inputProps={{
+                                    id: 'position-required',
+                                }}
+                                className={classes.selectEmpty}
+                            >
+                                <MenuItem key={0} value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                {data.positions.map((value)=>(
+                                    <MenuItem key={value.id} value={value.id}>{value.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
+                        <KeyboardDatePicker
+                            disableToolbar
+                            // variant="inline"
+                            format="yyyy-MM-dd"
                             id="startTime"
                             name="startTime"
                             label="Start Time"
-                            fullWidth
-                            autoComplete="startTime"
+                            value={request.startTime}
+                            onChange={handleStartTime}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
                         />
                     </Grid>
                 </Grid>
@@ -100,5 +163,8 @@ class AccountForm extends Component {
 }
 AccountForm.propTypes = {
     classes: PropTypes.object.isRequired,
+    request: PropTypes.object.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
+    handleDatePickerChange: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(AccountForm);

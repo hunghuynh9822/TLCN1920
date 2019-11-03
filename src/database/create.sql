@@ -71,16 +71,16 @@ ALTER TABLE "public"."roles" ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");
 -- ----------------------------
 -- Records of roles
 -- ----------------------------
-INSERT INTO "public"."roles" VALUES (1, 'ROLE_ADMIN', 1567937957503, NULL);
-INSERT INTO "public"."roles" VALUES (2, 'ROLE_STAFF', 1567937962314, NULL);
-INSERT INTO "public"."roles" VALUES (3, 'ROLE_LEAD', 1567937962314, NULL);
-INSERT INTO "public"."roles" VALUES (4, 'ROLE_HR', 1567937962314, NULL);
+INSERT INTO "public"."roles" VALUES (1, 'ROLE_ADMIN', 1567937957503, 1567937957503);
+INSERT INTO "public"."roles" VALUES (2, 'ROLE_STAFF', 1567937962314, 1567937962314);
+INSERT INTO "public"."roles" VALUES (3, 'ROLE_LEAD', 1567937962314, 1567937962314);
+INSERT INTO "public"."roles" VALUES (4, 'ROLE_HR', 1567937962314, 1567937962314);
 
 CREATE TABLE IF NOT EXISTS "public"."user_roles" (
   "user_id" int8 NOT NULL,
   "role_id" int4 NOT NULL,
-  "create_at" int8 NOT NULL,
-  "update_at" int8
+  "created_at" int8 NOT NULL,
+  "updated_at" int8
 )
 ;
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "employee_roles_pkey" PRIMARY KEY ("user_id", "role_id");
@@ -89,7 +89,10 @@ ALTER TABLE "public"."user_roles" ADD CONSTRAINT "user_id" FOREIGN KEY ("user_id
 -- ----------------------------
 -- Records of user_roles
 -- ----------------------------
-INSERT INTO "public"."user_roles" VALUES (15714589149401, 1, 1571458915069, NULL);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 1, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 3, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 2, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 4, 1571458915069, 1571458915069);
 
 CREATE TABLE IF NOT EXISTS "public"."genuid" (
   "id" int4 NOT NULL,

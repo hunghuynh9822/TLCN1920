@@ -62,7 +62,7 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(jwtConfig.getPrefix(),token));
     }
 
-    private static final String EMPLOYEE_SERVICE = "http://employee-service/api/";
+    private static final String EMPLOYEE_SERVICE = "http://employee-service/api/employees";
 
 //    @GetMapping("/current")
 //    public ResponseEntity<?> getCurrentUser(@RequestHeader(required = false,name=USER_ID_HEADER)String userId) {
@@ -85,7 +85,7 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
         LOGGER.info("Current Id : {}",userId);
-        String url = EMPLOYEE_SERVICE+"{id}";
+        String url = EMPLOYEE_SERVICE+"/{id}";
         Map<String, String> params = new HashMap<>();
         params.put("id", userId);
         EmployeeResponse employeeResponse = restTemplate.getForObject(url,EmployeeResponse.class,params);

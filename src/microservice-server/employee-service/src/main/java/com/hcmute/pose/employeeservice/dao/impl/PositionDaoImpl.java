@@ -22,7 +22,7 @@ public class PositionDaoImpl implements PositionDao {
     private static Logger LOGGER = LoggerFactory.getLogger(RoleDaoImpl.class);
 
     private static String SQL_GET_ALL_POSITIONS = "SELECT * FROM positions";
-    private static String SQL_INSERT_POSITION = "INSERT INTO positions(name,created_at) VALUES(?,?)";
+    private static String SQL_INSERT_POSITION = "INSERT INTO positions(name,created_at,updated_at) VALUES(?,?)";
     private static String SQL_SELECT_POSITION_BY_NAME = "SELECT * FROM positions WHERE name LIKE ?";
     private static String SQL_SELECT_POSITION_BY_ID = "SELECT * FROM positions WHERE id = ?";
 
@@ -38,7 +38,7 @@ public class PositionDaoImpl implements PositionDao {
     public Optional<Position> createPosition(String name) throws DatabaseException {
         if(this.findByName(name) == null) {
             try{
-                databaseHelper.executeNonQuery(SQL_INSERT_POSITION, Statement.RETURN_GENERATED_KEYS,name,System.currentTimeMillis());
+                databaseHelper.executeNonQuery(SQL_INSERT_POSITION, Statement.RETURN_GENERATED_KEYS,name,System.currentTimeMillis(),System.currentTimeMillis());
                 return this.findByName(name);
             } catch (SQLException | TransactionException ex) {
                 LOGGER.error("[PositionDaoImpl]:[createPosition] GOT EXCEPTION ", ex);
