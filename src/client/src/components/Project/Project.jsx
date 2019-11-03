@@ -4,15 +4,11 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import { red } from '@material-ui/core/colors';
-import Tune from '@material-ui/icons/Tune';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AddStafftoProject from '../AddStafftoProject/AddStafftoProject';
-
+import Moment from 'moment';
 const styles = theme => ({
     card: {
         width: 245,
@@ -47,7 +43,7 @@ class Project extends Component {
                     action={
                         <div style={{ margin: '20px' }}>
                             {/* <Tune /> */}
-                            <AddStafftoProject/>
+                            <AddStafftoProject title={this.props.value.title}/>
                         </div>
 
                     }
@@ -58,7 +54,7 @@ class Project extends Component {
                             fontWeight: '400',
                             color: '#464c59',
                         }}>
-                            QLCTy
+                            {this.props.value.title}
                         </div>
                     }
                     subheader={
@@ -67,7 +63,7 @@ class Project extends Component {
                             fontSize: '0.7em',
                             fontWeight: '400',
                         }}>
-                            September 26, 2019
+                            {Moment(this.props.value.createTime).format('YYYY-MM-DD')}
                         </div>
                     }
                     style={{ padding: '0px' }} />

@@ -77,7 +77,6 @@ class Main extends Component {
         );
     }
     componentWillMount() {
-
     }
 
     componentWillUpdate() {
