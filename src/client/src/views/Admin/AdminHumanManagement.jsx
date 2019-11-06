@@ -19,7 +19,7 @@ const CustomPaginationTable = withStyles(theme => ({
 class AdminHumanManagement extends Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             columns: [
                 { id: 'no', label: 'No.', minWidth: 50, align: 'center' },
                 { id: 'name', label: 'Name', minWidth: 200 },
@@ -29,18 +29,32 @@ class AdminHumanManagement extends Component {
                 { id: 'action', label: 'Action', minWidth: 150, align: 'center' },
             ],
             rowsActive: [],
-            rowsWaiting:[],
+            rowsWaiting: [],
         }
     }
 
-    createData(no, name, position, phone, address) {
-        const action = ['view', 'delete'];
-        return { no, name, position, phone, address, action };
+    testCallAction(row) {
+        console.log(row);
+        console.log(row.data);
     }
-    
-    createDataWaiting(no, name, position, phone, address) {
-        const action = ['confirm'];
-        return { no, name, position, phone, address, action };
+
+    createData(no, name, position, phone, address, data) {
+        const action = [{
+            name: 'view',
+            method: this.testCallAction
+        }, {
+            name: 'delete',
+            method: this.testCallAction
+        }];
+        return { no, name, position, phone, address, action, data };
+    }
+
+    createDataWaiting(no, name, position, phone, address, data) {
+        const action = [{
+            name: 'confirm',
+            method: this.testCallAction
+        }];
+        return { no, name, position, phone, address, action, data };
     }
 
     componentDidMount() {
@@ -55,14 +69,14 @@ class AdminHumanManagement extends Component {
                     let position = employee.position.name;
                     let phone = employee.phone;
                     let address = employee.address;
-                    activeEmployees.push(this.createData(index + 1, name, position, phone, address));
+                    activeEmployees.push(this.createData(index + 1, name, position, phone, address, employee));
                 })
                 response.waitingEmployees.map((employee, index) => {
                     let name = employee.firstName + " " + employee.middleName + " " + employee.lastName;
                     let position = employee.position.name;
                     let phone = employee.phone;
                     let address = employee.address;
-                    waitingEmployees.push(this.createDataWaiting(index + 1, name, position, phone, address));
+                    waitingEmployees.push(this.createDataWaiting(index + 1, name, position, phone, address, employee));
                 })
                 this.setState({
                     rowsActive: activeEmployees,
@@ -76,8 +90,8 @@ class AdminHumanManagement extends Component {
     }
     render() {
         const { classes } = this.props;
-        const {routes} = this.props;
-        const { columns, rowsActive, rowsWaiting} = this.state;
+        const { routes } = this.props;
+        const { columns, rowsActive, rowsWaiting } = this.state;
         console.log(routes);
         return (
             <div className={classes.root}>
