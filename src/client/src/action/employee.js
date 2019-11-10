@@ -27,3 +27,17 @@ export function getAdminEmployees() {
     });
 }
 
+export function getRoles() {
+    return request({
+        url: superUrl + "/roles",
+        method: 'GET',
+    });
+}
+
+export function updateState(requestUpdate) {
+    return request({
+        url: superUrl + "/state",
+        method: 'PATCH',
+        data: JSON.stringify(requestUpdate)
+    });
+}

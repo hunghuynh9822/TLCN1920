@@ -95,7 +95,7 @@ class PaginationTable extends Component {
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                    method(row);
+                    method('view',row);
                 }}
                 style={{
                     width: '60px',
@@ -114,7 +114,7 @@ class PaginationTable extends Component {
                 fullWidth
                 variant="contained"
                 onClick={() => {
-                    method(row);
+                    method('confirm',row);
                 }}
                 style={{
                     width: '80px',
@@ -135,7 +135,7 @@ class PaginationTable extends Component {
                 fullWidth
                 variant="contained"
                 onClick={() => {
-                    method(row);
+                    method('delete',row);
                 }}
                 style={{
                     width: '80px',

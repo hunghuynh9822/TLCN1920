@@ -132,7 +132,7 @@ class AccountForm extends Component {
                                 }}
                                 className={classes.selectEmpty}
                             >
-                                <MenuItem key={0} value="">
+                                <MenuItem key={-1} value="">
                                     <em>None</em>
                                 </MenuItem>
                                 {data.positions.map((value)=>(

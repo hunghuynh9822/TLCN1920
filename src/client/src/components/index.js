@@ -30,3 +30,7 @@ export {default as PrivateRoute} from './Route/PrivateRoute.jsx';
 export {default as OAuth2RedirectHandler} from './OAuth2/OAuth2RedirectHandler.jsx';
 export {default as Fade} from './Animation/Fade.jsx';
 export {default as RequestAddStaff} from './AddStaff/RequestAddStaff.jsx';
+export {default as CustomDialog } from './Dialog/CustomDialog.jsx';
+export {default as ViewEmployee } from './Form/ViewEmployee.jsx';
+export {default as SetupAccount } from './Form/SetupAccount.jsx';
+export {default as ConfirmDialog } from './Dialog/ConfirmDialog.jsx';

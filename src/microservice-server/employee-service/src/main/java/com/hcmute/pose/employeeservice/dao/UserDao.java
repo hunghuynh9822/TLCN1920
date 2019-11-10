@@ -12,6 +12,7 @@ public interface UserDao {
     Optional<Long> getLastId();
     Optional<User> createUser(User user);
     void addRoleToUser(Long userId,Long roleId) throws SQLException, TransactionException;
+    void removeRoleToUser(Long userId,Long roleId) throws SQLException, TransactionException;
     List<User> getAll() throws SQLException;
     List<User> getAllWaiting() throws SQLException;
     void updateStatus(Long userId, UserStatus status) throws SQLException, TransactionException;
