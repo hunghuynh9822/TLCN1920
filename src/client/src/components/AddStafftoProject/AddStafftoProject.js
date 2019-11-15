@@ -67,7 +67,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   );
 });
 
-export default function AddStafftoProject({title}) {
+export default function AddStafftoProject({title,listPOP}) {
   
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -88,16 +88,17 @@ export default function AddStafftoProject({title}) {
  
 
   const [listNewUesr , setListNewUser] = React.useState([]);
-  const listUser = [
-    {
-      "id":"1",
-      "name":"Liem"
-    },
-    {
-      "id":"2",
-      "name":"Hung"
-    }
-  ]
+  const listUser = listPOP;
+  // const listUser = [
+  //   {
+  //     "id":"1",
+  //     "name":"Liem"
+  //   },
+  //   {
+  //     "id":"2",
+  //     "name":"Hung"
+  //   }
+  // ]
     
   const pushNewUser = event => {
     let temp = [...listNewUesr,{
@@ -128,6 +129,7 @@ export default function AddStafftoProject({title}) {
       .then(res => {
         console.log(res);
         console.log(res.data);
+        
       })
   }
 
@@ -157,7 +159,7 @@ export default function AddStafftoProject({title}) {
             <div>
             <FormControl>
             <InputLabel htmlFor="my-input">Descriptions</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" />
+            <Input id="my-input" aria-describedby="my-helper-text" value={title}/>
             </FormControl>
             </div>
             <h6>Procject Admin</h6>
@@ -167,7 +169,7 @@ export default function AddStafftoProject({title}) {
               liem
             </Fab>            
             </div>
-            <h6>Procject Member {title}</h6>
+            <h6>Procject Member</h6>
             <div>           
             <Fab onClick={pushNewUser} color="primary" size="small" aria-label="add" className={classes.fab}><AddIcon /></Fab>
             {
@@ -175,7 +177,7 @@ export default function AddStafftoProject({title}) {
               return <Fab key={i} variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />{user.name}</Fab>
             })
             }
-              {
+            {
               listNewUesr.map((user,i)=>{
               return <Fab key={i} variant="extended" size="small" aria-label="delete" className={classnames(classes.fab,classes.input)}><PersonIcon className={classes.extendedIcon} />{user.name}</Fab>
             })

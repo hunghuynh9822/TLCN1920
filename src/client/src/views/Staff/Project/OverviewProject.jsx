@@ -20,17 +20,18 @@ class OverviewProject extends Component {
         projects : []
     }
 
+    addPro(pro){
+        var temp = this.state.projects;
+        temp.push(pro);
+        this.setState({projects : temp });
+    }
+
     componentDidMount(){
-        axios.get('http://localhost:8080/promicro/listProject')
+        axios.get('http://192.168.200.1:8080/promicro/listProject')
         .then(response =>{
             console.log(response.data);
-            // console.log(response.status);
-            // console.log(response.statusText);
-            // console.log(response.headers);
-            // console.log(response.config);
             const projects = response.data;
-            this.setState({projects})
-            console.log(response.data);
+            this.setState({projects : projects})
             
         })
         .catch(error => console.log("ok loi ne "+error))
@@ -41,11 +42,11 @@ class OverviewProject extends Component {
         return (
             <div className={classes.root}>
                 <CollapsibleSection title="Recent Projects">
-                    {this.state.projects.map(item => <Project value={item} />)}
+                    {this.state.projects.map(item => <Project value={item}  />)}
                 </CollapsibleSection>
                 <CollapsibleSection title="My Project">
                     {this.state.projects.map(item => <Project value={item} />)}
-                    <NewProject />
+                    <NewProject addPro={this.addPro} />
                 </CollapsibleSection>
             </div>
         );

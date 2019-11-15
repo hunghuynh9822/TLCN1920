@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AddStafftoProject from '../AddStafftoProject/AddStafftoProject';
 import Moment from 'moment';
+import axios from 'axios';
 const styles = theme => ({
     card: {
         width: 245,
@@ -35,6 +36,19 @@ class Project extends Component {
     constructor(props) {
         super(props);
     }
+
+    state={
+        listPOP : []
+    }
+    componentDidMount(){
+        axios.get('http://192.168.200.1:8080/promicro/listPOP')
+        .then(response =>{
+            console.log(response.data);
+            const listPOP = response.data;
+            this.setState({listPOP : listPOP})
+        })
+        .catch(error => console.log("ok loi ne "+error))
+    }
     render() {
         const { classes } = this.props;
         return (
@@ -43,7 +57,7 @@ class Project extends Component {
                     action={
                         <div style={{ margin: '20px' }}>
                             {/* <Tune /> */}
-                            <AddStafftoProject title={this.props.value.title}/>
+                            <AddStafftoProject  title={this.props.value.title} listPOP={this.state.listPOP}/>
                         </div>
 
                     }

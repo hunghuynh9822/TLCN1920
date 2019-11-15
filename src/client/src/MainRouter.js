@@ -88,7 +88,7 @@ class MainRouter extends Component {
       <React.Fragment>
         <Switch>
           <PrivateRoute path="/home" component={AsyncHome} />
-          <PrivateRoute path="/admin" component={AsyncMain} />
+          <Route path="/admin" component={AsyncMain} />
           <PrivateRoute path="/hr" component={AsyncMain} />
           <PrivateRoute path="/staff" component={AsyncMain} />
           <PrivateRoute path="/lead" component={AsyncMain} />

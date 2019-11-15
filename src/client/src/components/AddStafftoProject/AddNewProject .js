@@ -73,9 +73,10 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   );
 });
 
-export default function AddStafftoProject() {
+export default function AddStafftoProject(addPro) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -103,10 +104,12 @@ export default function AddStafftoProject() {
     // const employeeid = {
     //   employeeid: this.state.employeeid
     // };
-    axios.post(`http://localhost:8080/promicro/create`, { title , employeeid })
+ 
+    axios.post(`http://192.168.200.1:8080/promicro/create`, { title , employeeid })
       .then(res => {
         console.log(res);
         console.log(res.data);
+        addPro(res.data);
       })
   }
   return (
