@@ -16,6 +16,9 @@ zuul:
     tasks:
       path: /taskmicro/**
       service-id: task-service
+    projects:
+      path: /promicro/**
+      service-id: project-service
     auth:
       path: /auth/**
       service-id: auth-service
