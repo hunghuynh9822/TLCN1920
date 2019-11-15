@@ -67,7 +67,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   );
 });
 
-export default function AddStafftoProject({title,listPOP}) {
+export default function AddStafftoProject({project,listPOP}) {
   
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -101,10 +101,7 @@ export default function AddStafftoProject({title,listPOP}) {
   // ]
     
   const pushNewUser = event => {
-    let temp = [...listNewUesr,{
-      "id":"3",
-      "name":"Liem2"
-    }]
+    let temp = [...listNewUesr,123]
     setListNewUser(temp)
 
   }
@@ -112,24 +109,18 @@ export default function AddStafftoProject({title,listPOP}) {
   const handleSubmit = event => {
     event.preventDefault();
     console.log("Da vo submit");
-    let request = {
-      "idPro": "1",
-      "idListPer": list
-    }
-//     let idPro = "1";
-//     let idListPer= [1 ,2 ,3];
 
-    // const title = {
-    //   title: this.state.title
-    // };
-    // const employeeid = {
-    //   employeeid: this.state.employeeid
-    // };
-    axios.post(`http://localhost:8080/promicro/createPOP`, { request })
+    var request = {
+      idPro : project.id,
+      idListPer : listNewUesr
+    }
+
+    axios.post(`http://192.168.200.1:8080/promicro/createPOP`, { idPro : project.id, idListPer : listNewUesr})
       .then(res => {
         console.log(res);
         console.log(res.data);
-        
+      }).catch(err=>{ 
+        console.log(err);
       })
   }
 
@@ -159,7 +150,7 @@ export default function AddStafftoProject({title,listPOP}) {
             <div>
             <FormControl>
             <InputLabel htmlFor="my-input">Descriptions</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" value={title}/>
+            <Input id="my-input" aria-describedby="my-helper-text" value={project.title}/>
             </FormControl>
             </div>
             <h6>Procject Admin</h6>

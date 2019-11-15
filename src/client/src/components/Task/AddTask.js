@@ -84,13 +84,27 @@ export default function AddTask() {
     setDescript(event.target.value);
   }
 
+  const [date1, setDate1] = React.useState(new Date());
+  const handleDate1 = (date) => {
+    setDate1(date);
+  }
+
+  const [date2, setDate2] = React.useState(new Date());
+  const handleDate2 = (date) => {
+    setDate2(date);
+  }
+
   const handleSubmit = event => {
     event.preventDefault();
-    
-    console.log("day la name : " + nametask);
     console.log("day la descript : " + descript);
-    
- 
+    console.log("day la ngay : " + date1);
+    console.log("day la ngay : " + date1.getTime());
+
+    const date11 = date1;
+    const date22 = date2;
+    const diffTime = Math.abs(date22 - date11);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    console.log("so ngay "+diffDays);
   }
    
   return (
@@ -117,12 +131,6 @@ export default function AddTask() {
             <h2 id="spring-modal-title" className={classes.title}>Add Task</h2>
             <div>
             <FormControl className={classes.buttonSubmit}>
-            <InputLabel htmlFor="my-input" >Name Task</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" nametask="nametask" onChange={handleNametask}/>
-            </FormControl>
-            </div>
-            <div>
-            <FormControl className={classes.buttonSubmit}>
             <InputLabel htmlFor="my-input">Description</InputLabel>
             <Input id="my-input" aria-describedby="my-helper-text" descript="descript" onChange={handleDescript}/>
             </FormControl>
@@ -130,20 +138,16 @@ export default function AddTask() {
             <h4>Time start</h4>
             <div style={{display:'flex'}}>
               <div>
-              <MaterialUIPickers />
+              <MaterialUIPickers getDate={handleDate1}/>
               </div> 
-            <div style={{marginLeft:'10px'}}>
-            <Hour/>
-            </div>
+        
             </div>
             <h4>Time end</h4>
             <div style={{display:'flex'}}> 
               <div>
-              <MaterialUIPickers />
+              <MaterialUIPickers getDate={handleDate2}/>
               </div> 
-            <div style={{marginLeft:'10px'}}>
-            <Hour/>
-            </div>
+        
             </div>
             <div>
             <Button type="submit" variant="contained" color="primary" className={classnames(classes.button,classes.buttonSubmit)}>

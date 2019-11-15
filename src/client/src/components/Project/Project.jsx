@@ -41,7 +41,8 @@ class Project extends Component {
         listPOP : []
     }
     componentDidMount(){
-        axios.get('http://192.168.200.1:8080/promicro/listPOP')
+        var url = "http://192.168.200.1:8080/promicro/listPOP/"+ this.props.value.id
+        axios.get(url)
         .then(response =>{
             console.log(response.data);
             const listPOP = response.data;
@@ -57,7 +58,7 @@ class Project extends Component {
                     action={
                         <div style={{ margin: '20px' }}>
                             {/* <Tune /> */}
-                            <AddStafftoProject  title={this.props.value.title} listPOP={this.state.listPOP}/>
+                            <AddStafftoProject  project={this.props.value} listPOP={this.state.listPOP}/>
                         </div>
 
                     }

@@ -26,6 +26,8 @@ class Task extends Component {
         points : 0, 
     }
 
+    
+
     componentDidMount() {
         var lSubmited = []
         var lEmty = []

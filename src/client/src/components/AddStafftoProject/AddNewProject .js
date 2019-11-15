@@ -110,6 +110,8 @@ export default function AddStafftoProject(addPro) {
         console.log(res);
         console.log(res.data);
         addPro(res.data);
+      }).catch(err=>{ 
+        console.log(err);
       })
   }
   return (
