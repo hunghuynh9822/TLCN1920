@@ -34,3 +34,6 @@ export {default as CustomDialog } from './Dialog/CustomDialog.jsx';
 export {default as ViewEmployee } from './Form/ViewEmployee.jsx';
 export {default as SetupAccount } from './Form/SetupAccount.jsx';
 export {default as ConfirmDialog } from './Dialog/ConfirmDialog.jsx';
+//Information
+export {default as Avartar } from './Infomation/Avartar.jsx';
+export {default as InformationForm } from './Infomation/InformationForm.jsx';

@@ -5,7 +5,7 @@ export { default as Request } from './Common/Request.jsx';
 export { default as Notification } from './Common/Notification.jsx';
 export { default as ProjectsManagement} from './Staff/ProjectsManagement.jsx';
 export { default as TimeKeeping} from './HR/TimeKeeping.jsx';
-export {default as Information}from './Common/Infomation.jsx';
+export {default as Information}from './Common/Information.jsx';
 export {default as AdminHumanManagement} from './Admin/AdminHumanManagement.jsx';
 export {default as AdminDashboard} from './Admin/AdminDashboard.jsx';
 export {default as OverviewProject} from './Staff/Project/OverviewProject.jsx';

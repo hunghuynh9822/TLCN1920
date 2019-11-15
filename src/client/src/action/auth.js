@@ -6,6 +6,7 @@ import {request} from './'
 
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
+export const UPDATE_USER = 'UPDATE_USER'
 
 export function authenticate(authenticated, currentUser) {
     return { type: LOG_IN, authenticated, currentUser};
@@ -15,6 +16,10 @@ export function logout() {
   let authenticated = false;
   let currentUser = null;
   return { type: LOG_OUT, authenticated, currentUser};
+}
+
+export function updateUser(user){
+  return { type: UPDATE_USER, user}
 }
 
 export function getCurrentUser() {
