@@ -30,8 +30,10 @@ class AdminHumanManagement extends Component {
                 { id: 'address', label: 'Address', minWidth: 400 },
                 { id: 'action', label: 'Action', minWidth: 150, align: 'center' },
             ],
+
             rowsActive: [],
-            rows  : [],
+            rowsWaiting:[],
+
             steps: [],
             open: false,
             error: null,

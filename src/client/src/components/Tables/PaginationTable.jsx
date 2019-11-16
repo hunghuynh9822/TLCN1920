@@ -152,7 +152,7 @@ class PaginationTable extends Component {
         const { classes } = this.props;
         const { columns, rows } = this.props;
         const { page, rowsPerPage } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+        // const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
@@ -220,6 +220,6 @@ class PaginationTable extends Component {
 PaginationTable.propTypes = {
     classes: PropTypes.object.isRequired,
     columns: PropTypes.array.isRequired,
-    rows: PropTypes.array.isRequired,
+    rows: PropTypes.array,
 };
 export default withStyles(styles)(PaginationTable);
