@@ -34,6 +34,15 @@ class Sidebar extends Component {
             return window.location.pathname.includes(layout+path);
         }
         const { color, logo, image, logoText, router } = this.props;
+        const { projectId } = this.props;
+        const getParamProjectId = (path, projectId) => {
+            let temp = path.replace(':projectId', 'project');
+            if(projectId !== null){
+                temp = path.replace(':projectId', projectId);
+            }
+            console.log('Get param project id : '+ temp);
+            return temp;
+        }
         var links = (
             <List className={classes.list}>
                 {router.routes.map((prop, key) => {
@@ -43,9 +52,13 @@ class Sidebar extends Component {
                     const whiteFontClasses = classNames({
                         [" " + classes.whiteFont]: activeRoute(prop.layout,prop.path)
                     });
+                    let path = prop.path;
+                    if(path.includes(':projectId')){
+                        path = getParamProjectId(path, projectId);
+                    }
                     return (
                         <NavLink
-                            to={prop.layout + prop.path}
+                            to={prop.layout + path}
                             className={classes.item}
                             activeClassName="active"
                             key={key}
@@ -182,7 +195,8 @@ Sidebar.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     return {
         mobileOpen: state.layout.mobileOpen,
-        desktopOpen: state.layout.desktopOpen
+        desktopOpen: state.layout.desktopOpen,
+        projectId: state.project.projectId,
     }
 }
 

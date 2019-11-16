@@ -46,9 +46,13 @@ class TaskManagement extends Component {
         ];
         const { classes } = this.props;
         const { match } = this.props;
-        console.log("TaskManagement : ");
-        console.log(match);
-        console.log(tabs);
+        let projectId = this.props.match.params.projectId;
+        console.log("Tasks of projectId : " + projectId);
+        if (projectId === 'project') {
+            return (
+                <div>No project selected</div>
+            )
+        }
         return (
             <div className={classes.root}>
                 <div className={classes.sub_layout_header}>
