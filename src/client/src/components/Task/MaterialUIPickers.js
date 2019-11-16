@@ -9,7 +9,7 @@ import {
 
 export default function MaterialUIPickers({getDate}) {
   // The first commit of Material-UI
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2019-12-12'));
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
 
   const handleDateChange = date => {
     setSelectedDate(date);
@@ -21,8 +21,8 @@ export default function MaterialUIPickers({getDate}) {
     <Grid container justify="space-around">
       <KeyboardDatePicker
         margin="normal"
-        id="date-picker-dialog"
-        label="Date picker dialog"
+        // id="date-picker-dialog"
+        // label="Date picker dialog"
         format="MM/dd/yyyy"
         value={selectedDate}
         onChange={handleDateChange}

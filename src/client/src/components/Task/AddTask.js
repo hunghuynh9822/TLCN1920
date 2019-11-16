@@ -13,6 +13,7 @@ import Input from '@material-ui/core/Input';
 import MaterialUIPickers from './MaterialUIPickers'
 import Hour from './hour'
 import Add from '@material-ui/icons/Add';
+import axios from 'axios';
 const useStyles = makeStyles(theme => ({
   modal: {
     display: 'flex',
@@ -63,7 +64,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   );
 });
 
-export default function AddTask() {
+export default function AddTask({user}) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -84,27 +85,29 @@ export default function AddTask() {
     setDescript(event.target.value);
   }
 
-  const [date1, setDate1] = React.useState(new Date());
-  const handleDate1 = (date) => {
-    setDate1(date);
-  }
-
   const [date2, setDate2] = React.useState(new Date());
   const handleDate2 = (date) => {
     setDate2(date);
   }
 
   const handleSubmit = event => {
-    event.preventDefault();
-    console.log("day la descript : " + descript);
-    console.log("day la ngay : " + date1);
-    console.log("day la ngay : " + date1.getTime());
-
-    const date11 = date1;
+    event.preventDefault();   
+    const date11 = new Date();
     const date22 = date2;
     const diffTime = Math.abs(date22 - date11);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-    console.log("so ngay "+diffDays);
+    axios.post(`http://192.168.200.1:8080/taskmicro/create`, {
+      employeeId:user.id,
+      projectId:user.proID,
+      title:descript,
+      duration:diffDays
+    })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      }).catch(err=>{ 
+        console.log(err);
+      })
   }
    
   return (
@@ -135,13 +138,7 @@ export default function AddTask() {
             <Input id="my-input" aria-describedby="my-helper-text" descript="descript" onChange={handleDescript}/>
             </FormControl>
             </div>
-            <h4>Time start</h4>
-            <div style={{display:'flex'}}>
-              <div>
-              <MaterialUIPickers getDate={handleDate1}/>
-              </div> 
-        
-            </div>
+           
             <h4>Time end</h4>
             <div style={{display:'flex'}}> 
               <div>
