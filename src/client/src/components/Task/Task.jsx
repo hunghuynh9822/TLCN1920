@@ -27,7 +27,9 @@ class Task extends Component {
     
 
     componentDidMount() {
-        var url = "http://192.168.200.1:8080/taskmicro/listTask?employeeId="+this.props.user.id+"&projectId="+ this.props.user.proID
+        //var url = "http://192.168.200.1:8080/taskmicro/listTask?employeeId="+this.props.user.id+"&projectId="+ this.props.user.proID
+        var url = "http://192.168.0.104:8080/taskmicro/listTask?employeeId="+this.props.user.id+"&projectId="+ this.props.user.proID
+        
         axios.get(url)
         .then(response =>{
             const listTask = response.data;

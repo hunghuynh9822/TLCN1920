@@ -27,7 +27,8 @@ class OverviewProject extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://192.168.200.1:8080/promicro/listProject')
+        //axios.get('http://192.168.200.1:8080/promicro/listProject')
+        axios.get('http://192.168.0.104:8080/promicro/listProject')
         .then(response =>{
             console.log(response.data);
             const projects = response.data;
