@@ -41,3 +41,19 @@ export function updateState(requestUpdate) {
         data: JSON.stringify(requestUpdate)
     });
 }
+
+
+export function getEmployee(employeeId) {
+    return request({
+        url: url + "/" + employeeId,
+        method: 'GET',
+    });
+}
+
+export function updateEmployee(employeeId, employeeData) {
+    return request({
+        url: url + "/" + employeeId,
+        method: 'PUT',
+        data: JSON.stringify(employeeData)
+    });
+}

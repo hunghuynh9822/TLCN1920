@@ -21,7 +21,6 @@ export {default as Notifi} from './AddNotifi/Notifi';
 export {default as AddRequest} from './AddRequest/AddRequest';
 export {default as Infomate} from './Infomation/Infomation';
 export {default as CustomLineChart} from './Chart/CustomLineChart.jsx';
-export {default as AddStaff} from './AddStaff/AddStaff';
 export {default as AddNewProject} from './AddStafftoProject/AddNewProject ';
 export {default as CollapsibleSection}from './Section/CollapsibleSection.jsx';
 export {default as CenteredTabs} from './Tab/CenteredTabs.jsx';

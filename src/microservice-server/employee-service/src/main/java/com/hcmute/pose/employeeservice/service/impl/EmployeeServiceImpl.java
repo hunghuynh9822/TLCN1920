@@ -1,5 +1,6 @@
 package com.hcmute.pose.employeeservice.service.impl;
 
+import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.employeeservice.dao.EmployeeDao;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
 import com.hcmute.pose.employeeservice.model.*;
@@ -28,5 +29,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Optional<Employee> findById(Long employeeId) throws SQLException {
         return employeeDao.findById(employeeId);
+    }
+
+    @Override
+    public void updateEmployee(Long id, String firstName, String middleName, String lastName, ID identification, String address, Bank bank, Long birthday) throws SQLException, TransactionException {
+        Employee employee = new Employee(id, firstName, middleName, lastName, identification, address, bank, birthday);
+        employeeDao.updateEmployee(employee);
     }
 }

@@ -7,6 +7,7 @@ import com.hcmute.pose.employeeservice.model.Role;
 import com.hcmute.pose.employeeservice.payload.StateRequest;
 import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
 import com.hcmute.pose.employeeservice.payload.EmployeeResponse;
+import com.hcmute.pose.employeeservice.payload.UpdateEmployeeRequest;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,4 +22,5 @@ public interface EmployeeServiceBuz {
     String checkPhoneOrEmail(String phoneOrEmail);
     Optional<EmployeeResponse> getEmployee(Long employeeId) throws BuzException;
     List<Role> getRoles();
+    void updateEmployee(Long employeeId, UpdateEmployeeRequest request) throws SQLException, TransactionException;
 }

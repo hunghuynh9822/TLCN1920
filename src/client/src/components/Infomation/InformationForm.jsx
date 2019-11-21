@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { withAlert } from 'react-alert'
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
 
 import {
     KeyboardDatePicker,
+    DatePicker 
 } from '@material-ui/pickers';
 
 import InputLabel from '@material-ui/core/InputLabel';
@@ -17,6 +20,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
+import { getEmployee, updateEmployee } from '../../action/employee';
 
 const styles = theme => ({
     subTitle: {
@@ -27,12 +32,115 @@ const styles = theme => ({
 class InformationForm extends Component {
     constructor(props) {
         super(props);
-        this.setState = {
+        this.state = {
+            readOnly: true,
+            requestUpdate: {
+                firstName: '',
+                middleName: '',
+                lastName: '',
+                address: '',
+                birthday: new Date(),
+                idNumber: '',
+                idCreated: new Date(),
+                idLocation: '',
+                bankNumber: '',
+                bankName: '',
+                bankBranch: ''
+            },
+        }
 
+        this.handleUpdateEmployee = this.handleUpdateEmployee.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleDatePickerChange = this.handleDatePickerChange.bind(this);
+        this.handleBirthday = this.handleBirthday.bind(this);
+        this.handleIdCreatedAt = this.handleIdCreatedAt.bind(this);
+    }
+
+    componentDidMount() {
+        const { alert } = this.props;
+        const { curEmployee } = this.props;
+        console.log("Current employee : " + JSON.stringify(curEmployee));
+        getEmployee(curEmployee.id)
+            .then(response => {
+                this.setState({
+                    requestUpdate: {
+                        firstName: response.firstName,
+                        middleName: response.middleName,
+                        lastName: response.lastName,
+                        address: response.address,
+                        birthday: response.birthday,
+                        idNumber: response.identification.idNumber,
+                        idCreated: response.identification.idCreated,
+                        idLocation: response.identification.idLocation,
+                        bankNumber: response.bank.bankNumber,
+                        bankName: response.bank.bankName,
+                        bankBranch: response.bank.bankBranch
+                    }
+                })
+            })
+            .catch(error => {
+                console.log(error);
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+            });
+    }
+
+    handleInputChange(event) {
+        const { name, value } = event.target;
+        // console.log(`handleInputChange - Name : ${name} value : ${value}`);
+        this.setState(prevState => {
+            let requestUpdate = Object.assign({}, prevState.requestUpdate);
+            requestUpdate[name] = value;
+            return { requestUpdate };
+        })
+    }
+
+    handleBirthday(date) {
+        this.handleDatePickerChange('birthday', date);
+    }
+
+    handleIdCreatedAt(date) {
+        this.handleDatePickerChange('idCreated', date);
+    }
+
+    handleDatePickerChange(name, date) {
+        // console.log(`handleInputChange - Name : ${name} value : ${date}`);
+        this.setState(prevState => {
+            let requestUpdate = Object.assign({}, prevState.requestUpdate);
+            requestUpdate[name] = date;
+            return { requestUpdate };
+        })
+    }
+
+    handleUpdateEmployee() {
+        const { alert } = this.props;
+        const { curEmployee } = this.props;
+        const { requestUpdate, readOnly } = this.state;
+        const { handleUpdate } = this.props;
+        if (readOnly) {
+            this.setState({
+                readOnly: false
+            })
+        } else {
+            updateEmployee(curEmployee.id, requestUpdate)
+                .then((response) => {
+                    console.log(response);
+                    this.setState({
+                        readOnly: true
+                    })
+                    handleUpdate();
+                })
+                .catch(error => {
+                    console.log(error);
+                    //(error && error.message) || 
+                    alert.error('Oops! Something went wrong. Please try again!');
+                });
         }
     }
+
     render() {
         const { classes } = this.props;
+        const { requestUpdate, readOnly } = this.state;
         const { curEmployee } = this.props;
         const data = {
             positions: [
@@ -52,70 +160,81 @@ class InformationForm extends Component {
                 }
             ]
         }
-        console.log("Current employee : " + JSON.stringify(curEmployee));
         return (
             <React.Fragment>
                 <Grid container spacing={3} >
+                    <Grid item xs={12}>
+                        <Button variant="contained" color="primary" onClick={this.handleUpdateEmployee} className={classes.button}>
+                            {readOnly ? "Edit" : "Save"}
+                        </Button>
+                    </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
-                            required
                             label="First name"
                             fullWidth
-                            value={curEmployee.firstName}
+                            value={requestUpdate.firstName}
                             InputProps={{
-                                readOnly: true,
+                                readOnly: Boolean(readOnly),
                             }}
+                            onChange={this.handleInputChange}
+                            name="firstName"
                         />
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
-                            required
                             label="Middle name"
                             fullWidth
-                            value={curEmployee.middleName}
+                            value={requestUpdate.middleName}
                             InputProps={{
-                                readOnly: true,
+                                readOnly: Boolean(readOnly),
                             }}
+                            onChange={this.handleInputChange}
+                            name="middleName"
                         />
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
-                            required
                             label="Last name"
                             fullWidth
-                            value={curEmployee.lastName}
+                            value={requestUpdate.lastName}
                             InputProps={{
-                                readOnly: true,
+                                readOnly: Boolean(readOnly),
                             }}
+                            onChange={this.handleInputChange}
+                            name="lastName"
                         />
                     </Grid>
                     <Grid item xs={12} sm={8}>
                         <TextField
                             label="Address information"
                             fullWidth
-                            value={curEmployee.address}
+                            value={requestUpdate.address}
                             InputProps={{
-                                readOnly: true,
+                                readOnly: Boolean(readOnly),
                             }}
+                            onChange={this.handleInputChange}
+                            name="address"
                         />
                     </Grid>
 
                     <Grid item xs={12} sm={4}>
-                        <KeyboardDatePicker
-                            disableToolbar
-                            // variant="inline"
+                        <DatePicker
+                            disableFuture
+                            openTo="year"
                             format="yyyy-MM-dd"
-                            label="Birthday"
-                            value={curEmployee.birthday}
-                            readOnly
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
+                            // format="dd-MM-yyyy"
+                            label="Date of birth"
+                            views={["year", "month", "date"]}
+                            value={requestUpdate.birthday}
+                            readOnly={readOnly}
+                            onChange={this.handleBirthday}
+                            name="birthday"
                         />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                         <TextField
+                            required
                             label="Phone number"
                             fullWidth
                             value={curEmployee.phone}
@@ -126,6 +245,7 @@ class InformationForm extends Component {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
+                            required
                             label="Email"
                             fullWidth
                             value={curEmployee.email}
@@ -157,16 +277,14 @@ class InformationForm extends Component {
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <KeyboardDatePicker
+                        <DatePicker
+                            required
                             disableToolbar
-                            // variant="inline"
+                            variant="inline"
                             format="yyyy-MM-dd"
                             label="Start Time"
                             value={curEmployee.startTime}
                             readOnly
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
                         />
                     </Grid>
 
@@ -178,33 +296,37 @@ class InformationForm extends Component {
                             <TextField
                                 label="Number"
                                 fullWidth
-                                value={curEmployee.idNumber}
+                                value={requestUpdate.idNumber}
                                 InputProps={{
-                                    readOnly: true,
+                                    readOnly: Boolean(readOnly),
                                 }}
+                                onChange={this.handleInputChange}
+                                name="idNumber"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Location"
                                 fullWidth
-                                value={curEmployee.idLocation}
+                                value={requestUpdate.idLocation}
                                 InputProps={{
-                                    readOnly: true,
+                                    readOnly: Boolean(readOnly),
                                 }}
+                                onChange={this.handleInputChange}
+                                name="idLocation"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <KeyboardDatePicker
-                                disableToolbar
-                                // variant="inline"
+                            <DatePicker
+                                disableFuture
+                                openTo="year"
                                 format="yyyy-MM-dd"
                                 label="Created at"
-                                value={curEmployee.idCreated}
-                                readOnly
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
+                                views={["year", "month", "date"]}
+                                value={requestUpdate.idCreated}
+                                readOnly={readOnly}
+                                onChange={this.handleIdCreatedAt}
+                                name="idCreated"
                             />
                         </Grid>
                     </Grid>
@@ -217,30 +339,36 @@ class InformationForm extends Component {
                             <TextField
                                 label="Number"
                                 fullWidth
-                                value={curEmployee.bankNumber}
+                                value={requestUpdate.bankNumber}
                                 InputProps={{
-                                    readOnly: true,
+                                    readOnly: Boolean(readOnly),
                                 }}
+                                onChange={this.handleInputChange}
+                                name="bankNumber"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Name"
                                 fullWidth
-                                value={curEmployee.bankName}
+                                value={requestUpdate.bankName}
                                 InputProps={{
-                                    readOnly: true,
+                                    readOnly: Boolean(readOnly),
                                 }}
+                                onChange={this.handleInputChange}
+                                name="bankName"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Branch"
                                 fullWidth
-                                value={curEmployee.bankBranch}
+                                value={requestUpdate.bankBranch}
                                 InputProps={{
-                                    readOnly: true,
+                                    readOnly: Boolean(readOnly),
                                 }}
+                                onChange={this.handleInputChange}
+                                name="bankBranch"
                             />
                         </Grid>
                     </Grid>
@@ -252,5 +380,6 @@ class InformationForm extends Component {
 InformationForm.propTypes = {
     classes: PropTypes.object.isRequired,
     curEmployee: PropTypes.object.isRequired,
+    handleUpdate: PropTypes.func.isRequired,
 };
-export default withStyles(styles)(InformationForm);
+export default withStyles(styles)(withAlert()(InformationForm));

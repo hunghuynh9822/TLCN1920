@@ -9,6 +9,7 @@ import com.hcmute.pose.employeeservice.model.*;
 import com.hcmute.pose.employeeservice.payload.StateRequest;
 import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
 import com.hcmute.pose.employeeservice.payload.EmployeeResponse;
+import com.hcmute.pose.employeeservice.payload.UpdateEmployeeRequest;
 import com.hcmute.pose.employeeservice.service.EmployeeService;
 import com.hcmute.pose.employeeservice.service.PositionService;
 import com.hcmute.pose.employeeservice.service.RoleService;
@@ -232,6 +233,25 @@ public class EmployeeServiceBuzImpl implements EmployeeServiceBuz {
             LOGGER.error("[EmployeeServiceBuzImpl]:[getRoles] GOT UNKNOWN EXCEPTION ",e);
             return new ArrayList<>();
         }finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public void updateEmployee(Long employeeId, UpdateEmployeeRequest request) throws SQLException, TransactionException {
+        try{
+            databaseHelper.beginTransaction();
+
+            employeeService.updateEmployee(employeeId, request.getFirstName(), request.getMiddleName(), request.getLastName(),
+                    new ID(request.getIdNumber(), request.getIdCreated().getTime(), request.getIdLocation()),
+                    request.getAddress(), new Bank(request.getBankNumber(), request.getBankName(), request.getBankBranch()),
+                    request.getBirthday().getTime());
+
+            databaseHelper.commit();
+        } catch (TransactionException | SQLException e) {
+            LOGGER.error("[EmployeeServiceBuzImpl]:[updateEmployee] GOT UNKNOWN EXCEPTION ", e);
+            throw e;
+        } finally {
             databaseHelper.closeConnection();
         }
     }
