@@ -29,9 +29,11 @@
         <module>gateway-proxy</module>
         <module>auth-service</module>
         <module>employee-service</module>
-        <module>project-service</module>
         <module>task-service</module>
-    </modules>
+		<module>project-service</module>
+		<module>request-service</module>
+		<module>notify-service</module>
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>
