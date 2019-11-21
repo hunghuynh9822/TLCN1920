@@ -8,9 +8,9 @@
 		<version>1.0.0</version>
 	</parent>
 	<groupId>com.hcmute.pose</groupId>
-	<artifactId>employee-service</artifactId>
+	<artifactId>notify-service</artifactId>
 	<version>1.0.0</version>
-	<name>employee-service</name>
+	<name>notify-service</name>
 	<description>Demo project for Spring Boot</description>
 
 	<dependencies>
@@ -32,6 +32,7 @@
 		<dependency>
 			<groupId>com.hcmute.pose</groupId>
 			<artifactId>database-connector</artifactId>
+			<version>${database-connector.version}</version>
 		</dependency>
 
 		<dependency>
@@ -48,11 +49,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
 		</dependency>
 	</dependencies>
 
