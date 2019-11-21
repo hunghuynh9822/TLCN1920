@@ -3,24 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.9.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>com.hcmute.pose</groupId>
+		<artifactId>microservice-server</artifactId>
+		<version>1.0.0</version>
 	</parent>
 	<groupId>com.hcmute.pose</groupId>
 	<artifactId>project-service</artifactId>
 	<version>1.0.0</version>
 	<name>project-service</name>
 	<description>Demo project for Spring Boot</description>
-
-	<properties>
-		<java.version>1.8</java.version>
-		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
-		<database-connector.version>1.0.0</database-connector.version>
-		<common.version>1.0.0</common.version>
-		<genuid.version>1.0.0</genuid.version>
-	</properties>
 
 	<dependencies>
 		<dependency>
@@ -47,13 +38,11 @@
 		<dependency>
 			<groupId>com.hcmute.pose</groupId>
 			<artifactId>common</artifactId>
-			<version>${common.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.hcmute.pose</groupId>
 			<artifactId>generate-uid</artifactId>
-			<version>${genuid.version}</version>
 		</dependency>
 
 		<dependency>
@@ -62,18 +51,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<build>
 		<plugins>
