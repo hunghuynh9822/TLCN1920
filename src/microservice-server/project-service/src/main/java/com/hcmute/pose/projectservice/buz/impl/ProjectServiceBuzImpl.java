@@ -39,7 +39,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         try{
             databaseHelper.beginTransaction();
             Project project = projectService.ceratePro(projectRequest.getTitle(),projectRequest.getDescription());
-            perOfProjectService.createPOP(project.getId(), projectRequest.getEmployeeCreate(), ProjectRole.OWNER);
+            perOfProjectService.createPOP(project.getId(), projectRequest.getEmployeeId(), ProjectRole.OWNER);
             databaseHelper.commit();
             return project;
         }catch (Exception | TransactionException e){

@@ -5,7 +5,7 @@ import com.hcmute.pose.projectservice.model.ProjectRole;
 public class PerOfProjectRequest {
     private Long employeeId;
     private Long projectId;
-    private ProjectRole role;
+    private Integer role;
 
     public PerOfProjectRequest() {
     }
@@ -13,7 +13,7 @@ public class PerOfProjectRequest {
     public PerOfProjectRequest(Long employeeId, Long projectId, ProjectRole role) {
         this.employeeId = employeeId;
         this.projectId = projectId;
-        this.role = role;
+        this.role = role.ordinal();
     }
 
     public Long getEmployeeId() {
@@ -33,10 +33,10 @@ public class PerOfProjectRequest {
     }
 
     public ProjectRole getRole() {
-        return role;
+        return ProjectRole.values()[role];
     }
 
     public void setRole(ProjectRole role) {
-        this.role = role;
+        this.role = role.ordinal();
     }
 }

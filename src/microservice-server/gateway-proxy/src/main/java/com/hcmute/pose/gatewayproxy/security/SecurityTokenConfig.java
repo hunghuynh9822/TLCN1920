@@ -42,7 +42,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 // Remember that Spring needs roles to be in this format: "ROLE_" + userRole (i.e. "ROLE_ADMIN")
                 // So, we need to set it to that format, so we can verify and compare roles (i.e. hasRole("ADMIN")).
                 // must be an admin if trying to access admin area (authentication is also required here)
-                .antMatchers("/emplmicro" + "/api/admin/*").hasRole("ADMIN")
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
 //                .antMatchers("/emplmicro" + "/api/employees/*").authenticated()
                 // Any other request must be authenticated
 //                .anyRequest().authenticated();

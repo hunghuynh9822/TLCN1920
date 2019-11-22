@@ -19,6 +19,11 @@ public class ProjectServiceController {
     @Autowired
     private ProjectServiceBuz projectServiceBuz;
 
+    @GetMapping("/test")
+    public ResponseEntity testApi(){
+        return new ResponseEntity("Test successfully", HttpStatus.OK);
+    }
+
     @PostMapping("/")
     public ResponseEntity createProject(@Valid @RequestBody ProjectRequest projectRequest){
         Project project;

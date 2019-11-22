@@ -9,15 +9,13 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 public class ProjectUpdateRequest {
-    @NotNull
     private Long projectId;
     @NotBlank(message = "Not null title")
     @Size(min = 1, max = 255, message = "Title not in length")
     private String title;
     @NotBlank(message = "Not null description")
     private String description;
-    @NotNull
-    private ProjectState state;
+    private Integer state;
     @NotEmpty
     private List<PerOfProjectRequest> perOfProjects;
 
@@ -49,11 +47,11 @@ public class ProjectUpdateRequest {
     }
 
     public ProjectState getState() {
-        return state;
+        return ProjectState.values()[state];
     }
 
     public void setState(ProjectState state) {
-        this.state = state;
+        this.state = state.ordinal();
     }
 
     public List<PerOfProjectRequest> getPerOfProjects() {
