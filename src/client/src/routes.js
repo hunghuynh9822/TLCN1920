@@ -36,7 +36,7 @@ import {
   Information,
   AdminHumanManagement,
   AdminDashboard,
-  OverviewProject,
+  ProjectOverview,
   ProjectView
 } from "./views";
 
@@ -61,10 +61,9 @@ const manageRoutes = [
         component: ProjectsManagement,
         layout: "/admin",
         breadcrumb: "Projects",
-        routes:[
-          {
+        routes: [{
             path: "",
-            component: OverviewProject,
+            component: ProjectOverview,
             layout: "/admin/projects",
           },
           {
@@ -73,15 +72,6 @@ const manageRoutes = [
             layout: "/admin/projects",
           }
         ]
-      },
-      {
-        path: "/:projectId/tasks",
-        name: "Tasks Management",
-        rtlName: "Quản lý Task",
-        icon: Assignment,
-        component: TaskManagement,
-        layout: "/admin",
-        breadcrumb: "TasksManagement"
       },
       {
         path: "/human",
@@ -149,19 +139,23 @@ const manageRoutes = [
         component: ProjectsManagement,
         layout: "/lead",
         breadcrumb: "Projects",
-        routes:[
-          {
+        routes: [{
             path: "",
-            component: OverviewProject,
-            layout: "/admin/projects",
+            component: ProjectOverview,
+            layout: "/lead/projects",
+            name: "OverView",
+            rtlName: "Quản lý dự án",
+            icon: FolderOpen,
+            breadcrumb: "OverView",
           },
           {
             path: "/:idProject",
             component: ProjectView,
-            layout: "/admin/projects",
+            layout: "/lead/projects",
           }
         ]
-      }, {
+      },
+      {
         path: "/:projectId/tasks",
         name: "Tasks Management",
         rtlName: "Quản lý Tasks",
@@ -169,7 +163,8 @@ const manageRoutes = [
         component: TaskManagement,
         layout: "/lead",
         breadcrumb: "TasksManagement"
-      }, {
+      },
+      {
         path: "/:projectId/timeline",
         name: "TimeLine",
         rtlName: "Lịch công việc",
@@ -177,7 +172,8 @@ const manageRoutes = [
         component: GanttChart,
         layout: "/staff",
         breadcrumb: "TimeLine"
-      }, {
+      },
+      {
         path: "/request",
         name: "Request",
         rtlName: "Xin phép nghỉ",
@@ -223,10 +219,9 @@ const manageRoutes = [
         component: ProjectsManagement,
         layout: "/staff",
         breadcrumb: "Projects",
-        routes:[
-          {
+        routes: [{
             path: "",
-            component: OverviewProject,
+            component: ProjectOverview,
             layout: "/admin/projects",
           },
           {

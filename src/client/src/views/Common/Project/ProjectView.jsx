@@ -6,7 +6,11 @@ import SwipeableViews from 'react-swipeable-views';
 
 import { CenteredTabs, TabPanel } from '../../../components';
 
-import {GanttChart,AdminDashboard} from '../../'
+import { ProjectDetails, ProjectTasks, GanttChart, ProjectAnalytics } from '../..'
+
+import { NavLink } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 const styles = theme => ({
     sub_layout_header: {
@@ -15,36 +19,31 @@ const styles = theme => ({
     sub_header: {
         display: 'flex',
         justifyContent: 'space-between',
+        minHeight: '45px',
+        lineHeight: '45px',
+        backgroundColor: 'white',
     },
     sub_header_section: {
         flexBasis: '33%',
     },
+    tab_header: {
+        marginBottom: '5px',
+    },
     content: {
         padding: '0px 55px 0px 55px',
-    }
-});
-const tabs = [
-    {
-        name:"Timeline",
-        component:GanttChart,
     },
-    {
-        name:"Analytics",
-        component:AdminDashboard,
-    }
-];
+    margin: {
+        margin: theme.spacing(1),
+    },
+});
+
 class ProjectView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             value: 0,
         }
-    }
-    a11yProps(index) {
-        return {
-            id: `full-width-tab-${index}`,
-            'aria-controls': `full-width-tabpanel-${index}`,
-        };
+        this.handleBack = this.handleBack.bind(this);
     }
     handleChange = (event, newValue) => {
         this.setState({
@@ -56,9 +55,35 @@ class ProjectView extends Component {
             value: index,
         })
     };
+    handleBack() {
+        const { match } = this.props;
+        let path = match.path;
+        let back = path.substring(0, path.lastIndexOf('/'));
+        console.log("back :" + back)
+        this.props.history.push(back);
+    }
     render() {
         const { classes } = this.props;
+        const tabs = [
+            {
+                name: "Overview",
+                component: ProjectDetails,
+            },
+            {
+                name: "Tasks",
+                component: ProjectTasks,
+            },
+            {
+                name: "Timeline",
+                component: GanttChart,
+            },
+            {
+                name: "Analytics",
+                component: ProjectAnalytics,
+            }
+        ];
         const { match } = this.props;
+        const projectId = match.params.projectId
         console.log("ProjectView : ");
         console.log(match);
         return (
@@ -66,27 +91,35 @@ class ProjectView extends Component {
                 <div className={classes.sub_layout_header}>
                     <div className={classes.sub_header}>
                         <div className={classes.sub_header_section}>
-
+                            <Button onClick={this.handleBack} size="medium" color="primary" className={classes.margin}>
+                                <ArrowBackIosIcon className={classes.backIcon} />
+                                Back
+                            </Button>
                         </div>
                         <div className={classes.sub_header_section}>
-                            <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
+                            aaaaaaa
                         </div>
                         <div className={classes.sub_header_section}>
-
+                            Search
                         </div>
                     </div>
                 </div>
+                <div className={classes.sub_layout_header}>
+                    <div className={classes.tab_header}>
+                        <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
+                    </div>
+                </div>
                 <div className={classes.content}>
-                    <SwipeableViews 
+                    <SwipeableViews
                         axis={'x'}
                         index={this.state.value}
                         onChangeIndex={this.handleChangeIndex}
                     >
                         {
-                            tabs.map((tab,key)=>(
+                            tabs.map((tab, key) => (
                                 <TabPanel key={key} value={this.state.value} index={key}>
-                                    <tab.component/>
-                                </TabPanel>  
+                                    <tab.component projectId={projectId} />
+                                </TabPanel>
                             ))
                         }
                     </SwipeableViews>

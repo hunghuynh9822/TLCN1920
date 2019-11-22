@@ -14,7 +14,7 @@ const styles = theme => ({
     }
 });
 
-class OverviewProject extends Component {
+class ProjectOverview extends Component {
 
     constructor(props) {
         super(props);
@@ -31,7 +31,7 @@ class OverviewProject extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://192.168.200.1:8080/promicro/listProject')
+        axios.get('http://localhost:8080/promicro/listProject')
             .then(response => {
                 console.log(response.data);
                 const projects = response.data;
@@ -56,7 +56,7 @@ class OverviewProject extends Component {
         );
     }
 }
-OverviewProject.propTypes = {
+ProjectOverview.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
@@ -71,4 +71,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(OverviewProject));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ProjectOverview));
