@@ -10,15 +10,6 @@ eureka:
 #Zuul routes. Here for /employee path, we are routing to localhost:8001 with extra path after that.
 zuul:
   routes:
-    emloyee:
-      path: /emplmicro/**
-      service-id: employee-service
-    tasks:
-      path: /taskmicro/**
-      service-id: task-service
-    projects:
-      path: /promicro/**
-      service-id: project-service
     auth:
       path: /auth/**
       service-id: auth-service
@@ -29,6 +20,26 @@ zuul:
       strip-prefix: false
       # Exclude authorization from sensitive headers
       sensitive-headers: Cookie,Set-Cookie
+    emloyees:
+      path: /api/employees/**
+      strip-prefix: false
+      service-id: employee-service
+    tasks:
+      path: /api/tasks/**
+      strip-prefix: false
+      service-id: task-service
+    projects:
+      path: /api/projects/**
+      strip-prefix: false
+      service-id: project-service
+    requests:
+      path: /api/requests/**
+      strip-prefix: false
+      service-id: requests-service
+    notify:
+      path: /api/notify/**
+      strip-prefix: false
+      service-id: requests-service
   host:
     connect-timeout-millis: 60000
 #security:
