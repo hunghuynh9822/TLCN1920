@@ -8,7 +8,6 @@ import { CenteredTabs, TabPanel } from '../../../components';
 
 import { ProjectDetails, ProjectTasks, GanttChart, ProjectAnalytics } from '../..'
 
-import { NavLink } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
@@ -92,7 +91,7 @@ class ProjectView extends Component {
                     <div className={classes.sub_header}>
                         <div className={classes.sub_header_section}>
                             <Button onClick={this.handleBack} size="medium" color="primary" className={classes.margin}>
-                                <ArrowBackIosIcon className={classes.backIcon} />
+                                <ArrowBackIosIcon className={classes.backIcon} style={{ fontSize: 20 }}/>
                                 Back
                             </Button>
                         </div>

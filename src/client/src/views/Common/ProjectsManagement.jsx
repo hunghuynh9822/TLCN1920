@@ -54,7 +54,6 @@ class ProjectsManagement extends Component {
                         );
                     })
                 }
-                {/* <Redirect to={curLayout} /> */}
             </Switch>
         );
     }
@@ -79,6 +78,7 @@ ProjectsManagement.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     return {
         projectId: state.project.projectId,
+        currentUser: state.auth.currentUser,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
