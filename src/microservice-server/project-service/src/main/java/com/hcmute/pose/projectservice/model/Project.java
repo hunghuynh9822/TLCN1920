@@ -8,18 +8,28 @@ import java.io.Serializable;
 public class Project implements Serializable {
     private Long id;
     private String title;
-    @SerializedName("createtime")
-    private Long createTime;
-    @SerializedName("employeeid")
-    private Long employeeCreate;
-    private boolean submit;
+    private String description;
+    private ProjectState state;
+    @SerializedName("created_at")
+    private Long createdAt;
+    @SerializedName("updated_at")
+    private Long updatedAt;
 
-    public Project(Long id, String title, Long createTime, Long employeeCreate, boolean submit) {
+    public Project(Long id, String title, String description, ProjectState state, Long createdAt, Long updatedAt) {
         this.id = id;
         this.title = title;
-        this.createTime = createTime;
-        this.employeeCreate = employeeCreate;
-        this.submit = submit;
+        this.description = description;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Project(Long id, String title, String description, ProjectState state, Long updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.state = state;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -38,27 +48,35 @@ public class Project implements Serializable {
         this.title = title;
     }
 
-    public Long getCreateTime() {
-        return createTime;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public boolean isSubmit() {
-        return submit;
+    public ProjectState getState() {
+        return state;
     }
 
-    public void setSubmit(boolean submit) {
-        this.submit = submit;
+    public void setState(ProjectState state) {
+        this.state = state;
     }
 
-    public Long getEmployeeCreate() {
-        return employeeCreate;
+    public Long getCreatedAt() {
+        return createdAt;
     }
 
-    public void setEmployeeCreate(Long employeeCreate) {
-        this.employeeCreate = employeeCreate;
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Long updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

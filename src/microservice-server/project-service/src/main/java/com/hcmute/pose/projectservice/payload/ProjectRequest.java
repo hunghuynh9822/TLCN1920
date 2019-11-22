@@ -1,19 +1,21 @@
 package com.hcmute.pose.projectservice.payload;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 public class ProjectRequest {
 
     @NotBlank(message = "Not null title")
+    @Size(min = 1, max = 255, message = "Title not in length")
     private String title;
+    @NotBlank(message = "Not null description")
+    private String description;
+    @NotNull
+    private Long employeeCreatedId;
 
-    private Long employeeCreate;
-
-    public ProjectRequest(@NotBlank(message = "Not null title") String title, Long employeeCreate) {
-
-        this.title = title;
-        this.employeeCreate = employeeCreate;
+    public ProjectRequest() {
     }
 
     public String getTitle() {
@@ -21,6 +23,10 @@ public class ProjectRequest {
     }
 
     public Long getEmployeeCreate() {
-        return employeeCreate;
+        return employeeCreatedId;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
