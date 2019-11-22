@@ -21,7 +21,6 @@ export {default as Notifi} from './AddNotifi/Notifi';
 export {default as AddRequest} from './AddRequest/AddRequest';
 export {default as Infomate} from './Infomation/Infomation';
 export {default as CustomLineChart} from './Chart/CustomLineChart.jsx';
-export {default as AddStaff} from './AddStaff/AddStaff';
 export {default as AddNewProject} from './AddStafftoProject/AddNewProject ';
 export {default as CollapsibleSection}from './Section/CollapsibleSection.jsx';
 export {default as CenteredTabs} from './Tab/CenteredTabs.jsx';
@@ -30,3 +29,10 @@ export {default as PrivateRoute} from './Route/PrivateRoute.jsx';
 export {default as OAuth2RedirectHandler} from './OAuth2/OAuth2RedirectHandler.jsx';
 export {default as Fade} from './Animation/Fade.jsx';
 export {default as RequestAddStaff} from './AddStaff/RequestAddStaff.jsx';
+export {default as CustomDialog } from './Dialog/CustomDialog.jsx';
+export {default as ViewEmployee } from './Form/ViewEmployee.jsx';
+export {default as SetupAccount } from './Form/SetupAccount.jsx';
+export {default as ConfirmDialog } from './Dialog/ConfirmDialog.jsx';
+//Information
+export {default as Avartar } from './Infomation/Avartar.jsx';
+export {default as InformationForm } from './Infomation/InformationForm.jsx';

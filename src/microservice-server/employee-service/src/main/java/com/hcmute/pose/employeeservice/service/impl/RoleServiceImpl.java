@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -32,7 +33,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Set<Role> getEmployeeRoles(Long userId) throws SQLException {
+    public Set<Role> getUserRoles(Long userId) throws SQLException {
         return roleDao.getRoleUser(userId);
+    }
+
+    @Override
+    public List<Role> getRoles() throws SQLException {
+        return roleDao.getAllRole();
     }
 }

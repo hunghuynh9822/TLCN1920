@@ -6,7 +6,7 @@ import com.hcmute.pose.common.model.audit.DateAudit;
 import java.io.Serializable;
 
 public class Role extends DateAudit implements Serializable {
-    private Integer id;
+    private Long id;
     private String name;
 
     public Role() {
@@ -17,27 +17,27 @@ public class Role extends DateAudit implements Serializable {
         this.name = name;
     }
 
-    public Role(Integer id, String name) {
+    public Role(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Role(Integer id){
+    public Role(Long id){
         this.id = id;
     }
 
-    public Role(Integer id, String name, Long createdAt,Long updatedAt) {
+    public Role(Long id, String name, Long createdAt,Long updatedAt) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

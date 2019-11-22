@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface UserService {
     User createUser(String email,String phone, String password) throws DatabaseException;
     void addRoleToUser(Long userId,Long roleId) throws SQLException, TransactionException;
+    void removeRoleToUser(Long userId,Long roleId) throws SQLException, TransactionException;
     List<User> getUsers() throws SQLException;
     List<User> getUsersWaiting() throws SQLException;
     void updateStatus(Long userId, UserStatus status) throws SQLException, TransactionException;

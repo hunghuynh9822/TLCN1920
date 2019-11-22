@@ -36,7 +36,7 @@ class AccountForm extends Component {
             handleDatePickerChange('startTime', date);
         }
         const data = {
-            positions:[
+            positions: [
                 // {
                 //     id: 1,
                 //     name: 'Management'
@@ -44,10 +44,10 @@ class AccountForm extends Component {
                 {
                     id: 2,
                     name: 'Team Leader'
-                },{
+                }, {
                     id: 3,
                     name: 'Human Resource'
-                },{
+                }, {
                     id: 4,
                     name: 'Staff'
                 }
@@ -126,16 +126,16 @@ class AccountForm extends Component {
                                 value={request.positionId}
                                 onChange={handleInputChange}
                                 name="positionId"
-                                
+
                                 inputProps={{
                                     id: 'position-required',
                                 }}
                                 className={classes.selectEmpty}
                             >
-                                <MenuItem key={0} value="">
+                                <MenuItem key={-1} value="">
                                     <em>None</em>
                                 </MenuItem>
-                                {data.positions.map((value)=>(
+                                {data.positions.map((value) => (
                                     <MenuItem key={value.id} value={value.id}>{value.name}</MenuItem>
                                 ))}
                             </Select>

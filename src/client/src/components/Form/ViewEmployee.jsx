@@ -24,12 +24,12 @@ const styles = theme => ({
         width: '100%'
     }
 });
-class Review extends Component {
+class ViewEmployee extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { classes, request } = this.props;
+        const { classes, employee } = this.props;
         const data = {
             positions: [
                 {
@@ -48,6 +48,7 @@ class Review extends Component {
                 }
             ]
         }
+        console.log("Current employee : " + JSON.stringify(employee));
         return (
             <React.Fragment>
                 <Grid container spacing={3} >
@@ -56,7 +57,7 @@ class Review extends Component {
                             required
                             label="First name"
                             fullWidth
-                            value={request.firstName}
+                            value={employee.firstName}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -67,7 +68,7 @@ class Review extends Component {
                             required
                             label="Middle name"
                             fullWidth
-                            value={request.middleName}
+                            value={employee.middleName}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -78,7 +79,7 @@ class Review extends Component {
                             required
                             label="Last name"
                             fullWidth
-                            value={request.lastName}
+                            value={employee.lastName}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -88,7 +89,7 @@ class Review extends Component {
                         <TextField
                             label="Address information"
                             fullWidth
-                            value={request.address}
+                            value={employee.address}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -101,7 +102,7 @@ class Review extends Component {
                             // variant="inline"
                             format="yyyy-MM-dd"
                             label="Birthday"
-                            value={request.birthday}
+                            value={employee.birthday}
                             readOnly
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
@@ -113,7 +114,7 @@ class Review extends Component {
                         <TextField
                             label="Phone number"
                             fullWidth
-                            value={request.phone}
+                            value={employee.phone}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -123,7 +124,7 @@ class Review extends Component {
                         <TextField
                             label="Email"
                             fullWidth
-                            value={request.email}
+                            value={employee.email}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -133,10 +134,10 @@ class Review extends Component {
                         <FormControl required fullWidth className={classes.formControl}>
                             <InputLabel htmlFor="position-required">Position</InputLabel>
                             <Select
-                                value={request.positionId}
+                                value={employee.position.id}
                                 name="positionId"
                                 inputProps={{
-                                    name:"positionId",
+                                    name: "positionId",
                                     id: 'position-required',
                                     readOnly: true,
                                 }}
@@ -157,7 +158,7 @@ class Review extends Component {
                             // variant="inline"
                             format="yyyy-MM-dd"
                             label="Start Time"
-                            value={request.startTime}
+                            value={employee.startTime}
                             readOnly
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
@@ -173,7 +174,7 @@ class Review extends Component {
                             <TextField
                                 label="Number"
                                 fullWidth
-                                value={request.idNumber}
+                                value={employee.identification.idNumber}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -183,7 +184,7 @@ class Review extends Component {
                             <TextField
                                 label="Location"
                                 fullWidth
-                                value={request.idLocation}
+                                value={employee.identification.idLocation}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -195,7 +196,7 @@ class Review extends Component {
                                 // variant="inline"
                                 format="yyyy-MM-dd"
                                 label="Created at"
-                                value={request.idCreated}
+                                value={employee.identification.idCreated}
                                 readOnly
                                 KeyboardButtonProps={{
                                     'aria-label': 'change date',
@@ -212,7 +213,7 @@ class Review extends Component {
                             <TextField
                                 label="Number"
                                 fullWidth
-                                value={request.bankNumber}
+                                value={employee.bank.bankNumber}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -222,7 +223,7 @@ class Review extends Component {
                             <TextField
                                 label="Name"
                                 fullWidth
-                                value={request.bankName}
+                                value={employee.bank.bankName}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -232,7 +233,7 @@ class Review extends Component {
                             <TextField
                                 label="Branch"
                                 fullWidth
-                                value={request.bankBranch}
+                                value={employee.bank.bankBranch}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -244,8 +245,8 @@ class Review extends Component {
         );
     }
 }
-Review.propTypes = {
+ViewEmployee.propTypes = {
     classes: PropTypes.object.isRequired,
-    request: PropTypes.object.isRequired,
+    employee: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(Review);
+export default withStyles(styles)(ViewEmployee);

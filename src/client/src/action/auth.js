@@ -10,6 +10,7 @@ import {
 
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
+export const UPDATE_USER = 'UPDATE_USER'
 
 export function authenticate(authenticated, currentUser) {
   return {
@@ -27,6 +28,10 @@ export function logout() {
     authenticated,
     currentUser
   };
+}
+
+export function updateUser(user){
+  return { type: UPDATE_USER, user}
 }
 
 export function getCurrentUser() {
