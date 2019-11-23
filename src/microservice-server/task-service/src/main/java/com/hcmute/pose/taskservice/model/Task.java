@@ -7,53 +7,50 @@ import java.util.Date;
 
 public class Task implements Serializable {
     private Long id;
-    @SerializedName("employeeid")
-    private Long employeeId;
-    @SerializedName("projectid")
+    @SerializedName("project_id")
     private Long projectId;
+    @SerializedName("employee_creator")
+    private Long employeeCreator;
+    @SerializedName("employee_assignee")
+    private Long employeeAssignee;
     private String title;
-    @SerializedName("startdate")
-    private Long startDate;
+    private String description;
+    @SerializedName("started_at")
+    private Long startedAt;
     private Integer duration;
-    private Boolean status;
+    private TaskState state;
     private Integer point;
+    @SerializedName("created_at")
+    private Long createdAt;
+    @SerializedName("updated_at")
+    private Long updatedAt;
 
     public Task() {
     }
 
-    public Task(Long id, Long employeeId, Long projectId, String title, Long startDate, Integer duration, Boolean status, Integer point) {
+    public Task(Long id, Long projectId, Long employeeCreator, Long employeeAssignee, String title, String description, Long startedAt, Integer duration, TaskState state, Integer point, Long createdAt, Long updatedAt) {
         this.id = id;
-        this.employeeId = employeeId;
         this.projectId = projectId;
+        this.employeeCreator = employeeCreator;
+        this.employeeAssignee = employeeAssignee;
         this.title = title;
-        this.startDate = startDate;
+        this.description = description;
+        this.startedAt = startedAt;
         this.duration = duration;
-        this.status = status;
+        this.state = state;
         this.point = point;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
-    public Integer getPoint() {
-        return point;
-    }
-
-    public void setPoint(Integer point) {
-        this.point = point;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public Task(Long id, String title, String description, Long startedAt, Integer duration, TaskState state, Long updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.startedAt = startedAt;
+        this.duration = duration;
+        this.state = state;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -64,12 +61,28 @@ public class Task implements Serializable {
         this.id = id;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
+    public Long getEmployeeCreator() {
+        return employeeCreator;
+    }
+
+    public void setEmployeeCreator(Long employeeCreator) {
+        this.employeeCreator = employeeCreator;
+    }
+
+    public Long getEmployeeAssignee() {
+        return employeeAssignee;
+    }
+
+    public void setEmployeeAssignee(Long employeeAssignee) {
+        this.employeeAssignee = employeeAssignee;
     }
 
     public String getTitle() {
@@ -80,12 +93,20 @@ public class Task implements Serializable {
         this.title = title;
     }
 
-    public Long getStartDate() {
-        return startDate;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStartDate(Long startDate) {
-        this.startDate = startDate;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(Long startedAt) {
+        this.startedAt = startedAt;
     }
 
     public Integer getDuration() {
@@ -96,5 +117,35 @@ public class Task implements Serializable {
         this.duration = duration;
     }
 
+    public TaskState getState() {
+        return state;
+    }
 
+    public void setState(TaskState state) {
+        this.state = state;
+    }
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Long updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

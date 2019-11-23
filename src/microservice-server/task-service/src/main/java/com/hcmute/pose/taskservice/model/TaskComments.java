@@ -7,22 +7,26 @@ import java.util.Date;
 
 public class TaskComments implements Serializable {
     private Long id;
-    @SerializedName("taskid")
+    @SerializedName("task_id")
     private Long taskId;
-    @SerializedName("employeeid")
+    @SerializedName("employee_id")
     private Long employeeId;
-    @SerializedName("createtime")
-    private Long createTime;
+
     private String comment;
+    @SerializedName("created_at")
+    private Long createdAt;
+    @SerializedName("updated_at")
+    private Long updatedAt;
 
     public  TaskComments(){}
 
-    public TaskComments(Long id, Long taskID, Long employeeID, Long createTime, String comment) {
+    public TaskComments(Long id, Long taskId, Long employeeId, String comment, Long createdAt, Long updatedAt) {
         this.id = id;
-        this.taskId = taskID;
-        this.employeeId = employeeID;
-        this.createTime = createTime;
+        this.taskId = taskId;
+        this.employeeId = employeeId;
         this.comment = comment;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -33,28 +37,20 @@ public class TaskComments implements Serializable {
         this.id = id;
     }
 
-    public Long getTaskID() {
+    public Long getTaskId() {
         return taskId;
     }
 
-    public void setTaskID(Long taskID) {
-        this.taskId = taskID;
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 
-    public Long getEmployeeID() {
+    public Long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeID(Long employeeID) {
-        this.employeeId = employeeID;
-    }
-
-    public Long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getComment() {
@@ -63,5 +59,21 @@ public class TaskComments implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Long updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TaskCommentsDao {
     Optional<Long> getLastID ();
-    Optional<TaskComments> createTC (TaskComments taskComments);
-    List<TaskComments> getListTC (Long tastId) throws SQLException;
-    void updateTC (Long taskid ,Long employeeId , String comment) throws SQLException, TransactionException;
+    Optional<TaskComments> createTaskComment(TaskComments taskComments);
+    List<TaskComments> getListTaskComment(Long tastId) throws SQLException;
+    void updateTaskComment(Long taskId, Long employeeId, String comment) throws SQLException, TransactionException;
 }

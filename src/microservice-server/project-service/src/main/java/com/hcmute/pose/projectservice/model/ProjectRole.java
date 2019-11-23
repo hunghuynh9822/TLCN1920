@@ -10,5 +10,5 @@ public enum ProjectRole implements Serializable {
     @SerializedName("1")
     ADMIN,
     @SerializedName("2")
-    STAFF
+    MEMBER
 }
