@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import { create } from '../../action/project';
 const styles = theme => ({
@@ -130,31 +132,35 @@ class NewProject extends Component {
           <Paper className={classes.paper}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  id="title"
-                  name="title"
-                  label="Title"
-                  fullWidth
-                  variant="outlined"
-                  autoComplete="title"
-                  value={request.title}
-                  onChange={this.handleInputChange}
-                />
+                <FormControl required fullWidth className={classes.formControl}>
+                  <InputLabel htmlFor="title-required">Title</InputLabel>
+                  <TextField
+                    id="title"
+                    name="title"
+                    fullWidth
+                    placeholder="Title"
+                    variant="outlined"
+                    autoComplete="title"
+                    value={request.title}
+                    onChange={this.handleInputChange}
+                  />
+                </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  id="description"
-                  name="description"
-                  required
-                  fullWidth
-                  label="Description"
-                  multiline
-                  rows="6"
-                  variant="outlined"
-                  value={request.description}
-                  onChange={this.handleInputChange}
-                />
+                <FormControl required fullWidth className={classes.formControl}>
+                  <InputLabel htmlFor="description-required">Description</InputLabel>
+                  <TextField
+                    id="description"
+                    name="description"
+                    fullWidth
+                    multiline
+                    placeholder="Description"
+                    rows="6"
+                    variant="outlined"
+                    value={request.description}
+                    onChange={this.handleInputChange}
+                  />
+                </FormControl>
               </Grid>
             </Grid>
           </Paper>

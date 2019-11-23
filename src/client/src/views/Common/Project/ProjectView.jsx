@@ -91,23 +91,23 @@ class ProjectView extends Component {
                     <div className={classes.sub_header}>
                         <div className={classes.sub_header_section}>
                             <Button onClick={this.handleBack} size="medium" color="primary" className={classes.margin}>
-                                <ArrowBackIosIcon className={classes.backIcon} style={{ fontSize: 20 }}/>
+                                <ArrowBackIosIcon className={classes.backIcon} style={{ fontSize: 20 }} />
                                 Back
                             </Button>
                         </div>
                         <div className={classes.sub_header_section}>
-                            aaaaaaa
+                            <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.sub_header_section}>
                             Search
                         </div>
                     </div>
                 </div>
-                <div className={classes.sub_layout_header}>
+                {/* <div className={classes.sub_layout_header}>
                     <div className={classes.tab_header}>
                         <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
                     </div>
-                </div>
+                </div> */}
                 <div className={classes.content}>
                     <SwipeableViews
                         axis={'x'}
