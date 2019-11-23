@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { CollapsibleSection, Project, NewProject } from '../../../components';
 
-import { updateProjectId, getAllProjects } from '../../../action/project';
+import { updateProjectId, getAllProjects, getProjects } from '../../../action/project';
 import { hasRoleAdmin } from '../../../action/auth';
 
 import Button from '@material-ui/core/Button';
@@ -33,10 +33,10 @@ class ProjectOverview extends Component {
 
     constructor(props) {
         super(props);
-    }
-
-    state = {
-        projects: []
+        this.state = {
+            projects: []
+        }
+        this.handleNewProject = this.handleNewProject.bind(this);
     }
 
     addPro(pro) {
@@ -46,11 +46,22 @@ class ProjectOverview extends Component {
     }
 
     componentDidMount() {
+        // getAllProjects()
+        //     .then(response => {
+        //         console.log(response);
+        //         const projects = response;
+        //         this.setState({ projects: projects })
+
+        //     })
+        //     .catch(error => console.log("ok loi ne " + error))
+    }
+
+    handleNewProject() {
         getAllProjects()
             .then(response => {
                 console.log(response);
-                const projects = response;
-                this.setState({ projects: projects })
+                // const projects = response;
+                // this.setState({ projects: projects })
 
             })
             .catch(error => console.log("ok loi ne " + error))
@@ -63,7 +74,7 @@ class ProjectOverview extends Component {
         return (
             <div className={classes.root}>
                 <div className={classes.sub_header}>
-                    <Button onClick={this.handleBack} size="medium" color="primary" className={classes.margin}>
+                    <Button onClick={this.handleNewProject} size="medium" color="primary" className={classes.margin}>
                         <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
                         New project
                     </Button>
