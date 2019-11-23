@@ -21,7 +21,7 @@ const headerStyle = (theme) => ({
     position: "absolute",
     width: "100%",
     // paddingTop: "10px",
-    zIndex: "1029",
+    zIndex: "1",
     color: grayColor[7],
     border: "0",
     borderRadius: "0 !important",
@@ -73,7 +73,7 @@ const headerStyle = (theme) => ({
   },
   container: {
     ...container,
-    minHeight: "54px"
+    minHeight: "54px",
   },
   flex: {
     flex: 1
