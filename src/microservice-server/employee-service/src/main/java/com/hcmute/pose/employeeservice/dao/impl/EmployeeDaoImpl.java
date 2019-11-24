@@ -21,6 +21,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
     private static final String INSERT_DATA_EMPLOYEE = "id,first_name,middle_name,last_name,id_number,id_created,id_location,address,position_id,bank_number,bank_name,bank_branch,birthday,start_time,created_at,updated_at";
 
     private static String SQL_INSERT_EMPLOYEE = String.format("INSERT INTO employees(%s) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",INSERT_DATA_EMPLOYEE);
+    private static String SQL_UPDATE_EMPLOYEE = "UPDATE employees SET first_name = ?, middle_name = ?, last_name = ?," +
+            " id_number = ?, id_created = ? , id_location = ?," +
+            " address = ?, bank_number = ?, bank_name = ?, bank_branch = ?," +
+            " birthday = ?, updated_at = ?" +
+            " WHERE id = ?";
     private static String SQL_SELECT_EMPLOYEE_BY_ID = String.format("SELECT %s FROM employees WHERE id = ?",DATA_EMPLOYEE);
 
     @Autowired
@@ -60,5 +65,24 @@ public class EmployeeDaoImpl implements EmployeeDao {
             return Optional.of(employeeMapOptional.get().toEmployee());
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void updateEmployee(Employee employee) throws SQLException, TransactionException {
+        databaseHelper.executeNonQuery(SQL_UPDATE_EMPLOYEE,
+                employee.getFirstName(),
+                employee.getMiddleName(),
+                employee.getLastName(),
+                employee.getIdentification().getIdNumber(),
+                employee.getIdentification().getIdCreated(),
+                employee.getIdentification().getIdLocation(),
+                employee.getAddress(),
+                employee.getBank().getBankNumber(),
+                employee.getBank().getBankName(),
+                employee.getBank().getBankBranch(),
+                employee.getBirthday(),
+                System.currentTimeMillis(),
+                employee.getId()
+        );
     }
 }

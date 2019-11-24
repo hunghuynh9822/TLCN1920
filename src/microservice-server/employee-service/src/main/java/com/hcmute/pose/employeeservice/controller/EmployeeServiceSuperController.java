@@ -4,6 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.employeeservice.buz.EmployeeServiceBuz;
 import com.hcmute.pose.employeeservice.exception.BuzException;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
+import com.hcmute.pose.employeeservice.model.Role;
 import com.hcmute.pose.employeeservice.payload.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,11 +56,17 @@ public class EmployeeServiceSuperController {
     @PatchMapping("/state")
     public ResponseEntity updateStateEmployee(@RequestBody StateRequest stateRequest){
         try {
-            employeeServiceBuz.updateAcceptUser(stateRequest);
+            employeeServiceBuz.updateUser(stateRequest);
             return new ResponseEntity(new ApiResponse(true, "Update user success"),HttpStatus.OK);
         } catch (DatabaseException | SQLException | TransactionException e) {
             return new ResponseEntity(new ApiResponse(false, e.getMessage()),
                     HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity getRoles() {
+        List<Role> roles = employeeServiceBuz.getRoles();
+        return new ResponseEntity(new AllRolesResponse(roles), HttpStatus.OK);
     }
 }

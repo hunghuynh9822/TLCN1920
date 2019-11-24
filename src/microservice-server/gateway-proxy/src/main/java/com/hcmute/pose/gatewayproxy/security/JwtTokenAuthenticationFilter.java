@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestAuthenticationEntryPoint.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenAuthenticationFilter.class);
     private final JwtConfig jwtConfig;
 
     public JwtTokenAuthenticationFilter(JwtConfig jwtConfig) {
@@ -39,13 +39,14 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        LOGGER.info("[doFilterInternal] Doing...");
+        LOGGER.info("[gateway][doFilterInternal] Request : {} | {} | {}", request.getMethod(), request.getRequestURI(), request.getUserPrincipal());
+        LOGGER.info("[gateway][doFilterInternal] Doing...");
         // 1. get the authentication header. Tokens are supposed to be passed in the authentication header
         String header = request.getHeader(jwtConfig.getHeader());
-        LOGGER.info("[doFilterInternal] Header : {}",header);
+        LOGGER.info("[gateway][doFilterInternal] Header : {}",header);
         // 2. validate the header and check the prefix
         if(header == null || !header.startsWith(jwtConfig.getPrefix())) {
-            LOGGER.info("[doFilterInternal] Invalid header do next chain...");
+            LOGGER.info("[gateway][doFilterInternal] Invalid header do next chain...");
             chain.doFilter(request, response);  		// If not valid, go to the next filter.
             return;
         }
@@ -55,7 +56,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         // And If user tried to access without access token, then he won't be authenticated and an exception will be thrown.
         // 3. Get the token
         String token = header.replace(jwtConfig.getPrefix(), "");
-        LOGGER.info("[doFilterInternal] Token request : {}",token);
+        LOGGER.info("[gateway][doFilterInternal] Token request : {}",token);
         try {    // exceptions might be thrown in creating the claims if for example the token is expired
             // 4. Validate the token
             Claims claims = Jwts.parser()
@@ -63,11 +64,11 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                     .parseClaimsJws(token)
                     .getBody();
             String userId = claims.getSubject();
-            LOGGER.info("[doFilterInternal] UserId from token : {}",userId);
+            LOGGER.info("[gateway][doFilterInternal] UserId from token : {}",userId);
             if (userId != null) {
                 @SuppressWarnings("unchecked")
                 List<String> authorities = (List<String>) claims.get("authorities");
-                LOGGER.info("[doFilterInternal] Authorities from token : {}",new Gson().toJson(authorities));
+                LOGGER.info("[gateway][doFilterInternal] Authorities from token : {}",new Gson().toJson(authorities));
                 // 5. Create auth object
                 // UsernamePasswordAuthenticationToken: A built-in object, used by spring to represent the current authenticated / being authenticated user.
                 // It needs a list of authorities, which has type of GrantedAuthority interface, where SimpleGrantedAuthority is an implementation of that interface
@@ -77,22 +78,22 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 // 6. Authenticate the user
                 // Now, user is authenticated
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                LOGGER.info("[doFilterInternal] Authenticated : {}",new Gson().toJson(auth));
+                LOGGER.info("[gateway][doFilterInternal] Authenticated : {}",new Gson().toJson(auth));
             }
         }catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
+            logger.error("[gateway] Invalid JWT signature");
             SecurityContextHolder.clearContext();
         } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
+            logger.error("[gateway] Invalid JWT token");
             SecurityContextHolder.clearContext();
         } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
+            logger.error("[gateway] Expired JWT token");
             SecurityContextHolder.clearContext();
         } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
+            logger.error("[gateway] Unsupported JWT token");
             SecurityContextHolder.clearContext();
         } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
+            logger.error("[gateway] JWT claims string is empty.");
             SecurityContextHolder.clearContext();
         }
         // go to the next filter in the filter chain

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
+import { connect } from 'react-redux';
 
 import { withRouter, Switch, Route } from "react-router-dom";
 
 // core components
 import styles from "../../assets/jss/styles/views/projectManagementStyle";
+
+import { updateProjectId } from '../../action/project'
 
 class ProjectsManagement extends Component {
     constructor(props) {
@@ -52,7 +54,6 @@ class ProjectsManagement extends Component {
                         );
                     })
                 }
-                {/* <Redirect to={curLayout} /> */}
             </Switch>
         );
     }
@@ -73,4 +74,17 @@ class ProjectsManagement extends Component {
 ProjectsManagement.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withRouter(withStyles(styles)(ProjectsManagement));
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        projectId: state.project.projectId,
+        currentUser: state.auth.currentUser,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        updateProjectId: (projectId) => dispatch(updateProjectId(projectId)),
+    }
+}
+
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ProjectsManagement)));

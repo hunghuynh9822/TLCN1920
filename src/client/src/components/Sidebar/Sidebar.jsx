@@ -22,30 +22,50 @@ import styles from "../../assets/jss/material-react/components/sidebarStyle";
 class Sidebar extends Component {
     constructor(props) {
         super(props);
+
+        this.activeRoute = this.activeRoute.bind(this);
+        this.getPathToProjectId = this.getPathToProjectId.bind(this);
+        this.getNavRoute = this.getNavRoute.bind(this);
+        this.getLogoBrand = this.getLogoBrand.bind(this);
     }
-    render() {
-        const { classes } = this.props;
-        const { handleDrawerToggleMobile, handleDrawerToggleDesktop, drawerToggleDesktopClose } = this.props;
-        // verifies if routeName is the one active (in browser input)
-        function activeRoute(layout,path) {
-            if(path === ""){
-                return window.location.pathname === layout;
-            }
-            return window.location.pathname.includes(layout+path);
+
+    // verifies if routeName is the one active (in browser input)
+    activeRoute(layout, path) {
+        if (path === "") {
+            return window.location.pathname === layout;
         }
-        const { color, logo, image, logoText, router } = this.props;
-        var links = (
+        return window.location.pathname.includes(layout + path);
+    }
+
+    getPathToProjectId(path, projectId) {
+        let temp = path.replace(':projectId', 'project');
+        if (projectId !== null) {
+            temp = path.replace(':projectId', projectId);
+        }
+        console.log('Get param project id : ' + temp);
+        return temp;
+    }
+
+    getNavRoute() {
+        const { classes } = this.props;
+        const { projectId } = this.props;
+        const { color, router } = this.props;
+        return (
             <List className={classes.list}>
                 {router.routes.map((prop, key) => {
                     var listItemClasses = classNames({
-                        [" " + classes[color]]: activeRoute(prop.layout,prop.path)
+                        [" " + classes[color]]: this.activeRoute(prop.layout, prop.path)
                     });
                     const whiteFontClasses = classNames({
-                        [" " + classes.whiteFont]: activeRoute(prop.layout,prop.path)
+                        [" " + classes.whiteFont]: this.activeRoute(prop.layout, prop.path)
                     });
+                    let path = prop.path;
+                    if (path.includes(':projectId')) {
+                        path = this.getPathToProjectId(path, projectId);
+                    }
                     return (
                         <NavLink
-                            to={prop.layout + prop.path}
+                            to={prop.layout + path}
                             className={classes.item}
                             activeClassName="active"
                             key={key}
@@ -53,24 +73,18 @@ class Sidebar extends Component {
                             <ListItem button className={classes.itemLink + listItemClasses}>
                                 {typeof prop.icon === "string" ? (
                                     <Icon
-                                        className={classNames(classes.itemIcon, whiteFontClasses, {
-                                            [classes.itemIconRTL]: this.props.rtlActive
-                                        })}
+                                        className={classNames(classes.itemIcon, whiteFontClasses)}
                                     >
                                         {prop.icon}
                                     </Icon>
                                 ) : (
                                         <prop.icon
-                                            className={classNames(classes.itemIcon, whiteFontClasses, {
-                                                [classes.itemIconRTL]: this.props.rtlActive
-                                            })}
+                                            className={classNames(classes.itemIcon, whiteFontClasses)}
                                         />
                                     )}
                                 <ListItemText
                                     primary={this.props.rtlActive ? prop.rtlName : prop.name}
-                                    className={classNames(classes.itemText, whiteFontClasses, {
-                                        [classes.itemTextRTL]: this.props.rtlActive
-                                    })}
+                                    className={classNames(classes.itemText, whiteFontClasses)}
                                     disableTypography={true}
                                 />
                             </ListItem>
@@ -78,15 +92,19 @@ class Sidebar extends Component {
                     );
                 })}
             </List>
-        );
-        var brand = (
+        )
+    }
+
+    getLogoBrand() {
+        const { classes } = this.props;
+        const { logo, logoText } = this.props;
+        const { drawerToggleDesktopClose } = this.props;
+        return (
             <div className={classes.logo}>
                 {this.props.desktopOpen ?
                     <a
                         href="https://www.creative-tim.com?ref=mdr-sidebar"
-                        className={classNames(classes.logoLink, {
-                            [classes.logoLinkRTL]: this.props.rtlActive
-                        })}
+                        className={classes.logoLink}
                         target="_blank"
                     >
                         <div className={classes.logoImage}>
@@ -105,7 +123,13 @@ class Sidebar extends Component {
                     </div>
                 </Hidden>
             </div>
-        );
+        )
+    }
+
+    render() {
+        const { classes } = this.props;
+        const { handleDrawerToggleMobile, handleDrawerToggleDesktop } = this.props;
+        const { image } = this.props;
         return (
             <React.Fragment>
                 <Hidden mdUp implementation="css">
@@ -114,19 +138,17 @@ class Sidebar extends Component {
                         anchor="right"
                         open={this.props.mobileOpen}
                         classes={{
-                            paper: classNames(classes.drawerPaper, {
-                                [classes.drawerPaperRTL]: this.props.rtlActive
-                            })
+                            paper: classes.drawerPaper
                         }}
                         onClose={handleDrawerToggleMobile}
                         ModalProps={{
                             keepMounted: true // Better open performance on mobile.
                         }}
                     >
-                        {brand}
+                        {this.getLogoBrand()}
                         <div className={classes.sidebarWrapper}>
                             <MainNavbarLink />
-                            {links}
+                            {this.getNavRoute()}
                         </div>
                         {image !== undefined ? (
                             <div
@@ -144,8 +166,6 @@ class Sidebar extends Component {
                         open={this.props.desktopOpen}
                         classes={{
                             paper: classNames(classes.drawerPaper, {
-                                [classes.drawerPaperRTL]: this.props.rtlActive
-                            }, {
                                 [classes.drawerPaperClose]: !this.props.desktopOpen
                             })
                         }}
@@ -154,8 +174,8 @@ class Sidebar extends Component {
                             keepMounted: true // Better open performance on mobile.
                         }}
                     >
-                        {brand}
-                        <div className={classes.sidebarWrapper}>{links}</div>
+                        {this.getLogoBrand()}
+                        <div className={classes.sidebarWrapper}>{this.getNavRoute()}</div>
                         {image !== undefined ? (
                             <div
                                 className={classes.background}
@@ -182,7 +202,8 @@ Sidebar.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     return {
         mobileOpen: state.layout.mobileOpen,
-        desktopOpen: state.layout.desktopOpen
+        desktopOpen: state.layout.desktopOpen,
+        projectId: state.project.projectId,
     }
 }
 

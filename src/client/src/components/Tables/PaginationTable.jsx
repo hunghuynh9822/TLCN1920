@@ -36,10 +36,10 @@ const styles = theme => ({
 
 
 const StyledTableCell = withStyles(theme => ({
-    root:{
+    root: {
         padding: '14px',
     }
-    
+
 }))(TableCell);
 
 
@@ -74,19 +74,19 @@ class PaginationTable extends Component {
             rowsPerPage: parseInt(event.target.value, 10)
         });
     }
-    showActions(actions){
-        return actions.map((action)=>{
-            switch(action){
+    showActions(actions, row) {
+        return actions.map((action) => {
+            switch (action.name) {
                 case 'view':
-                    return this.showBtnView();
+                    return this.showBtnView(action.method, row);
                 case 'confirm':
-                    return this.showBtnConfirm();
+                    return this.showBtnConfirm(action.method, row);
                 case 'delete':
-                    return this.showBtnDelete();
+                    return this.showBtnDelete(action.method, row);
             }
         })
     }
-    showBtnView() {
+    showBtnView(method, row) {
         return (
             <Button
                 key='view'
@@ -94,45 +94,54 @@ class PaginationTable extends Component {
                 fullWidth
                 variant="contained"
                 color="primary"
+                onClick={() => {
+                    method('view',row);
+                }}
                 style={{
                     width: '60px',
-                    margin:'0px 3px',
+                    margin: '0px 3px',
                 }}
             >
                 View
             </Button>
         )
     }
-    showBtnConfirm() {
+    showBtnConfirm(method, row) {
         return (
             <Button
                 key='confirm'
                 type="submit"
                 fullWidth
                 variant="contained"
+                onClick={() => {
+                    method('confirm',row);
+                }}
                 style={{
                     width: '80px',
-                    margin:'0px 3px',
-                    backgroundColor:'#9ae5e5',
-                    color:'white',
+                    margin: '0px 3px',
+                    backgroundColor: '#9ae5e5',
+                    color: 'white',
                 }}
             >
                 Confirm
             </Button>
         )
     }
-    showBtnDelete() {
+    showBtnDelete(method, row) {
         return (
             <Button
                 key='delete'
                 type="submit"
                 fullWidth
                 variant="contained"
+                onClick={() => {
+                    method('delete',row);
+                }}
                 style={{
                     width: '80px',
-                    margin:'0px 3px',
-                    backgroundColor:'#DC3545',
-                    color:'white',
+                    margin: '0px 3px',
+                    backgroundColor: '#DC3545',
+                    color: 'white',
                 }}
             >
                 Delete
@@ -143,7 +152,7 @@ class PaginationTable extends Component {
         const { classes } = this.props;
         const { columns, rows } = this.props;
         const { page, rowsPerPage } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+        // const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
@@ -167,19 +176,19 @@ class PaginationTable extends Component {
                                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                     {columns.map(column => {
                                         const value = row[column.id];
-                                        console.log(column.id + " : " + value);
+                                        // console.log(column.id + " : " + value);
                                         if (column.id === 'action') {
                                             return (
-                                                <StyledTableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
-                                                    <div style={{display:'flex', justifyContent:'center'}}>
-                                                        {this.showActions(value)}
+                                                <StyledTableCell key={column.id} align={column.align} style={{ border: '1px solid rgba(224, 224, 224, 1)' }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                        {this.showActions(value, row)}
                                                     </div>
 
                                                 </StyledTableCell>
                                             );
                                         }
                                         return (
-                                            <StyledTableCell key={column.id} align={column.align} style={{border: '1px solid rgba(224, 224, 224, 1)'}}>
+                                            <StyledTableCell key={column.id} align={column.align} style={{ border: '1px solid rgba(224, 224, 224, 1)' }}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
                                             </StyledTableCell>
                                         );
@@ -211,6 +220,6 @@ class PaginationTable extends Component {
 PaginationTable.propTypes = {
     classes: PropTypes.object.isRequired,
     columns: PropTypes.array.isRequired,
-    rows: PropTypes.array.isRequired,
+    rows: PropTypes.array,
 };
 export default withStyles(styles)(PaginationTable);

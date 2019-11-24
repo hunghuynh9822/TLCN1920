@@ -1,5 +1,6 @@
 package com.hcmute.pose.authservice.security;
 
+import com.google.gson.Gson;
 import com.hcmute.pose.common.security.JwtConfig;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -38,10 +39,13 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+        LOGGER.info("[auth-service][doFilterInternal] Filter");
         // 1. get the authentication header. Tokens are supposed to be passed in the authentication header
         String header = request.getHeader(jwtConfig.getHeader());
+        LOGGER.info("[auth-service][doFilterInternal] Header : {}", header);
         // 2. validate the header and check the prefix
         if(header == null || !header.startsWith(jwtConfig.getPrefix())) {
+            LOGGER.info("[auth-service][doFilterInternal] Invalid header do next chain...");
             chain.doFilter(request, response);  		// If not valid, go to the next filter.
             return;
         }
@@ -70,21 +74,22 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 // 6. Authenticate the user
                 // Now, user is authenticated
                 SecurityContextHolder.getContext().setAuthentication(auth);
+                LOGGER.info("[auth-service][doFilterInternal] Authenticated : {}",new Gson().toJson(auth));
             }
         }catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
+            logger.error("[auth-service] Invalid JWT signature");
             SecurityContextHolder.clearContext();
         } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
+            logger.error("[auth-service] Invalid JWT token");
             SecurityContextHolder.clearContext();
         } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
+            logger.error("[auth-service] Expired JWT token");
             SecurityContextHolder.clearContext();
         } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
+            logger.error("[auth-service] Unsupported JWT token");
             SecurityContextHolder.clearContext();
         } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
+            logger.error("[auth-service] JWT claims string is empty.");
             SecurityContextHolder.clearContext();
         }
         // go to the next filter in the filter chain

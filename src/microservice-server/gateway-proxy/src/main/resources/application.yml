@@ -32,6 +32,10 @@ zuul:
       path: /api/projects/**
       strip-prefix: false
       service-id: project-service
+    adminprojects:
+      path: /api/admin/projects/**
+      strip-prefix: false
+      service-id: project-service
     requests:
       path: /api/requests/**
       strip-prefix: false

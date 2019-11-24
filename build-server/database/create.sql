@@ -133,17 +133,45 @@ ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "taskcomments_pkey" PRIMARY K
 CREATE TABLE IF NOT EXISTS "public"."projects" (
   "id" int8 NOT NULL,
   "title" varchar(255) COLLATE "pg_catalog"."default",
-  "employeeid" int8,
-  "createtime" int8,
-  "submit" bool
+  "description" text COLLATE "pg_catalog"."default",
+  "state" int4,
+  "created_at" int8,
+  "updated_at" int8
 )
 ;
+-- ----------------------------
+-- Primary Key structure for table projects
+-- ----------------------------
 ALTER TABLE "public"."projects" ADD CONSTRAINT "projects_pkey" PRIMARY KEY ("id");
+-- ----------------------------
+-- Records of projects
+-- ----------------------------
+INSERT INTO "public"."projects" VALUES (15744386380186, 'Test', 'Test Postman', 0, 1574438638025, 1574438638025);
+INSERT INTO "public"."projects" VALUES (15744386794017, 'Test 1', 'Test Postman 1', 0, 1574438679401, 1574438679401);
+INSERT INTO "public"."projects" VALUES (15744386934538, 'Test 2', 'Test Postman 2', 0, 1574438693453, 1574438693453);
+INSERT INTO "public"."projects" VALUES (15744393005229, 'Test 2', 'Test Postman 2', 0, 1574439300544, 1574439300544);
+
+
 
 CREATE TABLE IF NOT EXISTS "public"."perofproject" (
-  "proid" int8 NOT NULL,
-  "employeeid" int8 NOT NULL
+  "pro_id" int8 NOT NULL,
+  "employee_id" int8 NOT NULL,
+  "role" int4
 )
 ;
-
-ALTER TABLE "public"."perofproject" ADD CONSTRAINT "perofproject_pkey" PRIMARY KEY ("proid", "employeeid");
+-- ----------------------------
+-- Primary Key structure for table perofproject
+-- ----------------------------
+ALTER TABLE "public"."perofproject" ADD CONSTRAINT "perofproject_pkey" PRIMARY KEY ("pro_id", "employee_id");
+-- ----------------------------
+-- Foreign Keys structure for table perofproject
+-- ----------------------------
+ALTER TABLE "public"."perofproject" ADD CONSTRAINT "employee_project" FOREIGN KEY ("employee_id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."perofproject" ADD CONSTRAINT "project_constraint" FOREIGN KEY ("pro_id") REFERENCES "public"."projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- ----------------------------
+-- Records of perofproject
+-- ----------------------------
+INSERT INTO "public"."perofproject" VALUES (15744386380186, 15714589149401, 0);
+INSERT INTO "public"."perofproject" VALUES (15744386794017, 15714589149401, 0);
+INSERT INTO "public"."perofproject" VALUES (15744386934538, 15714589149401, 0);
+INSERT INTO "public"."perofproject" VALUES (15744393005229, 15714589149401, 0);

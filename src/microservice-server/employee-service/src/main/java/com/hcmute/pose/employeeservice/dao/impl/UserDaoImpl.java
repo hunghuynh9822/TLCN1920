@@ -23,8 +23,9 @@ public class UserDaoImpl implements UserDao {
 
     private static String SQL_INSERT_USER = "INSERT INTO users(id,email,phone,password,provider,email_verified,created_at,updated_at,status) VALUES(?,?,?,?,?,?,?,?,?)";
     private static String SQL_INSERT_USER_ROLE = "INSERT INTO user_roles(user_id, role_id, created_at, updated_at) VALUES( ?, ?, ?, ?)";
+    private static String SQL_DELETE_USER_ROLE = "DELETE FROM user_roles WHERE user_id = ? AND role_id = ?";
 
-    private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users WHERE status != ?",DATA_USER);
+    private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users WHERE status = ?",DATA_USER);
 
     private static String SQL_SELECT_ALL_USER_WAITING = String.format("SELECT %s FROM users WHERE status = ?",DATA_USER);
 
@@ -81,8 +82,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void removeRoleToUser(Long userId, Long roleId) throws SQLException, TransactionException {
+        try {
+            databaseHelper.executeNonQuery(SQL_DELETE_USER_ROLE, userId, roleId);
+        } catch (SQLException | TransactionException e) {
+            LOGGER.error("[UserDaoImpl]:[removeRoleToUser]",e);
+            throw e;
+        }
+    }
+
+    @Override
     public List<User> getAll() throws SQLException {
-        return databaseHelper.executeQueryListObject(User[].class,SQL_SELECT_ALL_USER,UserStatus.CREATED.ordinal());
+        return databaseHelper.executeQueryListObject(User[].class,SQL_SELECT_ALL_USER,UserStatus.ACCEPTED.ordinal());
     }
 
     @Override

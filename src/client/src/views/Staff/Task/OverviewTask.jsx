@@ -2,35 +2,35 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import {TaskContainer,Task} from '../../../components'
+import { TaskContainer, Task } from '../../../components'
 const styles = theme => ({
 
 });
 class OverviewTask extends Component {
     constructor(props) {
-        super(props); 
-             
+        super(props);
+
     }
     state = {
-        listUser : [],   
+        listUser: [],
     }
     componentDidMount() {
-        var listU = [{ "id": 1,"proID":15737973290221 , "name" : "Liem" },
-                    { "id":  2, "proID":15737973290221, "name" : "Hung" }];
+        var listU = [{ "id": 1, "proID": 15737973290221, "name": "Liem" },
+        { "id": 2, "proID": 15737973290221, "name": "Hung" }];
 
-        
-        this.setState({listUser : listU});
-        
-        
+
+        this.setState({ listUser: listU });
+
+
     }
-    
+
 
     render() {
         const { classes } = this.props;
-       
+
         return (
             <TaskContainer>
-                {this.state.listUser.map(user => <Task user={user}/>)}      
+                {this.state.listUser.map((user, index) => <Task key={index} user={user} />)}
             </TaskContainer>
         );
     }
