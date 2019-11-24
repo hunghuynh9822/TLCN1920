@@ -89,7 +89,7 @@ class MainRouter extends Component {
         <Switch>
           <PrivateRoute path="/home" component={AsyncHome} />
           <Route path="/admin" component={AsyncMain} />
-          <PrivateRoute path="/hr" component={AsyncMain} />
+          <Route path="/hr" component={AsyncMain} />
           <PrivateRoute path="/staff" component={AsyncMain} />
           <PrivateRoute path="/lead" component={AsyncMain} />
           <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>
