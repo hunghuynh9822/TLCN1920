@@ -28,6 +28,14 @@ zuul:
       path: /api/tasks/**
       strip-prefix: false
       service-id: task-service
+    admintasks:
+      path: /api/admin/tasks/**
+      strip-prefix: false
+      service-id: task-service
+    leadtasks:
+      path: /api/lead/tasks/**
+      strip-prefix: false
+      service-id: task-service
     projects:
       path: /api/projects/**
       strip-prefix: false
