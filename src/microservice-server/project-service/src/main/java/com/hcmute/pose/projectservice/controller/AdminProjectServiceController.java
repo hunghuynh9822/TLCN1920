@@ -37,10 +37,10 @@ public class AdminProjectServiceController {
     @GetMapping("/")
     public ResponseEntity getProjects(){
         try{
-            List<Project> projectList = projectServiceBuz.getListProject();
-            return new ResponseEntity(new AllProjectResponse(projectList),HttpStatus.OK);
+            AllProjectResponse projectList = projectServiceBuz.getListProject();
+            return new ResponseEntity(projectList, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

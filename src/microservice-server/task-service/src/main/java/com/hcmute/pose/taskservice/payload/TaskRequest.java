@@ -1,58 +1,26 @@
 package com.hcmute.pose.taskservice.payload;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class TaskRequest {
-
-
-    private Long Id;
-
-
-    private Long employeeId;
-
-
     private Long projectId;
-
+    private Long employeeCreator;
+    private Long employeeAssignee;
     @NotBlank(message = "Not null title")
     @Size(max = 255,message = "Not long character 255")
     private String title;
-
-
+    @NotBlank(message = "Not null title")
+    private String description;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date startedAt;
     private Integer duration;
-
-
-    private Boolean status;
-
-
-    private Integer point;
 
     public TaskRequest(){
 
-    }
-
-    public TaskRequest(Long employeeId, Long projectId, @NotBlank(message = "Not null title") @Size(max = 255, message = "Not long character 255") String title, Integer duration) {
-        this.employeeId = employeeId;
-        this.projectId = projectId;
-        this.title = title;
-        this.duration = duration;
-    }
-
-    public Long getId() {
-        return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
-    }
-
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
     }
 
     public Long getProjectId() {
@@ -63,6 +31,22 @@ public class TaskRequest {
         this.projectId = projectId;
     }
 
+    public Long getEmployeeCreator() {
+        return employeeCreator;
+    }
+
+    public void setEmployeeCreator(Long employeeCreator) {
+        this.employeeCreator = employeeCreator;
+    }
+
+    public Long getEmployeeAssignee() {
+        return employeeAssignee;
+    }
+
+    public void setEmployeeAssignee(Long employeeAssignee) {
+        this.employeeAssignee = employeeAssignee;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -71,27 +55,27 @@ public class TaskRequest {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(Date startedAt) {
+        this.startedAt = startedAt;
+    }
+
     public Integer getDuration() {
         return duration;
     }
 
     public void setDuration(Integer duration) {
         this.duration = duration;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public Integer getPoint() {
-        return point;
-    }
-
-    public void setPoint(Integer point) {
-        this.point = point;
     }
 }

@@ -177,14 +177,14 @@ public class EmployeeServiceBuzImpl implements EmployeeServiceBuz {
 
     private List<EmployeeResponse> getEmployeeByListUser(List<User> users) throws SQLException {
         List<EmployeeResponse> employees = new ArrayList<>();
-        for (User user:users
+        for (User user : users
         ) {
             try {
                 Employee employee = employeeService.findById(user.getId()).orElseThrow(() -> new BuzException(String.format("Can't find employee info %d", user.getId())));
                 user.setRoles(roleService.getUserRoles(user.getId()));
                 employee.setPosition(positionService.findById(employee.getPosition().getId()));
-                employees.add(new EmployeeResponse(user,employee));
-            }catch (BuzException | DatabaseException ex) {
+                employees.add(new EmployeeResponse(user, employee));
+            } catch (BuzException | DatabaseException ex) {
                 LOGGER.error("[EmployeeServiceBuzImpl]:[getEmployees] GOT UNKNOWN EXCEPTION ", ex);
             }
         }
@@ -215,8 +215,9 @@ public class EmployeeServiceBuzImpl implements EmployeeServiceBuz {
             User user = userService.findById(employeeId).orElseThrow(() -> new BuzException(String.format("Can't find user with %d", employeeId)));
             Employee employee = employeeService.findById(user.getId()).orElseThrow(() -> new BuzException(String.format("Can't find employee info %d", user.getId())));
             user.setRoles(roleService.getUserRoles(user.getId()));
+            employee.setPosition(positionService.findById(employee.getPosition().getId()));
             return Optional.of(new EmployeeResponse(user, employee));
-        } catch (SQLException e) {
+        } catch (SQLException | DatabaseException e) {
             LOGGER.error("[EmployeeServiceBuzImpl]:[getEmployee] GOT UNKNOWN EXCEPTION ",e);
             return Optional.empty();
         } finally {

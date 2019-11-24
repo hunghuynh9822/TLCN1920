@@ -43,8 +43,9 @@ public class Task implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Task(Long id, String title, String description, Long startedAt, Integer duration, TaskState state, Long updatedAt) {
+    public Task(Long id, Long employeeAssignee, String title, String description, Long startedAt, Integer duration, TaskState state, Long updatedAt) {
         this.id = id;
+        this.employeeAssignee = employeeAssignee;
         this.title = title;
         this.description = description;
         this.startedAt = startedAt;
