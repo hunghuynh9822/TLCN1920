@@ -36,7 +36,7 @@ import {
   Information,
   AdminHumanManagement,
   AdminDashboard,
-  OverviewProject,
+  ProjectOverview,
   ProjectView
 } from "./views";
 
@@ -44,8 +44,7 @@ const manageRoutes = [
   //Admin
   {
     layout: "/admin",
-    routes: [
-      {
+    routes: [{
         path: "",
         name: "Dashboad",
         rtlName: "Tổng quan",
@@ -62,10 +61,9 @@ const manageRoutes = [
         component: ProjectsManagement,
         layout: "/admin",
         breadcrumb: "Projects",
-        routes:[
-          {
+        routes: [{
             path: "",
-            component: OverviewProject,
+            component: ProjectOverview,
             layout: "/admin/projects",
           },
           {
@@ -74,15 +72,6 @@ const manageRoutes = [
             layout: "/admin/projects",
           }
         ]
-      },
-      {
-        path: "/tasks",
-        name: "Tasks Management",
-        rtlName: "Quản lý Task",
-        icon: Assignment,
-        component: TaskManagement,
-        layout: "/admin",
-        breadcrumb: "TasksManagement"
       },
       {
         path: "/human",
@@ -132,9 +121,8 @@ const manageRoutes = [
     ]
   },
   {
-    layout:"/lead",
-    routes:[
-      {
+    layout: "/lead",
+    routes: [{
         path: "",
         name: "Dashboard",
         rtlName: "Tổng quan",
@@ -151,11 +139,14 @@ const manageRoutes = [
         component: ProjectsManagement,
         layout: "/lead",
         breadcrumb: "Projects",
-        routes:[
-          {
+        routes: [{
             path: "",
-            component: OverviewProject,
+            component: ProjectOverview,
             layout: "/lead/projects",
+            name: "OverView",
+            rtlName: "Quản lý dự án",
+            icon: FolderOpen,
+            breadcrumb: "OverView",
           },
           {
             path: "/:idProject",
@@ -163,15 +154,26 @@ const manageRoutes = [
             layout: "/lead/projects",
           }
         ]
-      }, {
-        path: "/tasks",
+      },
+      {
+        path: "/:projectId/tasks",
         name: "Tasks Management",
         rtlName: "Quản lý Tasks",
         icon: Assignment,
         component: TaskManagement,
         layout: "/lead",
         breadcrumb: "TasksManagement"
-      }, {
+      },
+      {
+        path: "/:projectId/timeline",
+        name: "TimeLine",
+        rtlName: "Lịch công việc",
+        icon: TimeLine,
+        component: GanttChart,
+        layout: "/staff",
+        breadcrumb: "TimeLine"
+      },
+      {
         path: "/request",
         name: "Request",
         rtlName: "Xin phép nghỉ",
@@ -199,9 +201,8 @@ const manageRoutes = [
     ]
   },
   {
-    layout:"/staff",
-    routes:[
-      {
+    layout: "/staff",
+    routes: [{
         path: "",
         name: "Dashboard",
         rtlName: "Tổng quan",
@@ -211,28 +212,27 @@ const manageRoutes = [
         breadcrumb: "Dashboard"
       },
       {
-        path: "/projects",
+        path: "/:projectId/projects",
         name: "Projects",
         rtlName: "Quản lý dự án",
         icon: FolderOpen,
         component: ProjectsManagement,
         layout: "/staff",
         breadcrumb: "Projects",
-        routes:[
-          {
+        routes: [{
             path: "",
-            component: OverviewProject,
-            layout: "/staff/projects",
+            component: ProjectOverview,
+            layout: "/admin/projects",
           },
           {
             path: "/:idProject",
             component: ProjectView,
-            layout: "/staff/projects",
+            layout: "/admin/projects",
           }
         ]
       },
       {
-        path: "/tasks",
+        path: "/:projectId/tasks",
         name: "Tasks Management",
         rtlName: "Quản lý Tasks",
         icon: Assignment,
@@ -240,7 +240,7 @@ const manageRoutes = [
         layout: "/staff",
         breadcrumb: "TasksManagement"
       }, {
-        path: "/timeline",
+        path: "/:projectId/timeline",
         name: "TimeLine",
         rtlName: "Lịch công việc",
         icon: TimeLine,
@@ -275,9 +275,8 @@ const manageRoutes = [
     ]
   },
   {
-    layout:"/hr",
-    routes:[
-      {
+    layout: "/hr",
+    routes: [{
         path: "",
         name: "Dashboard",
         rtlName: "Tổng quan",
@@ -294,7 +293,7 @@ const manageRoutes = [
         component: EmployeeManagement,
         layout: "/hr",
         breadcrumb: "HumanResources"
-      },{
+      }, {
         path: "/timekeeping",
         name: "Timekeeping",
         rtlName: "Chấm công",
@@ -310,7 +309,7 @@ const manageRoutes = [
         component: Request,
         layout: "/hr",
         breadcrumb: "Request"
-      },  {
+      }, {
         path: "/notification",
         name: "Notification",
         rtlName: "Thông báo",

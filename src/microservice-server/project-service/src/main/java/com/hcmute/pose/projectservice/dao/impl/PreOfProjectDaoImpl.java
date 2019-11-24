@@ -5,6 +5,7 @@ import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.genuid.GenerateUID;
 import com.hcmute.pose.projectservice.dao.PerOfProjectDao;
 import com.hcmute.pose.projectservice.model.PerOfProject;
+import com.hcmute.pose.projectservice.model.ProjectRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,11 @@ import java.util.Optional;
 @Repository
 public class PreOfProjectDaoImpl implements PerOfProjectDao {
     private static Logger LOGGER = LoggerFactory.getLogger(PerOfProjectDao.class);
-    private static String SQL_INSERT_POP = "INSERT INTO perofproject(proId,employeeId) VALUES(?,?)";
-    private static String SQl_GET_LIST_POP = "SELECT * FROM perofproject WHERE proid =?";
-    private static String SQL_DELETE_POP = "DELETE FROM perofproject WHERE proid=? AND employeeid=?";
+    private static String SQL_INSERT_POP = "INSERT INTO perofproject(pro_id, employee_id, role) VALUES(?,?,?)";
+    private static String SQL_GET_LIST_POP = "SELECT * FROM perofproject WHERE pro_id =?";
+    private static String SQL_DELETE_POP = "DELETE FROM perofproject WHERE pro_id=? AND employee_id=? AND role != ?";
+    private static String SQL_GET_PROJECT_WITH_ROLE = "SELECT * FROM perofproject WHERE employee_id = ? AND role = ?";
+    private static String SQL_GET_PROJECT_WITHOUT_ROLE = "SELECT * FROM perofproject WHERE employee_id = ? AND role != ?";
 
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -35,8 +38,9 @@ public class PreOfProjectDaoImpl implements PerOfProjectDao {
     public Optional<PerOfProject> createPOP(PerOfProject perOfProject) {
         try {
             databaseHelper.executeNonQuery(SQL_INSERT_POP,
-                    perOfProject.getId(),
-                    perOfProject.getEmployeeId()
+                    perOfProject.getProjectId(),
+                    perOfProject.getEmployeeId(),
+                    perOfProject.getRole().ordinal()
             );
             return Optional.of(perOfProject);
         } catch (SQLException | TransactionException e) {
@@ -46,17 +50,37 @@ public class PreOfProjectDaoImpl implements PerOfProjectDao {
     }
 
     @Override
-    public List<PerOfProject> getListPOP(Long idPro) throws SQLException {
+    public List<PerOfProject> getListPOP(Long projectId) throws SQLException {
         try {
-            return databaseHelper.executeQueryListObject(PerOfProject[].class,SQl_GET_LIST_POP,idPro);
+            return databaseHelper.executeQueryListObject(PerOfProject[].class, SQL_GET_LIST_POP, projectId);
         } catch (SQLException e) {
-            LOGGER.error("[TaskDaoImpl]:[getListTaskByID]",e);
+            LOGGER.error("[TaskDaoImpl]:[getListPOP]", e);
             throw e;
         }
     }
 
     @Override
-    public void deletePOP(Long id,Long employeeId) throws SQLException, TransactionException {
-        databaseHelper.executeNonQuery(SQL_DELETE_POP,id,employeeId);
+    public void deletePOP(Long projectId, Long employeeId) throws SQLException, TransactionException {
+        databaseHelper.executeNonQuery(SQL_DELETE_POP, projectId, employeeId, ProjectRole.OWNER.ordinal());
+    }
+
+    @Override
+    public List<PerOfProject> getListWithRole(Long employeeId, ProjectRole role) throws SQLException {
+        try {
+            return databaseHelper.executeQueryListObject(PerOfProject[].class, SQL_GET_PROJECT_WITH_ROLE, employeeId, role.ordinal());
+        } catch (SQLException e) {
+            LOGGER.error("[TaskDaoImpl]:[getListOwner]", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<PerOfProject> getListWithoutRole(Long employeeId, ProjectRole role) throws SQLException {
+        try {
+            return databaseHelper.executeQueryListObject(PerOfProject[].class, SQL_GET_PROJECT_WITHOUT_ROLE, employeeId, role.ordinal());
+        } catch (SQLException e) {
+            LOGGER.error("[TaskDaoImpl]:[getListOwner]", e);
+            throw e;
+        }
     }
 }

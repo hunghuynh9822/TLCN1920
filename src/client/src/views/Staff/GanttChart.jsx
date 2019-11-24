@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+
 import { Gantt, Toolbar, MessageArea } from '../../components'
 const styles = theme => ({
     gantt_container: { "height": "calc(100vh - 40px - 200px)" }
@@ -55,6 +56,13 @@ class GanttChart extends Component {
     render() {
         const { classes } = this.props;
         const { currentZoom, messages } = this.state;
+        let projectId = this.props.match.params.projectId;
+        console.log("Timeline of projectId : " + projectId);
+        if (projectId === 'project') {
+            return (
+                <div>No project selected</div>
+            )
+        }
         return (
             <div>
                 <div className="zoom-bar">

@@ -121,7 +121,7 @@ class Main extends Component {
                         <div className={classNames(classes.content, { [" " + classes.contentClose]: !this.props.desktopOpen && this.props.mode === 'desktop' })}>
                             <div className={classes.container}>{this.switchRoutes(curRouter)}</div>
                         </div>
-                        <Footer />
+                        {/* <Footer /> */}
                     </div>
                 </div>
             </React.Fragment>

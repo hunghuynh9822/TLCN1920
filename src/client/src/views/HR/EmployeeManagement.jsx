@@ -22,24 +22,36 @@ class EmployeeManagement extends Component {
             rows: []
         }
     }
-    createData(no, name, position, phone, address) {
+
+    testCallAction(row) {
+        console.log(row);
+        console.log(row.data);
+    }
+
+    createData(no, name, position, phone, address, data) {
         // const action = "View | Confirm";
-        const action = ['view', 'delete'];
-        return { no, name, position, phone, address, action };
+        const action = [{
+            name: 'view',
+            method: this.testCallAction
+        }, {
+            name: 'delete',
+            method: this.testCallAction
+        }];
+        return { no, name, position, phone, address, action, data };
     }
     componentDidMount() {
         getEmployees()
             .then(response => {
-                console.log(response.employees);
+                // console.log(response.employees);
                 let employees = [];
                 response.employees.map((employee, index) => {
                     let name = employee.firstName + " " + employee.middleName + " " + employee.lastName;
                     let position = employee.position.name;
                     let phone = employee.phone;
                     let address = employee.address;
-                    employees.push(this.createData(index + 1, name, position, phone, address));
+                    employees.push(this.createData(index + 1, name, position, phone, address, employee));
                 })
-                console.log(employees);
+                // console.log(employees);
                 this.setState({
                     rows: employees,
                 })

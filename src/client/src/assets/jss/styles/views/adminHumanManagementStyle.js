@@ -3,7 +3,8 @@ const adminHumanManagementStyle = theme => ({
     root: {
         padding: '10px 15px 0px 15px',
         width: '100%',
-        minHeight: 'calc(100vh - 110px)',
+        // minHeight: 'calc(100vh - 110px)',
+        minHeight: '100%',
         backgroundColor: '#f2f2f2'
     },
     area: {

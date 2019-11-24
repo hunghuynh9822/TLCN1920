@@ -32,10 +32,10 @@ class Review extends Component {
         const { classes, request } = this.props;
         const data = {
             positions: [
-                // {
-                //     id: 1,
-                //     name: 'Management'
-                // },
+                {
+                    id: 1,
+                    name: 'Management'
+                },
                 {
                     id: 2,
                     name: 'Team Leader'
@@ -142,7 +142,7 @@ class Review extends Component {
                                 }}
                                 className={classes.selectEmpty}
                             >
-                                <MenuItem key={0} value="">
+                                <MenuItem key={-1} value="">
                                     <em>None</em>
                                 </MenuItem>
                                 {data.positions.map((value) => (

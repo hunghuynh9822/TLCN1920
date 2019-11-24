@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void removeRoleToUser(Long userId, Long roleId) throws SQLException, TransactionException {
+        userDao.removeRoleToUser(userId,roleId);
+    }
+
+    @Override
     public List<User> getUsers() throws SQLException {
         return userDao.getAll();
     }

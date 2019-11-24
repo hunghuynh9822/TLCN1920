@@ -9,6 +9,7 @@ import com.hcmute.pose.employeeservice.model.*;
 import com.hcmute.pose.employeeservice.payload.StateRequest;
 import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
 import com.hcmute.pose.employeeservice.payload.EmployeeResponse;
+import com.hcmute.pose.employeeservice.payload.UpdateEmployeeRequest;
 import com.hcmute.pose.employeeservice.service.EmployeeService;
 import com.hcmute.pose.employeeservice.service.PositionService;
 import com.hcmute.pose.employeeservice.service.RoleService;
@@ -115,16 +116,23 @@ public class EmployeeServiceBuzImpl implements EmployeeServiceBuz {
 
     private Set<Role> updateRole(Long userId,List<Long> roles) throws SQLException, TransactionException, DatabaseException {
         Set<Role> userRoles = new HashSet<>();
-        for (Long id :roles
-        ) {
-            userService.addRoleToUser(userId,id);
-            userRoles.add(roleService.findById(id));
+        Set<Role> preRoles = roleService.getUserRoles(userId);
+        for (Role role: preRoles
+             ) {
+            userService.removeRoleToUser(userId, role.getId());
+        }
+        if(roles != null){
+            for (Long id :roles
+            ) {
+                userService.addRoleToUser(userId,id);
+                userRoles.add(roleService.findById(id));
+            }
         }
         return userRoles;
     }
 
     @Override
-    public void updateAcceptUser(StateRequest request) throws TransactionException, SQLException, DatabaseException {
+    public void updateUser(StateRequest request) throws TransactionException, SQLException, DatabaseException {
         try{
             databaseHelper.beginTransaction();
 
@@ -173,7 +181,7 @@ public class EmployeeServiceBuzImpl implements EmployeeServiceBuz {
         ) {
             try {
                 Employee employee = employeeService.findById(user.getId()).orElseThrow(() -> new BuzException(String.format("Can't find employee info %d", user.getId())));
-                user.setRoles(roleService.getEmployeeRoles(employee.getId()));
+                user.setRoles(roleService.getUserRoles(user.getId()));
                 employee.setPosition(positionService.findById(employee.getPosition().getId()));
                 employees.add(new EmployeeResponse(user,employee));
             }catch (BuzException | DatabaseException ex) {
@@ -206,11 +214,43 @@ public class EmployeeServiceBuzImpl implements EmployeeServiceBuz {
         try {
             User user = userService.findById(employeeId).orElseThrow(() -> new BuzException(String.format("Can't find user with %d", employeeId)));
             Employee employee = employeeService.findById(user.getId()).orElseThrow(() -> new BuzException(String.format("Can't find employee info %d", user.getId())));
-            user.setRoles(roleService.getEmployeeRoles(employee.getId()));
+            user.setRoles(roleService.getUserRoles(user.getId()));
             return Optional.of(new EmployeeResponse(user, employee));
         } catch (SQLException e) {
             LOGGER.error("[EmployeeServiceBuzImpl]:[getEmployee] GOT UNKNOWN EXCEPTION ",e);
             return Optional.empty();
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public List<Role> getRoles(){
+        try {
+            List<Role> roles = roleService.getRoles();
+            return roles;
+        } catch (SQLException e) {
+            LOGGER.error("[EmployeeServiceBuzImpl]:[getRoles] GOT UNKNOWN EXCEPTION ",e);
+            return new ArrayList<>();
+        }finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public void updateEmployee(Long employeeId, UpdateEmployeeRequest request) throws SQLException, TransactionException {
+        try{
+            databaseHelper.beginTransaction();
+
+            employeeService.updateEmployee(employeeId, request.getFirstName(), request.getMiddleName(), request.getLastName(),
+                    new ID(request.getIdNumber(), request.getIdCreated().getTime(), request.getIdLocation()),
+                    request.getAddress(), new Bank(request.getBankNumber(), request.getBankName(), request.getBankBranch()),
+                    request.getBirthday().getTime());
+
+            databaseHelper.commit();
+        } catch (TransactionException | SQLException e) {
+            LOGGER.error("[EmployeeServiceBuzImpl]:[updateEmployee] GOT UNKNOWN EXCEPTION ", e);
+            throw e;
         } finally {
             databaseHelper.closeConnection();
         }

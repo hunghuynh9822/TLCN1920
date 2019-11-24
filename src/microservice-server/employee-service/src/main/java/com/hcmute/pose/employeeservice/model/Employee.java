@@ -38,6 +38,17 @@ public class Employee extends DateAudit implements Serializable {
         this.startTime = startTime;
     }
 
+    public Employee(Long id, String firstName, String middleName, String lastName, ID identification, String address, Bank bank, Long birthday) {
+        this.id = id;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.identification = identification;
+        this.address = address;
+        this.bank = bank;
+        this.birthday = birthday;
+    }
+
     public Long getId() {
         return id;
     }

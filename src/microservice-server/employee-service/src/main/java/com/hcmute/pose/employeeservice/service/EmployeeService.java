@@ -1,5 +1,6 @@
 package com.hcmute.pose.employeeservice.service;
 
+import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
 import com.hcmute.pose.employeeservice.model.Bank;
 import com.hcmute.pose.employeeservice.model.Employee;
@@ -12,4 +13,5 @@ import java.util.Optional;
 public interface EmployeeService {
     Employee createEmployee(Long employeeId, String firstName, String middleName, String lastName, ID identification, String address, Position position, Bank bank, Long birthday, Long startTime) throws DatabaseException;
     Optional<Employee> findById(Long employeeId) throws SQLException;
+    void updateEmployee(Long id, String firstName, String middleName, String lastName, ID identification, String address, Bank bank, Long birthday) throws SQLException, TransactionException;
 }

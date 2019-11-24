@@ -1,8 +1,9 @@
 package com.hcmute.pose.projectservice.controller;
 
 import com.hcmute.pose.database.connector.exception.TransactionException;
-import com.hcmute.pose.projectservice.buz.ProjectBuz;
+import com.hcmute.pose.projectservice.buz.ProjectServiceBuz;
 import com.hcmute.pose.projectservice.model.Project;
+import com.hcmute.pose.projectservice.payload.ProjectOfPerResponse;
 import com.hcmute.pose.projectservice.payload.ProjectRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,50 +14,34 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/projects")
 public class ProjectServiceController {
     @Autowired
-    private ProjectBuz projectBuz;
+    private ProjectServiceBuz projectServiceBuz;
 
-    @PostMapping("/create")
-    public ResponseEntity createTask (@Valid @RequestBody ProjectRequest projectRequest){
+    @GetMapping("/test")
+    public ResponseEntity testApi(){
+        return new ResponseEntity("Test successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/")
+    public ResponseEntity createProject(@Valid @RequestBody ProjectRequest projectRequest){
         Project project;
         try{
-            project = projectBuz.ceratePro(projectRequest).orElseThrow(() -> new Exception("Not created Project"));
+            project = projectServiceBuz.createProject(projectRequest);
             return new ResponseEntity(project, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/listProject")
-    public ResponseEntity getListTaskByID (){
-        try{
-            List<Project> projectList = projectBuz.getListPro();
-            return new ResponseEntity(projectList,HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PutMapping("/updateTitle/{id}")
-    public ResponseEntity updatePoint (@PathVariable("id") Long id ,@RequestParam Long employeeId,@RequestParam String title ){
-        try{
-
-            projectBuz.updateTitle(id,employeeId,title);
-            return new ResponseEntity("Update title success",HttpStatus.OK);
         }catch (Exception | TransactionException e){
-            return new ResponseEntity("update title fail",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/updateSubmit/{id}")
-    public ResponseEntity updatePoint (@PathVariable("id") Long id ,@RequestParam Long employeeId,@RequestParam Boolean submit ){
+    @GetMapping("/{employeeId}/all")
+    public ResponseEntity getProjectOfEmployee(@PathVariable("employeeId") Long employeeId){
         try{
-            projectBuz.ipdateSubmit(id,employeeId,submit);
-            return new ResponseEntity("Update submit success",HttpStatus.OK);
-        }catch (Exception | TransactionException e){
-            return new ResponseEntity("update submit fail",HttpStatus.BAD_REQUEST);
+            ProjectOfPerResponse projectOfPerResponse = projectServiceBuz.getProjects(employeeId);
+            return new ResponseEntity(projectOfPerResponse, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
