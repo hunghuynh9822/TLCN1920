@@ -4,6 +4,7 @@ package com.hcmute.pose.projectservice.payload;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 
 public class ProjectRequest {
@@ -14,6 +15,8 @@ public class ProjectRequest {
     private String title;
     @NotBlank(message = "Not null description")
     private String description;
+    private List<Long> projectAdmin;
+    private List<Long> projectMember;
 
     public ProjectRequest() {
     }
@@ -40,5 +43,21 @@ public class ProjectRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Long> getProjectAdmin() {
+        return projectAdmin;
+    }
+
+    public void setProjectAdmin(List<Long> projectAdmin) {
+        this.projectAdmin = projectAdmin;
+    }
+
+    public List<Long> getProjectMember() {
+        return projectMember;
+    }
+
+    public void setProjectMember(List<Long> projectMember) {
+        this.projectMember = projectMember;
     }
 }

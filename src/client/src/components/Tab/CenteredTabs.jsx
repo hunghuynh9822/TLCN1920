@@ -6,7 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 const styles = theme => ({
-
+    root: {
+        minHeight: '100%',
+    }
 })
 class CenteredTabs extends Component {
     constructor(props) {
@@ -23,6 +25,9 @@ class CenteredTabs extends Component {
                     indicatorColor="primary"
                     textColor="primary"
                     centered
+                    style={{
+                        minHeight: '100%',
+                    }}
                 >
                     {this.props.tabs.map((tab,key)=>(
                         <Tab key={key} label={tab.name}/>

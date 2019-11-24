@@ -8,18 +8,34 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AddStafftoProject from '../AddStafftoProject/AddStafftoProject';
+import IconButton from '@material-ui/core/IconButton';
+
 import Moment from 'moment';
 import axios from 'axios';
+
+import TuneIcon from '@material-ui/icons/Tune';
 const styles = theme => ({
     card: {
         width: 245,
         height: 200,
-        margin: '0px 10px',
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        marginBottom: theme.spacing(1),
+        marginTop: theme.spacing(1),
         position: 'relative',
     },
     font: {
         color: '#8d919a',
         fontSize: '0.7em',
+    },
+    title: {
+        margin: '12px 0px 0px 15px',
+        fontSize: '1em',
+        fontWeight: '400',
+        color: '#464c59',
+        '&:hover': {
+            background: '#e6e6e6',
+        },
     }
 });
 const CustomProcessBar = withStyles({
@@ -35,41 +51,32 @@ const CustomProcessBar = withStyles({
 class Project extends Component {
     constructor(props) {
         super(props);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleSetting = this.handleSetting.bind(this);
     }
 
-    state={
-        listPOP : []
+    handleClick() {
+        const { project, handleToProject } = this.props;
+        handleToProject(project.id);
     }
-    componentDidMount(){
-        var url = "http://192.168.200.1:8080/promicro/listPOP/"+ this.props.value.id
-        axios.get(url)
-        .then(response =>{
-            console.log(response.data);
-            const listPOP = response.data;
-            this.setState({listPOP : listPOP})
-        })
-        .catch(error => console.log("ok loi ne "+error))
+
+    handleSetting() {
+        console.log("Click setting");
     }
+
     render() {
         const { classes } = this.props;
         return (
-            <Card className={classes.card}>
+            <Card className={classes.card} >
                 <CardHeader
                     action={
-                        <div style={{ margin: '20px' }}>
-                            {/* <Tune /> */}
-                            <AddStafftoProject  project={this.props.value} listPOP={this.state.listPOP}/>
-                        </div>
-
+                        <IconButton aria-label="settings" onClick={this.handleSetting} style={{ margin: '10px'}}>
+                            <TuneIcon />
+                        </IconButton>
                     }
                     title={
-                        <div style={{
-                            margin: '12px 0px 0px 15px',
-                            fontSize: '1em',
-                            fontWeight: '400',
-                            color: '#464c59',
-                        }}>
-                            {this.props.value.title}
+                        <div className={classes.title} onClick={this.handleClick} >
+                            {this.props.project.title}
                         </div>
                     }
                     subheader={
@@ -78,7 +85,7 @@ class Project extends Component {
                             fontSize: '0.7em',
                             fontWeight: '400',
                         }}>
-                            {Moment(this.props.value.createTime).format('YYYY-MM-DD')}
+                            {Moment(this.props.project.createdAt).format('YYYY-MM-DD')}
                         </div>
                     }
                     style={{ padding: '0px' }} />
@@ -98,9 +105,9 @@ class Project extends Component {
                         opacity: '0.7',
                         color: '#8d919a',
                     }}>
-                        No status
+                        {this.props.project.state}
                     </Button>
-                    <div style={{marginBottom:'7px'}}>
+                    <div style={{ marginBottom: '7px' }}>
                         <span className={classes.font} style={{ float: 'left' }}>
                             50% Completed
                         </span>
@@ -116,5 +123,7 @@ class Project extends Component {
 }
 Project.propTypes = {
     classes: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
+    handleToProject: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(Project);
