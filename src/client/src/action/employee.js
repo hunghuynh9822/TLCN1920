@@ -2,8 +2,8 @@ import {
     request
 } from './'
 
-const url = '/emplmicro/api/employees';
-const superUrl = '/emplmicro/api/admin/employees'
+const url = '/api/employees';
+const superUrl = '/api/admin/employees'
 
 export function create(createRequest) {
     return request({
