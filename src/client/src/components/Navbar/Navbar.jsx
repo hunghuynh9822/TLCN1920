@@ -17,6 +17,7 @@ import { CustomButton, MainNavbarLink, RouterBreadcrumbs } from "../"
 
 import styles from "../../assets/jss/material-react/components/headerStyle";
 
+
 import bgImage from "../../assets/img/navbar.jpg"
 
 class Navbar extends Component {
@@ -84,6 +85,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mapStateToProps = (state, ownProps) => {
     return {
         desktopOpen: state.layout.desktopOpen,
+        currentUser: state.auth.currentUser,
     }
 }
 Navbar.propTypes = {

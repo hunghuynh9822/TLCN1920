@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ProjectServiceBuz {
-    Project createProject(ProjectRequest projectRequest) throws Exception, TransactionException;
+    ProjectResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException;
     AllProjectResponse getListProject() throws Exception;
     EmployeeProjectResponse getProjectsOfEmployee(Long employeeId) throws Exception;
     void updateProject(ProjectUpdateRequest projectUpdateRequest) throws Exception, TransactionException;

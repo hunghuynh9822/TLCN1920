@@ -88,7 +88,7 @@ class NewProject extends Component {
             description: "",
           }
         })
-        handleToProject(response.id)
+        handleToProject(response)
       }).catch(error => {
         console.log(error);
         //(error && error.message) || 
@@ -132,35 +132,33 @@ class NewProject extends Component {
           <Paper className={classes.paper}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <FormControl required fullWidth className={classes.formControl}>
-                  <InputLabel htmlFor="title-required">Title</InputLabel>
-                  <TextField
-                    id="title"
-                    name="title"
-                    fullWidth
-                    placeholder="Title"
-                    variant="outlined"
-                    autoComplete="title"
-                    value={request.title}
-                    onChange={this.handleInputChange}
-                  />
-                </FormControl>
+                <TextField
+                  id="title"
+                  name="title"
+                  label="Title"
+                  required
+                  fullWidth
+                  placeholder="Title"
+                  variant="outlined"
+                  autoComplete="title"
+                  value={request.title}
+                  onChange={this.handleInputChange}
+                />
               </Grid>
               <Grid item xs={12}>
-                <FormControl required fullWidth className={classes.formControl}>
-                  <InputLabel htmlFor="description-required">Description</InputLabel>
-                  <TextField
-                    id="description"
-                    name="description"
-                    fullWidth
-                    multiline
-                    placeholder="Description"
-                    rows="6"
-                    variant="outlined"
-                    value={request.description}
-                    onChange={this.handleInputChange}
-                  />
-                </FormControl>
+                <TextField
+                  id="description"
+                  name="description"
+                  fullWidth
+                  required
+                  label="Description"
+                  multiline
+                  placeholder="Description"
+                  rows="6"
+                  variant="outlined"
+                  value={request.description}
+                  onChange={this.handleInputChange}
+                />
               </Grid>
             </Grid>
           </Paper>

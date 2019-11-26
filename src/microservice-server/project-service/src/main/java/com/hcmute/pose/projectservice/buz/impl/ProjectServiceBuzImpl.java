@@ -13,15 +13,21 @@ import com.hcmute.pose.projectservice.service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     private static Logger LOGGER = LoggerFactory.getLogger(ProjectServiceBuzImpl.class);
+    private static final String EMPLOYEE_SERVICE = "http://employee-service/api/employees";
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -31,11 +37,14 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     @Autowired
     private PerOfProjectService perOfProjectService;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @Override
-    public Project createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
+    public ProjectResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
-            Project project = projectService.ceratePro(projectRequest.getTitle(),projectRequest.getDescription());
+            Project project = projectService.createProject(projectRequest.getTitle(),projectRequest.getDescription());
             perOfProjectService.createPOP(project.getId(), projectRequest.getEmployeeId(), ProjectRole.OWNER);
             if(projectRequest.getProjectAdmin() != null) {
                 for (Long employeeId : projectRequest.getProjectAdmin()) {
@@ -47,8 +56,9 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
                     perOfProjectService.createPOP(project.getId(), employeeId, ProjectRole.MEMBER);
                 }
             }
+            ProjectResponse response = getProjectResponse(project);
             databaseHelper.commit();
-            return project;
+            return response;
         }catch (Exception | TransactionException e){
             LOGGER.error("",e);
             throw e;
@@ -108,16 +118,16 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     }
 
     private ProjectResponse getProjectResponse(Project project) throws Exception {
-        try {
-            List<Long> members = new ArrayList<>();
-            List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
-            for(PerOfProject per : perOfProjects) {
-                members.add(per.getEmployeeId());
-            }
-            return new ProjectResponse(project, members);
-        } finally {
-            databaseHelper.closeConnection();
+        List<EmployeeResponse> members = new ArrayList<>();
+        List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
+        for (PerOfProject per : perOfProjects) {
+            String url = EMPLOYEE_SERVICE + "/{id}";
+            Map<String, String> params = new HashMap<>();
+            params.put("id", per.getEmployeeId().toString());
+            EmployeeResponse employeeResponse = restTemplate.getForObject(url, EmployeeResponse.class, params);
+            members.add(employeeResponse);
         }
+        return new ProjectResponse(project, members);
     }
 
     @Override

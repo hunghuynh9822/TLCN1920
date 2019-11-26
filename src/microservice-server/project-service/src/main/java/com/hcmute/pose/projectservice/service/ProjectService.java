@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProjectService {
-    Project ceratePro(String title, String description) throws Exception;
+    Project createProject(String title, String description) throws Exception;
     List<Project> getListPro () throws SQLException;
     void updateProject(Long id, String title, String description, ProjectState state) throws SQLException, TransactionException;
     void updateState(Long id, ProjectState state) throws SQLException, TransactionException;

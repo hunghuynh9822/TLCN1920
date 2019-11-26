@@ -48,8 +48,9 @@ class Sidebar extends Component {
 
     getNavRoute() {
         const { classes } = this.props;
-        const { projectId } = this.props;
+        const { projectItem } = this.props;
         const { color, router } = this.props;
+        const projectId = projectItem ? projectItem.project.id : null
         return (
             <List className={classes.list}>
                 {router.routes.map((prop, key) => {
@@ -203,7 +204,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         mobileOpen: state.layout.mobileOpen,
         desktopOpen: state.layout.desktopOpen,
-        projectId: state.project.projectId,
+        projectItem: state.project.projectItem,
     }
 }
 

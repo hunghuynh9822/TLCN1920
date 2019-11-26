@@ -56,8 +56,8 @@ class Project extends Component {
     }
 
     handleClick() {
-        const { project, handleToProject } = this.props;
-        handleToProject(project.id);
+        const { projectItem, handleToProject } = this.props;
+        handleToProject(projectItem);
     }
 
     handleSetting() {
@@ -66,6 +66,7 @@ class Project extends Component {
 
     render() {
         const { classes } = this.props;
+        const project = this.props.projectItem.project;
         return (
             <Card className={classes.card} >
                 <CardHeader
@@ -76,7 +77,7 @@ class Project extends Component {
                     }
                     title={
                         <div className={classes.title} onClick={this.handleClick} >
-                            {this.props.project.title}
+                            {project.title}
                         </div>
                     }
                     subheader={
@@ -85,7 +86,7 @@ class Project extends Component {
                             fontSize: '0.7em',
                             fontWeight: '400',
                         }}>
-                            {Moment(this.props.project.createdAt).format('YYYY-MM-DD')}
+                            {Moment(project.createdAt).format('YYYY-MM-DD')}
                         </div>
                     }
                     style={{ padding: '0px' }} />
@@ -105,7 +106,7 @@ class Project extends Component {
                         opacity: '0.7',
                         color: '#8d919a',
                     }}>
-                        {this.props.project.state}
+                        {project.state}
                     </Button>
                     <div style={{ marginBottom: '7px' }}>
                         <span className={classes.font} style={{ float: 'left' }}>
@@ -123,7 +124,7 @@ class Project extends Component {
 }
 Project.propTypes = {
     classes: PropTypes.object.isRequired,
-    project: PropTypes.object.isRequired,
+    projectItem: PropTypes.object.isRequired,
     handleToProject: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(Project);

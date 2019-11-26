@@ -8,7 +8,7 @@ import { withRouter, Switch, Route } from "react-router-dom";
 // core components
 import styles from "../../assets/jss/styles/views/projectManagementStyle";
 
-import { updateProjectId } from '../../action/project'
+import { updateProjectItem } from '../../action/project'
 
 class ProjectsManagement extends Component {
     constructor(props) {
@@ -77,13 +77,13 @@ ProjectsManagement.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        projectId: state.project.projectId,
+        projectItem: state.project.projectItem,
         currentUser: state.auth.currentUser,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateProjectId: (projectId) => dispatch(updateProjectId(projectId)),
+        updateProjectItem: (projectItem) => dispatch(updateProjectItem(projectItem)),
     }
 }
 

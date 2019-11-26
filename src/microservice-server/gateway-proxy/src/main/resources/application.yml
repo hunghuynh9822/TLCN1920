@@ -24,6 +24,10 @@ zuul:
       path: /api/employees/**
       strip-prefix: false
       service-id: employee-service
+    adminemloyees:
+      path: /api/admin/employees/**
+      strip-prefix: false
+      service-id: employee-service
     tasks:
       path: /api/tasks/**
       strip-prefix: false

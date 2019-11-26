@@ -6,12 +6,12 @@ import java.util.List;
 
 public class ProjectResponse {
     private Project project;
-    private List<Long> members;
+    private List<EmployeeResponse> members;
 
     public ProjectResponse() {
     }
 
-    public ProjectResponse(Project project, List<Long> members) {
+    public ProjectResponse(Project project, List<EmployeeResponse> members) {
         this.project = project;
         this.members = members;
     }
@@ -24,11 +24,11 @@ public class ProjectResponse {
         this.project = project;
     }
 
-    public List<Long> getMembers() {
+    public List<EmployeeResponse> getMembers() {
         return members;
     }
 
-    public void setMembers(List<Long> members) {
+    public void setMembers(List<EmployeeResponse> members) {
         this.members = members;
     }
 }

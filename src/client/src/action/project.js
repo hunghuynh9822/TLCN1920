@@ -7,10 +7,10 @@ const superUrl = '/api/admin/projects';
 
 export const UPDATE_PROJECT_ID = 'UPDATE_PROJECT_ID';
 
-export function updateProjectId(projectId) {
+export function updateProjectItem(projectItem) {
     return {
         type: UPDATE_PROJECT_ID,
-        projectId
+        projectItem
     };
 }
 

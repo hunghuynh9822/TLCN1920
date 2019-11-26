@@ -5,6 +5,7 @@ import com.hcmute.pose.projectservice.buz.ProjectServiceBuz;
 import com.hcmute.pose.projectservice.model.Project;
 import com.hcmute.pose.projectservice.payload.AllProjectResponse;
 import com.hcmute.pose.projectservice.payload.ProjectRequest;
+import com.hcmute.pose.projectservice.payload.ProjectResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class AdminProjectServiceController {
     @PostMapping("/")
     public ResponseEntity createProject(@Valid @RequestBody ProjectRequest projectRequest){
         try{
-            Project project = projectServiceBuz.createProject(projectRequest);
+            ProjectResponse project = projectServiceBuz.createProject(projectRequest);
             return new ResponseEntity(project, HttpStatus.OK);
         }catch (Exception | TransactionException e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);

@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class
-
-
- GenerateUID {
+public class GenerateUID {
     private static Logger LOGGER = LoggerFactory.getLogger(GenerateUID.class);
 
     private String dbUrl;

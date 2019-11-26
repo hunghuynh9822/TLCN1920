@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
+import { connect } from 'react-redux';
+import { withAlert } from 'react-alert'
+
 import SwipeableViews from 'react-swipeable-views';
 
 import { CenteredTabs, TabPanel } from '../../../components';
@@ -10,6 +13,8 @@ import { ProjectDetails, ProjectTasks, GanttChart, ProjectAnalytics } from '../.
 
 import Button from '@material-ui/core/Button';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+
+import { updateProjectItem } from '../../../action/project'
 
 const styles = theme => ({
     sub_layout_header: {
@@ -58,6 +63,7 @@ class ProjectView extends Component {
         const { match } = this.props;
         let path = match.path;
         let back = path.substring(0, path.lastIndexOf('/'));
+        this.props.updateProjectItem(null);
         console.log("back :" + back)
         this.props.history.push(back);
     }
@@ -82,9 +88,10 @@ class ProjectView extends Component {
             }
         ];
         const { match } = this.props;
-        const projectId = match.params.projectId
-        console.log("ProjectView : ");
-        console.log(match);
+        // const projectId = match.params.projectId;
+        const { projectItem } = this.props;
+        const projectId = projectItem.project.id
+        console.log("ProjectView : " + projectId);
         return (
             <React.Fragment>
                 <div className={classes.sub_layout_header}>
@@ -130,4 +137,18 @@ class ProjectView extends Component {
 ProjectView.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(ProjectView);
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        projectItem: state.project.projectItem,
+        currentUser: state.auth.currentUser,
+        currentRole: state.auth.currentRole,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        updateProjectItem: (projectItem) => dispatch(updateProjectItem(projectItem)),
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(ProjectView)));
