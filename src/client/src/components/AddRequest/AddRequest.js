@@ -63,7 +63,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   );
 });
 
-export default function AddRequest() {
+export default function AddRequest({addReq}) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -75,7 +75,19 @@ export default function AddRequest() {
     setOpen(false);
   };
 
-
+  const [date, setDate] = React.useState(new Date());
+  const handleDate = (date) => {
+    setDate(date);
+  }
+  const [date2, setDate2] = React.useState(new Date());
+  const handleDate2 = (date) => {
+    setDate2(date);
+  }
+  const handleSubmit = event => {
+    event.preventDefault();
+    var temp = {"position":"Nhân viên","timestart":date,"timeend":date2,"reason":"Di ban nha","confirm":false,"action":[{"name":"view"},{"name":"confirm"}]}
+    addReq(temp)
+  }
   return (
     <div>
       <Button variant="contained" color="primary"  onClick={handleOpen} className={classes.button}>
@@ -94,12 +106,13 @@ export default function AddRequest() {
         }}
       >
         <Fade in={open}>
+        <form onSubmit={handleSubmit}>
           <div className={classes.paper}>
             <h2 id="spring-modal-title" className={classes.title}>Request Form</h2>
             <h4>Time start</h4>
             <div style={{display:'flex'}}>
               <div>
-              <MaterialUIPickers />
+              <MaterialUIPickers getDate={handleDate}/>
               </div> 
             <div style={{marginLeft:'10px'}}>
             <Hour/>
@@ -108,7 +121,7 @@ export default function AddRequest() {
             <h4>Time end</h4>
             <div style={{display:'flex'}}> 
               <div>
-              <MaterialUIPickers />
+              <MaterialUIPickers  getDate={handleDate2}/>
               </div> 
             <div style={{marginLeft:'10px'}}>
             <Hour/>
@@ -121,11 +134,12 @@ export default function AddRequest() {
             </FormControl>
             </div>
             <div>
-            <Button variant="contained" color="primary" className={classnames(classes.button,classes.buttonSubmit)}>
+            <Button variant="contained" color="primary"  type="submit" className={classnames(classes.button,classes.buttonSubmit)}>
             Submit
             </Button>
             </div>   
           </div>
+          </form>>
         </Fade>
       </Modal>
     </div>
