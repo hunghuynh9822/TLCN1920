@@ -16,10 +16,10 @@ import java.util.Optional;
 public class RequestDaoImpl implements RequestDao {
 
     private static Logger LOGGER = LoggerFactory.getLogger(RequestDao.class);
-    private static String SQL_INSERT_REQUEST = "INSERT INTO requests(id, employeeid, name, , position, timestart, timeend, reason,confirm) VALUES(?,?,?,?,?,?,?,?)";
+    private static String SQL_INSERT_REQUEST = "INSERT INTO requests(id, employeeid, name,  position, timestart, timeend, reason,confirm) VALUES(?,?,?,?,?,?,?,?)";
     private static String SQl_GET_LIST_REQ = "SELECT * FROM requests";
     private static String SQl_GET_REQ_BY_ID = "SELECT * FROM requests WHERE employeeid = ?";
-    private static String SQL_UPDATE_CONFIRM = "UPDATE requests SET confirm=? WHERE id=? AND employeeid=?";
+    private static String SQL_UPDATE_CONFIRM = "UPDATE requests SET confirm=? WHERE id=?";
     private static String SQL_DELETE_REQ = "DELETE FROM requests WHERE id=?";
 
     @Autowired
@@ -78,8 +78,8 @@ public class RequestDaoImpl implements RequestDao {
     public void updateRequest(Long id, Boolean confirm) throws SQLException, TransactionException {
         try {
             databaseHelper.executeNonQuery(SQL_UPDATE_CONFIRM,
-                    id,
-                    confirm
+                    confirm,
+                    id
             );
         } catch (SQLException | TransactionException e) {
             LOGGER.error("[RequestDaoImpl]:[updateConfirm]", e);
@@ -88,12 +88,9 @@ public class RequestDaoImpl implements RequestDao {
     }
 
     @Override
-    public void deleteRequest(Long id, Long employeeid) throws SQLException, TransactionException {
+    public void deleteRequest(Long id) throws SQLException, TransactionException {
         try {
-            databaseHelper.executeNonQuery(SQL_DELETE_REQ,
-                    id,
-                    employeeid
-            );
+            databaseHelper.executeNonQuery(SQL_DELETE_REQ, id);
         } catch (SQLException | TransactionException e) {
             LOGGER.error("[RequestDaoImpl]:[DeleteReq]", e);
             throw e;

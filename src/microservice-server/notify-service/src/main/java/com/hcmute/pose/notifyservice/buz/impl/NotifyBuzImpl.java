@@ -1,34 +1,34 @@
-package com.hcmute.pose.requestservice.buz.impl;
+package com.hcmute.pose.notifyservice.buz.impl;
 
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
-import com.hcmute.pose.requestservice.buz.RequestServiceBuz;
-import com.hcmute.pose.requestservice.model.Request;
-import com.hcmute.pose.requestservice.payload.RequestRequest;
-import com.hcmute.pose.requestservice.service.RequestService;
+import com.hcmute.pose.notifyservice.buz.NotifyBuz;
+import com.hcmute.pose.notifyservice.model.Notify;
+import com.hcmute.pose.notifyservice.payload.NotifyRequest;
+import com.hcmute.pose.notifyservice.service.NotifyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-public class RequestServiceBuzImpl implements RequestServiceBuz {
-    private static Logger LOGGER = LoggerFactory.getLogger(RequestServiceBuz.class);
+public class NotifyBuzImpl implements NotifyBuz {
+    private static Logger LOGGER = LoggerFactory.getLogger(NotifyBuz.class);
     @Autowired
     private DatabaseHelper databaseHelper;
 
     @Autowired
-    private RequestService requestService;
-
+    private NotifyService notifyService;
 
     @Override
-    public Request createRequest(RequestRequest requestRequest) throws Exception, TransactionException {
+    public Optional<Notify> createNotify(NotifyRequest notifyRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
-            Request request = requestService.createRequest(requestRequest.getEmployeeid(),requestRequest.getName(),requestRequest.getPosition(),requestRequest.getTimestart(),requestRequest.getTimeend(),requestRequest.getReason(),requestRequest.getConfirm());
+            Optional<Notify> notify = notifyService.createNotify(notifyRequest.getCreate_id(),notifyRequest.getCreate_name(),notifyRequest.getCreate_time(),notifyRequest.getContent(),notifyRequest.getReceive_id());
             databaseHelper.commit();
-            return request;
+            return notify;
         }catch (Exception | TransactionException e){
             LOGGER.error("createRequest",e);
             throw e;
@@ -38,20 +38,15 @@ public class RequestServiceBuzImpl implements RequestServiceBuz {
     }
 
     @Override
-    public List<Request> getRequests() throws SQLException {
-        return requestService.getRequests();
+    public List<Notify> getNotifyById(Long receive_id) throws SQLException {
+        return notifyService.getNotifyById(receive_id);
     }
 
     @Override
-    public List<Request> getRequestByEmployee(Long employeeid) throws SQLException, TransactionException {
-        return requestService.getRequestByEmployee(employeeid);
-    }
-
-    @Override
-    public void updateRequest(Long id, Boolean confirm) throws SQLException, TransactionException {
+    public void updateView(Long id, Boolean view) throws SQLException, TransactionException {
         try{
             databaseHelper.beginTransaction();
-            requestService.updateRequest(id, confirm);
+            notifyService.updateView(id, view);
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
             LOGGER.error("",e);
@@ -65,7 +60,7 @@ public class RequestServiceBuzImpl implements RequestServiceBuz {
     public void deleteRequest(Long id) throws SQLException, TransactionException {
         try{
             databaseHelper.beginTransaction();
-            requestService.deleteRequest(id);
+            notifyService.deleteRequest(id);
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
             LOGGER.error("",e);

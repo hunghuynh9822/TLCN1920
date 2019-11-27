@@ -57,21 +57,21 @@ public class RequestServiceTroller {
     public ResponseEntity updatePoint (@PathVariable("id") Long id ,@RequestParam Boolean confirm ){
         try{
             requestServiceBuz.updateRequest(id,confirm);
-            return new ResponseEntity("Update point success",HttpStatus.OK);
+            return new ResponseEntity("Update confirm success",HttpStatus.OK);
         }catch (Exception | TransactionException e){
             LOGGER.error("",e);
-            return new ResponseEntity("update point fail",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("update confirm fail",HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/delete/{id}")
-    public ResponseEntity updatePoint (@PathVariable("id") Long id ,@RequestParam Long employeeid ){
+    public ResponseEntity updatePoint (@PathVariable("id") Long id  ){
         try{
-            requestServiceBuz.deleteRequest(id,employeeid);
-            return new ResponseEntity("Update point success",HttpStatus.OK);
+            requestServiceBuz.deleteRequest(id);
+            return new ResponseEntity("Delete confirm success",HttpStatus.OK);
         }catch (Exception | TransactionException e){
             LOGGER.error("",e);
-            return new ResponseEntity("update point fail",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Delete confirm fail",HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -5,9 +5,6 @@ public class RequestRequest {
     private String name;
     private String position;
     private Long timestart;
-
-
-
     private Long timeend;
     private String reason;
     private Boolean confirm;

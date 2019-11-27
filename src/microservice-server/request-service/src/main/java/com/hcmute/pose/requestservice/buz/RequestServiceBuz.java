@@ -12,5 +12,5 @@ public interface RequestServiceBuz {
     List<Request> getRequests () throws SQLException;
     List<Request> getRequestByEmployee (Long employeeid) throws SQLException, TransactionException;
     void updateRequest(Long id, Boolean confirm) throws SQLException, TransactionException;
-    void deleteRequest (Long id , Long employeeid) throws SQLException, TransactionException;
+    void deleteRequest (Long id ) throws SQLException, TransactionException;
 }

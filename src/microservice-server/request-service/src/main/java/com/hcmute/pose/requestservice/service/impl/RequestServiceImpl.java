@@ -37,7 +37,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void deleteRequest(Long id, Long employeeid) throws SQLException, TransactionException {
-        requestDao.deleteRequest(id,employeeid);
+    public void deleteRequest(Long id) throws SQLException, TransactionException {
+        requestDao.deleteRequest(id);
     }
 }
