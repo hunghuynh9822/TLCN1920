@@ -47,7 +47,7 @@ class MainRouter extends Component {
     Alert.success("You're safely logged out!");
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.loadCurrentlyLoggedInUser();
   }
 
