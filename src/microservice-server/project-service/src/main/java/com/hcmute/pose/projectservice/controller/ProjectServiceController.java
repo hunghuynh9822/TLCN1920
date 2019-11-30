@@ -3,6 +3,7 @@ package com.hcmute.pose.projectservice.controller;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.buz.ProjectServiceBuz;
 import com.hcmute.pose.projectservice.model.Project;
+import com.hcmute.pose.projectservice.payload.AllEmployeeResponse;
 import com.hcmute.pose.projectservice.payload.EmployeeProjectResponse;
 import com.hcmute.pose.projectservice.payload.ProjectRequest;
 import com.hcmute.pose.projectservice.payload.ProjectResponse;
@@ -39,6 +40,16 @@ public class ProjectServiceController {
         try{
             EmployeeProjectResponse employeeProjectResponse = projectServiceBuz.getProjectsOfEmployee(employeeId);
             return new ResponseEntity(employeeProjectResponse, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{projectId}/employees")
+    public ResponseEntity getEmployee(@PathVariable("projectId") Long projectId){
+        try{
+            AllEmployeeResponse allEmployeeResponse = projectServiceBuz.getEmployeesFreeForProject(projectId);
+            return new ResponseEntity(allEmployeeResponse, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

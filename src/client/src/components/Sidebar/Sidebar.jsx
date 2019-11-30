@@ -50,7 +50,6 @@ class Sidebar extends Component {
         const { classes } = this.props;
         const { projectItem } = this.props;
         const { color, router } = this.props;
-        const projectId = projectItem ? projectItem.project.id : null
         return (
             <List className={classes.list}>
                 {router.routes.map((prop, key) => {
@@ -62,7 +61,12 @@ class Sidebar extends Component {
                     });
                     let path = prop.path;
                     if (path.includes(':projectId')) {
-                        path = this.getPathToProjectId(path, projectId);
+                        if(projectItem) {
+                            const projectId = projectItem ? projectItem.project.id : null
+                            path = this.getPathToProjectId(path, projectId);
+                        } else {
+                            return;
+                        }
                     }
                     return (
                         <NavLink

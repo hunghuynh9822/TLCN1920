@@ -22,6 +22,7 @@ public class EmployeeServiceController {
     private EmployeeServiceBuz employeeServiceBuz;
 
     @GetMapping("/")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF','LEAD','HR')")
     public ResponseEntity getEmployees() {
         List<EmployeeResponse> employees = employeeServiceBuz.getEmployees();
 

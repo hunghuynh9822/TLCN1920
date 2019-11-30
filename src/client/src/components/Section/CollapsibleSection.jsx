@@ -14,6 +14,7 @@ const styles = theme => ({
         marginBottom: '10px',
     },
     bar: {
+        backgroundColor: '#f7f7f7',
         height: '50px',
         '&:hover': {
             background: color('#e6e6e6')

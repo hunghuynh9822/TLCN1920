@@ -1,5 +1,6 @@
 package com.hcmute.pose.projectservice.buz.impl;
 
+import com.google.gson.Gson;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.ProjectServiceBuz;
@@ -60,7 +61,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             databaseHelper.commit();
             return response;
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[createProject]",e);
             throw e;
         } finally {
             databaseHelper.closeConnection();
@@ -125,6 +126,8 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             Map<String, String> params = new HashMap<>();
             params.put("id", per.getEmployeeId().toString());
             EmployeeResponse employeeResponse = restTemplate.getForObject(url, EmployeeResponse.class, params);
+            assert employeeResponse != null;
+            employeeResponse.setRole(per.getRole());
             members.add(employeeResponse);
         }
         return new ProjectResponse(project, members);
@@ -160,7 +163,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
 
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[updateProject]",e);
             throw e;
         }finally {
             databaseHelper.closeConnection();
@@ -174,7 +177,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             projectService.updateState(id, state);
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[updateState]",e);
             throw e;
         }finally {
             databaseHelper.closeConnection();
@@ -190,7 +193,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             perOfProjectService.createPOP(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId(), perOfProjectRequest.getRole());
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[createPOP]",e);
             throw e;
         }finally {
             databaseHelper.closeConnection();
@@ -213,9 +216,40 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             perOfProjectService.deletePOP(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId());
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[deletePOP]",e);
             throw e;
         }finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public AllEmployeeResponse getEmployeesFreeForProject(Long projectId) throws Exception {
+        try {
+            Project project = projectService.getProject(projectId);
+            List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
+            String url = EMPLOYEE_SERVICE + "/";
+            AllEmployeeResponse allEmployeeResponse = restTemplate.getForObject(url, AllEmployeeResponse.class);
+            List<EmployeeResponse> employeeResponses = allEmployeeResponse.getEmployees();
+            List<EmployeeResponse> employees = new ArrayList<>();
+            for (EmployeeResponse employee : employeeResponses) {
+                boolean contain = false;
+                for (PerOfProject per : perOfProjects) {
+                    if (per.getEmployeeId().equals(employee.getId())) {
+                        contain = true;
+                        break;
+                    }
+                }
+                if (!contain) {
+                    employees.add(employee);
+                }
+            }
+            LOGGER.info("Employee free : {}", new Gson().toJson(employees));
+            return new AllEmployeeResponse(employees);
+        } catch (Exception e){
+            LOGGER.error("[getEmployeesFreeForProject]",e);
+            throw e;
+        } finally {
             databaseHelper.closeConnection();
         }
     }

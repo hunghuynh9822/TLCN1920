@@ -1,21 +1,21 @@
 package com.hcmute.pose.projectservice.payload;
 
-import com.google.gson.annotations.SerializedName;
+import com.hcmute.pose.projectservice.model.ProjectRole;
 
 public class EmployeeResponse {
-    @SerializedName("id")
-    private Long employeeId;
+    private Long id;
     private String firstName;
     private String middleName;
     private String lastName;
     private String email;
     private String imageUrl;
+    private ProjectRole role;
 
     public EmployeeResponse() {
     }
 
-    public EmployeeResponse(Long employeeId, String firstName, String middleName, String lastName, String email, String imageUrl) {
-        this.employeeId = employeeId;
+    public EmployeeResponse(Long id, String firstName, String middleName, String lastName, String email, String imageUrl) {
+        this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -23,12 +23,22 @@ public class EmployeeResponse {
         this.imageUrl = imageUrl;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public EmployeeResponse(Long id, String firstName, String middleName, String lastName, String email, String imageUrl, ProjectRole role) {
+        this.id = id;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.role = role;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -69,5 +79,13 @@ public class EmployeeResponse {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public ProjectRole getRole() {
+        return role;
+    }
+
+    public void setRole(ProjectRole role) {
+        this.role = role;
     }
 }

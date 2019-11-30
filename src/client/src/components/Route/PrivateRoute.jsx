@@ -12,8 +12,10 @@ class PrivateRoute extends Component {
     constructor(props) {
         super(props);
     }
+
     componentDidMount() {
         const { authenticated, path, currentUser, defaultPath } = this.props;
+        console.log("PrivateRoute authenticated : " + JSON.stringify(authenticated) + " current user " + JSON.stringify(currentUser));
         if (authenticated && currentUser) {
             let paths = currentUser.roles.map((role) => {
                 let path = ROUTER_MAP[role.name];

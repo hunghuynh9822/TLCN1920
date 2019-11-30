@@ -29,6 +29,13 @@ export function getProjects(employeeId) {
     });
 }
 
+export function getEmployeeFree(projectId) {
+    return request({
+        url: url + "/" + projectId + "/employees",
+        method: 'GET',
+    });
+}
+
 export function getAllProjects() {
     return request({
         url: superUrl + "/",
