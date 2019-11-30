@@ -8,17 +8,18 @@ import com.hcmute.pose.notifyservice.model.Notify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public class NotifyDaoImpl implements NotifyDao {
     private static Logger LOGGER = LoggerFactory.getLogger(Notify.class);
     private static String SQL_INSERT_NOTIFY = "INSERT INTO notify(id, create_id, create_name, create_time, content, receive_id, view) VALUES(?,?,?,?,?,?,?)";
     private static String SQl_GET_NOT_BY_ID = "SELECT * FROM notify WHERE receive_id = ?";
     private static String SQL_UPDATE_VIEW = "UPDATE notify SET view=? WHERE id=?";
-    private static String SQL_DELETE_NOT = "DELETE FROM requests WHERE id=?";
+    private static String SQL_DELETE_NOT = "DELETE FROM notify WHERE id=?";
 
     @Autowired
     private DatabaseHelper databaseHelper;
