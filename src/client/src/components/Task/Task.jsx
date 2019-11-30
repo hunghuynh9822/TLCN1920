@@ -24,8 +24,6 @@ class Task extends Component {
         points : 0, 
     }
 
-    
-
     componentDidMount() {
         //var url = "http://192.168.200.1:8080/taskmicro/listTask?employeeId="+this.props.user.id+"&projectId="+ this.props.user.proID
         var url = "http://192.168.0.104:8080/taskmicro/listTask?employeeId="+this.props.user.id+"&projectId="+ this.props.user.proID
@@ -54,9 +52,6 @@ class Task extends Component {
         .catch(error => console.log("ok loi ne "+error))
     }
 
-    
-
-    
     render() {
         const { classes } = this.props;
         
