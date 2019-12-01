@@ -130,18 +130,12 @@ export default function AddRequest({addReq}) {
               <div>
               <MaterialUIPickers getDate={handleDate}/>
               </div> 
-            <div style={{marginLeft:'10px'}}>
-            <Hour/>
-            </div>
             </div>
             <h4>Time end</h4>
             <div style={{display:'flex'}}> 
               <div>
               <MaterialUIPickers  getDate={handleDate2}/>
               </div> 
-            <div style={{marginLeft:'10px'}}>
-            <Hour/>
-            </div>
             </div>
             <div>
             <FormControl className={classes.buttonSubmit}>

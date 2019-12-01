@@ -57,7 +57,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   );
 });
 
-export default function Notifi() {
+export default function Notifi({addNot}) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -68,6 +68,21 @@ export default function Notifi() {
   const handleClose = () => {
     setOpen(false);
   };
+  const [title, setTitle] = React.useState("");
+  const handleTitle = event => {
+    setTitle(event.target.value);
+  }
+  const [content, setContent] = React.useState("");
+  const handleContent = event => {
+    setContent(event.target.value);
+  }
+
+  const handleSubmit = event => {
+    event.preventDefault();
+  
+    var temp = {"title":title, "content":content }
+    addNot(temp)
+  }
 
   return (
     <div>
@@ -87,26 +102,28 @@ export default function Notifi() {
         }}
       >
         <Fade in={open}>
+        <form onSubmit={handleSubmit}>
           <div className={classes.paper}>
             <h2 id="spring-modal-title" className={classes.title}>Thong bao</h2>
             <div>          
             <FormControl>
             <InputLabel htmlFor="my-input">Title</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" />
+            <Input id="my-input" aria-describedby="my-helper-text" onChange={handleTitle}/>
             </FormControl>
             </div>
             <div>
             <FormControl>
             <InputLabel htmlFor="my-input">Content</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" />
+            <Input id="my-input" aria-describedby="my-helper-text" onChange={handleContent}/>
             </FormControl>
             </div>
             <div>
-            <Button variant="contained" color="primary" className={classnames(classes.button,classes.buttonSubmit)}>
+            <Button variant="contained" color="primary" type="submit" onClick={handleClose} className={classnames(classes.button,classes.buttonSubmit)}>
             Submit
             </Button>
             </div>   
           </div>
+          </form>
         </Fade>
       </Modal>
     </div>
