@@ -7,6 +7,10 @@ const superUrl = '/api/admin/projects';
 
 export const UPDATE_PROJECT_ID = 'UPDATE_PROJECT_ID';
 
+export const PROJECT_STATE = [
+    'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'TESTED', 'RUNNING', 'MAINTAINING', 'BUG', 'DEBUGGING', 'CLOSE'
+]
+
 export function updateProjectItem(projectItem) {
     return {
         type: UPDATE_PROJECT_ID,

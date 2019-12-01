@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { withAlert } from 'react-alert';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -17,7 +18,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 
-import { TagMember } from '../../../components'
+import { TagMember } from '../../../components';
+
+import { invite, remove } from '../../../action/project'
 
 const styles = theme => ({
     root: {
@@ -110,7 +113,45 @@ class ProjectDetails extends Component {
     }
 
     removeMember(member) {
-        console.log("Remove : " + JSON.stringify(member))
+        const { alert } = this.props;
+        const { projectItem, freeEmployees, updateFreeEmployee } = this.props;
+        let projectId = projectItem.project.id;
+        let role = member.role;
+        let removeRequest = {
+            employeeId: member.id,
+            projectId: projectId,
+            role: role
+        }
+        remove(removeRequest)
+            .then(response => {
+                console.log("Remove response : " + JSON.stringify(response));
+                if (role === 'ADMIN') {
+                    this.setState(prevState => {
+                        let projectAdmin = [...prevState.projectAdmin];
+                        projectAdmin = projectAdmin.filter(oldMember => {
+                            return oldMember.id !== member.id;
+                        })
+                        return { projectAdmin };
+                    });
+                    let newMember = { ...member, role: '' };
+                    freeEmployees.push(newMember);
+                    updateFreeEmployee(freeEmployees);
+                } else if (role === 'MEMBER') {
+                    this.setState(prevState => {
+                        let projectMembers = [...prevState.projectMembers];
+                        projectMembers = projectMembers.filter(oldMember => {
+                            return oldMember.id !== member.id;
+                        })
+                        return { projectMembers };
+                    });
+                    let newMember = { ...member, role: '' };
+                    freeEmployees.push(newMember)
+                    updateFreeEmployee(freeEmployees);
+                }
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong. Please try again!');
+            });
     }
 
     handleOpenAdd(role) {
@@ -128,29 +169,54 @@ class ProjectDetails extends Component {
     }
 
     handleListItemClick(member, role) {
-        const { updateFreeEmployee, freeEmployees } = this.props;
+        const { alert } = this.props;
+        const { updateFreeEmployee, freeEmployees, projectItem } = this.props;
+        let projectId = projectItem.project.id;
         if (role === 'ADMIN') {
-            this.setState(prevState => {
-                let projectAdmin = [...prevState.projectAdmin];
-                let openAdd = false;
-                let roleAdd = '';
-                projectAdmin.push(member);
-                return { projectAdmin, openAdd, roleAdd };
-            });
-            updateFreeEmployee(freeEmployees.filter(free => {
-                return free.id !== member.id;
-            }));
+            let inviteRequest = {
+                employeeId: member.id,
+                projectId: projectId,
+                role: 1
+            }
+            invite(inviteRequest)
+                .then(response => {
+                    console.log("Invite response : " + JSON.stringify(response));
+                    this.setState(prevState => {
+                        let projectAdmin = [...prevState.projectAdmin];
+                        let openAdd = false;
+                        let roleAdd = '';
+                        projectAdmin.push(member);
+                        return { projectAdmin, openAdd, roleAdd };
+                    });
+                    updateFreeEmployee(freeEmployees.filter(free => {
+                        return free.id !== member.id;
+                    }));
+                }).catch(error => {
+                    console.log(error);
+                    alert.error('Oops! Something went wrong. Please try again!');
+                });
         } else if (role === 'MEMBER') {
-            this.setState(prevState => {
-                let projectMembers = [...prevState.projectMembers];
-                let openAdd = false;
-                let roleAdd = '';
-                projectMembers.push(member);
-                return { projectMembers, openAdd, roleAdd };
-            })
-            updateFreeEmployee(freeEmployees.filter(free => {
-                return free.id !== member.id;
-            }));
+            let inviteRequest = {
+                employeeId: member.id,
+                projectId: projectId,
+                role: 2
+            }
+            invite(inviteRequest)
+                .then(response => {
+                    this.setState(prevState => {
+                        let projectMembers = [...prevState.projectMembers];
+                        let openAdd = false;
+                        let roleAdd = '';
+                        projectMembers.push(member);
+                        return { projectMembers, openAdd, roleAdd };
+                    })
+                    updateFreeEmployee(freeEmployees.filter(free => {
+                        return free.id !== member.id;
+                    }));
+                }).catch(error => {
+                    console.log(error);
+                    alert.error('Oops! Something went wrong. Please try again!');
+                });
         }
     }
 
@@ -218,7 +284,7 @@ class ProjectDetails extends Component {
                                             <div>
                                                 <Button onClick={() => this.handleOpenAdd('ADMIN')} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
                                                 {projectAdmin.map((member, index) => (
-                                                    <TagMember key={index} member={member} />
+                                                    <TagMember key={index} member={member} removeMember={this.removeMember} />
                                                 ))}
                                             </div>
                                         </Grid>
@@ -229,7 +295,7 @@ class ProjectDetails extends Component {
                                             <div>
                                                 <Button onClick={() => this.handleOpenAdd('MEMBER')} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
                                                 {projectMembers.map((member, index) => (
-                                                    <TagMember key={index} member={member} />
+                                                    <TagMember key={index} member={member} removeMember={this.removeMember} />
                                                 ))}
                                             </div>
                                         </Grid>
@@ -277,4 +343,4 @@ ProjectDetails.propTypes = {
     freeEmployees: PropTypes.array.isRequired,
     updateFreeEmployee: PropTypes.func.isRequired,
 };
-export default withStyles(styles)(ProjectDetails);
+export default withStyles(styles)(withAlert()(ProjectDetails));

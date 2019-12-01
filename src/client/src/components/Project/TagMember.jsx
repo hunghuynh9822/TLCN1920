@@ -36,8 +36,9 @@ class TagMember extends Component {
         return employee.lastName + " " + employee.firstName;
     }
     handleRemove() {
-        const { member } = this.props;
-        console.log("Remove member : " + member);
+        const { member, removeMember } = this.props;
+        console.log("Remove member : " + JSON.stringify(member));
+        removeMember(member);
     }
     render() {
         const { classes } = this.props;
@@ -51,7 +52,7 @@ class TagMember extends Component {
                     )
                 }
                 <div className={classes.tag_name}>{this.getName(member)}</div>
-                <Button onClick={this.removeMember} size="medium" color="primary" className={classes.icon_close}><CloseIcon fontSize="small" /></Button>
+                <Button onClick={this.handleRemove} size="medium" color="primary" className={classes.icon_close}><CloseIcon fontSize="small" /></Button>
             </div>
         );
     }
@@ -59,5 +60,6 @@ class TagMember extends Component {
 TagMember.propTypes = {
     classes: PropTypes.object.isRequired,
     member: PropTypes.object.isRequired,
+    removeMember: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(TagMember);

@@ -51,11 +51,11 @@ zuul:
     requests:
       path: /api/requests/**
       strip-prefix: false
-      service-id: requests-service
+      service-id: request-service
     notify:
       path: /api/notify/**
       strip-prefix: false
-      service-id: requests-service
+      service-id: notify-service
   host:
     connect-timeout-millis: 60000
 #security:

@@ -47,4 +47,30 @@ public class LeadTaskServiceController {
             return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PatchMapping("/change-assignee")
+    public ResponseEntity<String> changeAssignee (@Valid @RequestBody TaskUpdateRequest request){
+        try{
+            taskServiceBuz.updateAssignee(request);
+            String message = String.format("Change assignee of %d successfully", request.getTaskId());
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }catch (Exception | TransactionException e){
+            LOGGER.error("",e);
+            String message = String.format("Change assignee of %d failed", request.getTaskId());
+            return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/change-time")
+    public ResponseEntity<String> changeTime (@Valid @RequestBody TaskUpdateRequest request){
+        try{
+            taskServiceBuz.updateTaskTime(request);
+            String message = String.format("Change time of %d successfully", request.getTaskId());
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }catch (Exception | TransactionException e){
+            LOGGER.error("",e);
+            String message = String.format("Change time of %d failed", request.getTaskId());
+            return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+        }
+    }
 }

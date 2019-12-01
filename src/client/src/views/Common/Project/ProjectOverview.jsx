@@ -8,7 +8,7 @@ import axios from 'axios';
 import { CollapsibleSection, Project, NewProject, SlideContainer } from '../../../components';
 
 import { updateProjectItem, getAllProjects, getProjects } from '../../../action/project';
-import { hasRoleAdmin, hasRoleLead, hasRoleStaff } from '../../../action/auth';
+import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 
 import Button from '@material-ui/core/Button';
 
@@ -37,12 +37,13 @@ class ProjectOverview extends Component {
             projects: []
         }
         this.handleToProject = this.handleToProject.bind(this);
+        this.renderProjects = this.renderProjects.bind(this);
     }
 
     componentDidMount() {
         const { alert } = this.props;
-        const { currentUser, currentRole } = this.props;
-        if (hasRoleAdmin(currentRole)) {
+        const { currentUser, loginRole } = this.props;
+        if (loginAsAdmin(loginRole)) {
             getAllProjects()
                 .then(response => {
                     console.log(response);
@@ -53,7 +54,7 @@ class ProjectOverview extends Component {
                     console.log(error)
                     alert.error('Oops! Something went wrong. Please try again!');
                 })
-        } else if (hasRoleLead(currentRole) || hasRoleStaff(currentRole)) {
+        } else if (loginAsLead(loginRole) || loginAsStaff(loginRole)) {
             getProjects(currentUser.id)
                 .then(response => {
                     console.log(response);
@@ -65,7 +66,7 @@ class ProjectOverview extends Component {
                     alert.error('Oops! Something went wrong. Please try again!');
                 })
         } else {
-            alert.error('Oops! You do not have permision!');
+            alert.error('Oops! Something went wrong. Please try again!');
         }
 
     }
@@ -81,28 +82,72 @@ class ProjectOverview extends Component {
         this.props.history.push(next);
     }
 
+    renderProjects() {
+        const { classes } = this.props;
+        const { alert } = this.props;
+        const { loginRole } = this.props;
+        const { projects } = this.state;
+        console.log("Render projects");
+        if (loginAsAdmin(loginRole)) {
+            let recentName = "Recent Projects";
+            recentName = recentName.concat(" ( ", projects !== undefined ? projects.length : 0, " )");
+            let allName = "All Projects";
+            allName = allName.concat(" ( ", projects !== undefined ? projects.length : 0, " )");
+            return (
+                <div className={classes.wrapper}>
+                    <CollapsibleSection title={recentName}>
+                        <SlideContainer>
+                            {projects && projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                        </SlideContainer>
+                    </CollapsibleSection>
+                    <CollapsibleSection title={allName}>
+                        <div className={classes.viewproject}>
+                            {projects && projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                        </div>
+                    </CollapsibleSection>
+                </div>
+            );
+        } else if (loginAsLead(loginRole) || loginAsStaff(loginRole)) {
+            let recentName = "Recent Projects";
+            recentName = recentName.concat(" ( ", projects.ownProjects !== undefined ? projects.ownProjects.length : 0, " )");
+            let ownName = "Owner Projects";
+            ownName = ownName.concat(" ( ", projects.ownProjects !== undefined ? projects.ownProjects.length : 0, " )");
+            let joinName = "Join Projects";
+            joinName = joinName.concat(" ( ", projects.joinProjects !== undefined ? projects.joinProjects.length : 0, " )")
+            return (
+                <div className={classes.wrapper}>
+                    <CollapsibleSection title={recentName}>
+                        <SlideContainer>
+                            {projects.ownProjects && projects.ownProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                        </SlideContainer>
+                    </CollapsibleSection>
+                    <CollapsibleSection title={ownName}>
+                        <SlideContainer>
+                            {projects.ownProjects && projects.ownProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                        </SlideContainer>
+                    </CollapsibleSection>
+                    <CollapsibleSection title={joinName}>
+                        <div className={classes.viewproject}>
+                            {projects.joinProjects && projects.joinProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                        </div>
+                    </CollapsibleSection>
+                </div>
+            );
+        } else {
+            alert.error('Oops! You do not have permision!');
+        }
+    }
+
     render() {
         const { classes } = this.props;
-        const { currentUser, currentRole } = this.props;
-        console.log("Has role admin " + hasRoleAdmin(currentRole))
+        const { currentUser, currentRole, loginRole } = this.props;
+        console.log("Login as admin " + loginRole + " " + loginAsAdmin(loginRole))
         return (
             <div className={classes.root}>
                 <div className={classes.sub_header}>
                     <NewProject currentUser={currentUser} currentRole={currentRole} handleToProject={this.handleToProject} />
                 </div>
-                <div className={classes.wrapper}>
-                    <CollapsibleSection title="Recent Projects">
-                        <SlideContainer>
-                            {this.state.projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
-                        </SlideContainer>
-                    </CollapsibleSection>
-                    <CollapsibleSection title="My Project">
-                        <div className={classes.viewproject}>
-                            {this.state.projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
-                        </div>
-                    </CollapsibleSection>
-                </div>
-
+                {this.renderProjects()}
             </div>
         );
     }
@@ -116,6 +161,7 @@ const mapStateToProps = (state, ownProps) => {
         projectItem: state.project.projectItem,
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
+        loginRole: state.auth.loginRole,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

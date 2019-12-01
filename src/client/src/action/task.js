@@ -5,6 +5,11 @@ import {
 const url = '/api/tasks';
 const superUrl = '/api/admin/tasks';
 const leadUrl = '/api/lead/tasks';
+
+export const TASK_STATE = [
+    'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'DONE'
+]
+
 /* 
 {
     projectId:
@@ -45,6 +50,34 @@ export function getTasksCreatedByLead(project, employee) {
     });
 }
 
+/*
+{
+    taskId:
+    employeeId: assigneeId
+}
+*/
+export function changeAssignee(changeRequest) {
+    return request({
+        url: url + "/change-assignee",
+        method: 'PATCH',
+        data: JSON.stringify(createRequest)
+    });
+}
+
+/*
+{
+    taskId:
+    startedAt:
+    duration:
+}
+*/
+export function changeTime(changeRequest) {
+    return request({
+        url: url + "/change-time",
+        method: 'PATCH',
+        data: JSON.stringify(createRequest)
+    });
+}
 /*
 {
     taskId:
@@ -124,7 +157,7 @@ export function getComments(taskId) {
     comment:
 }
 */
-export function getComments(updateRequest) {
+export function updateComments(updateRequest) {
     return request({
         url: url + "/comment",
         method: 'PUT',

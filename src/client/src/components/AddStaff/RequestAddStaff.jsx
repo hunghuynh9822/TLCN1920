@@ -113,7 +113,7 @@ class RequestAddStaff extends Component {
 
     handleInputChange(event) {
         const { name, value } = event.target;
-        console.log(`handleInputChange - Name : ${name} value : ${value}`);
+        // console.log(`handleInputChange - Name : ${name} value : ${value}`);
         this.setState(prevState => {
             let request = Object.assign({}, prevState.request);
             request[name] = value;
@@ -122,7 +122,7 @@ class RequestAddStaff extends Component {
     }
 
     handleDatePickerChange(name, date) {
-        console.log(`handleInputChange - Name : ${name} value : ${date}`);
+        // console.log(`handleInputChange - Name : ${name} value : ${date}`);
         this.setState(prevState => {
             let request = Object.assign({}, prevState.request);
             request[name] = date;

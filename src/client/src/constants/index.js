@@ -16,3 +16,10 @@ export const ROUTER_MAP = {
     'ROLE_LEAD': '/lead',
     'ROLE_HR': '/hr'
 }
+
+export const PATH_MAP = {
+    '/admin': 'ROLE_ADMIN',
+    '/staff': 'ROLE_STAFF',
+    '/lead': 'ROLE_LEAD',
+    '/hr': 'ROLE_HR' 
+}

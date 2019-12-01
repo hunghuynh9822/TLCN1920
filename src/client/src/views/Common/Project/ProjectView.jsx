@@ -88,20 +88,28 @@ class ProjectView extends Component {
     }
 
     componentDidMount() {
+        const { match } = this.props;
         const { alert } = this.props;
         const { projectItem } = this.props;
-        const projectId = projectItem.project.id;
-        getEmployeeFree(projectId)
-            .then(response => {
-                console.log("Free employee : " + JSON.stringify(response));
-                this.setState({
-                    freeEmployees : response.employees,
+        if (projectItem !== null) {
+            const projectId = projectItem.project.id;
+            if (projectId != match.params.projectId) {
+                this.handleBack();
+            }
+            getEmployeeFree(projectId)
+                .then(response => {
+                    console.log("Free employee : " + JSON.stringify(response));
+                    this.setState({
+                        freeEmployees: response.employees,
+                    })
                 })
-            })
-            .catch(error => {
-                console.log(error)
-                alert.error('Oops! Something went wrong. Please try again!');
-            })
+                .catch(error => {
+                    console.log(error)
+                    alert.error('Oops! Something went wrong. Please try again!');
+                })
+        } else {
+            this.handleBack();
+        }
     }
 
     render() {
@@ -128,12 +136,10 @@ class ProjectView extends Component {
         // const projectId = match.params.projectId;
         const { projectItem } = this.props;
         if (projectItem === null) {
-            this.handleBack();
             return null;
         }
         const projectId = projectItem.project.id;
         if (projectId != match.params.projectId) {
-            this.handleBack();
             return null;
         }
         console.log("ProjectView : " + projectId);
@@ -169,7 +175,7 @@ class ProjectView extends Component {
                         {
                             tabs.map((tab, key) => (
                                 <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                    <tab.component projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee}/>
+                                    <tab.component projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} />
                                 </TabPanel>
                             ))
                         }

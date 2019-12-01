@@ -7,7 +7,8 @@ import {
     useHistory,
     useLocation
 } from "react-router-dom";
-import { ROUTER_MAP } from '../../constants'
+import { ROUTER_MAP, PATH_MAP } from '../../constants';
+import { loginRole } from '../../action/auth'
 class PrivateRoute extends Component {
     constructor(props) {
         super(props);
@@ -24,11 +25,18 @@ class PrivateRoute extends Component {
             console.log("Paths " + JSON.stringify(paths) + " current path " + path);
             if (!paths.includes(path)) {
                 console.log("not included " + path);
+                console.log("Login role " + PATH_MAP[defaultPath]);
+                this.props.updateLoginRole(PATH_MAP[defaultPath]);
                 return (<Redirect to={{
                     pathname: defaultPath,
                     state: { from: this.props.location }
                 }} />);
+            } else {
+                console.log("Login role " + PATH_MAP[path]);
+                this.props.updateLoginRole(PATH_MAP[path]);
             }
+        } else {
+            this.props.updateLoginRole(null);
         }
     }
 
@@ -67,7 +75,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        updateLoginRole: (role) => dispatch(loginRole(role)),
     }
 }
 

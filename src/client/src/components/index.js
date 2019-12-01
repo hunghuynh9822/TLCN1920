@@ -5,7 +5,7 @@ export { default as Loading } from './Loading/Loading.jsx';
 export { default as Navbar } from './Navbar/Navbar.jsx';
 export { default as MainNavbarLink } from './Navbar/MainNavbarLink.jsx';
 export { default as Sidebar } from './Sidebar/Sidebar.jsx';
-export { default as Task } from './Task/Task.jsx';
+
 export { default as TaskContainer } from './Task/TaskContainer.jsx';
 export { default as RouterBreadcrumbs} from './Breadcrumbs/RouterBreadcrumbs.jsx';
 export {default as Copyright} from './Copyright/Copyright.jsx';
@@ -40,3 +40,7 @@ export {default as Project} from './Project/Project.jsx';
 export {default as NewProject} from './Project/NewProject.jsx';
 export {default as Gantt} from './Gantt/Gantt.jsx';
 export {default as TagMember} from './Project/TagMember.jsx';
+//Task
+export {default as NewTask} from './Task/NewTask.jsx';
+export {default as TaskCard} from './Task/TaskCard.jsx';
+export { default as Task } from './Task/Task.jsx';

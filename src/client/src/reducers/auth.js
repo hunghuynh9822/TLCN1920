@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, UPDATE_USER } from '../action/auth';
+import { LOG_IN, LOG_OUT, UPDATE_USER, LOGIN_ROLE } from '../action/auth';
 import {ROUTER_MAP} from '../constants'
 const initState = {
     authenticated: false,
@@ -6,6 +6,7 @@ const initState = {
     paths: null,
     defaultPath: null,
     currentRole: null,
+    loginRole: null,
 }
 const reducer = (state = initState, action) => {
     switch (action.type) {
@@ -49,6 +50,11 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 currentUser: action.user
+            }
+        case LOGIN_ROLE:
+            return {
+                ...state,
+                loginRole: action.role
             }
         default:
             return state;

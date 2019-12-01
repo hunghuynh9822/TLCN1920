@@ -11,7 +11,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 
 import {
-    KeyboardDatePicker,
     DatePicker 
 } from '@material-ui/pickers';
 

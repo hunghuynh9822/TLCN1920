@@ -71,7 +71,7 @@ class Project extends Component {
             <Card className={classes.card} >
                 <CardHeader
                     action={
-                        <IconButton aria-label="settings" onClick={this.handleSetting} style={{ margin: '10px'}}>
+                        <IconButton aria-label="settings" onClick={this.handleSetting} style={{ margin: '10px' }}>
                             <TuneIcon />
                         </IconButton>
                     }

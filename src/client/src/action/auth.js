@@ -11,12 +11,20 @@ import {
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
 export const UPDATE_USER = 'UPDATE_USER'
+export const LOGIN_ROLE = 'LOGIN_ROLE'
 
 export function authenticate(authenticated, currentUser) {
   return {
     type: LOG_IN,
     authenticated,
     currentUser
+  };
+}
+
+export function loginRole(role) {
+  return {
+    type: LOGIN_ROLE,
+    role
   };
 }
 
@@ -30,8 +38,11 @@ export function logout() {
   };
 }
 
-export function updateUser(user){
-  return { type: UPDATE_USER, user}
+export function updateUser(user) {
+  return {
+    type: UPDATE_USER,
+    user
+  }
 }
 
 export function getCurrentUser() {
@@ -50,6 +61,34 @@ export function login(loginRequest) {
     method: 'POST',
     data: JSON.stringify(loginRequest)
   });
+}
+
+export function loginAsAdmin(loginRole) {
+  if(loginRole !== null) {
+    return loginRole === 'ROLE_ADMIN';
+  }
+  return false;
+}
+
+export function loginAsLead(loginRole) {
+  if(loginRole !== null) {
+    return loginRole === 'ROLE_LEAD';
+  }
+  return false;
+}
+
+export function loginAsHr(loginRole) {
+  if(loginRole !== null) {
+    return loginRole === 'ROLE_HR';
+  }
+  return false;
+}
+
+export function loginAsStaff(loginRole) {
+  if(loginRole !== null) {
+    return loginRole === 'ROLE_STAFF';
+  }
+  return false;
 }
 
 export function hasRoleAdmin(currentRole) {
