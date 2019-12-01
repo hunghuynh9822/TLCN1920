@@ -4,7 +4,7 @@ import {
 
 const url = '/api/tasks';
 const superUrl = '/api/admin/tasks';
-const superUrl = '/api/lead/tasks';
+const leadUrl = '/api/lead/tasks';
 /* 
 {
     projectId:
@@ -24,6 +24,13 @@ export function create(createRequest) {
     });
 }
 
+export function getTasksByAdmin(project) {
+    return request({
+        url: superUrl + "/" + "?" + "project=" + project,
+        method: 'GET',
+    });
+}
+
 export function getTasksByEmployee(project, employee) {
     return request({
         url: url + "/" + "?" + "project=" + project + "&" + "employee=" + employee,
@@ -31,7 +38,35 @@ export function getTasksByEmployee(project, employee) {
     });
 }
 
+export function getTasksCreatedByLead(project, employee) {
+    return request({
+        url: leadUrl + "/" + "?" + "project=" + project + "&" + "employee=" + employee,
+        method: 'GET',
+    });
+}
 
+/*
+{
+    taskId:
+    employeeId: creatorId
+    point:
+}
+*/
+export function updatePointTasks(updateRequest) {
+    return request({
+        url: url + "/update-point",
+        method: 'PATCH',
+        data: JSON.stringify(createRequest)
+    });
+}
+
+/*
+{
+    taskId:
+    employeeId:
+    state:
+}
+*/
 export function updateStateTasks(updateRequest) {
     return request({
         url: url + "/update-state",
@@ -60,16 +95,39 @@ export function updateTasks(updateRequest) {
     });
 }
 
-export function getEmployeeFree(projectId) {
+/*
+{
+    taskId:
+    employeeId:
+    comment:
+}
+*/
+export function createComment(createRequest) {
     return request({
-        url: url + "/" + projectId + "/employees",
+        url: url + "/comment",
+        method: 'POST',
+        data: JSON.stringify(createRequest)
+    });
+}
+
+export function getComments(taskId) {
+    return request({
+        url: url + "/comment/" + taskId,
         method: 'GET',
     });
 }
 
-export function getAllProjects() {
+/*
+{
+    taskId:
+    employeeId:
+    comment:
+}
+*/
+export function getComments(updateRequest) {
     return request({
-        url: superUrl + "/",
-        method: 'GET',
+        url: url + "/comment",
+        method: 'PUT',
+        data: JSON.stringify(updateRequest)
     });
 }

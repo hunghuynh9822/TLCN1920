@@ -16,8 +16,6 @@ public class ProjectUpdateRequest {
     @NotBlank(message = "Not null description")
     private String description;
     private Integer state;
-    @NotEmpty
-    private List<PerOfProjectRequest> perOfProjects;
 
     public ProjectUpdateRequest() {
     }
@@ -54,11 +52,4 @@ public class ProjectUpdateRequest {
         this.state = state.ordinal();
     }
 
-    public List<PerOfProjectRequest> getPerOfProjects() {
-        return perOfProjects;
-    }
-
-    public void setPerOfProjects(List<PerOfProjectRequest> perOfProjects) {
-        this.perOfProjects = perOfProjects;
-    }
 }

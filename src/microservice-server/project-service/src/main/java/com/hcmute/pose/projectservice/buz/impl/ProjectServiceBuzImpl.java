@@ -136,31 +136,9 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     @Override
     public void updateProject(ProjectUpdateRequest projectUpdateRequest) throws Exception, TransactionException {
         Long projectId = projectUpdateRequest.getProjectId();
-        List<PerOfProjectRequest> employeeIds = projectUpdateRequest.getPerOfProjects();
         try{
             databaseHelper.beginTransaction();
-
             projectService.updateProject(projectId, projectUpdateRequest.getTitle(), projectUpdateRequest.getDescription(), projectUpdateRequest.getState());
-            List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(projectId);
-            for (PerOfProject per: perOfProjects
-                 ) {
-                for (PerOfProjectRequest request : employeeIds) {
-                    if (!request.getEmployeeId().equals(per.getEmployeeId())) {
-                        perOfProjectService.deletePOP(projectId, per.getEmployeeId());
-                        if (!perOfProjects.remove(per)) {
-                            throw new Exception("[updateProject] Got exception on remove list");
-                        }
-                    }
-                }
-            }
-            for (PerOfProjectRequest request : employeeIds) {
-                for (PerOfProject per: perOfProjects) {
-                    if(!request.getEmployeeId().equals(per.getEmployeeId())) {
-                        perOfProjectService.createPOP(projectId, request.getEmployeeId(), request.getRole());
-                    }
-                }
-            }
-
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
             LOGGER.error("[updateProject]",e);
