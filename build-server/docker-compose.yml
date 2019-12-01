@@ -139,6 +139,50 @@ services:
       - "8003:8003"
     networks:
       - pose
+  notify:
+    build:
+      context: ./server/notify-service
+      dockerfile: Dockerfile
+    image: pose/micro/service/notify
+    container_name: docker-micro-service-notify
+    restart: unless-stopped
+    volumes:
+      - ./logs/notify-service:/docker/server/notify-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+      - PSQL_URL=jdbc:postgresql://postgresql:5432/postgres
+    links:
+      - postgresql
+      - discovery
+    depends_on:
+      - discovery
+      - postgresql
+    ports:
+      - "8003:8003"
+    networks:
+      - pose
+  request:
+    build:
+      context: ./server/request-service
+      dockerfile: Dockerfile
+    image: pose/micro/service/request
+    container_name: docker-micro-service-request
+    restart: unless-stopped
+    volumes:
+      - ./logs/request-service:/docker/server/request-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+      - PSQL_URL=jdbc:postgresql://postgresql:5432/postgres
+    links:
+      - postgresql
+      - discovery
+    depends_on:
+      - discovery
+      - postgresql
+    ports:
+      - "8003:8003"
+    networks:
+      - pose
   # client:
   #   build:
   #     context: ./src/client/
