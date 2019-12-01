@@ -56,8 +56,9 @@ const headerLinksStyle = theme => ({
       "& > span": {
         justifyContent: "flex-start",
         width: "100%"
-      }
-    }
+      },
+    },
+    padding: "0px",
   },
   searchButton: {
     [theme.breakpoints.down("sm")]: {

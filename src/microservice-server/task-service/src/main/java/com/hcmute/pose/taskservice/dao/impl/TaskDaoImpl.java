@@ -19,14 +19,15 @@ import java.util.Optional;
 public class TaskDaoImpl implements TaskDao {
     private static Logger LOGGER = LoggerFactory.getLogger(TaskDaoImpl.class);
     private static String SQL_INSERT_TASK = "INSERT INTO tasks(id,project_id,employee_creator,title,description,started_at,duration,state,point,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-    private static String SQl_SELECT_TASK_BY_CREATOR = "SELECT * FROM tasks WHERE employee_creator = ? AND project_id = ?";
+    private static String SQl_SELECT_TASK_BY_ID = "SELECT * FROM tasks WHERE id = ?";
+    private static String SQl_SELECT_ASSIGNEE_BY_CREATOR = "SELECT employee_assignee as value FROM tasks WHERE employee_creator = ? AND project_id = ? GROUP BY employee_assignee";
     private static String SQl_SELECT_TASK_BY_ASSIGNEE = "SELECT * FROM tasks WHERE employee_assignee = ? AND project_id = ?";
     private static String SQl_SELECT_TASK_BY_PROJECT = "SELECT * FROM tasks WHERE project_id = ?";
     private static String SQl_SELECT_CREATOR_BY_PROJECT = "SELECT employee_creator as value FROM tasks WHERE project_id = ? GROUP BY employee_creator";
 
     private static String SQL_UPDATE_POINT = "UPDATE tasks SET point=?, updated_at=? WHERE id=? AND employee_creator=?";
-    private static String SQL_UPDATE_STATE = "UPDATE tasks SET state=?, updated_at=? WHERE id=? AND ( employee_creator=? OR employee_assignee=?)";
-    private static String SQL_UPDATE_TASK = "UPDATE tasks SET title=?, description=?, started_at=?, duration=?, state=?, updated_at=? WHERE id=?";
+    private static String SQL_UPDATE_STATE = "UPDATE tasks SET state=?, updated_at=? WHERE id=? AND ( employee_creator=? OR employee_assignee=? )";
+    private static String SQL_UPDATE_TASK = "UPDATE tasks SET employee_assignee=?, title=?, description=?, started_at=?, duration=?, state=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_TASK_TIME = "UPDATE tasks SET started_at=?, duration=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_ASSIGNEE = "UPDATE tasks SET employee_assignee=?, updated_at=? WHERE id=?";
 
@@ -65,9 +66,19 @@ public class TaskDaoImpl implements TaskDao {
     }
 
     @Override
-    public List<Task> getTasksByCreator(Long projectId, Long employeeId) throws SQLException {
+    public Optional<Task> getTasksById(Long taskId) throws SQLException {
         try {
-            return databaseHelper.executeQueryListObject(Task[].class,SQl_SELECT_TASK_BY_CREATOR,employeeId,projectId);
+            return databaseHelper.executeQueryObject(Task.class,SQl_SELECT_TASK_BY_ID, taskId);
+        } catch (SQLException e) {
+            LOGGER.error("[TaskDaoImpl]:[getTasksByCreator]",e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<LongValue> getAssigneeByCreator(Long projectId, Long employeeId) throws SQLException {
+        try {
+            return databaseHelper.executeQueryListObject(LongValue[].class, SQl_SELECT_ASSIGNEE_BY_CREATOR, employeeId, projectId);
         } catch (SQLException e) {
             LOGGER.error("[TaskDaoImpl]:[getTasksByCreator]",e);
             throw e;
@@ -122,6 +133,7 @@ public class TaskDaoImpl implements TaskDao {
     @Override
     public void updateTask(Task task) throws SQLException, TransactionException {
         databaseHelper.executeNonQuery(SQL_UPDATE_TASK,
+                task.getEmployeeAssignee(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getStartedAt(),

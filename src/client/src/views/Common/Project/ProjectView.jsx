@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
+import { connect } from 'react-redux';
+import { withAlert } from 'react-alert'
+
 import SwipeableViews from 'react-swipeable-views';
 
 import { CenteredTabs, TabPanel } from '../../../components';
@@ -11,6 +14,8 @@ import { ProjectDetails, ProjectTasks, GanttChart, ProjectAnalytics } from '../.
 import Button from '@material-ui/core/Button';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
+import { updateProjectItem, getEmployeeFree } from '../../../action/project'
+
 const styles = theme => ({
     sub_layout_header: {
 
@@ -18,8 +23,8 @@ const styles = theme => ({
     sub_header: {
         display: 'flex',
         justifyContent: 'space-between',
-        minHeight: '45px',
-        lineHeight: '45px',
+        minHeight: '35px',
+        lineHeight: '35px',
         backgroundColor: 'white',
     },
     sub_header_section: {
@@ -29,20 +34,33 @@ const styles = theme => ({
         marginBottom: '5px',
     },
     content: {
-        padding: '0px 55px 0px 55px',
+        // padding: '0px 55px 0px 55px',
     },
     margin: {
         margin: theme.spacing(1),
+        marginTop: 0,
+        marginBottom: 0,
     },
+    tabpanel: {
+        overflow: 'hidden',
+    }
 });
+const CustomSwipeableViews = withStyles(theme => ({
+    root: {
+        minHeight: '100%',
+        overflow: 'hidden',
+    }
+}))(SwipeableViews);
 
 class ProjectView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             value: 0,
+            freeEmployees: [],
         }
         this.handleBack = this.handleBack.bind(this);
+        this.updateFreeEmployee = this.updateFreeEmployee.bind(this);
     }
     handleChange = (event, newValue) => {
         this.setState({
@@ -58,9 +76,34 @@ class ProjectView extends Component {
         const { match } = this.props;
         let path = match.path;
         let back = path.substring(0, path.lastIndexOf('/'));
+        this.props.updateProjectItem(null);
         console.log("back :" + back)
         this.props.history.push(back);
     }
+
+    updateFreeEmployee(freeEmployee) {
+        this.setState({
+            freeEmployees: freeEmployee,
+        })
+    }
+
+    componentDidMount() {
+        const { alert } = this.props;
+        const { projectItem } = this.props;
+        const projectId = projectItem.project.id;
+        getEmployeeFree(projectId)
+            .then(response => {
+                console.log("Free employee : " + JSON.stringify(response));
+                this.setState({
+                    freeEmployees : response.employees,
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                alert.error('Oops! Something went wrong. Please try again!');
+            })
+    }
+
     render() {
         const { classes } = this.props;
         const tabs = [
@@ -82,9 +125,18 @@ class ProjectView extends Component {
             }
         ];
         const { match } = this.props;
-        const projectId = match.params.projectId
-        console.log("ProjectView : ");
-        console.log(match);
+        // const projectId = match.params.projectId;
+        const { projectItem } = this.props;
+        if (projectItem === null) {
+            this.handleBack();
+            return null;
+        }
+        const projectId = projectItem.project.id;
+        if (projectId != match.params.projectId) {
+            this.handleBack();
+            return null;
+        }
+        console.log("ProjectView : " + projectId);
         return (
             <React.Fragment>
                 <div className={classes.sub_layout_header}>
@@ -99,7 +151,7 @@ class ProjectView extends Component {
                             <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.sub_header_section}>
-                            Search
+                            {/* Search */}
                         </div>
                     </div>
                 </div>
@@ -109,19 +161,19 @@ class ProjectView extends Component {
                     </div>
                 </div> */}
                 <div className={classes.content}>
-                    <SwipeableViews
+                    <CustomSwipeableViews
                         axis={'x'}
                         index={this.state.value}
                         onChangeIndex={this.handleChangeIndex}
                     >
                         {
                             tabs.map((tab, key) => (
-                                <TabPanel key={key} value={this.state.value} index={key}>
-                                    <tab.component projectId={projectId} />
+                                <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
+                                    <tab.component projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee}/>
                                 </TabPanel>
                             ))
                         }
-                    </SwipeableViews>
+                    </CustomSwipeableViews>
                 </div>
             </React.Fragment>
         );
@@ -130,4 +182,18 @@ class ProjectView extends Component {
 ProjectView.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(ProjectView);
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        projectItem: state.project.projectItem,
+        currentUser: state.auth.currentUser,
+        currentRole: state.auth.currentRole,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        updateProjectItem: (projectItem) => dispatch(updateProjectItem(projectItem)),
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(ProjectView)));

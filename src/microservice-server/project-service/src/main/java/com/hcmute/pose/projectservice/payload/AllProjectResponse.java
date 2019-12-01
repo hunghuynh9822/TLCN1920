@@ -5,20 +5,20 @@ import com.hcmute.pose.projectservice.model.Project;
 import java.util.List;
 
 public class AllProjectResponse {
-    private List<Project> projects;
+    private List<ProjectResponse> projectResponses;
 
-    public AllProjectResponse(List<Project> projects) {
-        this.projects = projects;
+    public AllProjectResponse(List<ProjectResponse> projectResponses) {
+        this.projectResponses = projectResponses;
     }
 
     public AllProjectResponse() {
     }
 
-    public List<Project> getProjects() {
-        return projects;
+    public List<ProjectResponse> getProjectResponses() {
+        return projectResponses;
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
+    public void setProjectResponses(List<ProjectResponse> projectResponses) {
+        this.projectResponses = projectResponses;
     }
 }

@@ -39,3 +39,4 @@ export {default as SlideContainer } from './Slide/SlideContainer.jsx';
 export {default as Project} from './Project/Project.jsx';
 export {default as NewProject} from './Project/NewProject.jsx';
 export {default as Gantt} from './Gantt/Gantt.jsx';
+export {default as TagMember} from './Project/TagMember.jsx';

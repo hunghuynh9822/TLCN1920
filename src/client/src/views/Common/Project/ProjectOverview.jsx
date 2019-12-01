@@ -7,8 +7,8 @@ import { withAlert } from 'react-alert'
 import axios from 'axios';
 import { CollapsibleSection, Project, NewProject, SlideContainer } from '../../../components';
 
-import { updateProjectId, getAllProjects, getProjects } from '../../../action/project';
-import { hasRoleAdmin } from '../../../action/auth';
+import { updateProjectItem, getAllProjects, getProjects } from '../../../action/project';
+import { hasRoleAdmin, hasRoleLead, hasRoleStaff } from '../../../action/auth';
 
 import Button from '@material-ui/core/Button';
 
@@ -31,7 +31,6 @@ const styles = theme => ({
 });
 
 class ProjectOverview extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -40,31 +39,44 @@ class ProjectOverview extends Component {
         this.handleToProject = this.handleToProject.bind(this);
     }
 
-    addPro(pro) {
-        var temp = this.state.projects;
-        temp.push(pro);
-        this.setState({ projects: temp });
-    }
-
     componentDidMount() {
         const { alert } = this.props;
-        getAllProjects()
-            .then(response => {
-                console.log(response);
-                this.setState({ projects: response.projects })
+        const { currentUser, currentRole } = this.props;
+        if (hasRoleAdmin(currentRole)) {
+            getAllProjects()
+                .then(response => {
+                    console.log(response);
+                    this.setState({ projects: response.projectResponses })
 
-            })
-            .catch(error => {
-                console.log(error)
-                alert.error('Oops! Something went wrong. Please try again!');
-            })
+                })
+                .catch(error => {
+                    console.log(error)
+                    alert.error('Oops! Something went wrong. Please try again!');
+                })
+        } else if (hasRoleLead(currentRole) || hasRoleStaff(currentRole)) {
+            getProjects(currentUser.id)
+                .then(response => {
+                    console.log(response);
+                    this.setState({ projects: response })
+
+                })
+                .catch(error => {
+                    console.log(error)
+                    alert.error('Oops! Something went wrong. Please try again!');
+                })
+        } else {
+            alert.error('Oops! You do not have permision!');
+        }
+
     }
 
-    handleToProject(projectId) {
+    handleToProject(projectItem) {
         const { alert } = this.props;
         const { match } = this.props;
+        const { updateProjectItem } = this.props;
         let path = match.path;
-        let next = path.concat("/", projectId);
+        let next = path.concat("/", projectItem.project.id);
+        updateProjectItem(projectItem);
         console.log("next :" + next)
         this.props.history.push(next);
     }
@@ -76,17 +88,17 @@ class ProjectOverview extends Component {
         return (
             <div className={classes.root}>
                 <div className={classes.sub_header}>
-                    <NewProject currentUser={currentUser} currentRole={currentRole} handleToProject={this.handleToProject}/>
+                    <NewProject currentUser={currentUser} currentRole={currentRole} handleToProject={this.handleToProject} />
                 </div>
                 <div className={classes.wrapper}>
                     <CollapsibleSection title="Recent Projects">
                         <SlideContainer>
-                            {this.state.projects.map((item, key) => <Project key={key} project={item}  handleToProject={this.handleToProject}/>)}
+                            {this.state.projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
                         </SlideContainer>
                     </CollapsibleSection>
                     <CollapsibleSection title="My Project">
                         <div className={classes.viewproject}>
-                            {this.state.projects.map((item, key) => <Project key={key} project={item}  handleToProject={this.handleToProject}/>)}
+                            {this.state.projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
                         </div>
                     </CollapsibleSection>
                 </div>
@@ -101,14 +113,14 @@ ProjectOverview.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        projectId: state.project.projectId,
+        projectItem: state.project.projectItem,
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateProjectId: (projectId) => dispatch(updateProjectId(projectId)),
+        updateProjectItem: (projectItem) => dispatch(updateProjectItem(projectItem)),
     }
 }
 

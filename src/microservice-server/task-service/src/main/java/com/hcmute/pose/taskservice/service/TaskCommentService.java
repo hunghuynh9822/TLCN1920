@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface TaskCommentService {
-    TaskComments createTC (Long taskID, Long employeeId, Long createTime, String comment) throws Exception;
-    List<TaskComments> getListTC (Long taskId) throws SQLException;
-    void updateComment (Long taskid ,Long employeeId , String comment) throws SQLException, TransactionException;
+    TaskComments createTaskComment(Long taskId, Long employeeId, String comment) throws Exception;
+    List<TaskComments> getListTaskComment(Long taskId) throws SQLException;
+    void updateTaskComment(Long taskId, Long employeeId, String comment) throws SQLException, TransactionException;
 
 }

@@ -16,19 +16,19 @@ public class TaskCommentServiceImpl implements TaskCommentService {
     private TaskCommentsDao taskCommentsDao;
 
     @Override
-    public TaskComments createTC(Long taskID, Long employeeId, Long createTime, String comment) throws Exception {
-        Long id = taskCommentsDao.getLastID().orElseThrow(()-> new Exception("Not create Id_TC"));
-        TaskComments taskComments = new TaskComments(id,taskID,employeeId,createTime,comment);
-        return taskCommentsDao.createTC(taskComments).orElseThrow(()-> new Exception("Not create TaskComment"));
+    public TaskComments createTaskComment(Long taskId, Long employeeId, String comment) throws Exception {
+        Long id = taskCommentsDao.getLastID().orElseThrow(()-> new Exception("Can not get task comment generate id"));
+        TaskComments taskComments = new TaskComments(id,taskId,employeeId,comment,System.currentTimeMillis(),System.currentTimeMillis());
+        return taskCommentsDao.createTaskComment(taskComments).orElseThrow(()-> new Exception("Not create TaskComment"));
     }
 
     @Override
-    public List<TaskComments> getListTC(Long taskId) throws SQLException {
-        return taskCommentsDao.getListTC(taskId);
+    public List<TaskComments> getListTaskComment(Long taskId) throws SQLException {
+        return taskCommentsDao.getListTaskComment(taskId);
     }
 
     @Override
-    public void updateComment(Long taskid, Long employeeId, String comment) throws SQLException, TransactionException {
-        taskCommentsDao.updateTC(taskid,employeeId,comment);
+    public void updateTaskComment(Long taskid, Long employeeId, String comment) throws SQLException, TransactionException {
+        taskCommentsDao.updateTaskComment(taskid,employeeId,comment);
     }
 }

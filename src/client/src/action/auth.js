@@ -56,3 +56,18 @@ export function hasRoleAdmin(currentRole) {
   console.log("Current user role : " + JSON.stringify(currentRole));
   return currentRole.includes('ROLE_ADMIN');
 }
+
+export function hasRoleLead(currentRole) {
+  console.log("Current user role : " + JSON.stringify(currentRole));
+  return currentRole.includes('ROLE_LEAD');
+}
+
+export function hasRoleHr(currentRole) {
+  console.log("Current user role : " + JSON.stringify(currentRole));
+  return currentRole.includes('ROLE_HR');
+}
+
+export function hasRoleStaff(currentRole) {
+  console.log("Current user role : " + JSON.stringify(currentRole));
+  return currentRole.includes('ROLE_STAFF');
+}

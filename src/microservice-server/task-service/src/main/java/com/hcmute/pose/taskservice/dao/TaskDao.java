@@ -12,7 +12,8 @@ import java.util.Optional;
 public interface TaskDao {
     Optional<Long> getLastID ();
     Optional<Task> createTask (Task task);
-    List<Task> getTasksByCreator(Long projectId, Long employeeId) throws SQLException;
+    Optional<Task> getTasksById(Long taskId) throws SQLException;
+    List<LongValue> getAssigneeByCreator(Long projectId, Long employeeId) throws SQLException;
     List<Task> getTasksByAssignee(Long projectId, Long employeeId) throws SQLException;
     List<Task> getTasksByProject(Long projectId) throws SQLException;
     List<LongValue> getCreatorByProject(Long projectId) throws SQLException;

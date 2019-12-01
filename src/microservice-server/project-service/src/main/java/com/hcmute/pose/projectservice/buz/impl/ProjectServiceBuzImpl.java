@@ -1,5 +1,6 @@
 package com.hcmute.pose.projectservice.buz.impl;
 
+import com.google.gson.Gson;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.ProjectServiceBuz;
@@ -7,24 +8,27 @@ import com.hcmute.pose.projectservice.model.PerOfProject;
 import com.hcmute.pose.projectservice.model.Project;
 import com.hcmute.pose.projectservice.model.ProjectRole;
 import com.hcmute.pose.projectservice.model.ProjectState;
-import com.hcmute.pose.projectservice.payload.PerOfProjectRequest;
-import com.hcmute.pose.projectservice.payload.ProjectOfPerResponse;
-import com.hcmute.pose.projectservice.payload.ProjectRequest;
-import com.hcmute.pose.projectservice.payload.ProjectUpdateRequest;
+import com.hcmute.pose.projectservice.payload.*;
 import com.hcmute.pose.projectservice.service.PerOfProjectService;
 import com.hcmute.pose.projectservice.service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     private static Logger LOGGER = LoggerFactory.getLogger(ProjectServiceBuzImpl.class);
+    private static final String EMPLOYEE_SERVICE = "http://employee-service/api/employees";
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -34,11 +38,14 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     @Autowired
     private PerOfProjectService perOfProjectService;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @Override
-    public Project createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
+    public ProjectResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
-            Project project = projectService.ceratePro(projectRequest.getTitle(),projectRequest.getDescription());
+            Project project = projectService.createProject(projectRequest.getTitle(),projectRequest.getDescription());
             perOfProjectService.createPOP(project.getId(), projectRequest.getEmployeeId(), ProjectRole.OWNER);
             if(projectRequest.getProjectAdmin() != null) {
                 for (Long employeeId : projectRequest.getProjectAdmin()) {
@@ -50,45 +57,80 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
                     perOfProjectService.createPOP(project.getId(), employeeId, ProjectRole.MEMBER);
                 }
             }
+            ProjectResponse response = getProjectResponse(project);
             databaseHelper.commit();
-            return project;
+            return response;
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[createProject]",e);
             throw e;
-        }finally {
+        } finally {
             databaseHelper.closeConnection();
         }
     }
 
     @Override
-    public List<Project> getListProject() throws SQLException {
-        return projectService.getListPro();
+    public AllProjectResponse getListProject() throws Exception {
+        try {
+            List<ProjectResponse> projectResponses = new ArrayList<>();
+            List<Project> projects =  projectService.getListPro();
+            for(Project project : projects) {
+                projectResponses.add(getProjectResponse(project));
+            }
+            return new AllProjectResponse(projectResponses);
+        } finally {
+            databaseHelper.closeConnection();
+        }
     }
 
     @Override
-    public ProjectOfPerResponse getProjects(Long employeeId) throws Exception {
-        List<Project> ownProjects = new ArrayList<>();
-        List<Project> joinProjects = new ArrayList<>();
-        List<PerOfProject> owner = perOfProjectService.getListOwner(employeeId);
-        List<PerOfProject> join = perOfProjectService.getListJoin(employeeId);
-        for (PerOfProject per: owner
-             ) {
+    public ProjectResponse getProject(Long id) throws Exception {
+        try {
+            Project project = projectService.getProject(id);
+            return getProjectResponse(project);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public EmployeeProjectResponse getProjectsOfEmployee(Long employeeId) throws Exception {
+        try {
+            List<PerOfProject> owner = perOfProjectService.getListOwner(employeeId);
+            List<PerOfProject> join = perOfProjectService.getListJoin(employeeId);
+            List<ProjectResponse> ownProjects = getProjects(owner);
+            List<ProjectResponse> joinProjects = getProjects(join);
+            return new EmployeeProjectResponse(ownProjects, joinProjects);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    private List<ProjectResponse> getProjects(List<PerOfProject> perOfProjects) throws Exception {
+        List<ProjectResponse> projects = new ArrayList<>();
+        for (PerOfProject per : perOfProjects) {
             try {
-                ownProjects.add(projectService.getProject(per.getProjectId()));
+                Project project = projectService.getProject(per.getProjectId());
+                projects.add(getProjectResponse(project));
             } catch (Exception e) {
-                LOGGER.error("[getProjects] GOT EXCEPTION", e);
                 throw e;
             }
         }
-        for (PerOfProject per : join) {
-            try {
-                joinProjects.add(projectService.getProject(per.getProjectId()));
-            } catch (Exception e) {
-                LOGGER.error("[getProjects] GOT EXCEPTION", e);
-                throw e;
-            }
+        return projects;
+    }
+
+    private ProjectResponse getProjectResponse(Project project) throws Exception {
+        List<EmployeeResponse> members = new ArrayList<>();
+        List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
+        for (PerOfProject per : perOfProjects) {
+            String url = EMPLOYEE_SERVICE + "/{id}";
+            Map<String, String> params = new HashMap<>();
+            params.put("id", per.getEmployeeId().toString());
+            EmployeeResponse employeeResponse = restTemplate.getForObject(url, EmployeeResponse.class, params);
+            assert employeeResponse != null;
+            employeeResponse.setRole(per.getRole());
+            members.add(employeeResponse);
         }
-        return new ProjectOfPerResponse(ownProjects, joinProjects);
+        return new ProjectResponse(project, members);
     }
 
     @Override
@@ -121,7 +163,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
 
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[updateProject]",e);
             throw e;
         }finally {
             databaseHelper.closeConnection();
@@ -135,17 +177,14 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             projectService.updateState(id, state);
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[updateState]",e);
             throw e;
         }finally {
             databaseHelper.closeConnection();
         }
     }
 
-    @Override
-    public Project getProject(Long id) throws Exception {
-        return projectService.getProject(id);
-    }
+
 
     @Override
     public void createPOP(PerOfProjectRequest perOfProjectRequest) throws Exception, TransactionException {
@@ -154,7 +193,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             perOfProjectService.createPOP(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId(), perOfProjectRequest.getRole());
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[createPOP]",e);
             throw e;
         }finally {
             databaseHelper.closeConnection();
@@ -163,7 +202,11 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
 
     @Override
     public List<PerOfProject> getListPOP(Long projectId) throws SQLException {
-        return perOfProjectService.getListPOP(projectId);
+        try {
+            return perOfProjectService.getListPOP(projectId);
+        } finally {
+            databaseHelper.closeConnection();
+        }
     }
 
     @Override
@@ -173,9 +216,40 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             perOfProjectService.deletePOP(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId());
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
-            LOGGER.error("",e);
+            LOGGER.error("[deletePOP]",e);
             throw e;
         }finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public AllEmployeeResponse getEmployeesFreeForProject(Long projectId) throws Exception {
+        try {
+            Project project = projectService.getProject(projectId);
+            List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
+            String url = EMPLOYEE_SERVICE + "/";
+            AllEmployeeResponse allEmployeeResponse = restTemplate.getForObject(url, AllEmployeeResponse.class);
+            List<EmployeeResponse> employeeResponses = allEmployeeResponse.getEmployees();
+            List<EmployeeResponse> employees = new ArrayList<>();
+            for (EmployeeResponse employee : employeeResponses) {
+                boolean contain = false;
+                for (PerOfProject per : perOfProjects) {
+                    if (per.getEmployeeId().equals(employee.getId())) {
+                        contain = true;
+                        break;
+                    }
+                }
+                if (!contain) {
+                    employees.add(employee);
+                }
+            }
+            LOGGER.info("Employee free : {}", new Gson().toJson(employees));
+            return new AllEmployeeResponse(employees);
+        } catch (Exception e){
+            LOGGER.error("[getEmployeesFreeForProject]",e);
+            throw e;
+        } finally {
             databaseHelper.closeConnection();
         }
     }

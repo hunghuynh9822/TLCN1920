@@ -10,10 +10,15 @@ const styles = theme => ({
         minHeight: '100%',
     }
 })
+const CustomTab = withStyles(theme => ({
+    root: {
+        minHeight: '100%',
+    }
+}))(Tab);
 class CenteredTabs extends Component {
     constructor(props) {
         super(props);
-        
+
     }
     render() {
         const { classes } = this.props;
@@ -29,8 +34,8 @@ class CenteredTabs extends Component {
                         minHeight: '100%',
                     }}
                 >
-                    {this.props.tabs.map((tab,key)=>(
-                        <Tab key={key} label={tab.name}/>
+                    {this.props.tabs.map((tab, key) => (
+                        <CustomTab key={key} label={tab.name} />
                     ))}
                 </Tabs>
             </React.Fragment>

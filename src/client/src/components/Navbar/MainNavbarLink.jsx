@@ -20,6 +20,8 @@ import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
 import Dashboard from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
+import Avatar from 'react-avatar';
+
 // core components
 import { CustomInput, CustomButton } from "../";
 
@@ -37,8 +39,8 @@ class MainNavbarLink extends Component {
     }
     render() {
         const { classes } = this.props;
+        const { currentUser } = this.props;
         const handleClickNotification = event => {
-            console.log(event.target);
             if (this.state.openNotification && this.state.openNotification.contains(event.target)) {
                 this.setState({
                     openNotification: null,
@@ -55,7 +57,6 @@ class MainNavbarLink extends Component {
             })
         };
         const handleClickProfile = event => {
-            console.log(event.target);
             if (this.state.openProfile && this.state.openProfile.contains(event.target)) {
                 this.setState({
                     openProfile: null,
@@ -108,6 +109,7 @@ class MainNavbarLink extends Component {
                         aria-haspopup="true"
                         onClick={handleClickNotification}
                         className={classes.buttonLink}
+                        style={{ padding: 0 }}
                     >
                         <Notifications className={classes.icons} />
                         <span className={classes.notifications}>5</span>
@@ -187,7 +189,12 @@ class MainNavbarLink extends Component {
                         onClick={handleClickProfile}
                         className={classes.buttonLink}
                     >
-                        <Person className={classes.icons} />
+                        {/* <Person className={classes.icons} /> */}
+                        {currentUser.imageUrl ? (
+                            <Avatar src={currentUser.imageUrl} round="20px" size="30"/>
+                        ):(
+                            <Avatar name={currentUser.lastName + " " + currentUser.firstName} round="20px" size="30"/>
+                        )}
                         <Hidden mdUp implementation="css">
                             <p className={classes.linkText}>Profile</p>
                         </Hidden>
@@ -251,7 +258,7 @@ MainNavbarLink.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-
+        currentUser: state.auth.currentUser,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

@@ -20,7 +20,7 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectDao projectDao;
 
     @Override
-    public Project ceratePro(String title, String description) throws Exception {
+    public Project createProject(String title, String description) throws Exception {
         Long id = projectDao.getLastID().orElseThrow(()-> new Exception("Can not get generated id"));
         Project project = new Project(id, title, description, ProjectState.NEW, System.currentTimeMillis(), System.currentTimeMillis());
         return  projectDao.createPro(project).orElseThrow(()-> new Exception("Can not create project"));

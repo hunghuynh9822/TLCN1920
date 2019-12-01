@@ -67,7 +67,7 @@ const manageRoutes = [
             layout: "/admin/projects",
           },
           {
-            path: "/:idProject",
+            path: "/:projectId",
             component: ProjectView,
             layout: "/admin/projects",
           }
@@ -149,7 +149,7 @@ const manageRoutes = [
             breadcrumb: "OverView",
           },
           {
-            path: "/:idProject",
+            path: "/:projectId",
             component: ProjectView,
             layout: "/lead/projects",
           }

@@ -48,7 +48,7 @@ class Sidebar extends Component {
 
     getNavRoute() {
         const { classes } = this.props;
-        const { projectId } = this.props;
+        const { projectItem } = this.props;
         const { color, router } = this.props;
         return (
             <List className={classes.list}>
@@ -61,7 +61,12 @@ class Sidebar extends Component {
                     });
                     let path = prop.path;
                     if (path.includes(':projectId')) {
-                        path = this.getPathToProjectId(path, projectId);
+                        if(projectItem) {
+                            const projectId = projectItem ? projectItem.project.id : null
+                            path = this.getPathToProjectId(path, projectId);
+                        } else {
+                            return;
+                        }
                     }
                     return (
                         <NavLink
@@ -203,7 +208,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         mobileOpen: state.layout.mobileOpen,
         desktopOpen: state.layout.desktopOpen,
-        projectId: state.project.projectId,
+        projectItem: state.project.projectItem,
     }
 }
 

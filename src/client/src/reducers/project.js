@@ -3,14 +3,14 @@ import {
 } from '../action/project';
 
 const initState = {
-    projectId: null
+    projectItem: null
 }
 
 const reducer = (state = initState, action) => {
     switch (action.type) {
         case UPDATE_PROJECT_ID:
             return {
-                projectId: action.projectId
+                projectItem: action.projectItem
             };
         default:
             return state;

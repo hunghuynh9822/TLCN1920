@@ -28,7 +28,7 @@ class Loading extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-                <ColorCircularProgress size={90} thickness={3} disableShrink />
+                <ColorCircularProgress size={90} thickness={3}/>
             </div>
         )
     }

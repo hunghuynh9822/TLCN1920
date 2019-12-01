@@ -148,6 +148,8 @@ class AdminHumanManagement extends Component {
                 this.setState({
                     rowsActive: activeEmployees,
                     rowsWaiting: waitingEmployees,
+                    open: false,
+                    error: null,
                 })
             }).catch(error => {
                 console.log(error);
