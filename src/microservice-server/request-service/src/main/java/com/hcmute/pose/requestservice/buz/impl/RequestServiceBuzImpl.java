@@ -23,7 +23,6 @@ public class RequestServiceBuzImpl implements RequestServiceBuz {
     @Autowired
     private RequestService requestService;
 
-
     @Override
     public Request createRequest(RequestRequest requestRequest) throws Exception, TransactionException {
         try{
