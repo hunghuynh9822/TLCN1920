@@ -80,12 +80,28 @@ export default function AddRequest({addReq}) {
     setDate(date);
   }
   const [date2, setDate2] = React.useState(new Date());
-  const handleDate2 = (date) => {
-    setDate2(date);
+  const handleDate2 = (date2) => {
+    setDate2(date2);
   }
+
+
+  const getDate = (date) =>{
+    var day = date.getDate();
+    var monthIndex = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var tepm = day+"/"+monthIndex+"/"+year
+    return tepm
+  }
+
+  const [reson, setReson] = React.useState("");
+  const handleReson = event => {
+    setReson(event.target.value);
+  }
+
   const handleSubmit = event => {
     event.preventDefault();
-    var temp = {"position":"Nhân viên","timestart":date,"timeend":date2,"reason":"Di ban nha","confirm":false,"action":[{"name":"view"},{"name":"confirm"}]}
+    //console.log("gio ne: "+getDate(date));
+    var temp = {"t1":date,"t2":date2,"timestart":getDate(date),"timeend":getDate(date2),"reason":reson,"confirm":false,"action":[{"name":"view"},{"name":"confirm"}]}
     addReq(temp)
   }
   return (
@@ -114,27 +130,21 @@ export default function AddRequest({addReq}) {
               <div>
               <MaterialUIPickers getDate={handleDate}/>
               </div> 
-            <div style={{marginLeft:'10px'}}>
-            <Hour/>
-            </div>
             </div>
             <h4>Time end</h4>
             <div style={{display:'flex'}}> 
               <div>
               <MaterialUIPickers  getDate={handleDate2}/>
               </div> 
-            <div style={{marginLeft:'10px'}}>
-            <Hour/>
-            </div>
             </div>
             <div>
             <FormControl className={classes.buttonSubmit}>
-            <InputLabel htmlFor="my-input">Reson</InputLabel>
-            <Input id="my-input" aria-describedby="my-helper-text" />
+            <InputLabel htmlFor="my-input" >Reson</InputLabel>
+            <Input id="my-input" aria-describedby="my-helper-text" onChange={handleReson}/>
             </FormControl>
             </div>
             <div>
-            <Button variant="contained" color="primary"  type="submit" className={classnames(classes.button,classes.buttonSubmit)}>
+            <Button variant="contained" color="primary"  type="submit" onClick={handleClose} className={classnames(classes.button,classes.buttonSubmit)}>
             Submit
             </Button>
             </div>   
