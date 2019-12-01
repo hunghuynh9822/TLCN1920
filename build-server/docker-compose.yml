@@ -158,7 +158,7 @@ services:
       - discovery
       - postgresql
     ports:
-      - "8003:8003"
+      - "8004:8004"
     networks:
       - pose
   request:
@@ -180,7 +180,7 @@ services:
       - discovery
       - postgresql
     ports:
-      - "8003:8003"
+      - "8005:8005"
     networks:
       - pose
   # client:

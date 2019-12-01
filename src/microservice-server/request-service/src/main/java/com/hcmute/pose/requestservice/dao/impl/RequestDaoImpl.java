@@ -8,11 +8,13 @@ import com.hcmute.pose.requestservice.model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class RequestDaoImpl implements RequestDao {
 
     private static Logger LOGGER = LoggerFactory.getLogger(RequestDao.class);

@@ -9,10 +9,12 @@ import com.hcmute.pose.requestservice.service.RequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class RequestServiceBuzImpl implements RequestServiceBuz {
     private static Logger LOGGER = LoggerFactory.getLogger(RequestServiceBuz.class);
     @Autowired

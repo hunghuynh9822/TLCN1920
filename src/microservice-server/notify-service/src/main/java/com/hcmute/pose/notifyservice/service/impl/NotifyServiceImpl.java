@@ -5,11 +5,13 @@ import com.hcmute.pose.notifyservice.dao.NotifyDao;
 import com.hcmute.pose.notifyservice.model.Notify;
 import com.hcmute.pose.notifyservice.service.NotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class NotifyServiceImpl implements NotifyService {
     @Autowired
     private NotifyDao notifyDao;
