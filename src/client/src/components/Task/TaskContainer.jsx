@@ -12,6 +12,7 @@ import GridList from '@material-ui/core/GridList';
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
+import { changeAssignee } from '../../action/task'
 import { TaskCard } from '../../components'
 
 const styles = theme => ({
@@ -74,13 +75,13 @@ class TaskContainer extends Component {
     }
 
     // a little function to help us with reordering the result
-    reorder(list, startIndex, endIndex) {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
+    // reorder(list, startIndex, endIndex) {
+    //     const result = Array.from(list);
+    //     const [removed] = result.splice(startIndex, 1);
+    //     result.splice(endIndex, 0, removed);
 
-        return result;
-    };
+    //     return result;
+    // };
 
     /**
  * Moves an item from one list to another list.
@@ -120,7 +121,8 @@ class TaskContainer extends Component {
      */
     onDragEnd(result) {
         const { taskCards } = this.state;
-        const { source, destination } = result;
+        const { updateTask } = this.props;
+        const { source, destination, draggableId } = result;
         console.log("onDragEnd : " + JSON.stringify(result))
         // dropped outside the list
         if (!destination) {
@@ -128,31 +130,54 @@ class TaskContainer extends Component {
         }
 
         if (source.droppableId === destination.droppableId) {
-            const items = this.reorder(
-                this.getList(source.droppableId),
-                source.index,
-                destination.index
-            );
+            console.log("Source : " + JSON.stringify(this.getList(source.droppableId)))
+            // const items = reorder(
+            //     this.getList(source.droppableId),
+            //     source.index,
+            //     destination.index
+            // );
+            // let state = { items };
 
-            let state = { items };
-
-            if (source.droppableId === 'droppable2') {
-                state = { selected: items };
-            }
-
-            this.setState(state);
+            // this.setState(state);
         } else {
-            const result = this.move(
-                this.getList(source.droppableId),
-                this.getList(destination.droppableId),
-                source,
-                destination
-            );
+            let requestChange = {
+                taskId: draggableId,
+                employeeId: destination.droppableId
+            };
+            changeAssignee(requestChange)
+                .then(response => {
+                    console.log("changeAssignee : " + JSON.stringify(response))
+                    const result = move(
+                        this.getList(source.droppableId),
+                        this.getList(destination.droppableId),
+                        source,
+                        destination
+                    );
+                    console.log("Move result : " + JSON.stringify(result));
+                    let items = this.state.items;
+                    let newTaskCards = taskCards.map((card) => {
+                        card.tasks = result[card.assigneeId];
+                        return card;
+                    });
+                    console.log("New TaskCards : " + JSON.stringify(newTaskCards))
+                    this.setState({
+                        taskCards: newTaskCards,
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                })
 
-            this.setState({
-                items: result.droppable,
-                selected: result.droppable2
-            });
+
+
+            // this.setState({
+            //     items: result.droppable,
+            //     selected: result.droppable2
+            // });
+        }
+
+        if (source.droppableId !== destination.droppableId) {
+
         }
     };
 
@@ -220,6 +245,7 @@ class TaskContainer extends Component {
 TaskContainer.propTypes = {
     classes: PropTypes.object.isRequired,
     creator: PropTypes.object.isRequired,
+    updateTask: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
