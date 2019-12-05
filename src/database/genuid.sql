@@ -1,10 +1,10 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Home
+ Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : localhost:5432
+ Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 20/10/2019 13:10:41
+ Date: 05/12/2019 19:59:17
 */
 
 
@@ -30,6 +30,6 @@ CREATE TABLE "public"."genuid" (
 -- ----------------------------
 -- Records of genuid
 -- ----------------------------
-INSERT INTO "public"."genuid" VALUES (2, 0, 0);
-INSERT INTO "public"."genuid" VALUES (3, 0, 0);
-INSERT INTO "public"."genuid" VALUES (1, 1, 1);
+INSERT INTO "public"."genuid" VALUES (2, 2, 52);
+INSERT INTO "public"."genuid" VALUES (3, 2, 12);
+INSERT INTO "public"."genuid" VALUES (1, 5, 5);
