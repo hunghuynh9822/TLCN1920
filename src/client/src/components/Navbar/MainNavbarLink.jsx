@@ -5,7 +5,7 @@ import classNames from "classnames";
 
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert'
-
+import axios from 'axios';
 // @material-ui/core components
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
@@ -34,9 +34,34 @@ class MainNavbarLink extends Component {
         super(props);
         this.state = ({
             openNotification: null,
-            openProfile: null
+            openProfile: null,
+            rows : [],
+            notify : 0
         });
     }
+    componentDidMount(){
+        const {currentUser} = this.props;
+        var url = "http://192.168.200.1:8080/api/notify/" + currentUser.id
+        axios.get(url)
+        .then(response =>{
+            var temp = response.data;    
+            console.log(temp);
+            
+            var notify = 0;
+            temp.forEach(element => {
+                if (element.view == false){
+                    notify += 1 ;
+                }
+        });
+        this.setState({
+            rows: temp,
+            notify : notify
+        })
+
+        })
+        .catch(error => console.log("ok loi ne notify lisst"+error))
+    }
+
     render() {
         const { classes } = this.props;
         const { currentUser } = this.props;
@@ -52,6 +77,7 @@ class MainNavbarLink extends Component {
             }
         };
         const handleCloseNotification = () => {
+
             this.setState({
                 openNotification: null,
             })
@@ -67,7 +93,9 @@ class MainNavbarLink extends Component {
                 })
             }
         };
-        const handleCloseProfile = () => {
+        const handleCloseProfile = (element) => {
+            console.log(element);
+            
             this.setState({
                 openProfile: null,
             })
@@ -112,7 +140,7 @@ class MainNavbarLink extends Component {
                         style={{ padding: 0 }}
                     >
                         <Notifications className={classes.icons} />
-                        <span className={classes.notifications}>5</span>
+                    <span className={classes.notifications}>{this.state.notify}</span>
                         <Hidden mdUp implementation="css">
                             <p onClick={handleCloseNotification} className={classes.linkText}>
                                 Notification
@@ -142,36 +170,19 @@ class MainNavbarLink extends Component {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleCloseNotification}>
                                         <MenuList role="menu">
-                                            <MenuItem
+                                            {this.state.rows.map((element, i) => {     
+                                            console.log("Entered");                 
+                                            // Return the element. Also pass key     
+                                            return ( 
+                                                <MenuItem
                                                 onClick={handleCloseNotification}
                                                 className={classes.dropdownItem}
+                                                value={element}
                                             >
-                                                Mike John responded to your email
+                                                {element.content}
                                             </MenuItem>
-                                            <MenuItem
-                                                onClick={handleCloseNotification}
-                                                className={classes.dropdownItem}
-                                            >
-                                                You have 5 new tasks
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={handleCloseNotification}
-                                                className={classes.dropdownItem}
-                                            >
-                                                You{"'"}re now friend with Andrew
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={handleCloseNotification}
-                                                className={classes.dropdownItem}
-                                            >
-                                                Another Notification
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={handleCloseNotification}
-                                                className={classes.dropdownItem}
-                                            >
-                                                Another One
-                                            </MenuItem>
+                                            ) 
+                                            })}
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>
@@ -223,7 +234,7 @@ class MainNavbarLink extends Component {
                                     <ClickAwayListener onClickAway={handleCloseProfile}>
                                         <MenuList role="menu">
                                             <MenuItem
-                                                onClick={handleCloseProfile}
+                                                onClick={({element}) => handleCloseProfile}
                                                 className={classes.dropdownItem}
                                             >
                                                 Profile
