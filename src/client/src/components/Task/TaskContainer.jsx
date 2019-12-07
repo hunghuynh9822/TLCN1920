@@ -42,7 +42,6 @@ class TaskContainer extends Component {
             taskCards: [],
         }
         this.getMember = this.getMember.bind(this);
-        this.reorder = this.reorder.bind(this);
         this.move = this.move.bind(this);
         this.getList = this.getList.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
@@ -144,32 +143,29 @@ class TaskContainer extends Component {
                 taskId: draggableId,
                 employeeId: destination.droppableId
             };
+            const result = this.move(
+                this.getList(source.droppableId),
+                this.getList(destination.droppableId),
+                source,
+                destination
+            );
+            console.log("Move result : " + JSON.stringify(result));
+            let items = this.state.items;
+            let newTaskCards = taskCards.map((card) => {
+                card.tasks = result[card.assigneeId];
+                return card;
+            });
+            console.log("New TaskCards : " + JSON.stringify(newTaskCards))
+            this.setState({
+                taskCards: newTaskCards,
+            });
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("changeAssignee : " + JSON.stringify(response))
-                    const result = move(
-                        this.getList(source.droppableId),
-                        this.getList(destination.droppableId),
-                        source,
-                        destination
-                    );
-                    console.log("Move result : " + JSON.stringify(result));
-                    let items = this.state.items;
-                    let newTaskCards = taskCards.map((card) => {
-                        card.tasks = result[card.assigneeId];
-                        return card;
-                    });
-                    console.log("New TaskCards : " + JSON.stringify(newTaskCards))
-                    this.setState({
-                        taskCards: newTaskCards,
-                    });
                 })
                 .catch(error => {
                     console.log(error);
                 })
-
-
-
             // this.setState({
             //     items: result.droppable,
             //     selected: result.droppable2
