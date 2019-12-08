@@ -35,6 +35,7 @@ class ProjectTasks extends Component {
         this.getName = this.getName.bind(this);
         this.getMember = this.getMember.bind(this);
         this.getNameMember = this.getNameMember.bind(this);
+        this.updateTask = this.updateTask.bind(this);
     }
 
     getName(employee) {
@@ -81,6 +82,21 @@ class ProjectTasks extends Component {
         }
     }
 
+    updateTask(creator) {
+        let creatorTasks = this.state.creatorTasks;
+        let updateIndex = 0;
+        for(let i = 0; i < creatorTasks.length ; i++) {
+            if(creatorTasks[i].creatorId == creator.creatorId) {
+                updateIndex = i;
+                break;
+            }
+        }
+        creatorTasks[updateIndex] = creator;
+        this.setState({
+            creatorTasks : creatorTasks,
+        });
+    }
+
     render() {
         const { classes } = this.props;
         const { projectItem } = this.props;
@@ -108,7 +124,7 @@ class ProjectTasks extends Component {
                             let title = this.getNameMember(creator.creatorId);
                             return (
                                 <CollapsibleSection key={index} title={title}>
-                                    <TaskContainer creator={creator}/>
+                                    <TaskContainer creator={creator} updateTask={this.updateTask}/>
                                 </CollapsibleSection>
                             )
                         })}

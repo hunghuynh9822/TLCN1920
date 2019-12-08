@@ -58,9 +58,9 @@ export function getTasksCreatedByLead(project, employee) {
 */
 export function changeAssignee(changeRequest) {
     return request({
-        url: url + "/change-assignee",
+        url: leadUrl + "/change-assignee",
         method: 'PATCH',
-        data: JSON.stringify(createRequest)
+        data: JSON.stringify(changeRequest)
     });
 }
 
@@ -73,9 +73,9 @@ export function changeAssignee(changeRequest) {
 */
 export function changeTime(changeRequest) {
     return request({
-        url: url + "/change-time",
+        url: leadUrl + "/change-time",
         method: 'PATCH',
-        data: JSON.stringify(createRequest)
+        data: JSON.stringify(changeRequest)
     });
 }
 /*
@@ -87,7 +87,7 @@ export function changeTime(changeRequest) {
 */
 export function updatePointTasks(updateRequest) {
     return request({
-        url: url + "/update-point",
+        url: leadUrl + "/update-point",
         method: 'PATCH',
         data: JSON.stringify(createRequest)
     });

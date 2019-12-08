@@ -1,10 +1,10 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Home
+ Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : localhost:5432
+ Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 03/11/2019 12:12:06
+ Date: 05/12/2019 20:01:05
 */
 
 
@@ -31,10 +31,17 @@ CREATE TABLE "public"."user_roles" (
 -- ----------------------------
 -- Records of user_roles
 -- ----------------------------
-INSERT INTO "public"."user_roles" VALUES (15714589149401, 1, 1571458915069, NULL);
-INSERT INTO "public"."user_roles" VALUES (15714589149401, 3, 1571458915069, NULL);
-INSERT INTO "public"."user_roles" VALUES (15714589149401, 2, 1571458915069, NULL);
-INSERT INTO "public"."user_roles" VALUES (15714589149401, 4, 1571458915069, NULL);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 1, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 3, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 2, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15714589149401, 4, 1571458915069, 1571458915069);
+INSERT INTO "public"."user_roles" VALUES (15746072843063, 3, 1574785905117, 1574785905117);
+INSERT INTO "public"."user_roles" VALUES (15746072843063, 2, 1574785905118, 1574785905118);
+INSERT INTO "public"."user_roles" VALUES (15746071512232, 2, 1574789578705, 1574789578705);
+INSERT INTO "public"."user_roles" VALUES (15751881480165, 1, 1575188192653, 1575188192653);
+INSERT INTO "public"."user_roles" VALUES (15751881480165, 2, 1575188192655, 1575188192655);
+INSERT INTO "public"."user_roles" VALUES (15751881480165, 3, 1575188192656, 1575188192656);
+INSERT INTO "public"."user_roles" VALUES (15751881480165, 4, 1575188192656, 1575188192656);
 
 -- ----------------------------
 -- Primary Key structure for table user_roles

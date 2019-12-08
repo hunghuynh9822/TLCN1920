@@ -1,10 +1,10 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Home
+ Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : localhost:5432
+ Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 13/10/2019 19:14:39
+ Date: 05/12/2019 20:00:44
 */
 
 
@@ -25,8 +25,8 @@ CREATE TABLE "public"."taskcomments" (
   "task_id" int8,
   "employee_id" int8,
   "comment" text COLLATE "pg_catalog"."default",
-  "create_at" int8,
-  "update_at" int8
+  "created_at" int8,
+  "updated_at" int8
 )
 ;
 

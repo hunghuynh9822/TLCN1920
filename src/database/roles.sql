@@ -1,10 +1,10 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Home
+ Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : localhost:5432
+ Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -12,7 +12,7 @@
  Target Server Version : 100010
  File Encoding         : 65001
 
- Date: 20/10/2019 13:06:55
+ Date: 05/12/2019 20:00:35
 */
 
 
@@ -31,10 +31,10 @@ CREATE TABLE "public"."roles" (
 -- ----------------------------
 -- Records of roles
 -- ----------------------------
-INSERT INTO "public"."roles" VALUES (1, 'ROLE_ADMIN', 1567937957503, NULL);
-INSERT INTO "public"."roles" VALUES (2, 'ROLE_STAFF', 1567937962314, NULL);
-INSERT INTO "public"."roles" VALUES (3, 'ROLE_LEAD', 1567937962314, NULL);
-INSERT INTO "public"."roles" VALUES (4, 'ROLE_HR', 1567937962314, NULL);
+INSERT INTO "public"."roles" VALUES (1, 'ROLE_ADMIN', 1567937957503, 1567937957503);
+INSERT INTO "public"."roles" VALUES (2, 'ROLE_STAFF', 1567937962314, 1567937962314);
+INSERT INTO "public"."roles" VALUES (3, 'ROLE_LEAD', 1567937962314, 1567937962314);
+INSERT INTO "public"."roles" VALUES (4, 'ROLE_HR', 1567937962314, 1567937962314);
 
 -- ----------------------------
 -- Primary Key structure for table roles
