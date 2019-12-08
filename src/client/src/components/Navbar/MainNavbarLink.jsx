@@ -40,27 +40,33 @@ class MainNavbarLink extends Component {
         });
     }
     componentDidMount(){
+        this.getData();
+        setInterval(this.getData, 5000); 
+    }
+
+    getData = () => {
         const {currentUser} = this.props;
         var url = "http://192.168.200.1:8080/api/notify/" + currentUser.id
         axios.get(url)
         .then(response =>{
             var temp = response.data;    
-            console.log(temp);
-            
+            // console.log(temp);
+            var temp_false = []
             var notify = 0;
             temp.forEach(element => {
                 if (element.view == false){
+                    temp_false.push(element)
                     notify += 1 ;
                 }
         });
         this.setState({
-            rows: temp,
+            rows: temp_false,
             notify : notify
         })
 
         })
         .catch(error => console.log("ok loi ne notify lisst"+error))
-    }
+      }
 
     render() {
         const { classes } = this.props;

@@ -6,10 +6,11 @@ import { MaterialTable, PaginationTable, Notifi } from "../../components"
 import { connect } from 'react-redux';
 import axios from 'axios';
 const columns = [
-    { id: 'no', label: 'No.', minWidth: 50 },
+    { id: 'no', label: 'No.', minWidth: 30 },
     { id: 'title', label: 'Title', minWidth: 200 },
     { id: 'name', label: 'Sender', minWidth: 100 },
-    { id: 'action', label: 'Action', minWidth: 100 },
+    { id: 'date', label: 'Time', minWidth: 150 },
+    { id: 'action', label: 'Action', minWidth: 70 },
 ];
 
 // function createData(no, title) {
@@ -47,12 +48,21 @@ class Notification extends Component {
         axios.get(url)
         .then(response =>{
             const temp = response.data;
+            console.log(response.data);
+            
             var rows = []
             temp.forEach(element =>{
                 var no = rows.length + 1 ;
-                rows.push(this.createData(no , element.content ,element.create_name, element.id)) ;
+                var a = new Date(element.create_time);
+                var year = a.getFullYear();
+                var month = a.getMonth() + 1;
+                var date = a.getDate();
+                var hour = a.getHours();
+                var muti = a.getMinutes();
+                var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
+                rows.push(this.createData(no , element.content ,element.create_name, time, element.id)) ;
             })
-    
+            
         this.setState({
             rows: rows,
             isAdmin :isAdmin
@@ -79,16 +89,22 @@ class Notification extends Component {
         const name = currentUser.firstName +" "+ currentUser.middleName +" "+ currentUser.lastName;
         var date = new Date();
         var time = date.getTime();
-        const no = this.state.rows.length + this.state.rows.length + 1;
+        const no = this.state.rows.length + 1;
         listsID.forEach(element => {
             axios.post(`http://192.168.200.1:8080/api/notify/`, {create_id:currentUser.id,create_name:name,create_time:time,content:req.content,receive_id:element.id})
             .then(res => {
             // console.log(res);
             console.log(res.data);
-
-            id = res.data.id
+            var a = new Date(res.data.create_time * 1000);
+            var year = a.getFullYear();
+            var month = a.getMonth() + 1;
+            var date = a.getDate();
+            var hour = a.getHours();
+            var muti = a.getMinutes();
+            var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
+            var id = res.data.receive_id
             if (currentUser.id === id){
-                temp.push(this.createData(no , req.content ,req.create_name , id)) ;
+                temp.push(this.createData(no , res.data.content ,res.data.create_name, time , id)) ;
                 this.setState({ rows : temp });
             }
             
@@ -100,7 +116,7 @@ class Notification extends Component {
     }
 
 
-    createData(no, title, name ,data) {
+    createData(no, title, name,date ,data) {
         const action = [{
             name: 'view',
             method: this.callActionView
@@ -108,7 +124,7 @@ class Notification extends Component {
             name: 'delete',
             method: this.callActionDelete
         }];
-        return { no, title , name , action ,data };
+        return { no, title , name ,date , action ,data };
     }
 
     callActionDelete(method, row) {
