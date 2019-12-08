@@ -23,11 +23,20 @@ import static com.hcmute.pose.authservice.security.oauth2.HttpCookieOAuth2Author
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
+    private JwtConfig jwtConfig;
+
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
+
+    @Autowired
+    OAuth2AuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider, JwtConfig jwtConfig,
+                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtConfig = jwtConfig;
+        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -67,7 +76,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
 
-        return jwtTokenProvider.getJwtConfig().getAuthorizedRedirectUris()
+        return jwtConfig.getAuthorizedRedirectUris()
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {
                     // Only validate host and port. Let the clients use different paths if they want to
