@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 const columns = [
     { id: 'no', label: 'No.', minWidth: 50 },
-    { id: 'title', label: 'Title', minWidth: 300 },
+    { id: 'title', label: 'Title', minWidth: 200 },
+    { id: 'name', label: 'Sender', minWidth: 100 },
     { id: 'action', label: 'Action', minWidth: 100 },
 ];
 
@@ -27,7 +28,8 @@ class Notification extends Component {
         super(props);
         this.state = {
             rows : [],
-            list : []
+            list : [],
+            isAdmin : 0
         }
         this.callActionView = this.callActionView.bind(this);
         this.callActionDelete = this.callActionDelete.bind(this);
@@ -35,10 +37,12 @@ class Notification extends Component {
     }
     componentDidMount(){
         const {currentUser} = this.props;
-        // var row = [
-        //     this.createData('01', 'Thông báo nghỉ 2/9',""),
-        //     this.createData('02', 'Thông báo họp ngày 3/9',""),
-        // ];
+        var isAdmin = 0;
+        currentUser.roles.forEach(element => {
+            if(element.id === 1)
+                isAdmin = 1;
+                // console.log("isAdmin: "+isAdmin +"name: "+ element.name);    
+        });
         var url = "http://192.168.200.1:8080/api/notify/" + currentUser.id
         axios.get(url)
         .then(response =>{
@@ -46,12 +50,12 @@ class Notification extends Component {
             var rows = []
             temp.forEach(element =>{
                 var no = rows.length + 1 ;
-                rows.push(this.createData(no , element.content , element.id)) ;
+                rows.push(this.createData(no , element.content ,element.create_name, element.id)) ;
             })
-        
-              
+    
         this.setState({
-            rows: rows
+            rows: rows,
+            isAdmin :isAdmin
         })
         })
         .catch(error => console.log("ok loi ne notify lisst"+error))
@@ -84,7 +88,7 @@ class Notification extends Component {
 
             id = res.data.id
             if (currentUser.id === id){
-                temp.push(this.createData(no , req.content , id)) ;
+                temp.push(this.createData(no , req.content ,req.create_name , id)) ;
                 this.setState({ rows : temp });
             }
             
@@ -96,7 +100,7 @@ class Notification extends Component {
     }
 
 
-    createData(no, title, data) {
+    createData(no, title, name ,data) {
         const action = [{
             name: 'view',
             method: this.callActionView
@@ -104,11 +108,26 @@ class Notification extends Component {
             name: 'delete',
             method: this.callActionDelete
         }];
-        return { no, title , action ,data };
+        return { no, title , name , action ,data };
     }
 
     callActionDelete(method, row) {
         console.log("callActionDelete" + JSON.stringify(row));
+        axios.put(`http://192.168.200.1:8080/api/notify/delete/`+ row.data )
+            .then(res => {
+            console.log(res.data);
+            var rows = this.state.rows;
+            for(var i = rows.length - 1; i >= 0; i--) {
+                if(rows[i].id === row.data) {
+                   rows.splice(i, 1);
+                }
+            }
+            this.setState({
+                rows: rows
+            })
+            }).catch(err=>{ 
+                console.log(err);
+            })
     }
 
     callActionView(method, row) {
@@ -121,15 +140,27 @@ class Notification extends Component {
         // })
         // this.handleOpen();
         console.log("callActionView" + JSON.stringify(row));
+        axios.put(`http://192.168.200.1:8080/api/notify/update/`+ row.data +'?view=true')
+            .then(res => {
+            // console.log(res);
+            console.log(res.data);
+            }).catch(err=>{ 
+                console.log(err);
+            })
     }
 
 
     render() {
         const { classes } = this.props;
+        var AddNotify;
+        if (this.state.isAdmin === 1) {
+            AddNotify = <Notifi addNot={this.addNot}/>;
+        }
         return (
             <div className={classes.root}>
                 <div>
-                    <Notifi addNot={this.addNot}/>
+                    {/* <Notifi addNot={this.addNot}/> */}
+                    {AddNotify}
                 </div>
                 <PaginationTable columns={columns} rows={this.state.rows} />
             </div>

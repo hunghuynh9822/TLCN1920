@@ -93,9 +93,7 @@ class MainNavbarLink extends Component {
                 })
             }
         };
-        const handleCloseProfile = (element) => {
-            console.log(element);
-            
+        const handleCloseProfile = () => {
             this.setState({
                 openProfile: null,
             })
@@ -105,6 +103,11 @@ class MainNavbarLink extends Component {
             this.props.logout();
             localStorage.removeItem(ACCESS_TOKEN);
             this.props.alert.success("You're safely logged out!");
+        }
+
+        var numNotify;
+        if (this.state.notify > 0) {
+        numNotify = <span className={classes.notifications}>{this.state.notify}</span>;
         }
         return (
             <React.Fragment>
@@ -140,7 +143,10 @@ class MainNavbarLink extends Component {
                         style={{ padding: 0 }}
                     >
                         <Notifications className={classes.icons} />
-                    <span className={classes.notifications}>{this.state.notify}</span>
+                       
+                        {/* <span className={classes.notifications}>{this.state.notify}</span> */}
+                        {numNotify}
+                    
                         <Hidden mdUp implementation="css">
                             <p onClick={handleCloseNotification} className={classes.linkText}>
                                 Notification
@@ -176,8 +182,7 @@ class MainNavbarLink extends Component {
                                             return ( 
                                                 <MenuItem
                                                 onClick={handleCloseNotification}
-                                                className={classes.dropdownItem}
-                                                value={element}
+                                                className={classes.dropdownItem}                                             
                                             >
                                                 {element.content}
                                             </MenuItem>
