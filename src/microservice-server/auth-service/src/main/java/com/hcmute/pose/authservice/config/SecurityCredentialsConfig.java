@@ -32,11 +32,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         prePostEnabled = true
 )
 public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    @Bean
+    public JwtConfig jwtConfig(){
+        return new JwtConfig();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Autowired
-    private JwtConfig jwtConfig;
+    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -87,7 +94,7 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
                 // An object provided by WebSecurityConfigurerAdapter, used to authenticate the user passing user's credentials
                 // The filter needs this auth manager to authenticate the user.
 //                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig,jwtTokenProvider))
-                .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig()), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                     .antMatchers("/",
                             "/error",
@@ -101,7 +108,7 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
                             "/**/*.js")
                     .permitAll()
                     // allow all POST requests
-                    .antMatchers(HttpMethod.POST, jwtConfig.getUris()).permitAll()
+                    .antMatchers(HttpMethod.POST, jwtConfig().getUris()).permitAll()
                     // any other requests must be authenticated
                     .anyRequest().permitAll();
         http
@@ -126,10 +133,5 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
