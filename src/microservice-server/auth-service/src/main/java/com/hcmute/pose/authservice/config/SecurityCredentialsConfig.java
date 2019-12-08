@@ -129,16 +129,6 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtConfig jwtConfig() {
-        return new JwtConfig();
-    }
-
-    @Bean
-    public JwtTokenProvider jwtTokenProvider(JwtConfig jwtConfig){
-        return new JwtTokenProvider(jwtConfig);
-    }
-
-    @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

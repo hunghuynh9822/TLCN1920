@@ -6,9 +6,9 @@ export const ACCESS_TOKEN = 'accessToken';
 
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'
 
-export const GOOGLE_AUTH_URL = API_BASE_OAUTH2_URL + '/auth/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
-export const FACEBOOK_AUTH_URL = API_BASE_OAUTH2_URL + '/auth/oauth2/authorize/facebook?redirect_uri=' + OAUTH2_REDIRECT_URI;
-export const GITHUB_AUTH_URL = API_BASE_OAUTH2_URL + '/auth/oauth2/authorize/github?redirect_uri=' + OAUTH2_REDIRECT_URI;
+export const GOOGLE_AUTH_URL = API_BASE_URL + '/auth/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
+export const FACEBOOK_AUTH_URL = API_BASE_URL + '/auth/oauth2/authorize/facebook?redirect_uri=' + OAUTH2_REDIRECT_URI;
+export const GITHUB_AUTH_URL = API_BASE_URL + '/auth/oauth2/authorize/github?redirect_uri=' + OAUTH2_REDIRECT_URI;
 
 export const ROUTER_MAP = {
     'ROLE_ADMIN': '/admin',
@@ -21,5 +21,5 @@ export const PATH_MAP = {
     '/admin': 'ROLE_ADMIN',
     '/staff': 'ROLE_STAFF',
     '/lead': 'ROLE_LEAD',
-    '/hr': 'ROLE_HR' 
+    '/hr': 'ROLE_HR'
 }
