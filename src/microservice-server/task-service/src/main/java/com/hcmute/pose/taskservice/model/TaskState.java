@@ -12,5 +12,7 @@ public enum TaskState {
     @SerializedName("3")
     TESTING,
     @SerializedName("4")
-    DONE
+    DONE,
+    @SerializedName("5")
+    FINISH
 }

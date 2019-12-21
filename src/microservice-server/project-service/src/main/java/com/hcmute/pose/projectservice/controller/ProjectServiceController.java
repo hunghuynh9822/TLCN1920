@@ -36,6 +36,16 @@ public class ProjectServiceController {
         }
     }
 
+    @GetMapping("/{projectId}")
+    public ResponseEntity getProject(@PathVariable("projectId") Long projectId){
+        try{
+            ProjectResponse projectResponse = projectServiceBuz.getProject(projectId);
+            return new ResponseEntity(projectResponse, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/{employeeId}/all")
     public ResponseEntity getProjectOfEmployee(@PathVariable("employeeId") Long employeeId){
         try{
