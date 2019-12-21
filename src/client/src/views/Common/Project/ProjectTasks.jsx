@@ -115,7 +115,6 @@ ProjectTasks.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        projectItem: state.project.projectItem,
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,

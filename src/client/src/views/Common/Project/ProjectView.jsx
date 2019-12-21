@@ -64,6 +64,7 @@ class ProjectView extends Component {
         }
         this.handleBack = this.handleBack.bind(this);
         this.updateFreeEmployee = this.updateFreeEmployee.bind(this);
+        this.loadProject = this.loadProject.bind(this);
     }
     handleChange = (event, newValue) => {
         this.setState({
@@ -90,10 +91,38 @@ class ProjectView extends Component {
         })
     }
 
+    loadProject() {
+        const { alert } = this.props;
+        const { projectItem, updateProjectItem } = this.props;
+        const projectId = projectItem.project.id;
+        getProject(projectId)
+                .then(response => {
+                    console.log("Get project : " + JSON.stringify(response));
+                    updateProjectItem(response);
+                    getEmployeeFree(projectId)
+                        .then(responseEmployee => {
+                            console.log("Free employee : " + JSON.stringify(responseEmployee));
+                            this.setState({
+                                projectItem: response,
+                                projectId: projectId,
+                                freeEmployees: responseEmployee.employees
+                            })
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            alert.error('Oops! Something went wrong. Please try again!');
+                        })
+                })
+                .catch(error => {
+                    console.log(error)
+                    alert.error('Oops! Something went wrong. Please try again!');
+                })
+    }
+
     componentDidMount() {
         const { match } = this.props;
         const { alert } = this.props;
-        const { projectItem } = this.props;
+        const { projectItem, updateProjectItem } = this.props;
         if (projectItem !== undefined && projectItem !== null) {
             const projectId = projectItem.project.id;
             if (projectId != match.params.projectId) {
@@ -117,7 +146,6 @@ class ProjectView extends Component {
             this.setState({
                 loading: true
             });
-            let { updateProjectItem } = this.props;
             let projectId = match.params.projectId;
             getProject(projectId)
                 .then(response => {
@@ -206,7 +234,7 @@ class ProjectView extends Component {
                                 <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
                                     {
                                         projectItem && (
-                                            <tab.component projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} />
+                                            <tab.component loadProject={this.loadProject} projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} updateProjectItem={updateProjectItem} />
                                         )
                                     }
                                 </TabPanel>
