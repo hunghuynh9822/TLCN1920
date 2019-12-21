@@ -326,7 +326,7 @@ class ProjectDetails extends Component {
                                         )
                                     }
                                 </ListItemAvatar>
-                                <ListItemText primary={member.email} />
+                                <ListItemText primary={this.getName(member)} />
                             </ListItem>
                         )) : (
                                 <ListItemText primary="No employee" />

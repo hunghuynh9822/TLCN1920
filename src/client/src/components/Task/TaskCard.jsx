@@ -51,11 +51,12 @@ class TaskCard extends Component {
     render() {
         const { classes } = this.props;
         const { cardId, tasks, title } = this.props;
+        console.log("TaskCard : " + JSON.stringify(tasks));
         let doneTasks = tasks.filter((task) => {
-            return task.state == TASK_STATE.indexOf('DONE');
+            return task.state == 'FINISH';
         });
         let doTasks = tasks.filter((task) => {
-            return task.state != TASK_STATE.indexOf('DONE');
+            return task.state != 'FINISH';
         });
         let totalPoint = doneTasks.reduce((point, task, index, doneTasks) => {
             return point += task.point

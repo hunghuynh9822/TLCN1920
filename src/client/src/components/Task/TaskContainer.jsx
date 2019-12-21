@@ -122,14 +122,14 @@ class TaskContainer extends Component {
         const { taskCards } = this.state;
         const { updateTask } = this.props;
         const { source, destination, draggableId } = result;
-        console.log("onDragEnd : " + JSON.stringify(result))
+        // console.log("onDragEnd : " + JSON.stringify(result))
         // dropped outside the list
         if (!destination) {
             return;
         }
 
         if (source.droppableId === destination.droppableId) {
-            console.log("Source : " + JSON.stringify(this.getList(source.droppableId)))
+            // console.log("Source : " + JSON.stringify(this.getList(source.droppableId)))
             // const items = reorder(
             //     this.getList(source.droppableId),
             //     source.index,
@@ -149,31 +149,24 @@ class TaskContainer extends Component {
                 source,
                 destination
             );
-            console.log("Move result : " + JSON.stringify(result));
+            // console.log("Move result : " + JSON.stringify(result));
             let items = this.state.items;
             let newTaskCards = taskCards.map((card) => {
                 card.tasks = result[card.assigneeId];
                 return card;
             });
-            console.log("New TaskCards : " + JSON.stringify(newTaskCards))
-            this.setState({
-                taskCards: newTaskCards,
-            });
+            // console.log("New TaskCards : " + JSON.stringify(newTaskCards))
+            
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("changeAssignee : " + JSON.stringify(response))
+                    this.setState({
+                        taskCards: newTaskCards,
+                    });
                 })
                 .catch(error => {
                     console.log(error);
                 })
-            // this.setState({
-            //     items: result.droppable,
-            //     selected: result.droppable2
-            // });
-        }
-
-        if (source.droppableId !== destination.droppableId) {
-
         }
     };
 
