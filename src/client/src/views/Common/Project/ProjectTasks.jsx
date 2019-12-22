@@ -7,6 +7,9 @@ import { withAlert } from 'react-alert'
 import { NewTask } from '../../../components';
 import { AssignTasks, CompleteTasks } from '../../';
 
+import { getTasksByAdmin, getTasksCreatedByLead } from '../../../action/task';
+import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
+
 import SwipeableViews from 'react-swipeable-views';
 import { CenteredTabs, TabPanel } from '../../../components';
 const styles = theme => ({
@@ -41,9 +44,12 @@ class ProjectTasks extends Component {
         super(props);
         this.state = {
             value: 0,
+            totalTasks: [],
         }
         this.handleChangeTabs = this.handleChangeTabs.bind(this);
         this.handleChangeIndex = this.handleChangeIndex.bind(this);
+        this.updateTasks = this.updateTasks.bind(this);
+        this.loadTasks = this.loadTasks.bind(this);
     }
 
     handleChangeTabs = (event, newValue) => {
@@ -57,6 +63,42 @@ class ProjectTasks extends Component {
             value: index,
         })
     };
+
+    updateTasks(tasks) {
+        this.setState({
+            totalTasks: tasks,
+        })
+    }
+
+    loadTasks() {
+        const { alert } = this.props;
+        const { loginRole, projectItem, currentUser } = this.props;
+        let projectId = projectItem.project.id;
+        if (loginAsAdmin(loginRole)) {
+            getTasksByAdmin(projectId)
+                .then(response => {
+                    console.log("getTasksByAdmin : " + JSON.stringify(response));
+                    this.setState({
+                        totalTasks: response.creatorTasks,
+                    })
+                })
+        } else if (loginAsLead(loginRole)) {
+            getTasksCreatedByLead(projectId, currentUser.id)
+                .then(response => {
+                    console.log("getTasksCreatedByLead : " + JSON.stringify(response));
+                    this.setState({
+                        totalTasks: response.creatorTasks,
+                    })
+                })
+        } else {
+            alert.error('Oops! Something went wrong. Please try again!');
+        }
+    }
+
+    componentDidMount() {
+        this.loadTasks();
+    }
+
 
     render() {
         const { classes } = this.props;
@@ -73,9 +115,6 @@ class ProjectTasks extends Component {
         ]
         return (
             <React.Fragment>
-                {/* Hello Project Task : This will show in 2 mode
-                - Table
-                - Card task employee*/}
                 <div className={classes.root}>
                     <div className={classes.header}>
                         <div className={classes.header_section}>
@@ -97,7 +136,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component />
+                                        <tab.component creatorTasks={this.state.totalTasks} loadTasks={this.loadTasks} updateTasks={this.updateTasks} />
                                     </TabPanel>
                                 ))
                             }
@@ -115,6 +154,7 @@ ProjectTasks.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        projectItem: state.project.projectItem,
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,

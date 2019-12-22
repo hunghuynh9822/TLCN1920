@@ -223,7 +223,7 @@ class TaskContainer extends Component {
                 <div className={classes.root}>
                     <DragDropContext onDragEnd={this.onDragEnd}>
                         {/* <Slider {...settings}> */}
-                        {taskCards.map((card) => <TaskCard key={card.assigneeId} title={this.getNameMember(card.assigneeId)} cardId={card.assigneeId} tasks={card.tasks} />)}
+                        {taskCards.map((card) => <TaskCard filter={this.props.filter} key={card.assigneeId} title={this.getNameMember(card.assigneeId)} cardId={card.assigneeId} tasks={card.tasks} />)}
                         {/* </Slider> */}
                     </DragDropContext>
                 </div>

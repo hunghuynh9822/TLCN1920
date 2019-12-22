@@ -16,7 +16,7 @@ class AssignTasks extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            creatorTasks: [],
+
         }
         this.getName = this.getName.bind(this);
         this.getMember = this.getMember.bind(this);
@@ -25,29 +25,11 @@ class AssignTasks extends Component {
     }
 
     componentDidMount() {
-        const { alert } = this.props;
-        const { loginRole, projectItem, currentUser } = this.props;
-        let projectId = projectItem.project.id;
-        if (loginAsAdmin(loginRole)) {
-            getTasksByAdmin(projectId)
-                .then(response => {
-                    console.log("getTasksByAdmin : " + JSON.stringify(response));
-                    this.setState({
-                        creatorTasks: response.creatorTasks,
-                    })
-                })
-        } else if (loginAsLead(loginRole)) {
-            getTasksCreatedByLead(projectId, currentUser.id)
-                .then(response => {
-                    console.log("getTasksCreatedByLead : " + JSON.stringify(response));
-                })
-        } else {
-            alert.error('Oops! Something went wrong. Please try again!');
-        }
+        
     }
 
     updateTask(creator) {
-        let creatorTasks = this.state.creatorTasks;
+        const {creatorTasks, updateTasks} = this.props;
         let updateIndex = 0;
         for (let i = 0; i < creatorTasks.length; i++) {
             if (creatorTasks[i].creatorId == creator.creatorId) {
@@ -56,9 +38,7 @@ class AssignTasks extends Component {
             }
         }
         creatorTasks[updateIndex] = creator;
-        this.setState({
-            creatorTasks: creatorTasks,
-        });
+        updateTasks(creatorTasks)
     }
 
     getName(employee) {
@@ -85,7 +65,7 @@ class AssignTasks extends Component {
 
     render() {
         const { classes } = this.props;
-        const { creatorTasks } = this.state;
+        const { creatorTasks } = this.props;
         return (
             <React.Fragment>
                 {creatorTasks && creatorTasks.map((creator, index) => {
@@ -93,7 +73,7 @@ class AssignTasks extends Component {
                     let title = this.getNameMember(creator.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer creator={creator} updateTask={this.updateTask} filter="DONE"/>
+                            <TaskContainer creator={creator} updateTask={this.updateTask}/>
                         </CollapsibleSection>
                     )
                 })}
@@ -103,6 +83,9 @@ class AssignTasks extends Component {
 }
 AssignTasks.propTypes = {
     classes: PropTypes.object.isRequired,
+    creatorTasks: PropTypes.array.isRequired,
+    loadTasks: PropTypes.func.isRequired,
+    updateTasks: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
