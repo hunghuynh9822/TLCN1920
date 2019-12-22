@@ -10,6 +10,15 @@ export const TASK_STATE = [
     'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'DONE', 'FINISH'
 ]
 
+export const UPDATE_CREATOR_TASKS = 'UPDATE_CREATOR_TASKS';
+
+export function updateCreatorTasks(creatorTasks) {
+    return {
+        type: UPDATE_CREATOR_TASKS,
+        creatorTasks
+    };
+}
+
 /* 
 {
     projectId:

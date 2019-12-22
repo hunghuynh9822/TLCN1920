@@ -44,7 +44,8 @@ class TaskCard extends Component {
         super(props);
         this.state = {
             doTasks: [],
-            doneTasks: []
+            doneTasks: [],
+            tasks: [],
         }
     }
 
