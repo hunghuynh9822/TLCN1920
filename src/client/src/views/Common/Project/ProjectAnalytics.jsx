@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import BarChart from '../../../components/Chart/BarChart.jsx'
 const styles = theme => ({
                             
 });
@@ -13,7 +14,7 @@ class ProjectAnalytics extends Component {
         const { projectId } = this.props;
         return (
             <React.Fragment>
-                Hello Project Analytics                    
+              <BarChart/>                    
             </React.Fragment>
         );
     }

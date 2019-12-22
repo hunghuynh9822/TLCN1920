@@ -11,7 +11,7 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import { CustomLineChart } from '../../components';
-
+import PieChart from '../../components/Chart/PieChart.jsx'
 // Generate Sales Data
 function createData(time, amount) {
     return { time, amount };
@@ -40,21 +40,7 @@ class AdminDashboard extends Component {
                 <Grid container spacing={3} className={classes.gridroot}>
                     {/* Chart */}
                     <Grid item xs={12} md={8} lg={9}>
-                        <Paper className={classnames(classes.paper, classes.fixedHeight)}>
-                            <CustomLineChart title="Chart" data={data} />
-                        </Paper>
-                    </Grid>
-                    {/* Chart */}
-                    <Grid item xs={12} md={4} lg={3}>
-                        <Paper className={classnames(classes.paper, classes.fixedHeight)}>
-                            <CustomLineChart title="Chart" data={data} />
-                        </Paper>
-                    </Grid>
-                    {/* Chart */}
-                    <Grid item xs={12}>
-                        <Paper className={classnames(classes.paper, classes.fixedHeight)}>
-                            <CustomLineChart title="Chart" data={data} />
-                        </Paper>
+                        <PieChart/>
                     </Grid>
                 </Grid>
             </Container>
