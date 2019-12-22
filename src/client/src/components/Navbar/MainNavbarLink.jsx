@@ -41,7 +41,7 @@ class MainNavbarLink extends Component {
     }
     componentDidMount(){
         this.getData();
-        setInterval(this.getData, 5000); 
+        setInterval(this.getData, 500); 
     }
 
     getData = () => {
