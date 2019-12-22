@@ -71,6 +71,8 @@ class AssignTasks extends Component {
 AssignTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
+    creatorTasks: PropTypes.array.isRequired,
+
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -79,7 +81,7 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        creatorTasks: state.tasks.creatorTasks,
+        // creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

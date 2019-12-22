@@ -168,12 +168,12 @@ class TaskContainer extends Component {
             this.setState({
                 taskCards: newTaskCards,
             });
-            creatorTasks[index].tasks = newTaskCards;
-            console.log("Update TaskCards : " + JSON.stringify(creatorTasks[index]))
-            this.props.updateCreatorTasks(creatorTasks);
+            // creatorTasks[index].tasks = newTaskCards;
+            // console.log("Update TaskCards : " + JSON.stringify(creatorTasks[index]))
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("changeAssignee : " + JSON.stringify(response))
+                    this.props.loadTasks();
                 })
                 .catch(error => {
                     console.log(error);

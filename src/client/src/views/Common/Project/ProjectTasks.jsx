@@ -78,7 +78,8 @@ class ProjectTasks extends Component {
                     console.log("getTasksByAdmin : " + JSON.stringify(response));
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
-                        loading: false
+                        loading: false,
+                        creatorTasks: response.creatorTasks,
                     })
                 })
         } else if (loginAsLead(loginRole)) {
@@ -87,7 +88,8 @@ class ProjectTasks extends Component {
                     console.log("getTasksCreatedByLead : " + JSON.stringify(response));
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
-                        loading: false
+                        loading: false,
+                        creatorTasks: response.creatorTasks,
                     })
                 })
         } else {
@@ -115,9 +117,10 @@ class ProjectTasks extends Component {
                 component: AssignTasks,
             }
         ]
-        if (this.state.loading) {
-            return <Loading />
-        }
+        // if (this.state.loading) {
+        //     // return <Loading />
+        //     return null;
+        // }
         return (
             <React.Fragment>
                 <div className={classes.root}>
@@ -141,7 +144,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component loadTasks={this.loadTasks} />
+                                        <tab.component loadTasks={this.loadTasks} creatorTasks={this.state.creatorTasks} />
                                     </TabPanel>
                                 ))
                             }
