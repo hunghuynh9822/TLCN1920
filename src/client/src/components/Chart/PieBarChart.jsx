@@ -57,7 +57,7 @@ class PieBarChart extends Component {
 	
 	render() {	
 		this.options = {
-			"Liem": [{
+			"New vs Returning Visitors": [{
 				click: this.visitorsChartDrilldownHandler,
 				cursor: "pointer",
 				explodeOnClick: false,
@@ -139,13 +139,13 @@ class PieBarChart extends Component {
 		var chart = this.chart;
 		var options = this.options
 			chart.options = newVSReturningVisitorsOptions;
-			chart.options.data = options["liem1"];
+			chart.options.data = options["New vs Returning Visitors"];
 			chart.render();
 		
 		$("#backButton").click(function() { 
 			$(this).toggleClass("invisible");
 			chart.options = newVSReturningVisitorsOptions;
-			chart.options.data = options["Liem2"];
+			chart.options.data = options["New vs Returning Visitors"];
 			chart.render();
 		});
 	}

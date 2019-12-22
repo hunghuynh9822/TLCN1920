@@ -15,7 +15,7 @@ class ProjectAnalytics extends Component {
         const { projectId } = this.props;
         return (
             <React.Fragment>
-              <BarChart/>       
+              {/* <BarChart/>        */}
               <PieBarChart/>             
             </React.Fragment>
         );
