@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { withAlert } from 'react-alert';
+import { withAlert } from 'react-alert'
 
 import { getTasksByAdmin, getTasksCreatedByLead } from '../../../action/task';
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 import { updateCreatorTasks } from '../../../action/task';
 
-import { TaskContainer, Task, NewTask, CollapsibleSection } from '../../../components';
+import { TaskContainer, Task, NewTask, CollapsibleSection } from '../../../components'
 
 const styles = theme => ({
 
@@ -25,7 +25,7 @@ class CompleteTasks extends Component {
     }
 
     componentDidMount() {
-        
+
     }
 
     getName(employee) {
@@ -46,8 +46,12 @@ class CompleteTasks extends Component {
             console.log("getMember : compare " + member.id + " - " + memberId);
             return member.id == memberId;
         })[0];
-        console.log("getMember : " + result);
+        console.log("getMember : " + JSON.stringify(result));
         return result;
+    }
+
+    componentWillReceiveProps() {
+        console.log("...componentWillReceiveProps...")
     }
 
     render() {
@@ -60,7 +64,7 @@ class CompleteTasks extends Component {
                     let title = this.getNameMember(creator.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer creator={creator} loadTasks={this.props.loadTasks} filter="FINISH"/>
+                            <TaskContainer index={index} creator={creator} loadTasks={this.props.loadTasks} filter="DONE" />
                         </CollapsibleSection>
                     )
                 })}
@@ -72,6 +76,7 @@ CompleteTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
 };
+
 const mapStateToProps = (state, ownProps) => {
     return {
         projectItem: state.project.projectItem,

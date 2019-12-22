@@ -50,10 +50,16 @@ class TaskContainer extends Component {
     }
 
     componentDidMount() {
-        const { creator } = this.props;
-        this.setState({
-            taskCards: creator.tasks,
-        })
+        const { creatorTasks, index } = this.props;
+        if (creatorTasks[index]) {
+            this.setState({
+                taskCards: creatorTasks[index].tasks,
+            })
+        } else {
+            this.setState({
+                taskCards: [],
+            })
+        }
     }
 
     getMember(memberId) {
@@ -68,7 +74,7 @@ class TaskContainer extends Component {
         if (employee) {
             return employee.lastName + " " + employee.firstName;
         }
-        return 'Administrator'
+        return 'UnknownMember'
     }
 
     getNameMember(memberId) {
@@ -102,7 +108,8 @@ class TaskContainer extends Component {
     };
 
     getList(cardId) {
-        let taskCards = this.state.taskCards;
+        let { creatorTasks, index } = this.props;
+        let taskCards = creatorTasks[index].tasks;
         let card = taskCards.filter((taskCard) => {
             return taskCard.assigneeId == cardId;
         })[0];
@@ -121,7 +128,8 @@ class TaskContainer extends Component {
      * }
      */
     onDragEnd(result) {
-        const { taskCards } = this.state;
+        let { creatorTasks, index } = this.props;
+        let taskCards = creatorTasks[index].tasks;
         const { source, destination, draggableId } = result;
         // console.log("onDragEnd : " + JSON.stringify(result))
         // dropped outside the list
@@ -160,7 +168,9 @@ class TaskContainer extends Component {
             this.setState({
                 taskCards: newTaskCards,
             });
-            this.props.loadTasks();
+            creatorTasks[index].tasks = newTaskCards;
+            console.log("Update TaskCards : " + JSON.stringify(creatorTasks[index]))
+            this.props.updateCreatorTasks(creatorTasks);
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("changeAssignee : " + JSON.stringify(response))
@@ -173,7 +183,8 @@ class TaskContainer extends Component {
 
     render() {
         const { classes } = this.props;
-        const { taskCards } = this.state;
+        let { creatorTasks, index } = this.props;
+        const taskCards = creatorTasks[index].tasks;
         const settings = {
             className: classNames("center", classes.slider),
             infinite: false,
@@ -224,7 +235,13 @@ class TaskContainer extends Component {
                 <div className={classes.root}>
                     <DragDropContext onDragEnd={this.onDragEnd}>
                         {/* <Slider {...settings}> */}
-                        {taskCards.map((card) => <TaskCard filter={this.props.filter} key={card.assigneeId} title={this.getNameMember(card.assigneeId)} cardId={card.assigneeId} tasks={card.tasks} />)}
+                        {taskCards.map((card) => {
+                            let title = this.getNameMember(card.assigneeId);
+                            if (title != "UnknownMember")
+                                return (
+                                    <TaskCard filter={this.props.filter} key={card.assigneeId} title={title} cardId={card.assigneeId} tasks={card.tasks} />
+                                )
+                        })}
                         {/* </Slider> */}
                     </DragDropContext>
                 </div>
@@ -234,8 +251,8 @@ class TaskContainer extends Component {
 }
 TaskContainer.propTypes = {
     classes: PropTypes.object.isRequired,
-    creator: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
+    index: PropTypes.number.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {

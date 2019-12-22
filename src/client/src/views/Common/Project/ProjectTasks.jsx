@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert'
 
-import { NewTask } from '../../../components';
+import { NewTask, Loading } from '../../../components';
 import { AssignTasks, CompleteTasks } from '../../';
 
 import { getTasksByAdmin, getTasksCreatedByLead } from '../../../action/task';
@@ -45,6 +45,7 @@ class ProjectTasks extends Component {
         super(props);
         this.state = {
             value: 0,
+            loading: false,
         }
         this.handleChangeTabs = this.handleChangeTabs.bind(this);
         this.handleChangeIndex = this.handleChangeIndex.bind(this);
@@ -65,6 +66,9 @@ class ProjectTasks extends Component {
 
     loadTasks() {
         console.log("Loading task");
+        this.setState({
+            loading: true
+        });
         const { alert } = this.props;
         const { loginRole, projectItem, currentUser } = this.props;
         let projectId = projectItem.project.id;
@@ -73,15 +77,24 @@ class ProjectTasks extends Component {
                 .then(response => {
                     console.log("getTasksByAdmin : " + JSON.stringify(response));
                     this.props.updateCreatorTasks(response.creatorTasks);
+                    this.setState({
+                        loading: false
+                    })
                 })
         } else if (loginAsLead(loginRole)) {
             getTasksCreatedByLead(projectId, currentUser.id)
                 .then(response => {
                     console.log("getTasksCreatedByLead : " + JSON.stringify(response));
                     this.props.updateCreatorTasks(response.creatorTasks);
+                    this.setState({
+                        loading: false
+                    })
                 })
         } else {
             alert.error('Oops! Something went wrong. Please try again!');
+            this.setState({
+                loading: false
+            })
         }
     }
 
@@ -102,6 +115,9 @@ class ProjectTasks extends Component {
                 component: AssignTasks,
             }
         ]
+        if (this.state.loading) {
+            return <Loading />
+        }
         return (
             <React.Fragment>
                 <div className={classes.root}>

@@ -25,7 +25,7 @@ class AssignTasks extends Component {
     }
 
     componentDidMount() {
-        
+
     }
 
     getName(employee) {
@@ -60,7 +60,7 @@ class AssignTasks extends Component {
                     let title = this.getNameMember(creator.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer creator={creator} loadTasks={this.props.loadTasks}/>
+                            <TaskContainer index={index} creator={creator} loadTasks={this.props.loadTasks} />
                         </CollapsibleSection>
                     )
                 })}
