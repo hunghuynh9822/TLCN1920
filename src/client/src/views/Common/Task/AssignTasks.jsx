@@ -6,6 +6,7 @@ import { withAlert } from 'react-alert'
 
 import { getTasksByAdmin, getTasksCreatedByLead } from '../../../action/task';
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
+import { updateCreatorTasks } from '../../../action/task';
 
 import { TaskContainer, Task, NewTask, CollapsibleSection } from '../../../components'
 
@@ -21,24 +22,10 @@ class AssignTasks extends Component {
         this.getName = this.getName.bind(this);
         this.getMember = this.getMember.bind(this);
         this.getNameMember = this.getNameMember.bind(this);
-        this.updateTask = this.updateTask.bind(this);
     }
 
     componentDidMount() {
         
-    }
-
-    updateTask(creator) {
-        const {creatorTasks, updateTasks} = this.props;
-        let updateIndex = 0;
-        for (let i = 0; i < creatorTasks.length; i++) {
-            if (creatorTasks[i].creatorId == creator.creatorId) {
-                updateIndex = i;
-                break;
-            }
-        }
-        creatorTasks[updateIndex] = creator;
-        updateTasks(creatorTasks)
     }
 
     getName(employee) {
@@ -59,7 +46,7 @@ class AssignTasks extends Component {
             console.log("getMember : compare " + member.id + " - " + memberId);
             return member.id == memberId;
         })[0];
-        console.log("getMember : " + result);
+        console.log("getMember : " + JSON.stringify(result));
         return result;
     }
 
@@ -73,7 +60,7 @@ class AssignTasks extends Component {
                     let title = this.getNameMember(creator.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer creator={creator} updateTask={this.updateTask}/>
+                            <TaskContainer creator={creator} loadTasks={this.props.loadTasks}/>
                         </CollapsibleSection>
                     )
                 })}
@@ -83,9 +70,7 @@ class AssignTasks extends Component {
 }
 AssignTasks.propTypes = {
     classes: PropTypes.object.isRequired,
-    creatorTasks: PropTypes.array.isRequired,
     loadTasks: PropTypes.func.isRequired,
-    updateTasks: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -94,11 +79,12 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
+        creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        updateCreatorTasks: (creatorTasks) => dispatch(updateCreatorTasks(creatorTasks)),
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(AssignTasks)));

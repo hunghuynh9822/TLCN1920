@@ -9,6 +9,7 @@ import { AssignTasks, CompleteTasks } from '../../';
 
 import { getTasksByAdmin, getTasksCreatedByLead } from '../../../action/task';
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
+import { updateCreatorTasks } from '../../../action/task';
 
 import SwipeableViews from 'react-swipeable-views';
 import { CenteredTabs, TabPanel } from '../../../components';
@@ -44,11 +45,9 @@ class ProjectTasks extends Component {
         super(props);
         this.state = {
             value: 0,
-            totalTasks: [],
         }
         this.handleChangeTabs = this.handleChangeTabs.bind(this);
         this.handleChangeIndex = this.handleChangeIndex.bind(this);
-        this.updateTasks = this.updateTasks.bind(this);
         this.loadTasks = this.loadTasks.bind(this);
     }
 
@@ -64,13 +63,8 @@ class ProjectTasks extends Component {
         })
     };
 
-    updateTasks(tasks) {
-        this.setState({
-            totalTasks: tasks,
-        })
-    }
-
     loadTasks() {
+        console.log("Loading task");
         const { alert } = this.props;
         const { loginRole, projectItem, currentUser } = this.props;
         let projectId = projectItem.project.id;
@@ -78,17 +72,13 @@ class ProjectTasks extends Component {
             getTasksByAdmin(projectId)
                 .then(response => {
                     console.log("getTasksByAdmin : " + JSON.stringify(response));
-                    this.setState({
-                        totalTasks: response.creatorTasks,
-                    })
+                    this.props.updateCreatorTasks(response.creatorTasks);
                 })
         } else if (loginAsLead(loginRole)) {
             getTasksCreatedByLead(projectId, currentUser.id)
                 .then(response => {
                     console.log("getTasksCreatedByLead : " + JSON.stringify(response));
-                    this.setState({
-                        totalTasks: response.creatorTasks,
-                    })
+                    this.props.updateCreatorTasks(response.creatorTasks);
                 })
         } else {
             alert.error('Oops! Something went wrong. Please try again!');
@@ -98,7 +88,6 @@ class ProjectTasks extends Component {
     componentDidMount() {
         this.loadTasks();
     }
-
 
     render() {
         const { classes } = this.props;
@@ -118,7 +107,7 @@ class ProjectTasks extends Component {
                 <div className={classes.root}>
                     <div className={classes.header}>
                         <div className={classes.header_section}>
-                            <NewTask />
+                            <NewTask loadTasks={this.loadTasks} />
                         </div>
                         <div className={classes.header_section}>
                             <CenteredTabs handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
@@ -136,7 +125,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component creatorTasks={this.state.totalTasks} loadTasks={this.loadTasks} updateTasks={this.updateTasks} />
+                                        <tab.component loadTasks={this.loadTasks} />
                                     </TabPanel>
                                 ))
                             }
@@ -158,11 +147,12 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
+        creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        updateCreatorTasks: (creatorTasks) => dispatch(updateCreatorTasks(creatorTasks)),
     }
 }
 

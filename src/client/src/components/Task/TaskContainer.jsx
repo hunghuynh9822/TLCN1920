@@ -12,6 +12,8 @@ import GridList from '@material-ui/core/GridList';
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
+import { updateCreatorTasks } from '../../action/task';
+
 import { changeAssignee } from '../../action/task'
 import { TaskCard } from '../../components'
 
@@ -120,7 +122,6 @@ class TaskContainer extends Component {
      */
     onDragEnd(result) {
         const { taskCards } = this.state;
-        const { updateTask } = this.props;
         const { source, destination, draggableId } = result;
         // console.log("onDragEnd : " + JSON.stringify(result))
         // dropped outside the list
@@ -156,13 +157,13 @@ class TaskContainer extends Component {
                 return card;
             });
             // console.log("New TaskCards : " + JSON.stringify(newTaskCards))
-            
+            this.setState({
+                taskCards: newTaskCards,
+            });
+            this.props.loadTasks();
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("changeAssignee : " + JSON.stringify(response))
-                    this.setState({
-                        taskCards: newTaskCards,
-                    });
                 })
                 .catch(error => {
                     console.log(error);
@@ -234,7 +235,7 @@ class TaskContainer extends Component {
 TaskContainer.propTypes = {
     classes: PropTypes.object.isRequired,
     creator: PropTypes.object.isRequired,
-    updateTask: PropTypes.func.isRequired,
+    loadTasks: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -242,11 +243,13 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
+        creatorTasks: state.tasks.creatorTasks,
+
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        updateCreatorTasks: (creatorTasks) => dispatch(updateCreatorTasks(creatorTasks)),
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(TaskContainer)));
