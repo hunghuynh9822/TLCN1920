@@ -48,27 +48,19 @@ class TaskCard extends Component {
         }
     }
 
-    componentDidMount() {
-        const { tasks } = this.props;
-        let doneTasks = tasks.filter((task) => {
-            return task.state == TASK_STATE.indexOf('DONE');
-        });
-        let doTasks = tasks.filter((task) => {
-            return task.state != TASK_STATE.indexOf('DONE');
-        });
-        this.setState({
-            doTasks: doTasks,
-            doneTasks: doneTasks,
-        })
-    }
-
     render() {
         const { classes } = this.props;
         const { cardId, tasks, title } = this.props;
-        const { doTasks, doneTasks } = this.state;
+        console.log("TaskCard : " + JSON.stringify(tasks));
+        let doneTasks = tasks.filter((task) => {
+            return task.state == 'FINISH';
+        });
+        let doTasks = tasks.filter((task) => {
+            return task.state != 'FINISH';
+        });
         let totalPoint = doneTasks.reduce((point, task, index, doneTasks) => {
             return point += task.point
-        }, 0)
+        }, 0);
         return (
             <Droppable droppableId={cardId.toString()}>
                 {(provided, snapshot) => (
@@ -90,7 +82,11 @@ class TaskCard extends Component {
                                 {doTasks.map((item, index) => (
                                     <Task key={item.id} task={item} index={index} />
                                 ))}
-                                <li className="list-group-item "><div className="row" style={{ height: '6px' }}><a style={{ fontSize: '12px' }}>Completed Task</a></div></li>
+                                <li className="list-group-item ">
+                                    <div className="row" style={{ height: '6px' }}>
+                                        <a style={{ fontSize: '12px' }}>Completed Task</a>
+                                    </div>
+                                </li>
                                 {doneTasks.map((item, index) => (
                                     <Task key={item.id} task={item} index={index} />
                                 ))}

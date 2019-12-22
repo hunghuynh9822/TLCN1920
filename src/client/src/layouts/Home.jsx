@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 
-import { authenticate, getCurrentUser } from '../action/auth'
-
+import { authenticate, getCurrentUser, loginRole } from '../action/auth'
+import { PATH_MAP } from '../constants'
 const styles = theme => ({
 
 });
@@ -36,6 +36,7 @@ class Home extends Component {
         const { authenticated, currentUser, defaultPath } = this.props;
         if (authenticated && currentUser && defaultPath) {
             if (authenticated) {
+                this.props.updateLoginRole(PATH_MAP[defaultPath]);
                 return <Redirect to={{
                     pathname: defaultPath,
                     state: { from: this.props.location }
@@ -60,6 +61,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         authenticate: (authenticated, currentUser) => dispatch(authenticate(authenticated, currentUser)),
+        updateLoginRole: (role) => dispatch(loginRole(role)),
     }
 }
 

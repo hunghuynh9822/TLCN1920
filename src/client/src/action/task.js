@@ -7,7 +7,7 @@ const superUrl = '/api/admin/tasks';
 const leadUrl = '/api/lead/tasks';
 
 export const TASK_STATE = [
-    'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'DONE'
+    'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'DONE', 'FINISH'
 ]
 
 /* 
@@ -104,7 +104,7 @@ export function updateStateTasks(updateRequest) {
     return request({
         url: url + "/update-state",
         method: 'PATCH',
-        data: JSON.stringify(createRequest)
+        data: JSON.stringify(updateRequest)
     });
 }
 

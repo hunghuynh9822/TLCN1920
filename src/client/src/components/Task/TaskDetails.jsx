@@ -6,7 +6,7 @@ import { withAlert } from 'react-alert';
 
 import { create } from '../../action/task';
 
-import { TagMember } from '../../components';
+import { TagMember } from '..';
 import {
     DatePicker
 } from '@material-ui/pickers';
@@ -27,7 +27,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = theme => ({
     buttonAdd: {
-        // margin: theme.spacing(1),
+        margin: theme.spacing(1),
         marginLeft: theme.spacing(3)
     },
     paper: {
@@ -60,7 +60,7 @@ const styles = theme => ({
         margin: '0px 10px',
     },
 });
-class NewTask extends Component {
+class TaskDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -328,7 +328,7 @@ class NewTask extends Component {
                                         )
                                     }
                                 </ListItemAvatar>
-                                <ListItemText primary={this.getName(member)} />
+                                <ListItemText primary={member.email} />
                             </ListItem>
                         )) : (
                                 <ListItemText primary="No employee" />
@@ -339,8 +339,12 @@ class NewTask extends Component {
         );
     }
 }
-NewTask.propTypes = {
+TaskDetails.propTypes = {
     classes: PropTypes.object.isRequired,
+    open: PropTypes.object.isRequired,
+    handleOpen: PropTypes.func.isRequired,
+    task: PropTypes.object.isRequired,
+
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -357,4 +361,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(NewTask)));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(TaskDetails)));

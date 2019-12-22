@@ -42,7 +42,6 @@ class TaskContainer extends Component {
             taskCards: [],
         }
         this.getMember = this.getMember.bind(this);
-        this.reorder = this.reorder.bind(this);
         this.move = this.move.bind(this);
         this.getList = this.getList.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
@@ -123,14 +122,14 @@ class TaskContainer extends Component {
         const { taskCards } = this.state;
         const { updateTask } = this.props;
         const { source, destination, draggableId } = result;
-        console.log("onDragEnd : " + JSON.stringify(result))
+        // console.log("onDragEnd : " + JSON.stringify(result))
         // dropped outside the list
         if (!destination) {
             return;
         }
 
         if (source.droppableId === destination.droppableId) {
-            console.log("Source : " + JSON.stringify(this.getList(source.droppableId)))
+            // console.log("Source : " + JSON.stringify(this.getList(source.droppableId)))
             // const items = reorder(
             //     this.getList(source.droppableId),
             //     source.index,
@@ -144,22 +143,23 @@ class TaskContainer extends Component {
                 taskId: draggableId,
                 employeeId: destination.droppableId
             };
+            const result = this.move(
+                this.getList(source.droppableId),
+                this.getList(destination.droppableId),
+                source,
+                destination
+            );
+            // console.log("Move result : " + JSON.stringify(result));
+            let items = this.state.items;
+            let newTaskCards = taskCards.map((card) => {
+                card.tasks = result[card.assigneeId];
+                return card;
+            });
+            // console.log("New TaskCards : " + JSON.stringify(newTaskCards))
+            
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("changeAssignee : " + JSON.stringify(response))
-                    const result = move(
-                        this.getList(source.droppableId),
-                        this.getList(destination.droppableId),
-                        source,
-                        destination
-                    );
-                    console.log("Move result : " + JSON.stringify(result));
-                    let items = this.state.items;
-                    let newTaskCards = taskCards.map((card) => {
-                        card.tasks = result[card.assigneeId];
-                        return card;
-                    });
-                    console.log("New TaskCards : " + JSON.stringify(newTaskCards))
                     this.setState({
                         taskCards: newTaskCards,
                     });
@@ -167,17 +167,6 @@ class TaskContainer extends Component {
                 .catch(error => {
                     console.log(error);
                 })
-
-
-
-            // this.setState({
-            //     items: result.droppable,
-            //     selected: result.droppable2
-            // });
-        }
-
-        if (source.droppableId !== destination.droppableId) {
-
         }
     };
 
@@ -234,7 +223,7 @@ class TaskContainer extends Component {
                 <div className={classes.root}>
                     <DragDropContext onDragEnd={this.onDragEnd}>
                         {/* <Slider {...settings}> */}
-                        {taskCards.map((card) => <TaskCard key={card.assigneeId} title={this.getNameMember(card.assigneeId)} cardId={card.assigneeId} tasks={card.tasks} />)}
+                        {taskCards.map((card) => <TaskCard filter={this.props.filter} key={card.assigneeId} title={this.getNameMember(card.assigneeId)} cardId={card.assigneeId} tasks={card.tasks} />)}
                         {/* </Slider> */}
                     </DragDropContext>
                 </div>

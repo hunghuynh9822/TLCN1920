@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -27,8 +28,10 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     // change background colour if dragging
     background: isDragging ? 'lightgreen' : 'grey',
     // styles we need to apply on draggables
-    ...draggableStyle
+    ...draggableStyle,
 });
+
+const _dragEl = document.getElementById('draggable');
 
 class Task extends Component {
     constructor(props) {
@@ -43,6 +46,16 @@ class Task extends Component {
         }
     }
 
+    optionalPortal(styles, element) {
+        if (styles.position === 'fixed') {
+            return createPortal(
+                element,
+                _dragEl,
+            );
+        }
+        return element;
+    }
+
     componentDidMount() {
 
     }
@@ -51,20 +64,27 @@ class Task extends Component {
         const { classes } = this.props;
         const { task, index } = this.props;
         return (
+
             <Draggable
                 key={task.id}
                 draggableId={task.id.toString()}
                 index={index}>
                 {(provided, snapshot) => (
-                    <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                            snapshot.isDragging,
-                            provided.draggableProps.style
-                        )}>
-                        {task.title}
+                    <div>
+                        {this.optionalPortal(provided.draggableProps.style, (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                style={getItemStyle(
+                                    snapshot.isDragging,
+                                    provided.draggableProps.style
+                                )}
+                            >
+                                {task.title}
+                            </div>
+                        ))}
+                        {provided.placeholder}
                     </div>
                 )}
             </Draggable>

@@ -4,10 +4,14 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert'
 
+import { NewTask } from '../../../components';
+import { AssignTasks, CompleteTasks } from '../../';
+
 import { getTasksByAdmin, getTasksCreatedByLead } from '../../../action/task';
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 
-import { TaskContainer, Task, NewTask, CollapsibleSection } from '../../../components'
+import SwipeableViews from 'react-swipeable-views';
+import { CenteredTabs, TabPanel } from '../../../components';
 const styles = theme => ({
     root: {
 
@@ -24,43 +28,49 @@ const styles = theme => ({
     },
     content: {
 
+    },
+    tabpanel: {
+        overflow: 'hidden',
     }
 });
+const CustomSwipeableViews = withStyles(theme => ({
+    root: {
+        minHeight: '100%',
+        overflow: 'hidden',
+    }
+}))(SwipeableViews);
 class ProjectTasks extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            creatorTasks: [],
+            value: 0,
+            totalTasks: [],
         }
-        this.getName = this.getName.bind(this);
-        this.getMember = this.getMember.bind(this);
-        this.getNameMember = this.getNameMember.bind(this);
-        this.updateTask = this.updateTask.bind(this);
+        this.handleChangeTabs = this.handleChangeTabs.bind(this);
+        this.handleChangeIndex = this.handleChangeIndex.bind(this);
+        this.updateTasks = this.updateTasks.bind(this);
+        this.loadTasks = this.loadTasks.bind(this);
     }
 
-    getName(employee) {
-        if(employee) {
-            return employee.lastName + " " + employee.firstName;
-        }
-        return 'Administrator'
+    handleChangeTabs = (event, newValue) => {
+        this.setState({
+            value: newValue,
+        })
     }
 
-    getNameMember(memberId) {
-        return this.getName(this.getMember(memberId));
+    handleChangeIndex = index => {
+        this.setState({
+            value: index,
+        })
+    };
+
+    updateTasks(tasks) {
+        this.setState({
+            totalTasks: tasks,
+        })
     }
 
-    getMember(memberId) {
-        const { projectItem } = this.props;
-        let members = projectItem.members;
-        let result = members.filter((member) => {
-            console.log("getMember : compare " + member.id + " - " + memberId);
-            return member.id == memberId;
-        })[0];
-        console.log("getMember : " + result);
-        return result;
-    }
-
-    componentDidMount() {
+    loadTasks() {
         const { alert } = this.props;
         const { loginRole, projectItem, currentUser } = this.props;
         let projectId = projectItem.project.id;
@@ -69,65 +79,68 @@ class ProjectTasks extends Component {
                 .then(response => {
                     console.log("getTasksByAdmin : " + JSON.stringify(response));
                     this.setState({
-                        creatorTasks: response.creatorTasks,
+                        totalTasks: response.creatorTasks,
                     })
                 })
         } else if (loginAsLead(loginRole)) {
             getTasksCreatedByLead(projectId, currentUser.id)
                 .then(response => {
                     console.log("getTasksCreatedByLead : " + JSON.stringify(response));
+                    this.setState({
+                        totalTasks: response.creatorTasks,
+                    })
                 })
         } else {
             alert.error('Oops! Something went wrong. Please try again!');
         }
     }
 
-    updateTask(creator) {
-        let creatorTasks = this.state.creatorTasks;
-        let updateIndex = 0;
-        for(let i = 0; i < creatorTasks.length ; i++) {
-            if(creatorTasks[i].creatorId == creator.creatorId) {
-                updateIndex = i;
-                break;
-            }
-        }
-        creatorTasks[updateIndex] = creator;
-        this.setState({
-            creatorTasks : creatorTasks,
-        });
+    componentDidMount() {
+        this.loadTasks();
     }
+
 
     render() {
         const { classes } = this.props;
         const { projectItem } = this.props;
-        const { creatorTasks } = this.state;
+        const tabs = [
+            {
+                name: "Complete Task",
+                component: CompleteTasks,
+            },
+            {
+                name: "Assign Task",
+                component: AssignTasks,
+            }
+        ]
         return (
             <React.Fragment>
-                {/* Hello Project Task : This will show in 2 mode
-                - Table
-                - Card task employee*/}
                 <div className={classes.root}>
                     <div className={classes.header}>
                         <div className={classes.header_section}>
                             <NewTask />
                         </div>
                         <div className={classes.header_section}>
-
+                            <CenteredTabs handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.header_section}>
                             Change mode
                         </div>
                     </div>
                     <div className={classes.content}>
-                        {creatorTasks && creatorTasks.map((creator, index) => {
-                            console.log("Creator : " + JSON.stringify(creator));
-                            let title = this.getNameMember(creator.creatorId);
-                            return (
-                                <CollapsibleSection key={index} title={title}>
-                                    <TaskContainer creator={creator} updateTask={this.updateTask}/>
-                                </CollapsibleSection>
-                            )
-                        })}
+                        <CustomSwipeableViews
+                            axis={'x'}
+                            index={this.state.value}
+                            onChangeIndex={this.handleChangeIndex}
+                        >
+                            {
+                                tabs.map((tab, key) => (
+                                    <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
+                                        <tab.component creatorTasks={this.state.totalTasks} loadTasks={this.loadTasks} updateTasks={this.updateTasks} />
+                                    </TabPanel>
+                                ))
+                            }
+                        </CustomSwipeableViews>
                     </div>
                 </div>
             </React.Fragment>

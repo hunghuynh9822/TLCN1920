@@ -18,6 +18,10 @@ public class JwtTokenProvider {
         this.jwtConfig = jwtConfig;
     }
 
+    public JwtConfig getJwtConfig() {
+        return jwtConfig;
+    }
+
     public String generateToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long now = System.currentTimeMillis();
