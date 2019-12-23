@@ -53,15 +53,46 @@ class TaskCard extends Component {
         const { classes } = this.props;
         const { cardId, tasks, title } = this.props;
         // console.log("TaskCard : " + JSON.stringify(tasks));
-        let doneTasks = tasks.filter((task) => {
+        let finishTasks = tasks.filter((task) => {
             return task.state == 'FINISH';
         });
         let doTasks = tasks.filter((task) => {
             return task.state != 'FINISH';
         });
-        let totalPoint = doneTasks.reduce((point, task, index, doneTasks) => {
+        let totalPoint = finishTasks.reduce((point, task, index, finishTasks) => {
             return point += task.point
         }, 0);
+        let doneTasks = tasks.filter((task) => {
+            return task.state == 'DONE';
+        });
+        if (this.props.filter && this.props.filter == 'DONE') {
+            console.log("DoneTasks : " + JSON.stringify(doneTasks));
+            if (doneTasks.length == 0) {
+                return null;
+            }
+            return (
+                <Card style={getListStyle(false)} className={classes.card}>
+                    <CardHeader
+                        title={
+                            <div className={classes.title} >
+                                {title}
+                            </div>
+                        } />
+                    <CardContent className={classes.content}>
+                        <ul className="list-group">
+                            <li className="list-group-item">
+                                <div className="row">
+                                    <div className="col-8"><a>Done task</a></div>
+                                </div>
+                            </li>
+                            {doneTasks.map((item, index) => (
+                                <Task key={item.id} task={item} index={index} />
+                            ))}
+                        </ul>
+                    </CardContent>
+                </Card>
+            );
+        }
         return (
             <Droppable droppableId={cardId.toString()}>
                 {(provided, snapshot) => (
@@ -76,7 +107,7 @@ class TaskCard extends Component {
                             <ul className="list-group">
                                 <li className="list-group-item">
                                     <div className="row">
-                                        <div className="col-8"><a>{doneTasks.length}/{tasks.length} Task With Point</a></div>
+                                        <div className="col-8"><a>{finishTasks.length}/{tasks.length} Task With Point</a></div>
                                         <div className="col-4"><a style={{ float: 'right' }}>{totalPoint} Point</a></div>
                                     </div>
                                 </li>
@@ -88,7 +119,7 @@ class TaskCard extends Component {
                                         <a style={{ fontSize: '12px' }}>Completed Task</a>
                                     </div>
                                 </li>
-                                {doneTasks.map((item, index) => (
+                                {finishTasks.map((item, index) => (
                                     <Task key={item.id} task={item} index={index} />
                                 ))}
                             </ul>

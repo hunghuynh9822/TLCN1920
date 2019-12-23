@@ -113,8 +113,9 @@ class TaskContainer extends Component {
         let card = taskCards.filter((taskCard) => {
             return taskCard.assigneeId == cardId;
         })[0];
-        console.log("getList : " + JSON.stringify(card))
-        return card.tasks;
+        let tasks = card && card.tasks ? card.tasks : [];
+        console.log("getList : " + JSON.stringify(tasks))
+        return tasks;
     }
 
     /**onDragEnd : {"draggableId":"15752273449756","type":"DEFAULT","source":{"index":0,"droppableId":"15746071512232"},"reason":"DROP","mode":"FLUID","destination":{"droppableId":"15746072843063","index":0},"combine":null} */
@@ -129,7 +130,9 @@ class TaskContainer extends Component {
      */
     onDragEnd(result) {
         let { creatorTasks, index } = this.props;
+        // let taskCards = creatorTasks[index].tasks;
         let taskCards = creatorTasks[index].tasks;
+
         const { source, destination, draggableId } = result;
         // console.log("onDragEnd : " + JSON.stringify(result))
         // dropped outside the list
@@ -161,14 +164,22 @@ class TaskContainer extends Component {
             // console.log("Move result : " + JSON.stringify(result));
             let items = this.state.items;
             let newTaskCards = taskCards.map((card) => {
-                // console.log("New TaskCards : " + JSON.stringify(result[card.assigneeId]));
-                if(result[card.assigneeId] == undefined) {
+                console.log("New TaskCards : " + JSON.stringify(result[card.assigneeId]));
+                if (result[card.assigneeId] == undefined) {
                     return card;
                 }
                 card.tasks = result[card.assigneeId];
                 return card;
             });
-            // console.log("New TaskCards : " + JSON.stringify(newTaskCards))
+            let memberTasks =taskCards.find(card=>{
+                return card.assigneeId == destination.droppableId;
+            });
+            console.log("Member TaskCards destination : " + JSON.stringify(memberTasks));
+            if(memberTasks == undefined) {
+                let card = {assigneeId: Number(destination.droppableId), tasks: result[destination.droppableId]}
+                newTaskCards.push(card);
+            }
+            console.log("New TaskCards : " + JSON.stringify(newTaskCards))
             this.setState({
                 taskCards: newTaskCards,
             });
@@ -177,6 +188,9 @@ class TaskContainer extends Component {
                 .then(response => {
                     console.log("changeAssignee : " + JSON.stringify(response))
                     // this.props.loadTasks();
+                    // if(memberTasks == undefined) {
+                    //     return this.props.loadTasks();
+                    // }
                     creatorTasks[index].tasks = newTaskCards;
                     this.props.updateTasks(creatorTasks);
                 })
@@ -189,14 +203,15 @@ class TaskContainer extends Component {
     render() {
         const { classes } = this.props;
         let { creatorTasks, index } = this.props;
-        const taskCards = creatorTasks[index].tasks;
+        // const {taskCards} = creatorTasks[index].tasks;
+        const {taskCards} = this.state;
         const settings = {
             className: classNames("center", classes.slider),
             infinite: false,
             centerPadding: "60px",
             slidesToShow: 5,
             swipeToSlide: true,
-            adaptiveHeight: true,
+            // adaptiveHeight: true,
             afterChange: function (index) {
                 console.log(
                     `Slider Changed to: ${index + 1}`
@@ -206,48 +221,56 @@ class TaskContainer extends Component {
                 {
                     breakpoint: 1650,
                     settings: {
-                        slidesToShow: 4,
+                        slidesToShow: 5,
                     }
                 },
                 {
                     breakpoint: 1400,
                     settings: {
-                        slidesToShow: 3,
+                        slidesToShow: 4,
                     }
                 },
                 {
                     breakpoint: 1100,
                     settings: {
-                        slidesToShow: 2,
-                    }
-                },
-                {
-                    breakpoint: 800,
-                    settings: {
-                        slidesToShow: 2,
+                        slidesToShow: 3,
                     }
                 },
                 {
                     breakpoint: 650,
                     settings: {
-                        slidesToShow: 1,
+                        slidesToShow: 2,
                     }
                 }
             ]
         };
+        const members = this.props.projectItem.members;
         return (
             <React.Fragment>
                 <div className={classes.root}>
                     <DragDropContext onDragEnd={this.onDragEnd}>
-                        {/* <Slider {...settings}> */}
-                        {taskCards.map((card) => {
-                            let title = this.getNameMember(card.assigneeId);
-                            if (title != "UnknownMember")
-                                return (
-                                    <TaskCard filter={this.props.filter} key={card.assigneeId} title={title} cardId={card.assigneeId} tasks={card.tasks ? card.tasks : []} />
-                                )
-                        })}
-                        {/* </Slider> */}
+                        <Slider {...settings}>
+                            {
+                                members.map((member) => {
+                                    let title = this.getNameMember(member.id);
+                                    let card = taskCards.find((card) => {
+                                        return card.assigneeId == member.id;
+                                    })
+                                    let tasks = card && card.tasks ? card.tasks : [];
+                                    if (title != "UnknownMember")
+                                        return (
+                                            <TaskCard filter={this.props.filter} key={member.id} title={title} cardId={member.id} tasks={tasks} />
+                                        )
+                                })
+                            }
+                            {/* {taskCards.map((card) => {
+                                let title = this.getNameMember(card.assigneeId);
+                                if (title != "UnknownMember")
+                                    return (
+                                        <TaskCard filter={this.props.filter} key={card.assigneeId} title={title} cardId={card.assigneeId} tasks={card.tasks ? card.tasks : []} />
+                                    )
+                            })} */}
+                        </Slider>
                     </DragDropContext>
                 </div>
             </React.Fragment>

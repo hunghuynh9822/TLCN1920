@@ -71,7 +71,7 @@ class AssignTasks extends Component {
 AssignTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
-    creatorTasks: PropTypes.array.isRequired,
+    // creatorTasks: PropTypes.array.isRequired,
     updateTasks: PropTypes.func.isRequired,
 };
 
