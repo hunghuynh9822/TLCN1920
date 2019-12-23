@@ -56,11 +56,11 @@ class AssignTasks extends Component {
         return (
             <React.Fragment>
                 {creatorTasks && creatorTasks.map((creator, index) => {
-                    console.log("Creator : " + JSON.stringify(creator));
+                    // console.log("Creator : " + JSON.stringify(creator));
                     let title = this.getNameMember(creator.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer index={index} creator={creator} loadTasks={this.props.loadTasks} />
+                            <TaskContainer updateTasks={this.props.updateTasks} index={index} creator={creator} loadTasks={this.props.loadTasks} />
                         </CollapsibleSection>
                     )
                 })}
@@ -72,7 +72,7 @@ AssignTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
     creatorTasks: PropTypes.array.isRequired,
-
+    updateTasks: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

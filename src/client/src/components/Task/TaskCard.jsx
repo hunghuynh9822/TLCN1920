@@ -52,7 +52,7 @@ class TaskCard extends Component {
     render() {
         const { classes } = this.props;
         const { cardId, tasks, title } = this.props;
-        console.log("TaskCard : " + JSON.stringify(tasks));
+        // console.log("TaskCard : " + JSON.stringify(tasks));
         let doneTasks = tasks.filter((task) => {
             return task.state == 'FINISH';
         });

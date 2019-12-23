@@ -44,6 +44,7 @@ class Task extends Component {
                 point: '',
             }
         }
+        this.handleOpen = this.handleOpen.bind(this);
     }
 
     optionalPortal(styles, element) {
@@ -60,6 +61,10 @@ class Task extends Component {
 
     }
 
+    handleOpen() {
+        console.log("Open")
+    }
+
     render() {
         const { classes } = this.props;
         const { task, index } = this.props;
@@ -68,7 +73,8 @@ class Task extends Component {
             <Draggable
                 key={task.id}
                 draggableId={task.id.toString()}
-                index={index}>
+                index={index}
+                onClick={this.handleOpen}>
                 {(provided, snapshot) => (
                     <div>
                         {this.optionalPortal(provided.draggableProps.style, (

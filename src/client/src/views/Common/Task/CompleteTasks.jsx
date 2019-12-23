@@ -43,10 +43,10 @@ class CompleteTasks extends Component {
         const { projectItem } = this.props;
         let members = projectItem.members;
         let result = members.filter((member) => {
-            console.log("getMember : compare " + member.id + " - " + memberId);
+            // console.log("getMember : compare " + member.id + " - " + memberId);
             return member.id == memberId;
         })[0];
-        console.log("getMember : " + JSON.stringify(result));
+        // console.log("getMember : " + JSON.stringify(result));
         return result;
     }
 
@@ -56,11 +56,11 @@ class CompleteTasks extends Component {
         return (
             <React.Fragment>
                 {creatorTasks && creatorTasks.map((creator, index) => {
-                    console.log("Creator : " + JSON.stringify(creator));
+                    // console.log("Creator : " + JSON.stringify(creator));
                     let title = this.getNameMember(creator.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer index={index} creator={creator} loadTasks={this.props.loadTasks} filter="DONE" />
+                            <TaskContainer index={index} creator={creator} updateTasks={this.props.updateTasks} loadTasks={this.props.loadTasks} filter="DONE" />
                         </CollapsibleSection>
                     )
                 })}
@@ -72,6 +72,7 @@ CompleteTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
     creatorTasks: PropTypes.array.isRequired,
+    updateTasks: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

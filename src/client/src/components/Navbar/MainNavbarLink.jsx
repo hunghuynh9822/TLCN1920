@@ -183,7 +183,7 @@ class MainNavbarLink extends Component {
                                     <ClickAwayListener onClickAway={handleCloseNotification}>
                                         <MenuList role="menu">
                                             {this.state.rows.map((element, i) => {     
-                                            console.log("Entered");                 
+                                            // console.log("Entered");                 
                                             // Return the element. Also pass key     
                                             return ( 
                                                 <MenuItem

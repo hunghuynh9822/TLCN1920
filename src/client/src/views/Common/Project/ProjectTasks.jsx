@@ -50,19 +50,28 @@ class ProjectTasks extends Component {
         this.handleChangeTabs = this.handleChangeTabs.bind(this);
         this.handleChangeIndex = this.handleChangeIndex.bind(this);
         this.loadTasks = this.loadTasks.bind(this);
+        this.updateTasks = this.updateTasks.bind(this);
     }
 
     handleChangeTabs = (event, newValue) => {
+        this.loadTasks();
         this.setState({
             value: newValue,
         })
     }
 
     handleChangeIndex = index => {
+        this.loadTasks();
         this.setState({
             value: index,
         })
     };
+
+    updateTasks(creatorTasks) {
+        this.setState({
+            creatorTasks: creatorTasks,
+        })
+    }
 
     loadTasks() {
         console.log("Loading task");
@@ -75,7 +84,7 @@ class ProjectTasks extends Component {
         if (loginAsAdmin(loginRole)) {
             getTasksByAdmin(projectId)
                 .then(response => {
-                    console.log("getTasksByAdmin : " + JSON.stringify(response));
+                    // console.log("getTasksByAdmin : " + JSON.stringify(response));
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
                         loading: false,
@@ -85,7 +94,7 @@ class ProjectTasks extends Component {
         } else if (loginAsLead(loginRole)) {
             getTasksCreatedByLead(projectId, currentUser.id)
                 .then(response => {
-                    console.log("getTasksCreatedByLead : " + JSON.stringify(response));
+                    // console.log("getTasksCreatedByLead : " + JSON.stringify(response));
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
                         loading: false,
@@ -144,7 +153,13 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component loadTasks={this.loadTasks} creatorTasks={this.state.creatorTasks} />
+                                        {/* {
+                                            this.state.creatorTasks && (
+                                                <tab.component loadTasks={this.loadTasks} creatorTasks={this.state.creatorTasks} />
+                                            )
+                                        } */}
+                                        <tab.component updateTasks={this.updateTasks} loadTasks={this.loadTasks} creatorTasks={this.state.creatorTasks} />
+
                                     </TabPanel>
                                 ))
                             }

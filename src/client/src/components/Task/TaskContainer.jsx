@@ -161,6 +161,10 @@ class TaskContainer extends Component {
             // console.log("Move result : " + JSON.stringify(result));
             let items = this.state.items;
             let newTaskCards = taskCards.map((card) => {
+                // console.log("New TaskCards : " + JSON.stringify(result[card.assigneeId]));
+                if(result[card.assigneeId] == undefined) {
+                    return card;
+                }
                 card.tasks = result[card.assigneeId];
                 return card;
             });
@@ -168,12 +172,13 @@ class TaskContainer extends Component {
             this.setState({
                 taskCards: newTaskCards,
             });
-            // creatorTasks[index].tasks = newTaskCards;
             // console.log("Update TaskCards : " + JSON.stringify(creatorTasks[index]))
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("changeAssignee : " + JSON.stringify(response))
-                    this.props.loadTasks();
+                    // this.props.loadTasks();
+                    creatorTasks[index].tasks = newTaskCards;
+                    this.props.updateTasks(creatorTasks);
                 })
                 .catch(error => {
                     console.log(error);
@@ -239,7 +244,7 @@ class TaskContainer extends Component {
                             let title = this.getNameMember(card.assigneeId);
                             if (title != "UnknownMember")
                                 return (
-                                    <TaskCard filter={this.props.filter} key={card.assigneeId} title={title} cardId={card.assigneeId} tasks={card.tasks} />
+                                    <TaskCard filter={this.props.filter} key={card.assigneeId} title={title} cardId={card.assigneeId} tasks={card.tasks ? card.tasks : []} />
                                 )
                         })}
                         {/* </Slider> */}
@@ -253,6 +258,7 @@ TaskContainer.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
+    updateTasks: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
