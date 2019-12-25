@@ -35,6 +35,7 @@ const styles = theme => ({
     slider: {
         width: '100%',
         minHeight: '100%',
+        padding: '0px 20px'
     }
 });
 class TaskContainer extends Component {
@@ -259,19 +260,13 @@ class TaskContainer extends Component {
                                     let tasks = card && card.tasks ? card.tasks : [];
                                     if (title != "UnknownMember")
                                         return (
-                                            <TaskCard filter={this.props.filter} key={member.id} title={title} cardId={member.id} tasks={tasks} />
+                                            <TaskCard filter={this.props.filter} key={member.id} title={title} cardId={member.id} tasks={tasks} openForm={this.props.openForm}/>
                                         )
                                 })
                             }
-                            {/* {taskCards.map((card) => {
-                                let title = this.getNameMember(card.assigneeId);
-                                if (title != "UnknownMember")
-                                    return (
-                                        <TaskCard filter={this.props.filter} key={card.assigneeId} title={title} cardId={card.assigneeId} tasks={card.tasks ? card.tasks : []} />
-                                    )
-                            })} */}
                         </Slider>
                     </DragDropContext>
+                    
                 </div>
             </React.Fragment>
         );
@@ -282,6 +277,7 @@ TaskContainer.propTypes = {
     loadTasks: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     updateTasks: PropTypes.func.isRequired,
+    openForm: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {

@@ -63,20 +63,19 @@ class Task extends Component {
 
     handleOpen() {
         console.log("Open")
+        this.props.openForm(this.props.task);
     }
 
     render() {
         const { classes } = this.props;
         const { task, index } = this.props;
         return (
-
             <Draggable
                 key={task.id}
                 draggableId={task.id.toString()}
-                index={index}
-                onClick={this.handleOpen}>
+                index={index}>
                 {(provided, snapshot) => (
-                    <div>
+                    <div onClick={this.handleOpen}>
                         {this.optionalPortal(provided.draggableProps.style, (
                             <div
                                 ref={provided.innerRef}
@@ -102,6 +101,7 @@ Task.propTypes = {
     classes: PropTypes.object.isRequired,
     task: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
+    openForm: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
