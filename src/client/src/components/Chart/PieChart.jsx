@@ -23,7 +23,7 @@ class PieChart extends Component {
         const options = {
 			animationEnabled: true,
 			title: {
-				text: "Tasks"
+				text: "Project Overview"
 			},
 			subtitles: [{
 				//text: "71% Positive",
