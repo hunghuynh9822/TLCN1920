@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import BarChart from '../../../components/Chart/BarChart.jsx'
+import PieChart from '../../../components/Chart/PieChart.jsx'
 import PieBarChart from '../../../components/Chart/PieBarChart.jsx'
+import BarChartNgang from '../../../components/Chart/BarChartNgang.jsx'
 const styles = theme => ({
                             
 });
@@ -15,7 +16,8 @@ class ProjectAnalytics extends Component {
         const { projectId } = this.props;
         return (
             <React.Fragment>
-              {/* <BarChart/>        */}
+              <PieChart/> 
+              <BarChartNgang/>      
               <PieBarChart/>             
             </React.Fragment>
         );

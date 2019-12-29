@@ -12,6 +12,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import { CustomLineChart } from '../../components';
 import PieChart from '../../components/Chart/PieChart.jsx'
+import BarChartNgang from '../../components/Chart/BarChartNgang.jsx'
 // Generate Sales Data
 function createData(time, amount) {
     return { time, amount };
@@ -41,6 +42,7 @@ class AdminDashboard extends Component {
                     {/* Chart */}
                     <Grid item xs={12} md={8} lg={9}>
                         <PieChart/>
+                        <BarChartNgang/>
                     </Grid>
                 </Grid>
             </Container>
