@@ -33,6 +33,25 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Rating from '@material-ui/lab/Rating';
+
+const StyledRating = withStyles({
+    iconFilled: {
+        color: '#3d55d1',
+    },
+    iconHover: {
+        color: '#5b73eb',
+    },
+})(Rating);
+
+function getLabelText(value) {
+    return `${value} Heart${value !== 1 ? 's' : ''}`;
+}
+
 
 const styles = theme => ({
     root: {
@@ -416,6 +435,29 @@ class ProjectTasks extends Component {
                                         ) : null}
                                     </div>
                                 </Grid>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <DatePicker
+                                    required
+                                    disableToolbar
+                                    variant="inline"
+                                    format="dd-MM-yyyy"
+                                    label="Status"
+                                    value={task.startedAt}
+                                    onChange={this.handleStartedAt}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Box component="fieldset" mb={3} borderColor="transparent">
+                                    <Typography component="legend">Custom icon and color</Typography>
+                                    <StyledRating
+                                        name="customized-color"
+                                        value={2}
+                                        getLabelText={getLabelText}
+                                        precision={0.5}
+                                        icon={<FiberManualRecordIcon fontSize="inherit" />}
+                                    />
+                                </Box>
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <DatePicker
