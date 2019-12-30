@@ -47,7 +47,8 @@
     "react-swipeable-views": "^0.13.3",
     "recharts": "^1.7.1",
     "redux": "^4.0.4",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "jss": "10.0.0"
   },
   "resolutions": {
     "jss": "10.0.0"
