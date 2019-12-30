@@ -365,7 +365,7 @@ class ProjectTasks extends Component {
                             <CenteredTabs handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.header_section}>
-                            Change mode
+                            {/* Change mode */}
                         </div>
                     </div>
                     <div className={classes.content}>
@@ -437,22 +437,25 @@ class ProjectTasks extends Component {
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <DatePicker
-                                    required
-                                    disableToolbar
-                                    variant="inline"
-                                    format="dd-MM-yyyy"
-                                    label="Status"
-                                    value={task.startedAt}
-                                    onChange={this.handleStartedAt}
-                                />
+                                <TextField
+                                        id="status"
+                                        name="status"
+                                        label="status"
+                                        required
+                                        fullWidth
+                                        placeholder="Status"
+                                        variant="outlined"
+                                        autoComplete="status"
+                                        value={task.status}
+                                        onChange={this.handleInputChange}
+                                    />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Box component="fieldset" mb={3} borderColor="transparent">
-                                    <Typography component="legend">Custom icon and color</Typography>
+                                    <Typography component="legend">Point</Typography>
                                     <StyledRating
                                         name="customized-color"
-                                        value={2}
+                                        value={0}
                                         getLabelText={getLabelText}
                                         precision={0.5}
                                         icon={<FiberManualRecordIcon fontSize="inherit" />}

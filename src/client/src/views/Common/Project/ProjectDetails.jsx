@@ -251,7 +251,7 @@ class ProjectDetails extends Component {
                                 <div className={classes.title_name}>{project.title}</div>
                                 <div className={classes.title_details}>
                                     <span>Created by </span>
-                                    <span className={classes.highlight}>{this.getName(projectOwner)}</span>
+                                    <span className={classes.highlight}>{projectOwner ? this.getName(projectOwner) : ""}</span>
                                 </div>
                             </div>
                             <div className={classes.divider} />
@@ -263,8 +263,8 @@ class ProjectDetails extends Component {
                             </div>
                             <div className={classes.divider} />
                             <Grid item container className={classes.paraph}>
-                                <Grid item xs={6}>Hello Project Details</Grid>
-                                <Grid item xs={6}>Hello Project Details</Grid>
+                                <Grid item xs={6}>Mục tiêu</Grid>
+                                <Grid item xs={6}>Xây dựng ứng dụng bán hàng qua mạng, tiệu dụng</Grid>
                             </Grid>
                             <div className={classes.divider} />
                         </Paper>
