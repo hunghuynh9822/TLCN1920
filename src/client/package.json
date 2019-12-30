@@ -49,6 +49,9 @@
     "redux": "^4.0.4",
     "slick-carousel": "^1.8.1"
   },
+  "resolutions": {
+    "jss": "10.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
