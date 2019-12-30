@@ -105,7 +105,7 @@ export default function AddStafftoProject(addPro) {
     //   employeeid: this.state.employeeid
     // };
  
-    axios.post(`http://192.168.200.1:8080/promicro/create`, { title , employeeid })
+    axios.post(`http://localhost:8080/promicro/create`, { title , employeeid })
       .then(res => {
         console.log(res);
         console.log(res.data);

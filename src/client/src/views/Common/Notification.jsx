@@ -44,7 +44,7 @@ class Notification extends Component {
                 isAdmin = 1;
                 // console.log("isAdmin: "+isAdmin +"name: "+ element.name);    
         });
-        var url = "http://192.168.200.1:8080/api/notify/" + currentUser.id
+        var url = "http://localhost:8080/api/notify/" + currentUser.id
         axios.get(url)
         .then(response =>{
             const temp = response.data;
@@ -71,7 +71,7 @@ class Notification extends Component {
         .catch(error => console.log("ok loi ne notify lisst"+error))
 
 
-        var url = "http://192.168.200.1:8080/api/employees/"
+        var url = "http://localhost:8080/api/employees/"
         axios.get(url)
         .then(response =>{
             const temp = response.data.employees;
@@ -91,7 +91,7 @@ class Notification extends Component {
         var time = date.getTime();
         const no = this.state.rows.length + 1;
         listsID.forEach(element => {
-            axios.post(`http://192.168.200.1:8080/api/notify/`, {create_id:currentUser.id,create_name:name,create_time:time,content:req.content,receive_id:element.id})
+            axios.post(`http://localhost:8080/api/notify/`, {create_id:currentUser.id,create_name:name,create_time:time,content:req.content,receive_id:element.id})
             .then(res => {
             // console.log(res);
             console.log(res.data);
@@ -129,7 +129,7 @@ class Notification extends Component {
 
     callActionDelete(method, row) {
         console.log("callActionDelete" + JSON.stringify(row));
-        axios.put(`http://192.168.200.1:8080/api/notify/delete/`+ row.data )
+        axios.put(`http://localhost:8080/api/notify/delete/`+ row.data )
             .then(res => {
             console.log(res.data);
             var rows = this.state.rows;
@@ -156,7 +156,7 @@ class Notification extends Component {
         // })
         // this.handleOpen();
         console.log("callActionView" + JSON.stringify(row));
-        axios.put(`http://192.168.200.1:8080/api/notify/update/`+ row.data +'?view=true')
+        axios.put(`http://localhost:8080/api/notify/update/`+ row.data +'?view=true')
             .then(res => {
             // console.log(res);
             console.log(res.data);

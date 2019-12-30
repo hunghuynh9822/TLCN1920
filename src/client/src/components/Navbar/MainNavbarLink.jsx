@@ -46,7 +46,7 @@ class MainNavbarLink extends Component {
 
     getData = () => {
         const {currentUser} = this.props;
-        var url = "http://192.168.200.1:8080/api/notify/" + currentUser.id
+        var url = "http://localhost:8080/api/notify/" + currentUser.id
         axios.get(url)
         .then(response =>{
             var temp = response.data;    

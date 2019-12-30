@@ -4,7 +4,7 @@
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 

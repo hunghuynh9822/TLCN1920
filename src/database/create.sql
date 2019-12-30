@@ -4,7 +4,7 @@
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -56,7 +56,7 @@ ALTER TABLE "public"."users" ADD CONSTRAINT "users_pkey" PRIMARY KEY ("id");
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -100,7 +100,7 @@ ALTER TABLE "public"."positions" ADD CONSTRAINT "positions_pkey" PRIMARY KEY ("i
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -158,7 +158,7 @@ ALTER TABLE "public"."employees" ADD CONSTRAINT "user_id" FOREIGN KEY ("id") REF
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -202,7 +202,7 @@ ALTER TABLE "public"."roles" ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -259,7 +259,7 @@ ALTER TABLE "public"."user_roles" ADD CONSTRAINT "user_id" FOREIGN KEY ("user_id
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -296,7 +296,7 @@ INSERT INTO "public"."genuid" VALUES (1, 5, 5);
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -348,7 +348,7 @@ ALTER TABLE "public"."tasks" ADD CONSTRAINT "tasks_pkey" PRIMARY KEY ("id");
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -386,7 +386,7 @@ ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "taskcomments_pkey" PRIMARY K
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -440,7 +440,7 @@ ALTER TABLE "public"."projects" ADD CONSTRAINT "projects_pkey" PRIMARY KEY ("id"
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -497,7 +497,7 @@ ALTER TABLE "public"."perofproject" ADD CONSTRAINT "project_constraint" FOREIGN 
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
@@ -548,7 +548,7 @@ ALTER TABLE "public"."notify" ADD CONSTRAINT "notify_pkey" PRIMARY KEY ("id");
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
  Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
+ Source Host           : localhost:5432
  Source Catalog        : postgres
  Source Schema         : public
 
