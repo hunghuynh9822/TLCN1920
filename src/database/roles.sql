@@ -3,16 +3,16 @@
 
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : localhost:5432
+ Source Server Version : 100011
+ Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 100010
+ Target Server Version : 100011
  File Encoding         : 65001
 
- Date: 05/12/2019 20:00:35
+ Date: 01/01/2020 11:46:20
 */
 
 

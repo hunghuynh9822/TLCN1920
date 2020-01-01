@@ -3,16 +3,16 @@
 
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : localhost:5432
+ Source Server Version : 100011
+ Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 100010
+ Target Server Version : 100011
  File Encoding         : 65001
 
- Date: 05/12/2019 19:59:17
+ Date: 01/01/2020 11:45:17
 */
 
 
@@ -30,6 +30,6 @@ CREATE TABLE "public"."genuid" (
 -- ----------------------------
 -- Records of genuid
 -- ----------------------------
-INSERT INTO "public"."genuid" VALUES (2, 2, 52);
-INSERT INTO "public"."genuid" VALUES (3, 2, 12);
 INSERT INTO "public"."genuid" VALUES (1, 5, 5);
+INSERT INTO "public"."genuid" VALUES (3, 5, 15);
+INSERT INTO "public"."genuid" VALUES (2, 7, 137);
