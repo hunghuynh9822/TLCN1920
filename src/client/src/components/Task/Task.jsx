@@ -105,7 +105,7 @@ class Task extends Component {
                         <div>
                             <StyledRating
                                 name="customized-color"
-                                value={0}
+                                value={task.point}
                                 getLabelText={getLabelText}
                                 precision={0.5}
                                 icon={<FiberManualRecordIcon fontSize="small" />}
@@ -140,7 +140,7 @@ class Task extends Component {
                                 <div>
                                     <StyledRating
                                         name="customized-color"
-                                        value={0}
+                                        value={task.point}
                                         getLabelText={getLabelText}
                                         precision={0.5}
                                         icon={<FiberManualRecordIcon fontSize="small" />}

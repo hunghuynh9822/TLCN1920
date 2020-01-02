@@ -7,7 +7,7 @@ import { withAlert } from 'react-alert'
 import { NewTask, Loading } from '../../../components';
 import { AssignTasks, CompleteTasks } from '../../';
 
-import { getTasksByAdmin, getTasksCreatedByLead, TASK_STATE, updateStateTasks } from '../../../action/task';
+import { getTasksByAdmin, getTasksCreatedByLead, TASK_STATE, updateStateTasks, updatePointTasks } from '../../../action/task';
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 import { updateCreatorTasks } from '../../../action/task';
 
@@ -162,6 +162,7 @@ class ProjectTasks extends Component {
         this.handleOpenAdd = this.handleOpenAdd.bind(this);
         this.handleCloseAdd = this.handleCloseAdd.bind(this);
         this.handleSelectStateChange = this.handleSelectStateChange.bind(this);
+        this.handlePointChange = this.handlePointChange.bind(this);
     }
 
     handleChangeTabs = (event, newValue) => {
@@ -275,6 +276,29 @@ class ProjectTasks extends Component {
         }
         console.log("Request update task : " + JSON.stringify(request));
         updateStateTasks(request)
+            .then(response => {
+                console.log(response);
+                this.loadTasks();
+            }).catch(error => {
+                console.log(error);
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+            });
+    }
+
+    handlePointChange(event, newValue) {
+        const { alert } = this.props;
+        const { currentUser } = this.props;
+        this.setState({
+            task: { ...this.state.task, point: newValue }
+        });
+        let request = {
+            taskId: this.state.task.id,
+            employeeId: currentUser.id,
+            point: newValue
+        }
+        console.log("Request update task : " + JSON.stringify(request));
+        updatePointTasks(request)
             .then(response => {
                 console.log(response);
                 this.loadTasks();
@@ -484,9 +508,19 @@ class ProjectTasks extends Component {
                                         onChange={this.handleSelectStateChange}
                                     >
                                         {
-                                            TASK_STATE.map((state, index) => (
-                                                state !== 'FINISH' && <MenuItem key={index} value={index}>{state}</MenuItem>
-                                            ))
+                                            TASK_STATE.map((state, index) => {
+                                                console.log("STATE : " + task.state);
+                                                if (task.state === 'DONE' || task.state === 'FINISH') {
+                                                    return (
+                                                        <MenuItem key={index} value={index}>{state}</MenuItem>
+                                                    )
+                                                } else if (state !== 'FINISH') {
+                                                    return (
+                                                        <MenuItem key={index} value={index}>{state}</MenuItem>
+                                                    )
+                                                }
+                                            }
+                                            )
                                         }
                                     </Select>
                                 </FormControl>
@@ -496,10 +530,13 @@ class ProjectTasks extends Component {
                                     <Typography component="legend">Point</Typography>
                                     <StyledRating
                                         name="customized-color"
-                                        value={0}
+                                        value={task.point}
                                         getLabelText={getLabelText}
                                         precision={0.5}
                                         icon={<FiberManualRecordIcon fontSize="inherit" />}
+                                        onChange={(event, newValue) => {
+                                            this.handlePointChange(event, newValue);
+                                        }}
                                     />
                                 </Box>
                             </Grid>

@@ -98,7 +98,7 @@ export function updatePointTasks(updateRequest) {
     return request({
         url: leadUrl + "/update-point",
         method: 'PATCH',
-        data: JSON.stringify(createRequest)
+        data: JSON.stringify(updateRequest)
     });
 }
 
