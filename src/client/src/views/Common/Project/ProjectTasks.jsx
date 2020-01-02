@@ -7,7 +7,7 @@ import { withAlert } from 'react-alert'
 import { NewTask, Loading } from '../../../components';
 import { AssignTasks, CompleteTasks } from '../../';
 
-import { getTasksByAdmin, getTasksCreatedByLead } from '../../../action/task';
+import { getTasksByAdmin, getTasksCreatedByLead, TASK_STATE, updateStateTasks } from '../../../action/task';
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 import { updateCreatorTasks } from '../../../action/task';
 
@@ -38,6 +38,11 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Rating from '@material-ui/lab/Rating';
+
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const StyledRating = withStyles({
     iconFilled: {
@@ -107,6 +112,11 @@ const styles = theme => ({
         padding: '0px',
         margin: '0px 10px',
     },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+        maxWidth: 300,
+    },
 });
 const CustomSwipeableViews = withStyles(theme => ({
     root: {
@@ -151,6 +161,7 @@ class ProjectTasks extends Component {
         this.handleListItemClick = this.handleListItemClick.bind(this);
         this.handleOpenAdd = this.handleOpenAdd.bind(this);
         this.handleCloseAdd = this.handleCloseAdd.bind(this);
+        this.handleSelectStateChange = this.handleSelectStateChange.bind(this);
     }
 
     handleChangeTabs = (event, newValue) => {
@@ -214,6 +225,7 @@ class ProjectTasks extends Component {
     }
 
     openForm(task) {
+        console.log("OPEN TASK : " + JSON.stringify(task))
         this.setState({
             open: true,
             task: task,
@@ -250,6 +262,29 @@ class ProjectTasks extends Component {
         })
     }
 
+    handleSelectStateChange(event) {
+        const { alert } = this.props;
+        const { currentUser } = this.props;
+        this.setState({
+            task: { ...this.state.task, state: TASK_STATE[event.target.value] }
+        });
+        let request = {
+            taskId: this.state.task.id,
+            employeeId: currentUser.id,
+            state: TASK_STATE[event.target.value]
+        }
+        console.log("Request update task : " + JSON.stringify(request));
+        updateStateTasks(request)
+            .then(response => {
+                console.log(response);
+                this.loadTasks();
+            }).catch(error => {
+                console.log(error);
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+            });
+    }
+
     handleDatePickerChange(name, date) {
         // console.log(`handleInputChange - Name : ${name} value : ${date}`);
         this.setState(prevState => {
@@ -281,6 +316,8 @@ class ProjectTasks extends Component {
             employeeAssignee: task.employeeAssignee,
             title: task.title,
             description: task.description,
+            state: task.state,
+            point: task.point,
             startedAt: task.startedAt,
             duration: task.duration
         }
@@ -437,18 +474,22 @@ class ProjectTasks extends Component {
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField
-                                        id="status"
-                                        name="status"
-                                        label="status"
-                                        required
-                                        fullWidth
-                                        placeholder="Status"
-                                        variant="outlined"
-                                        autoComplete="status"
-                                        value={task.status}
-                                        onChange={this.handleInputChange}
-                                    />
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel id="state-label">State</InputLabel>
+                                    <Select
+                                        labelId="state-label"
+                                        id="state"
+                                        name="state"
+                                        value={TASK_STATE.indexOf(task.state)}
+                                        onChange={this.handleSelectStateChange}
+                                    >
+                                        {
+                                            TASK_STATE.map((state, index) => (
+                                                state !== 'FINISH' && <MenuItem key={index} value={index}>{state}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Box component="fieldset" mb={3} borderColor="transparent">
