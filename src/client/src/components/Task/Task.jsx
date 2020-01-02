@@ -91,6 +91,32 @@ class Task extends Component {
     render() {
         const { classes } = this.props;
         const { task, index } = this.props;
+        if (this.props.mode && this.props.mode === 'READONLY') {
+            return (
+                <div onClick={this.handleOpen}>
+                    <div
+                        style={getItemStyle(
+                            false, {}
+                        )}
+                    >
+                        <div>
+                            {task.title}
+                        </div>
+                        <div>
+                            <StyledRating
+                                name="customized-color"
+                                value={0}
+                                getLabelText={getLabelText}
+                                precision={0.5}
+                                icon={<FiberManualRecordIcon fontSize="small" />}
+                                readOnly
+                            />
+                            {task.state}
+                        </div>
+                    </div>
+                </div>
+            )
+        }
         return (
             <Draggable
                 key={task.id}
@@ -120,6 +146,7 @@ class Task extends Component {
                                         icon={<FiberManualRecordIcon fontSize="small" />}
                                         readOnly
                                     />
+                                    {task.state}
                                 </div>
                             </div>
                         ))}

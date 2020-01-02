@@ -43,7 +43,7 @@ class AssignTasks extends Component {
         const { projectItem } = this.props;
         let members = projectItem.members;
         let result = members.filter((member) => {
-            console.log("getMember : compare " + member.id + " - " + memberId);
+            // console.log("getMember : compare " + member.id + " - " + memberId);
             return member.id == memberId;
         })[0];
         console.log("getMember : " + JSON.stringify(result));

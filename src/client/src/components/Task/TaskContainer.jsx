@@ -172,12 +172,12 @@ class TaskContainer extends Component {
                 card.tasks = result[card.assigneeId];
                 return card;
             });
-            let memberTasks =taskCards.find(card=>{
+            let memberTasks = taskCards.find(card => {
                 return card.assigneeId == destination.droppableId;
             });
             console.log("Member TaskCards destination : " + JSON.stringify(memberTasks));
-            if(memberTasks == undefined) {
-                let card = {assigneeId: Number(destination.droppableId), tasks: result[destination.droppableId]}
+            if (memberTasks == undefined) {
+                let card = { assigneeId: Number(destination.droppableId), tasks: result[destination.droppableId] }
                 newTaskCards.push(card);
             }
             console.log("New TaskCards : " + JSON.stringify(newTaskCards))
@@ -204,8 +204,8 @@ class TaskContainer extends Component {
     render() {
         const { classes } = this.props;
         let { creatorTasks, index } = this.props;
-        // const {taskCards} = creatorTasks[index].tasks;
-        const {taskCards} = this.state;
+        const taskCards = creatorTasks[index] ? creatorTasks[index].tasks : [];
+        // const {taskCards} = this.state;
         const settings = {
             className: classNames("center", classes.slider),
             infinite: false,
@@ -260,13 +260,13 @@ class TaskContainer extends Component {
                                     let tasks = card && card.tasks ? card.tasks : [];
                                     if (title != "UnknownMember")
                                         return (
-                                            <TaskCard filter={this.props.filter} key={member.id} title={title} cardId={member.id} tasks={tasks} openForm={this.props.openForm}/>
+                                            <TaskCard filter={this.props.filter} key={member.id} title={title} cardId={member.id} tasks={tasks} openForm={this.props.openForm} />
                                         )
                                 })
                             }
                         </Slider>
                     </DragDropContext>
-                    
+
                 </div>
             </React.Fragment>
         );

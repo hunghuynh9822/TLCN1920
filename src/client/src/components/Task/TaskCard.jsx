@@ -58,7 +58,7 @@ class TaskCard extends Component {
             return task.state == 'FINISH';
         });
         let doTasks = tasks.filter((task) => {
-            return task.state != 'FINISH';
+            return task.state != 'FINISH' && task.state != 'DONE';
         });
         let totalPoint = finishTasks.reduce((point, task, index, finishTasks) => {
             return point += task.point
@@ -68,9 +68,6 @@ class TaskCard extends Component {
         });
         if (this.props.filter && this.props.filter == 'DONE') {
             console.log("DoneTasks : " + JSON.stringify(doneTasks));
-            if (doneTasks.length == 0) {
-                return null;
-            }
             return (
                 <Card style={getListStyle(false)} className={classes.card}>
                     <CardHeader
@@ -78,9 +75,11 @@ class TaskCard extends Component {
                             <div className={classes.title} >
                                 {title}
                             </div>
-                        } style={{margin: '0px',
-                        padding: '8px',
-                        backgroundColor: '#3f51b5'}} />
+                        } style={{
+                            margin: '0px',
+                            padding: '8px',
+                            backgroundColor: '#3f51b5'
+                        }} />
                     <CardContent className={classes.content}>
                         <ul className="list-group">
                             <li className="list-group-item">
@@ -89,7 +88,7 @@ class TaskCard extends Component {
                                 </div>
                             </li>
                             {doneTasks.map((item, index) => (
-                                <Task key={item.id} task={item} index={index} openForm={this.props.openForm} />
+                                <Task key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
                             ))}
                         </ul>
                     </CardContent>
@@ -105,10 +104,12 @@ class TaskCard extends Component {
                                 <div className={classes.title} >
                                     {title}
                                 </div>
-                            } 
-                            style={{margin: '0px',
+                            }
+                            style={{
+                                margin: '0px',
                                 padding: '8px',
-                                backgroundColor: '#3f51b5'}}/>
+                                backgroundColor: '#3f51b5'
+                            }} />
                         <CardContent className={classes.content}>
                             <ul className="list-group">
                                 <li className="list-group-item">

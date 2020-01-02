@@ -271,7 +271,7 @@ class ProjectTasks extends Component {
         let request = {
             taskId: this.state.task.id,
             employeeId: currentUser.id,
-            state: TASK_STATE[event.target.value]
+            state: event.target.value
         }
         console.log("Request update task : " + JSON.stringify(request));
         updateStateTasks(request)
