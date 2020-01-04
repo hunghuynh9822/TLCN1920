@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(Long userId, String password) throws SQLException, TransactionException {
-        userDao.updatePassword(userId, password);
+        userDao.updatePassword(userId, encoder.encode(password));
     }
 
     @Override
