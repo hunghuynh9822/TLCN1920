@@ -6,10 +6,7 @@ import com.hcmute.pose.employeeservice.buz.EmployeeServiceBuz;
 import com.hcmute.pose.employeeservice.exception.BuzException;
 import com.hcmute.pose.employeeservice.exception.DatabaseException;
 import com.hcmute.pose.employeeservice.model.*;
-import com.hcmute.pose.employeeservice.payload.StateRequest;
-import com.hcmute.pose.employeeservice.payload.EmployeeRequest;
-import com.hcmute.pose.employeeservice.payload.EmployeeResponse;
-import com.hcmute.pose.employeeservice.payload.UpdateEmployeeRequest;
+import com.hcmute.pose.employeeservice.payload.*;
 import com.hcmute.pose.employeeservice.service.EmployeeService;
 import com.hcmute.pose.employeeservice.service.PositionService;
 import com.hcmute.pose.employeeservice.service.RoleService;
@@ -143,6 +140,22 @@ public class EmployeeServiceBuzImpl implements EmployeeServiceBuz {
             databaseHelper.commit();
         } catch (TransactionException | SQLException | DatabaseException e) {
             LOGGER.error("[EmployeeServiceBuzImpl]:[updateAcceptUser] GOT UNKNOWN EXCEPTION ", e);
+            throw e;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordRequest request) throws TransactionException, SQLException {
+        try{
+            databaseHelper.beginTransaction();
+
+            userService.updatePassword(request.getId(),request.getPassword());
+
+            databaseHelper.commit();
+        } catch (TransactionException | SQLException e) {
+            LOGGER.error("[EmployeeServiceBuzImpl]:[updatePassword] GOT UNKNOWN EXCEPTION ", e);
             throw e;
         } finally {
             databaseHelper.closeConnection();

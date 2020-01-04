@@ -39,6 +39,8 @@ public class UserDaoImpl implements UserDao {
 
     private static String SQL_UPDATE_USER_STATUS = "UPDATE users SET status = ?, updated_at = ? WHERE id = ?";
 
+    private static String SQL_UPDATE_USER_PASSWORD = "UPDATE users SET password = ?, updated_at = ? WHERE id = ?";
+
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -106,6 +108,16 @@ public class UserDaoImpl implements UserDao {
             databaseHelper.executeNonQuery(SQL_UPDATE_USER_STATUS,status.ordinal(),System.currentTimeMillis(),userId);
         } catch (SQLException | TransactionException e) {
             LOGGER.error("[UserDaoImpl]:[updateStatus]",e);
+            throw e;
+        }
+    }
+
+    @Override
+    public void updatePassword(Long userId, String password) throws SQLException, TransactionException {
+        try {
+            databaseHelper.executeNonQuery(SQL_UPDATE_USER_PASSWORD, password, System.currentTimeMillis(),userId);
+        } catch (SQLException | TransactionException e) {
+            LOGGER.error("[UserDaoImpl]:[updatePassword]",e);
             throw e;
         }
     }

@@ -22,4 +22,5 @@ public interface UserDao {
     Optional<User> findById(Long id) throws SQLException;
     Boolean existsByPhone(String phone) throws SQLException;
     Boolean existsByEmail(String email) throws SQLException;
+    void updatePassword(Long userId, String password) throws SQLException, TransactionException;
 }
