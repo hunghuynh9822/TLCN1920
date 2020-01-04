@@ -1,21 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 20:01:18
-*/
-
-
 -- ----------------------------
 -- Table structure for users
 -- ----------------------------
@@ -40,32 +22,15 @@ CREATE TABLE "public"."users" (
 -- Records of users
 -- ----------------------------
 INSERT INTO "public"."users" VALUES (15714589149401, 'huuhung9822@gmail.com', '0938781162', '$2a$10$uPjQ.ZhoRY1mqiWvSupRUOyXWM0yR7MoHix85oRk.Ls7BY/K8pXIq', 'google', '107889025848008063650', 'Hưng Huỳnh', 'https://lh4.googleusercontent.com/-vao6VCfseGo/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reIFx6E9VfOMlCmZEleSK2kvEAJFg/photo.jpg', 't', 1571458915068, NULL, 1);
-INSERT INTO "public"."users" VALUES (15746074348584, 'test.staff.2@gmail.com', '0909654321', '$2a$10$n39S1dPWhOjO.sz2Kzf85.VcyASAV1RbcqXD/o.O60sKGYElUO51m', 'local', NULL, NULL, NULL, 'f', 1574607434956, 1574607434956, 0);
 INSERT INTO "public"."users" VALUES (15746072843063, 'test.lead.1@gmail.com', '0909456123', '$2a$10$QSzWFRz83r2eQnels2WUXuoKDc3EjiH/TPWqub95mTJQCXrSXslxa', 'local', NULL, NULL, NULL, 'f', 1574607284406, 1574785905109, 1);
-INSERT INTO "public"."users" VALUES (15746071512232, 'test.staff.1@gmail.com', '0909123456', '$2a$10$TX/fSfJQuSENRFVu5GJkyO7LgWJMIzIyHt4mWDPtVfPqn1zOVX8wS', 'local', NULL, NULL, NULL, 'f', 1574607151398, 1574789578695, 1);
 INSERT INTO "public"."users" VALUES (15751881480165, 'thaithanhliem2704@gmail.com', '0961375203', '$2a$10$HXE1ASaNmk4QMiPvzISCQe8phA6ZGp1S0cbqXLdCJ6xaR61iNBF6e', 'local', NULL, NULL, NULL, 'f', 1575188148420, 1575188192646, 1);
+INSERT INTO "public"."users" VALUES (15746071512232, 'test.staff.1@gmail.com', '0909123456', '$2a$10$TX/fSfJQuSENRFVu5GJkyO7LgWJMIzIyHt4mWDPtVfPqn1zOVX8wS', 'local', NULL, NULL, NULL, 'f', 1574607151398, 1577676436907, 2);
+INSERT INTO "public"."users" VALUES (15746074348584, 'test.staff.2@gmail.com', '0909654321', '$2a$10$n39S1dPWhOjO.sz2Kzf85.VcyASAV1RbcqXD/o.O60sKGYElUO51m', 'local', NULL, NULL, NULL, 'f', 1574607434956, 1577678249435, 1);
 
 -- ----------------------------
 -- Primary Key structure for table users
 -- ----------------------------
 ALTER TABLE "public"."users" ADD CONSTRAINT "users_pkey" PRIMARY KEY ("id");
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 19:59:53
-*/
 
 
 -- ----------------------------
@@ -92,24 +57,6 @@ INSERT INTO "public"."positions" VALUES (4, 'Staff', 1567937957503, NULL);
 -- Primary Key structure for table positions
 -- ----------------------------
 ALTER TABLE "public"."positions" ADD CONSTRAINT "positions_pkey" PRIMARY KEY ("id");
-
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 19:59:03
-*/
 
 
 -- ----------------------------
@@ -152,24 +99,6 @@ ALTER TABLE "public"."employees" ADD CONSTRAINT "employee_position" FOREIGN KEY 
 ALTER TABLE "public"."employees" ADD CONSTRAINT "user_id" FOREIGN KEY ("id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 20:00:35
-*/
-
-
 -- ----------------------------
 -- Table structure for roles
 -- ----------------------------
@@ -196,24 +125,6 @@ INSERT INTO "public"."roles" VALUES (4, 'ROLE_HR', 1567937962314, 1567937962314)
 ALTER TABLE "public"."roles" ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");
 
 
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 20:01:05
-*/
-
-
 -- ----------------------------
 -- Table structure for user_roles
 -- ----------------------------
@@ -235,11 +146,11 @@ INSERT INTO "public"."user_roles" VALUES (15714589149401, 2, 1571458915069, 1571
 INSERT INTO "public"."user_roles" VALUES (15714589149401, 4, 1571458915069, 1571458915069);
 INSERT INTO "public"."user_roles" VALUES (15746072843063, 3, 1574785905117, 1574785905117);
 INSERT INTO "public"."user_roles" VALUES (15746072843063, 2, 1574785905118, 1574785905118);
-INSERT INTO "public"."user_roles" VALUES (15746071512232, 2, 1574789578705, 1574789578705);
 INSERT INTO "public"."user_roles" VALUES (15751881480165, 1, 1575188192653, 1575188192653);
 INSERT INTO "public"."user_roles" VALUES (15751881480165, 2, 1575188192655, 1575188192655);
 INSERT INTO "public"."user_roles" VALUES (15751881480165, 3, 1575188192656, 1575188192656);
 INSERT INTO "public"."user_roles" VALUES (15751881480165, 4, 1575188192656, 1575188192656);
+INSERT INTO "public"."user_roles" VALUES (15746074348584, 2, 1577678249443, 1577678249443);
 
 -- ----------------------------
 -- Primary Key structure for table user_roles
@@ -251,24 +162,6 @@ ALTER TABLE "public"."user_roles" ADD CONSTRAINT "employee_roles_pkey" PRIMARY K
 -- ----------------------------
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "role_id" FOREIGN KEY ("role_id") REFERENCES "public"."roles" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "user_id" FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 19:59:17
-*/
 
 
 -- ----------------------------
@@ -285,28 +178,67 @@ CREATE TABLE "public"."genuid" (
 -- ----------------------------
 -- Records of genuid
 -- ----------------------------
-INSERT INTO "public"."genuid" VALUES (2, 2, 52);
-INSERT INTO "public"."genuid" VALUES (3, 2, 12);
 INSERT INTO "public"."genuid" VALUES (1, 5, 5);
+INSERT INTO "public"."genuid" VALUES (3, 5, 15);
+INSERT INTO "public"."genuid" VALUES (2, 7, 137);
 
 
-/*
- Navicat Premium Data Transfer
+-- ----------------------------
+-- Table structure for projects
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."projects";
+CREATE TABLE "public"."projects" (
+  "id" int8 NOT NULL,
+  "title" varchar(255) COLLATE "pg_catalog"."default",
+  "description" text COLLATE "pg_catalog"."default",
+  "state" int4,
+  "created_at" int8,
+  "updated_at" int8
+)
+;
 
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
+-- ----------------------------
+-- Records of projects
+-- ----------------------------
+INSERT INTO "public"."projects" VALUES (15776774274194, 'Website thương mại điện tử', 'Xây dựng website thương mại điện tử với Reactjs', 0, 1577677427419, 1577677427419);
+INSERT INTO "public"."projects" VALUES (15776775042945, 'Website bán điện thoại', 'Xây dựng website như thế giới di động', 0, 1577677504295, 1577677504295);
 
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
+-- ----------------------------
+-- Primary Key structure for table projects
+-- ----------------------------
+ALTER TABLE "public"."projects" ADD CONSTRAINT "projects_pkey" PRIMARY KEY ("id");
 
- Date: 05/12/2019 20:00:54
-*/
 
+-- ----------------------------
+-- Table structure for perofproject
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."perofproject";
+CREATE TABLE "public"."perofproject" (
+  "pro_id" int8 NOT NULL,
+  "employee_id" int8 NOT NULL,
+  "role" int4
+)
+;
+
+-- ----------------------------
+-- Records of perofproject
+-- ----------------------------
+INSERT INTO "public"."perofproject" VALUES (15776774274194, 15714589149401, 0);
+INSERT INTO "public"."perofproject" VALUES (15776775042945, 15714589149401, 0);
+INSERT INTO "public"."perofproject" VALUES (15776775042945, 15746072843063, 2);
+INSERT INTO "public"."perofproject" VALUES (15776775042945, 15751881480165, 1);
+INSERT INTO "public"."perofproject" VALUES (15776775042945, 15746074348584, 2);
+
+-- ----------------------------
+-- Primary Key structure for table perofproject
+-- ----------------------------
+ALTER TABLE "public"."perofproject" ADD CONSTRAINT "perofproject_pkey" PRIMARY KEY ("pro_id", "employee_id");
+
+-- ----------------------------
+-- Foreign Keys structure for table perofproject
+-- ----------------------------
+ALTER TABLE "public"."perofproject" ADD CONSTRAINT "employee_project" FOREIGN KEY ("employee_id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."perofproject" ADD CONSTRAINT "project_constraint" FOREIGN KEY ("pro_id") REFERENCES "public"."projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- ----------------------------
 -- Table structure for tasks
@@ -331,33 +263,25 @@ CREATE TABLE "public"."tasks" (
 -- ----------------------------
 -- Records of tasks
 -- ----------------------------
-INSERT INTO "public"."tasks" VALUES (15752202794018, 15744386380186, 'Test nào', 1575220190855, 4, 0, 0, 15714589149401, '1 2 3 5 test', 1575220279401, 1575220279401, 15746072843063);
-INSERT INTO "public"."tasks" VALUES (15752272193295, 15744386380186, 'Test drag', 1575227166556, NULL, 0, 0, 15714589149401, '2h sáng anh gọi em không bắt máy', 1575227219329, 1575227219329, 15746072843063);
-INSERT INTO "public"."tasks" VALUES (15752273449756, 15744386380186, 'Thêm task cho nhân viên', 1575227312779, 3, 0, 0, 15714589149401, 'Tạo một task mới này', 1575227344975, 1575227344975, 15746071512232);
-INSERT INTO "public"."tasks" VALUES (15752201914757, 15744386380186, 'Test add task', 1575219940333, 2, 0, 0, 15714589149401, 'Hơn 12h rồi', 1575220191485, 1575232592577, 15746071512232);
+INSERT INTO "public"."tasks" VALUES (15776776576042, 15776775042945, 'Phân tích xử lý', 1577677608760, NULL, 0, 0, 15714589149401, 'Phân tích các chức năng có thể có', 1577677657604, 1577677657604, 15746072843063);
+INSERT INTO "public"."tasks" VALUES (15776777180033, 15776775042945, 'Giám sát quy trình', 1577677664519, NULL, 0, 0, 15714589149401, 'Đảm bảo đúng tiến độ với kế hoạch', 1577677718040, 1577677718040, 15714589149401);
+INSERT INTO "public"."tasks" VALUES (15776777978154, 15776775042945, 'Xây dựng API tính năng mua hàng', 1577677749221, NULL, 0, 0, 15714589149401, 'Xây dựng api cho tính năng mua hàng', 1577677797835, 1577677797835, 15746072843063);
+INSERT INTO "public"."tasks" VALUES (15776779867316, 15776775042945, 'Giám sát quy trình triển khai', 1577677927342, NULL, 0, 0, 15714589149401, 'Đảm bảo quy trình triển khai đúng kế hoạch', 1577677986731, 1577677986731, 15714589149401);
+INSERT INTO "public"."tasks" VALUES (15776780298297, 15776775042945, 'Xây dựng API đăng nhập', 1577677985459, NULL, 0, 0, 15714589149401, 'Xây dựng tính năng đăng nhập với mạng xã hội hiện có', 1577678029829, 1577678029829, 15746072843063);
+INSERT INTO "public"."tasks" VALUES (15776775543901, 15776775042945, 'Khảo sát hiện trạng', 1577677515118, NULL, 0, 0, 15714589149401, 'Tìm hiểu các website hiện có trên thị trường', 1577677554390, 1577678181557, 15751881480165);
+INSERT INTO "public"."tasks" VALUES (15776778448415, 15776775042945, 'Giám sát quy trình kiểm thử', 1577677802796, NULL, 0, 0, 15714589149401, 'Đảm bảo đi đúng kế hoạch', 1577677844877, 1577678185425, 15751881480165);
 
 -- ----------------------------
 -- Primary Key structure for table tasks
 -- ----------------------------
 ALTER TABLE "public"."tasks" ADD CONSTRAINT "tasks_pkey" PRIMARY KEY ("id");
 
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 20:00:44
-*/
+-- ----------------------------
+-- Foreign Keys structure for table tasks
+-- ----------------------------
+ALTER TABLE "public"."tasks" ADD CONSTRAINT "employee_assignee" FOREIGN KEY ("employee_assignee") REFERENCES "public"."users" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."tasks" ADD CONSTRAINT "employee_creator" FOREIGN KEY ("employee_creator") REFERENCES "public"."users" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."tasks" ADD CONSTRAINT "of_project" FOREIGN KEY ("project_id") REFERENCES "public"."projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 -- ----------------------------
@@ -379,134 +303,11 @@ CREATE TABLE "public"."taskcomments" (
 -- ----------------------------
 ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "taskcomments_pkey" PRIMARY KEY ("id");
 
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 20:00:10
-*/
-
-
 -- ----------------------------
--- Table structure for projects
+-- Foreign Keys structure for table taskcomments
 -- ----------------------------
-DROP TABLE IF EXISTS "public"."projects";
-CREATE TABLE "public"."projects" (
-  "id" int8 NOT NULL,
-  "title" varchar(255) COLLATE "pg_catalog"."default",
-  "description" text COLLATE "pg_catalog"."default",
-  "state" int4,
-  "created_at" int8,
-  "updated_at" int8
-)
-;
-
--- ----------------------------
--- Records of projects
--- ----------------------------
-INSERT INTO "public"."projects" VALUES (15744386380186, 'Test', 'Test Postman', 0, 1574438638025, 1574438638025);
-INSERT INTO "public"."projects" VALUES (15744386794017, 'Test 1', 'Test Postman 1', 0, 1574438679401, 1574438679401);
-INSERT INTO "public"."projects" VALUES (15744386934538, 'Test 2', 'Test Postman 2', 0, 1574438693453, 1574438693453);
-INSERT INTO "public"."projects" VALUES (15744393005229, 'Test 2', 'Test Postman 2', 0, 1574439300544, 1574439300544);
-INSERT INTO "public"."projects" VALUES (15745069787281, 'Test web', 'This project to test on web', 0, 1574506978738, 1574506978738);
-INSERT INTO "public"."projects" VALUES (15745097951082, '1', 'AAAAAAAA', 0, 1574509795108, 1574509795108);
-INSERT INTO "public"."projects" VALUES (15745121365703, 'Test goto project', 'Test after create goto project', 0, 1574512136570, 1574512136570);
-INSERT INTO "public"."projects" VALUES (15745122326794, 'Test goto project 2', 'Fix response get project id', 0, 1574512232679, 1574512232679);
-INSERT INTO "public"."projects" VALUES (15745123562105, 'Test goto project 3', 'Test history go', 0, 1574512356211, 1574512356211);
-INSERT INTO "public"."projects" VALUES (15745127207896, 'Test 4', '1 2 3 4', 0, 1574512720789, 1574512720789);
-INSERT INTO "public"."projects" VALUES (15745681890267, 'Test 4', 'asddsafdfdsafaaddasf', 0, 1574568189037, 1574568189037);
-INSERT INTO "public"."projects" VALUES (15747901151112, 'Test 4', 'czxzxvzxczx', 0, 1574790115117, 1574790115117);
-
--- ----------------------------
--- Primary Key structure for table projects
--- ----------------------------
-ALTER TABLE "public"."projects" ADD CONSTRAINT "projects_pkey" PRIMARY KEY ("id");
-
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 19:59:42
-*/
-
-
--- ----------------------------
--- Table structure for perofproject
--- ----------------------------
-DROP TABLE IF EXISTS "public"."perofproject";
-CREATE TABLE "public"."perofproject" (
-  "pro_id" int8 NOT NULL,
-  "employee_id" int8 NOT NULL,
-  "role" int4
-)
-;
-
--- ----------------------------
--- Records of perofproject
--- ----------------------------
-INSERT INTO "public"."perofproject" VALUES (15744386794017, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15744386934538, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15744393005229, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745069787281, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745097951082, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745121365703, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745122326794, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745123562105, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745127207896, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745681890267, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15744386380186, 15746072843063, 0);
-INSERT INTO "public"."perofproject" VALUES (15747901151112, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15744386380186, 15746071512232, 1);
-
--- ----------------------------
--- Primary Key structure for table perofproject
--- ----------------------------
-ALTER TABLE "public"."perofproject" ADD CONSTRAINT "perofproject_pkey" PRIMARY KEY ("pro_id", "employee_id");
-
--- ----------------------------
--- Foreign Keys structure for table perofproject
--- ----------------------------
-ALTER TABLE "public"."perofproject" ADD CONSTRAINT "employee_project" FOREIGN KEY ("employee_id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."perofproject" ADD CONSTRAINT "project_constraint" FOREIGN KEY ("pro_id") REFERENCES "public"."projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 19:59:27
-*/
+ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "comment_of_employee" FOREIGN KEY ("employee_id") REFERENCES "public"."users" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "comment_of_task" FOREIGN KEY ("task_id") REFERENCES "public"."tasks" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 
 -- ----------------------------
@@ -525,39 +326,15 @@ CREATE TABLE "public"."notify" (
 ;
 
 -- ----------------------------
--- Records of notify
--- ----------------------------
-INSERT INTO "public"."notify" VALUES (15752214634511, 15751881480165, 'Thai Thanh  Liem', 1575221463127, 'dcdcdc', 15714589149401, 'f');
-INSERT INTO "public"."notify" VALUES (15752214635352, 15751881480165, 'Thai Thanh  Liem', 1575221463127, 'dcdcdc', 15746071512232, 'f');
-INSERT INTO "public"."notify" VALUES (15752214635533, 15751881480165, 'Thai Thanh  Liem', 1575221463127, 'dcdcdc', 15746072843063, 'f');
-INSERT INTO "public"."notify" VALUES (15752214635694, 15751881480165, 'Thai Thanh  Liem', 1575221463127, 'dcdcdc', 15751881480165, 'f');
-INSERT INTO "public"."notify" VALUES (15752539228037, 15751881480165, 'Thai Thanh  Liem', 1575253921355, 'Di hoc', 15714589149401, 'f');
-INSERT INTO "public"."notify" VALUES (15752539228978, 15751881480165, 'Thai Thanh  Liem', 1575253921355, 'Di hoc', 15746072843063, 'f');
-INSERT INTO "public"."notify" VALUES (15752539230199, 15751881480165, 'Thai Thanh  Liem', 1575253921355, 'Di hoc', 15746071512232, 'f');
-INSERT INTO "public"."notify" VALUES (15752539231110, 15751881480165, 'Thai Thanh  Liem', 1575253921355, 'Di hoc', 15751881480165, 'f');
-
--- ----------------------------
 -- Primary Key structure for table notify
 -- ----------------------------
 ALTER TABLE "public"."notify" ADD CONSTRAINT "notify_pkey" PRIMARY KEY ("id");
 
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : TLCN_SERVER
- Source Server Type    : PostgreSQL
- Source Server Version : 100010
- Source Host           : 192.168.200.1:5432
- Source Catalog        : postgres
- Source Schema         : public
-
- Target Server Type    : PostgreSQL
- Target Server Version : 100010
- File Encoding         : 65001
-
- Date: 05/12/2019 20:00:24
-*/
+-- ----------------------------
+-- Foreign Keys structure for table notify
+-- ----------------------------
+ALTER TABLE "public"."notify" ADD CONSTRAINT "creator_employee" FOREIGN KEY ("create_id") REFERENCES "public"."users" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."notify" ADD CONSTRAINT "receiver_employee" FOREIGN KEY ("receive_id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 -- ----------------------------
@@ -580,11 +357,17 @@ CREATE TABLE "public"."requests" (
 -- Records of requests
 -- ----------------------------
 INSERT INTO "public"."requests" VALUES (15752142668940, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575214255103, 1575300600000, 'Di hoc', 't');
-INSERT INTO "public"."requests" VALUES (15752142925351, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1577460660000, 1577547060000, 'Di ban nha', 'f');
 INSERT INTO "public"."requests" VALUES (15752541704051, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575254100000, 1575340500000, 'Đi học ', 't');
 INSERT INTO "public"."requests" VALUES (15752542004592, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575254188067, 1575254188067, 'Đi làm', 'f');
+INSERT INTO "public"."requests" VALUES (15757872533667, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575761959233, 1575761959233, 'Đi học ', 'f');
+INSERT INTO "public"."requests" VALUES (15752142925351, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1577460660000, 1577547060000, 'Di ban nha', 't');
 
 -- ----------------------------
 -- Primary Key structure for table requests
 -- ----------------------------
 ALTER TABLE "public"."requests" ADD CONSTRAINT "requests_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table requests
+-- ----------------------------
+ALTER TABLE "public"."requests" ADD CONSTRAINT "request_of" FOREIGN KEY ("employeeid") REFERENCES "public"."users" ("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -115,7 +115,7 @@ export default function AddStafftoProject({project,listPOP}) {
       idListPer : listNewUesr
     }
 
-    axios.post(`http://192.168.200.1:8080/promicro/createPOP`, { idPro : project.id, idListPer : listNewUesr})
+    axios.post(`http://localhost:8080/promicro/createPOP`, { idPro : project.id, idListPer : listNewUesr})
       .then(res => {
         console.log(res);
         console.log(res.data);

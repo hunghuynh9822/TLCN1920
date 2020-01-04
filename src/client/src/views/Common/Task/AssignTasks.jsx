@@ -25,7 +25,7 @@ class AssignTasks extends Component {
     }
 
     componentDidMount() {
-        
+
     }
 
     getName(employee) {
@@ -43,7 +43,7 @@ class AssignTasks extends Component {
         const { projectItem } = this.props;
         let members = projectItem.members;
         let result = members.filter((member) => {
-            console.log("getMember : compare " + member.id + " - " + memberId);
+            // console.log("getMember : compare " + member.id + " - " + memberId);
             return member.id == memberId;
         })[0];
         console.log("getMember : " + JSON.stringify(result));
@@ -56,11 +56,11 @@ class AssignTasks extends Component {
         return (
             <React.Fragment>
                 {creatorTasks && creatorTasks.map((creator, index) => {
-                    console.log("Creator : " + JSON.stringify(creator));
+                    // console.log("Creator : " + JSON.stringify(creator));
                     let title = this.getNameMember(creator.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer creator={creator} loadTasks={this.props.loadTasks}/>
+                            <TaskContainer updateTasks={this.props.updateTasks} index={index} creator={creator} loadTasks={this.props.loadTasks} openForm={this.props.openForm}/>
                         </CollapsibleSection>
                     )
                 })}
@@ -71,6 +71,9 @@ class AssignTasks extends Component {
 AssignTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
+    // creatorTasks: PropTypes.array.isRequired,
+    updateTasks: PropTypes.func.isRequired,
+    openForm: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -79,7 +82,7 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        creatorTasks: state.tasks.creatorTasks,
+        // creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

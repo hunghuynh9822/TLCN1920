@@ -190,10 +190,10 @@ services:
   #   image: pose/client-reactjs
   #   container_name: client-reactjs
   #   restart: unless-stopped
-  #   links:
-  #     - gateway
-  #   depends_on: 
-  #     - gateway
+  #   # links:
+  #   #   - gateway
+  #   # depends_on: 
+  #     # - gateway
   #   ports:
   #     - "3000:3000"
   #   networks:

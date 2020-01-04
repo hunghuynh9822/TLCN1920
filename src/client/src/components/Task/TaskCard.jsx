@@ -16,24 +16,25 @@ import CardContent from '@material-ui/core/CardContent';
 
 const styles = theme => ({
     title: {
-        margin: '12px 0px 0px 15px',
-        fontSize: '1em',
+        margin: '5px 0px 0px 15px',
+        fontSize: '0.8em',
         fontWeight: '400',
-        color: '#464c59',
-        '&:hover': {
-            background: '#e6e6e6',
-        },
+        color: 'white',
+        // '&:hover': {
+        //     background: '#e6e6e6',
+        // },
     },
     content: {
         display: 'flex', /* or inline-flex */
         flexDirection: 'column',
+        padding: '3px 5px 0px 5px',
     }
 });
 
 const grid = 8;
 const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? 'lightblue' : 'lightgrey',
-    padding: grid,
+    background: isDraggingOver ? 'lightblue' : '#e6e6e6',
+    padding: '0px',
     width: 250,
     marginLeft: grid,
     marginRight: grid,
@@ -52,16 +53,48 @@ class TaskCard extends Component {
     render() {
         const { classes } = this.props;
         const { cardId, tasks, title } = this.props;
-        console.log("TaskCard : " + JSON.stringify(tasks));
-        let doneTasks = tasks.filter((task) => {
+        // console.log("TaskCard : " + JSON.stringify(tasks));
+        let finishTasks = tasks.filter((task) => {
             return task.state == 'FINISH';
         });
         let doTasks = tasks.filter((task) => {
-            return task.state != 'FINISH';
+            return task.state != 'FINISH' && task.state != 'DONE';
         });
-        let totalPoint = doneTasks.reduce((point, task, index, doneTasks) => {
+        let totalPoint = finishTasks.reduce((point, task, index, finishTasks) => {
             return point += task.point
         }, 0);
+        let doneTasks = tasks.filter((task) => {
+            return task.state == 'DONE';
+        });
+        if (this.props.filter && this.props.filter == 'DONE') {
+            console.log("DoneTasks : " + JSON.stringify(doneTasks));
+            return (
+                <Card style={getListStyle(false)} className={classes.card}>
+                    <CardHeader
+                        title={
+                            <div className={classes.title} >
+                                {title}
+                            </div>
+                        } style={{
+                            margin: '0px',
+                            padding: '8px',
+                            backgroundColor: '#3f51b5'
+                        }} />
+                    <CardContent className={classes.content}>
+                        <ul className="list-group">
+                            <li className="list-group-item">
+                                <div className="row">
+                                    <div className="col-8"><a>Done task</a></div>
+                                </div>
+                            </li>
+                            {doneTasks.map((item, index) => (
+                                <Task key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
+                            ))}
+                        </ul>
+                    </CardContent>
+                </Card>
+            );
+        }
         return (
             <Droppable droppableId={cardId.toString()}>
                 {(provided, snapshot) => (
@@ -71,25 +104,30 @@ class TaskCard extends Component {
                                 <div className={classes.title} >
                                     {title}
                                 </div>
-                            } />
+                            }
+                            style={{
+                                margin: '0px',
+                                padding: '8px',
+                                backgroundColor: '#3f51b5'
+                            }} />
                         <CardContent className={classes.content}>
                             <ul className="list-group">
                                 <li className="list-group-item">
                                     <div className="row">
-                                        <div className="col-8"><a>{doneTasks.length}/{tasks.length} Task With Point</a></div>
-                                        <div className="col-4"><a style={{ float: 'right' }}>{totalPoint} Point</a></div>
+                                        <div className="col-7"><a>{finishTasks.length}/{tasks.length} Task</a></div>
+                                        <div className="col-5"><a style={{ float: 'right' }}>{totalPoint} Point</a></div>
                                     </div>
                                 </li>
                                 {doTasks.map((item, index) => (
-                                    <Task key={item.id} task={item} index={index} />
+                                    <Task key={item.id} task={item} index={index} openForm={this.props.openForm} />
                                 ))}
                                 <li className="list-group-item ">
                                     <div className="row" style={{ height: '6px' }}>
                                         <a style={{ fontSize: '12px' }}>Completed Task</a>
                                     </div>
                                 </li>
-                                {doneTasks.map((item, index) => (
-                                    <Task key={item.id} task={item} index={index} />
+                                {finishTasks.map((item, index) => (
+                                    <Task key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
                                 ))}
                             </ul>
                             {provided.placeholder}
@@ -105,6 +143,7 @@ TaskCard.propTypes = {
     cardId: PropTypes.number.isRequired,
     tasks: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
+    openForm: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {

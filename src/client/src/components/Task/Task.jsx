@@ -12,6 +12,24 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import classNames from "classnames";
 import Rating from '@material-ui/lab/Rating';
 
+const StyledRating = withStyles({
+    iconFilled: {
+        color: '#3d55d1',
+    },
+    iconHover: {
+        color: '#5b73eb',
+    },
+})(Rating);
+
+function getLabelText(value) {
+    return `${value} Heart${value !== 1 ? 's' : ''}`;
+}
+
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+
 const styles = theme => ({
     "checked": { "color": "orange" },
     "fa": { "fontSize": "10px" },
@@ -24,9 +42,13 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: 'none',
     padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
+    margin: `0 0 5px 0`,
     // change background colour if dragging
-    background: isDragging ? 'lightgreen' : 'grey',
+    background: isDragging ? 'lightgreen' : 'white',
+    display: 'flex',
+    lineHeight: '40px',
+    justifyContent: 'space-between',
+    padding: '10px 8px',
     // styles we need to apply on draggables
     ...draggableStyle,
 });
@@ -44,6 +66,7 @@ class Task extends Component {
                 point: '',
             }
         }
+        this.handleOpen = this.handleOpen.bind(this);
     }
 
     optionalPortal(styles, element) {
@@ -60,17 +83,47 @@ class Task extends Component {
 
     }
 
+    handleOpen() {
+        console.log("Open")
+        this.props.openForm(this.props.task);
+    }
+
     render() {
         const { classes } = this.props;
         const { task, index } = this.props;
+        if (this.props.mode && this.props.mode === 'READONLY') {
+            return (
+                <div onClick={this.handleOpen}>
+                    <div
+                        style={getItemStyle(
+                            false, {}
+                        )}
+                    >
+                        <div>
+                            {task.title}
+                        </div>
+                        <div>
+                            <StyledRating
+                                name="customized-color"
+                                value={task.point}
+                                getLabelText={getLabelText}
+                                precision={0.5}
+                                icon={<FiberManualRecordIcon fontSize="small" />}
+                                readOnly
+                            />
+                            {task.state}
+                        </div>
+                    </div>
+                </div>
+            )
+        }
         return (
-
             <Draggable
                 key={task.id}
                 draggableId={task.id.toString()}
                 index={index}>
                 {(provided, snapshot) => (
-                    <div>
+                    <div onClick={this.handleOpen}>
                         {this.optionalPortal(provided.draggableProps.style, (
                             <div
                                 ref={provided.innerRef}
@@ -81,7 +134,20 @@ class Task extends Component {
                                     provided.draggableProps.style
                                 )}
                             >
-                                {task.title}
+                                <div>
+                                    {task.title}
+                                </div>
+                                <div>
+                                    <StyledRating
+                                        name="customized-color"
+                                        value={task.point}
+                                        getLabelText={getLabelText}
+                                        precision={0.5}
+                                        icon={<FiberManualRecordIcon fontSize="small" />}
+                                        readOnly
+                                    />
+                                    {task.state}
+                                </div>
                             </div>
                         ))}
                         {provided.placeholder}
@@ -96,6 +162,7 @@ Task.propTypes = {
     classes: PropTypes.object.isRequired,
     task: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
+    openForm: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {

@@ -5,7 +5,7 @@ const projectManagementStyle = theme => ({
         width: '100%',
         // minHeight: 'calc(100vh - 110px)',
         minHeight: '100%',
-        backgroundColor: '#f2f2f2',
+        backgroundColor: 'transparent',
         paddingBottom: '20px',
 
     },

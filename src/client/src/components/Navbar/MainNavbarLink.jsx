@@ -41,12 +41,12 @@ class MainNavbarLink extends Component {
     }
     componentDidMount(){
         this.getData();
-        setInterval(this.getData, 500); 
+        // setInterval(this.getData, 500); 
     }
 
     getData = () => {
         const {currentUser} = this.props;
-        var url = "http://192.168.200.1:8080/api/notify/" + currentUser.id
+        var url = "http://localhost:8080/api/notify/" + currentUser.id
         axios.get(url)
         .then(response =>{
             var temp = response.data;    
@@ -183,7 +183,7 @@ class MainNavbarLink extends Component {
                                     <ClickAwayListener onClickAway={handleCloseNotification}>
                                         <MenuList role="menu">
                                             {this.state.rows.map((element, i) => {     
-                                            console.log("Entered");                 
+                                            // console.log("Entered");                 
                                             // Return the element. Also pass key     
                                             return ( 
                                                 <MenuItem

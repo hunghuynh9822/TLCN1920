@@ -3,16 +3,16 @@
 
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
- Source Server Version : 100010
+ Source Server Version : 100011
  Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 100010
+ Target Server Version : 100011
  File Encoding         : 65001
 
- Date: 05/12/2019 20:00:24
+ Date: 01/01/2020 11:46:12
 */
 
 
@@ -36,11 +36,17 @@ CREATE TABLE "public"."requests" (
 -- Records of requests
 -- ----------------------------
 INSERT INTO "public"."requests" VALUES (15752142668940, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575214255103, 1575300600000, 'Di hoc', 't');
-INSERT INTO "public"."requests" VALUES (15752142925351, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1577460660000, 1577547060000, 'Di ban nha', 'f');
 INSERT INTO "public"."requests" VALUES (15752541704051, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575254100000, 1575340500000, 'Đi học ', 't');
 INSERT INTO "public"."requests" VALUES (15752542004592, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575254188067, 1575254188067, 'Đi làm', 'f');
+INSERT INTO "public"."requests" VALUES (15757872533667, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575761959233, 1575761959233, 'Đi học ', 'f');
+INSERT INTO "public"."requests" VALUES (15752142925351, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1577460660000, 1577547060000, 'Di ban nha', 't');
 
 -- ----------------------------
 -- Primary Key structure for table requests
 -- ----------------------------
 ALTER TABLE "public"."requests" ADD CONSTRAINT "requests_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table requests
+-- ----------------------------
+ALTER TABLE "public"."requests" ADD CONSTRAINT "request_of" FOREIGN KEY ("employeeid") REFERENCES "public"."users" ("id") ON DELETE SET NULL ON UPDATE CASCADE;

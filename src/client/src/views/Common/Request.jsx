@@ -49,7 +49,7 @@ class Request extends Component {
         });
         // kiem tra quyen admin
         if (isAdmin === 1){
-        var url = "http://192.168.200.1:8080/api/requests/"
+        var url = "http://localhost:8080/api/requests/"
         axios.get(url)
         .then(response =>{
             const temp = response.data;
@@ -80,7 +80,7 @@ class Request extends Component {
         })
         .catch(error => console.log("ok loi ne "+error))
         } else {
-            var url = "http://192.168.200.1:8080/api/requests/"+ currentUser.id 
+            var url = "http://localhost:8080/api/requests/"+ currentUser.id 
         axios.get(url)
         .then(response =>{
             const temp = response.data;
@@ -123,7 +123,7 @@ class Request extends Component {
         const position = currentUser.position.name
         var timestart = req.t1.getTime();
         var timeend = req.t2.getTime();
-        axios.post(`http://192.168.200.1:8080/api/requests/`, {employeeid:currentUser.id,name:name,position:position,timestart:timestart,timeend:timeend,reason:req.reason,confirm:false})
+        axios.post(`http://localhost:8080/api/requests/`, {employeeid:currentUser.id,name:name,position:position,timestart:timestart,timeend:timeend,reason:req.reason,confirm:false})
         .then(res => {
         // console.log(res);
         // console.log(res.data);
@@ -157,7 +157,7 @@ class Request extends Component {
             if( rows[i].no === row.no ){
                 rows[i].confirm = true;
                 //console.log(rows[i].data);
-                axios.put(`http://192.168.200.1:8080/api/requests/update/`+rows[i].data +"?confirm=true")
+                axios.put(`http://localhost:8080/api/requests/update/`+rows[i].data +"?confirm=true")
                 .then(res => {
                 console.log(res);
                 console.log(res.data);

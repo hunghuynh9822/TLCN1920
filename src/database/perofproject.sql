@@ -3,16 +3,16 @@
 
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
- Source Server Version : 100010
+ Source Server Version : 100011
  Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 100010
+ Target Server Version : 100011
  File Encoding         : 65001
 
- Date: 05/12/2019 19:59:42
+ Date: 01/01/2020 11:45:44
 */
 
 
@@ -30,19 +30,11 @@ CREATE TABLE "public"."perofproject" (
 -- ----------------------------
 -- Records of perofproject
 -- ----------------------------
-INSERT INTO "public"."perofproject" VALUES (15744386794017, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15744386934538, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15744393005229, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745069787281, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745097951082, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745121365703, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745122326794, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745123562105, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745127207896, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15745681890267, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15744386380186, 15746072843063, 0);
-INSERT INTO "public"."perofproject" VALUES (15747901151112, 15714589149401, 0);
-INSERT INTO "public"."perofproject" VALUES (15744386380186, 15746071512232, 1);
+INSERT INTO "public"."perofproject" VALUES (15776774274194, 15714589149401, 0);
+INSERT INTO "public"."perofproject" VALUES (15776775042945, 15714589149401, 0);
+INSERT INTO "public"."perofproject" VALUES (15776775042945, 15746072843063, 2);
+INSERT INTO "public"."perofproject" VALUES (15776775042945, 15751881480165, 1);
+INSERT INTO "public"."perofproject" VALUES (15776775042945, 15746074348584, 2);
 
 -- ----------------------------
 -- Primary Key structure for table perofproject
