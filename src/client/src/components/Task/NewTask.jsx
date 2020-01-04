@@ -139,7 +139,7 @@ class NewTask extends Component {
             title: this.state.request.title,
             description: this.state.request.description,
             startedAt: this.state.request.startedAt,
-            duration: this.state.request.duration
+            duration: this.state.request.duration ? this.state.request.duration : 1
         }
         console.log("Request create task : " + JSON.stringify(request));
         create(request)

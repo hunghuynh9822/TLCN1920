@@ -558,7 +558,7 @@ class ProjectTasks extends Component {
                                     variant="inline"
                                     format="dd-MM-yyyy"
                                     label="End Time"
-                                    value={task.endAt}
+                                    value={task.startedAt + task.duration == null ? 0 : task.duration * 24 * 60 * 60 * 1000}
                                     onChange={this.handleDuration}
                                 />
                             </Grid>
