@@ -74,7 +74,7 @@ class Notification extends Component {
         .catch(error => console.log("ok loi ne notify lisst"+error))
 
 
-        var url = "http://localhost:8080/api/employees/"
+        var url =  serverUrl +"/api/employees/"
         axios.get(url)
         .then(response =>{
             const temp = response.data.employees;
@@ -93,8 +93,9 @@ class Notification extends Component {
         var date = new Date();
         var time = date.getTime();
         const no = this.state.rows.length + 1;
+        var url = serverUrl + "/api/notify/"
         listsID.forEach(element => {
-            axios.post(`http://localhost:8080/api/notify/`, {create_id:currentUser.id,create_name:name,create_time:time,content:req.content,receive_id:element.id})
+            axios.post(url, {create_id:currentUser.id,create_name:name,create_time:time,content:req.content,receive_id:element.id})
             .then(res => {
             // console.log(res);
             console.log(res.data);
@@ -132,7 +133,8 @@ class Notification extends Component {
 
     callActionDelete(method, row) {
         console.log("callActionDelete" + JSON.stringify(row));
-        axios.put(`http://localhost:8080/api/notify/delete/`+ row.data )
+        var url =  serverUrl +"/api/notify/delete/" + row.data;
+        axios.put(url)
             .then(res => {
             console.log(res.data);
             var rows = this.state.rows;
@@ -159,7 +161,8 @@ class Notification extends Component {
         // })
         // this.handleOpen();
         console.log("callActionView" + JSON.stringify(row));
-        axios.put(`http://localhost:8080/api/notify/update/`+ row.data +'?view=true')
+        var url = serverUrl + "/api/notify/update/" + row.data +"?view=true"
+        axios.put(url)
             .then(res => {
             // console.log(res);
             console.log(res.data);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styles from "../../assets/jss/styles/views/requestStyle";
-
+import { serverUrl } from '../../action/index';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { MaterialTable, PaginationTable,AddRequest,CollapsibleSection } from "../../components"
@@ -49,7 +49,7 @@ class Request extends Component {
         });
         // kiem tra quyen admin
         if (isAdmin === 1){
-        var url = "http://localhost:8080/api/requests/"
+        var url = serverUrl+"/api/requests/"
         axios.get(url)
         .then(response =>{
             const temp = response.data;
@@ -80,7 +80,7 @@ class Request extends Component {
         })
         .catch(error => console.log("ok loi ne "+error))
         } else {
-            var url = "http://localhost:8080/api/requests/"+ currentUser.id 
+            var url = serverUrl+"/api/requests/"+ currentUser.id 
         axios.get(url)
         .then(response =>{
             const temp = response.data;
@@ -123,7 +123,8 @@ class Request extends Component {
         const position = currentUser.position.name
         var timestart = req.t1.getTime();
         var timeend = req.t2.getTime();
-        axios.post(`http://localhost:8080/api/requests/`, {employeeid:currentUser.id,name:name,position:position,timestart:timestart,timeend:timeend,reason:req.reason,confirm:false})
+        var url = serverUrl+"/api/requests/"
+        axios.post(url, {employeeid:currentUser.id,name:name,position:position,timestart:timestart,timeend:timeend,reason:req.reason,confirm:false})
         .then(res => {
         // console.log(res);
         // console.log(res.data);
@@ -157,7 +158,8 @@ class Request extends Component {
             if( rows[i].no === row.no ){
                 rows[i].confirm = true;
                 //console.log(rows[i].data);
-                axios.put(`http://localhost:8080/api/requests/update/`+rows[i].data +"?confirm=true")
+                var url = serverUrl+"/api/requests/update/"+rows[i].data +"?confirm=true"
+                axios.put(url)
                 .then(res => {
                 console.log(res);
                 console.log(res.data);

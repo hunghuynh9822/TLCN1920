@@ -27,7 +27,7 @@ import { CustomInput, CustomButton } from "../";
 
 import { logout } from '../../action/auth';
 import { ACCESS_TOKEN } from '../../constants'
-
+import { serverUrl } from '../../action/index';
 import styles from "../../assets/jss/material-react/components/headerLinksStyle";
 class MainNavbarLink extends Component {
     constructor(props) {
@@ -41,12 +41,12 @@ class MainNavbarLink extends Component {
     }
     componentDidMount(){
         this.getData();
-        // setInterval(this.getData, 500); 
+        setInterval(this.getData, 5000); 
     }
 
     getData = () => {
         const {currentUser} = this.props;
-        var url = "http://localhost:8080/api/notify/" + currentUser.id
+        var url = serverUrl+"/api/notify/" + currentUser.id
         axios.get(url)
         .then(response =>{
             var temp = response.data;    
