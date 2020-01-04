@@ -64,17 +64,6 @@ public class EmployeeServiceSuperController {
         }
     }
 
-    @PatchMapping("/password")
-    public ResponseEntity updatePassword(@RequestBody UpdatePasswordRequest passwordRequest){
-        try {
-            employeeServiceBuz.updatePassword(passwordRequest);
-            return new ResponseEntity(new ApiResponse(true, "Update user success"),HttpStatus.OK);
-        } catch (SQLException | TransactionException e) {
-            return new ResponseEntity(new ApiResponse(false, e.getMessage()),
-                    HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @GetMapping("/roles")
     public ResponseEntity getRoles() {
         List<Role> roles = employeeServiceBuz.getRoles();
