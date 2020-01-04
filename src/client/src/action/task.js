@@ -59,6 +59,13 @@ export function getTasksCreatedByLead(project, employee) {
     });
 }
 
+export function getTasksOfProject(project) {
+    return request({
+        url: url + "/project" + "?" + "project=" + project,
+        method: 'GET',
+    });
+}
+
 /*
 {
     taskId:
