@@ -56,14 +56,19 @@ class Notification extends Component {
             var rows = []
             temp.forEach(element =>{
                 var no = rows.length + 1 ;
-                var a = new Date(element.create_time);
-                var year = a.getFullYear();
-                var month = a.getMonth() + 1;
-                var date = a.getDate();
-                var hour = a.getHours();
-                var muti = a.getMinutes();
-                var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
-                rows.push(this.createData(no , element.content ,element.create_name, time, element.id)) ;
+                // var a = new Date(element.create_time * 1000);
+                // var year = a.getFullYear();
+                // var month = a.getMonth() + 1;
+                // var date = a.getDate();
+                // var hour = a.getHours();
+                // var muti = a.getMinutes();
+                // var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
+                var time = this.unixTime(element.create_time)
+                if(element.view == false){
+                    rows.push(this.createData(no , element.content ,element.create_name, time, element.id)) ;
+                }else{
+                    rows.push(this.createDataDelete(no , element.content ,element.create_name, time, element.id)) ;
+                }
             })
             
         this.setState({
@@ -92,6 +97,9 @@ class Notification extends Component {
         const name = currentUser.firstName +" "+ currentUser.middleName +" "+ currentUser.lastName;
         var date = new Date();
         var time = date.getTime();
+        console.log(date);
+        console.log(time);
+        
         const no = this.state.rows.length + 1;
         var url = serverUrl + "/api/notify/"
         listsID.forEach(element => {
@@ -99,13 +107,14 @@ class Notification extends Component {
             .then(res => {
             // console.log(res);
             console.log(res.data);
-            var a = new Date(res.data.create_time * 1000);
-            var year = a.getFullYear();
-            var month = a.getMonth() + 1;
-            var date = a.getDate();
-            var hour = a.getHours();
-            var muti = a.getMinutes();
-            var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
+            // var a = new Date(res.data.create_time * 1000);
+            // var year = a.getFullYear();
+            // var month = a.getMonth() + 1;
+            // var date = a.getDate();
+            // var hour = a.getHours();
+            // var muti = a.getMinutes();
+            // var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
+            var time = this.unixTime(res.data.create_time);
             var id = res.data.receive_id
             if (currentUser.id === id){
                 temp.push(this.createData(no , res.data.content ,res.data.create_name, time , id)) ;
@@ -130,6 +139,13 @@ class Notification extends Component {
         }];
         return { no, title , name ,date , action ,data };
     }
+    createDataDelete(no, title, name,date ,data) {
+        const action = [{
+            name: 'delete',
+            method: this.callActionDelete
+        }];
+        return { no, title , name ,date , action ,data };
+    }
 
     callActionDelete(method, row) {
         console.log("callActionDelete" + JSON.stringify(row));
@@ -137,15 +153,7 @@ class Notification extends Component {
         axios.put(url)
             .then(res => {
             console.log(res.data);
-            var rows = this.state.rows;
-            for(var i = rows.length - 1; i >= 0; i--) {
-                if(rows[i].id === row.data) {
-                   rows.splice(i, 1);
-                }
-            }
-            this.setState({
-                rows: rows
-            })
+            this.componentDidMount();
             }).catch(err=>{ 
                 console.log(err);
             })
@@ -166,11 +174,22 @@ class Notification extends Component {
             .then(res => {
             // console.log(res);
             console.log(res.data);
+            this.componentDidMount();
             }).catch(err=>{ 
                 console.log(err);
             })
     }
+    unixTime(unixtime) {
 
+        var u = new Date(unixtime*1000);
+    
+          return u.getUTCFullYear() +
+            '-' + ('0' + u.getUTCMonth()).slice(-2) +
+            '-' + ('0' + u.getUTCDate()).slice(-2) + 
+            ' ' + ('0' + u.getUTCHours()).slice(-2) +
+            ':' + ('0' + u.getUTCMinutes()).slice(-2) +
+            ':' + ('0' + u.getUTCSeconds()).slice(-2)
+        };
 
     render() {
         const { classes } = this.props;

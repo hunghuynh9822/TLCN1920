@@ -18,9 +18,6 @@ const columns = [
 ];
 
 
-
-
-
 class Request extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +26,7 @@ class Request extends Component {
             confirms : [],
             requests : []
         }
-        this.callActionView = this.callActionView.bind(this);
+        this.callActionDelete = this.callActionDelete.bind(this);
         this.callActionConfirm = this.callActionConfirm.bind(this);
         this.addReq = this.addReq.bind(this);
     }
@@ -60,7 +57,11 @@ class Request extends Component {
                 datestart = datestart.getDate() +"/"+(datestart.getMonth() + 1) + "/" + datestart.getFullYear(); 
                 var dateend = new Date(element.timeend);
                 dateend = dateend.getDate() +"/"+(dateend.getMonth() + 1) + "/" + dateend.getFullYear();
-                rows.push(this.createData(no , element.name , element.position , datestart , dateend , element.reason, element.confirm, element.id)) ;
+                if (element.confirm === false ){
+                    rows.push(this.createData(no , element.name , element.position , datestart , dateend , element.reason, element.confirm, element.id)) ;
+                }else{
+                    rows.push(this.createDataDelete(no , element.name , element.position , datestart , dateend , element.reason, element.confirm, element.id)) ;
+                }
             })
             var lRequest = []
             var lConfirm = []
@@ -91,7 +92,11 @@ class Request extends Component {
                 datestart = datestart.getDate() +"/"+(datestart.getMonth() + 1) + "/" + datestart.getFullYear(); 
                 var dateend = new Date(element.timeend);
                 dateend = dateend.getDate() +"/"+(dateend.getMonth() + 1) + "/" + dateend.getFullYear();
-                rows.push(this.createData(no , element.name , element.position , datestart , dateend , element.reason, element.confirm, element.id)) ;
+                if (element.confirm === false ){
+                    rows.push(this.createData(no , element.name , element.position , datestart , dateend , element.reason, element.confirm, element.id)) ;
+                }else{
+                    rows.push(this.createDataDelete(no , element.name , element.position , datestart , dateend , element.reason, element.confirm, element.id)) ;
+                }          
             })
             var lRequest = []
             var lConfirm = []
@@ -137,28 +142,105 @@ class Request extends Component {
         
     }
 
+    // createData(no, name, position, timestart, timeend, reason, confirm , data) {
+    //     const action = [{
+    //         name: 'view',
+    //         method: this.callActionView
+    //     }, {
+    //         name: 'confirm',
+    //         method: this.callActionConfirm
+    //     }];
+    //     return { no, name, position, timestart, timeend, reason, confirm ,action ,data };
+    // }
     createData(no, name, position, timestart, timeend, reason, confirm , data) {
         const action = [{
-            name: 'view',
-            method: this.callActionView
-        }, {
             name: 'confirm',
             method: this.callActionConfirm
         }];
         return { no, name, position, timestart, timeend, reason, confirm ,action ,data };
     }
-
+    createDataDelete(no, name, position, timestart, timeend, reason, confirm , data) {
+        const action = [{
+            name: 'delete',
+            method: this.callActionDelete
+        }];
+        return { no, name, position, timestart, timeend, reason, confirm ,action ,data  };
+    }
     callActionConfirm(method, row) {
-        console.log("callActionConfirm" + JSON.stringify(row));
+        const {currentUser} = this.props;
+        var isAdmin = 0;
+        currentUser.roles.forEach(element => {
+            if(element.id === 1)
+                isAdmin = 1;
+                // console.log("isAdmin: "+isAdmin +"name: "+ element.name);    
+        });
+        if(isAdmin == 1){
+            var rows = this.state.requests;  
+            for(var i=0 ; i < rows.length ;i++){
+                if( rows[i].no === row.no ){
+                    rows[i].confirm = true;
+                    //console.log(rows[i].data);
+                    var url = serverUrl+"/api/requests/update/"+rows[i].data +"?confirm=true"
+                    axios.put(url)
+                    .then(res => {
+                    console.log(res);
+                    console.log(res.data);
+                    //=================
+                    var url = serverUrl+"/api/requests/"
+                    axios.get(url)
+                    .then(response =>{
+                        const temp = response.data;
+                        var rows = []
+                        temp.forEach(element =>{
+                            var no = rows.length + 1 ;
+                            var datestart = new Date(element.timestart);
+                            datestart = datestart.getDate() +"/"+(datestart.getMonth() + 1) + "/" + datestart.getFullYear(); 
+                            var dateend = new Date(element.timeend);
+                            dateend = dateend.getDate() +"/"+(dateend.getMonth() + 1) + "/" + dateend.getFullYear();
+                            if (element.confirm === false ){
+                                rows.push(this.createData(no , element.name , element.position , datestart , dateend , element.reason, element.confirm, element.id)) ;
+                            }else{
+                                rows.push(this.createDataDelete(no , element.name , element.position , datestart , dateend , element.reason, element.confirm, element.id)) ;
+                            }
+                        })
+                        var lRequest = []
+                        var lConfirm = []
+                    rows.forEach(element => {
+                        if (element.confirm === false ) {
+                            lRequest.push(element);
+                            console.log(element);   
+                        }else{
+                            lConfirm.push(element);
+                        }
+                    });        
+                    this.setState({
+                        requests : lRequest,
+                        rows: rows,
+                        confirms : lConfirm,
+                    })
+                    })
+                    .catch(error => console.log("ok loi ne "+error))
+                    //========================================
+                    }).catch(err=>{ 
+                        console.log(err);
+                    }) 
+                }
+            }
+            
+        }
+        //console.log("callActionConfirm" + JSON.stringify(row));    
+    }
 
-        var rows = this.state.requests;
+    callActionDelete(method, row) {
+        console.log("callActionView" + JSON.stringify(row));
+        var rows = this.state.confirms;
         
         
         for(var i=0 ; i < rows.length ;i++){
             if( rows[i].no === row.no ){
-                rows[i].confirm = true;
+                //rows[i].confirm = true;
                 //console.log(rows[i].data);
-                var url = serverUrl+"/api/requests/update/"+rows[i].data +"?confirm=true"
+                var url = serverUrl+"/api/requests/delete/"+rows[i].data 
                 axios.put(url)
                 .then(res => {
                 console.log(res);
@@ -168,30 +250,13 @@ class Request extends Component {
                 }) 
             }
         }
-        
-        var lRequest = []
         var lConfirm = this.state.confirms;
-        rows.forEach(element => {
-            console.log("element : " + JSON.stringify(element)); 
-            if (element.confirm === false ) {
-                lRequest.push(element);
-            }else{
-                lConfirm.push(element);
+        for(var i = lConfirm.length - 1; i >= 0; i--) {
+            if(lConfirm[i].no === row.no) {
+               lConfirm.splice(i, 1);
             }
-        });        
-        this.setState({requests : lRequest , confirms : lConfirm})
-    }
-
-    callActionView(method, row) {
-        // let roles = row.data.roles.map((value) => {
-        //     return value.name;
-        // })
-        // this.setState({
-        //     request: { ...this.state.request, method: method, curEmployee: row.data, roles: roles },
-        //     steps: ['Information', 'Setup Account'],
-        // })
-        // this.handleOpen();
-        console.log("callActionView" + JSON.stringify(row));
+        }
+        this.setState({confirms : lConfirm})
     }
 
     render() {
