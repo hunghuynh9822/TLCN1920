@@ -88,6 +88,12 @@ class GanttChart extends Component {
         this.loadTasks();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.index == 2) {
+            this.loadTasks();
+        }
+    }
+
     addMessage(message) {
         const maxLogLength = 5;
         const newMessate = { message };
@@ -123,12 +129,12 @@ class GanttChart extends Component {
         const { projectItem } = this.props;
         let projectId = projectItem.project.id;
         console.log("Timeline of projectId : " + projectId);
-        console.log("TASK OF PROJECT : " + JSON.stringify(this.state.data))
         if(this.state.loading) {
             return (
                 <Loading />
             )
         }
+        console.log("TASK OF PROJECT : " + JSON.stringify(this.state.data))
         return (
             <div>
                 <div className="zoom-bar">

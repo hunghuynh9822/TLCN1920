@@ -234,7 +234,7 @@ class ProjectView extends Component {
                                 <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
                                     {
                                         projectItem && (
-                                            <tab.component loadProject={this.loadProject} projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} updateProjectItem={updateProjectItem} />
+                                            <tab.component index={this.state.value} loadProject={this.loadProject} projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} updateProjectItem={updateProjectItem} />
                                         )
                                     }
                                 </TabPanel>

@@ -227,9 +227,10 @@ class ProjectTasks extends Component {
 
     openForm(task) {
         console.log("OPEN TASK : " + JSON.stringify(task))
+        let duration = task.duration == null ? 24 * 60 * 60 * 1000 : task.duration * 24 * 60 * 60 * 1000;
         this.setState({
             open: true,
-            task: task,
+            task: {...task, endAt: task.startedAt + duration},
         })
     }
 
@@ -558,7 +559,7 @@ class ProjectTasks extends Component {
                                     variant="inline"
                                     format="dd-MM-yyyy"
                                     label="End Time"
-                                    value={task.startedAt + task.duration == null ? 0 : task.duration * 24 * 60 * 60 * 1000}
+                                    value={task.endAt}
                                     onChange={this.handleDuration}
                                 />
                             </Grid>
