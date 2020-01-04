@@ -9,6 +9,6 @@ USER node
 
 COPY --chown=node:node . .
 
-RUN npm install && npm run build
+RUN npm install && npm run build && cp -R ./public/ ./dist/
 
 CMD ["npm","start"]
