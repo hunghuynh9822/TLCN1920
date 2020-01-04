@@ -198,19 +198,19 @@ services:
       - "3000:3000"
     networks:
       - pose
-  nginx:
-    build:
-      context: ./src/nginx/
-      dockerfile: Dockerfile
-    image: pose/nginx
-    container_name: nginx
-    restart: unless-stopped
-    links:
-      - client
-    ports:
-      - "80:80"
-    networks:
-      - pose
+  # nginx:
+  #   build:
+  #     context: ./src/nginx/
+  #     dockerfile: Dockerfile
+  #   image: pose/nginx
+  #   container_name: nginx
+  #   restart: unless-stopped
+  #   links:
+  #     - client
+  #   ports:
+  #     - "80:80"
+  #   networks:
+  #     - pose
 networks:
   pose:
     driver: bridge
