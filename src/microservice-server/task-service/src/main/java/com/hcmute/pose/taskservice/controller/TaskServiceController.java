@@ -4,10 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.taskservice.buz.TaskServiceBuz;
 import com.hcmute.pose.taskservice.model.Task;
 import com.hcmute.pose.taskservice.model.TaskComments;
-import com.hcmute.pose.taskservice.payload.AssigneeTasksResponse;
-import com.hcmute.pose.taskservice.payload.TaskCommentRequest;
-import com.hcmute.pose.taskservice.payload.TaskRequest;
-import com.hcmute.pose.taskservice.payload.TaskUpdateRequest;
+import com.hcmute.pose.taskservice.payload.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,16 @@ public class TaskServiceController {
             task = taskServiceBuz.createTask(taskRequest).orElseThrow(() -> new Exception("Can not create task"));
             return new ResponseEntity<>(task, HttpStatus.OK);
         }catch (Exception | TransactionException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/tasks")
+    public ResponseEntity getAllTaskByProject(@RequestParam(name="project") Long projectId){
+        try{
+            AllTasksProjectResponse response = taskServiceBuz.getAllTasksByProject(projectId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }

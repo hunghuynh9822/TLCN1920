@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface TaskServiceBuz {
     Optional<Task> createTask (TaskRequest taskRequest) throws Exception, TransactionException;
     Task getTasksById(Long taskId) throws Exception;
+    AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException;
     ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException;
     CreatorTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException;
     AssigneeTasksResponse getTasksByAssignee(Long projectId, Long assigneeId) throws SQLException;

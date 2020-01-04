@@ -54,6 +54,16 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     }
 
     @Override
+    public AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException {
+        try{
+            List<Task> tasks = taskService.getTasksByProject(projectId);
+            return new AllTasksProjectResponse(projectId, tasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
     public ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException {
         List<CreatorTasksResponse> creatorTasks = new ArrayList<>();
         try{

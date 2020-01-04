@@ -29,8 +29,17 @@ class GanttChart extends Component {
         this.state = {
             currentZoom: 'Days',
             messages: [],
+            data = {
+                data: [],
+                links: []
+            }
         }
     }
+
+    componentDidMount() {
+        
+    }
+    
 
     addMessage(message) {
         const maxLogLength = 5;
@@ -64,13 +73,9 @@ class GanttChart extends Component {
     render() {
         const { classes } = this.props;
         const { currentZoom, messages } = this.state;
-        const { projectId } = this.props;
+        const { projectItem } = this.props;
+        let projectId = projectItem.project.id;
         console.log("Timeline of projectId : " + projectId);
-        if (projectId === 'project') {
-            return (
-                <div>No project selected</div>
-            )
-        }
         return (
             <div>
                 <div className="zoom-bar">
