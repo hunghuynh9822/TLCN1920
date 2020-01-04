@@ -38,7 +38,7 @@ public class TaskServiceController {
         }
     }
 
-    @GetMapping("/tasks")
+    @GetMapping("/project")
     public ResponseEntity getAllTaskByProject(@RequestParam(name="project") Long projectId){
         try{
             AllTasksProjectResponse response = taskServiceBuz.getAllTasksByProject(projectId);
