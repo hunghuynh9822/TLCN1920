@@ -17,6 +17,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import Add from '@material-ui/icons/Add';
 import clsx from 'clsx';
 import axios from 'axios';
+import { serverUrl } from '../../action/index';
 const useStyles = makeStyles(theme => ({
   modal: {
     display: 'flex',
@@ -104,8 +105,8 @@ export default function AddStafftoProject(addPro) {
     // const employeeid = {
     //   employeeid: this.state.employeeid
     // };
- 
-    axios.post(`http://localhost:8080/promicro/create`, { title , employeeid })
+    var url = serverUrl+"/promicro/create"
+    axios.post(url, { title , employeeid })
       .then(res => {
         console.log(res);
         console.log(res.data);

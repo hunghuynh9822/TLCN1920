@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-
+import { serverUrl } from '../../action/index';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
@@ -114,8 +114,8 @@ export default function AddStafftoProject({project,listPOP}) {
       idPro : project.id,
       idListPer : listNewUesr
     }
-
-    axios.post(`http://localhost:8080/promicro/createPOP`, { idPro : project.id, idListPer : listNewUesr})
+    var url = serverUrl +"/promicro/createPOP"
+    axios.post(url, { idPro : project.id, idListPer : listNewUesr})
       .then(res => {
         console.log(res);
         console.log(res.data);
