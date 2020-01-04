@@ -5,6 +5,9 @@ import styles from "../../assets/jss/styles/views/notificationStyle";
 import { MaterialTable, PaginationTable, Notifi } from "../../components"
 import { connect } from 'react-redux';
 import axios from 'axios';
+
+import { serverUrl } from '../../action/index';
+
 const columns = [
     { id: 'no', label: 'No.', minWidth: 30 },
     { id: 'title', label: 'Title', minWidth: 200 },
@@ -44,7 +47,7 @@ class Notification extends Component {
                 isAdmin = 1;
                 // console.log("isAdmin: "+isAdmin +"name: "+ element.name);    
         });
-        var url = "http://localhost:8080/api/notify/" + currentUser.id
+        var url = serverUrl + "/api/notify/" + currentUser.id
         axios.get(url)
         .then(response =>{
             const temp = response.data;
