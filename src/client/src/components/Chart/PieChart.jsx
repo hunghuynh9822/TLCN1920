@@ -12,11 +12,11 @@ class PieChart extends Component {
     }
 
     componentDidMount(){
-        var data = [
-            { name: "Done 5", y: 25 },
-			{ name: "Doing 15", y: 75 },
-        ]
-        this.setState({data : data})
+        // var data = [
+        //     { name: "Done 5", y: 25 },
+		// 	{ name: "Doing 15", y: 75 },
+        // ]
+        // this.setState({data : data})
     }
 
 	render() {
@@ -36,7 +36,7 @@ class PieChart extends Component {
 				showInLegend: true,
 				indexLabel: "{name}: {y}",
 				yValueFormatString: "#,###'%'",
-				dataPoints: this.state.data
+				dataPoints: this.props.data
 				
 			}]
 		}

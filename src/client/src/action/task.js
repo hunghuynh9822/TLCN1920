@@ -66,6 +66,20 @@ export function getTasksOfProject(project) {
     });
 }
 
+export function getTasksWithStateOfProject(project) {
+    return request({
+        url: url + "/project/state" + "?" + "project=" + project,
+        method: 'GET',
+    });
+}
+
+export function getTasksAssigneeWithStateOfProject(project) {
+    return request({
+        url: url + "/project/assignee/state" + "?" + "project=" + project,
+        method: 'GET',
+    });
+}
+
 /*
 {
     taskId:
