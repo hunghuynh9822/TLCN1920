@@ -17,6 +17,7 @@ public interface TaskDao {
     List<Task> getTasksByAssignee(Long projectId, Long employeeId) throws SQLException;
     List<Task> getTasksByProject(Long projectId) throws SQLException;
     List<LongValue> getCreatorByProject(Long projectId) throws SQLException;
+    List<LongValue> getAssigneeByProject(Long projectId) throws SQLException;
     void updatePoint(Long taskId, Long creatorId, Integer point) throws SQLException, TransactionException;
     void updateState(Long taskId, Long employeeId, TaskState state) throws SQLException, TransactionException;
     void updateTask(Task task) throws SQLException, TransactionException;

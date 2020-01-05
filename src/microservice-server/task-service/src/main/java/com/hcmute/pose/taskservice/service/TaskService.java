@@ -15,6 +15,7 @@ public interface TaskService {
     List<Task> getTasksByAssignee(Long projectId, Long employeeId) throws SQLException;
     List<Task> getTasksByProject(Long projectId) throws SQLException;
     List<Long> getCreatorByProject(Long projectId) throws SQLException;
+    List<Long> getAsigneeByProject(Long projectId) throws SQLException;
     void updatePoint(Long taskId, Long creatorId, Integer point) throws SQLException, TransactionException;
     void updateState(Long taskId, Long employeeId, TaskState state) throws SQLException, TransactionException;
     void updateAssignee(Long taskId, Long employeeId) throws SQLException, TransactionException;

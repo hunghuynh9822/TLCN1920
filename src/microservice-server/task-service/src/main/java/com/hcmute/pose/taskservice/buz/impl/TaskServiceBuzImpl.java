@@ -88,6 +88,21 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     }
 
     @Override
+    public ProjectTasksAssigneeWithStateResponse getTasksAssigneeWithStateByProject(Long projectId) throws SQLException {
+        List<AssigneeTasksWithStateResponse> assigneeTasks = new ArrayList<>();
+        try{
+            List<Long> assignIds = taskService.getAsigneeByProject(projectId);
+            for(Long assigneeId : assignIds) {
+                List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
+                assigneeTasks.add(new AssigneeTasksWithStateResponse(assigneeId, getTasksWithState(tasks)));
+            }
+            return new ProjectTasksAssigneeWithStateResponse(projectId, assigneeTasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
     public CreatorTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException {
         try{
             List<AssigneeTasksResponse> assigneeTasks = getAssigneeTasks(projectId, creatorId);
@@ -106,6 +121,20 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 assigneeTasksResponses.add(new AssigneeTasksResponse(assigneeId, tasks));
             }
             return assigneeTasksResponses;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    private List<AssigneeTasksWithStateResponse> getAssigneeTasksWithState(Long projectId, Long creatorId) throws SQLException {
+        List<AssigneeTasksWithStateResponse> assigneeTasksWithStateResponses = new ArrayList<>();
+        try{
+            List<Long> assigneeIds = taskService.getAssigneeByCreator(projectId, creatorId);
+            for(Long assigneeId : assigneeIds) {
+                List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
+                assigneeTasksWithStateResponses.add(new AssigneeTasksWithStateResponse(assigneeId, getTasksWithState(tasks)));
+            }
+            return assigneeTasksWithStateResponses;
         } finally {
             databaseHelper.closeConnection();
         }

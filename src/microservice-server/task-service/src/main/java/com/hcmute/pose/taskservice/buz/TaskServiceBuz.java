@@ -3,7 +3,6 @@ package com.hcmute.pose.taskservice.buz;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.taskservice.model.Task;
 import com.hcmute.pose.taskservice.model.TaskComments;
-import com.hcmute.pose.taskservice.model.TaskState;
 import com.hcmute.pose.taskservice.payload.*;
 
 import java.sql.SQLException;
@@ -30,6 +29,7 @@ public interface TaskServiceBuz {
 
     TasksWithState getAllTasksWithStateByProject(Long projectId) throws SQLException;
     TasksWithState getTasksWithStateByAssignee(Long projectId, Long assigneeId) throws SQLException;
+    ProjectTasksAssigneeWithStateResponse getTasksAssigneeWithStateByProject(Long projectId) throws SQLException;
 
 }
 

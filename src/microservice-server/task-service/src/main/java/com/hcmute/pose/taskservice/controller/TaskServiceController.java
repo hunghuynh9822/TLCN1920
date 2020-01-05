@@ -48,6 +48,16 @@ public class TaskServiceController {
         }
     }
 
+    @GetMapping("/project/assignee/state")
+    public ResponseEntity getTasksWithStateByProject(@RequestParam(name="project") Long projectId){
+        try{
+            ProjectTasksAssigneeWithStateResponse response = taskServiceBuz.getTasksAssigneeWithStateByProject(projectId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/")
     public ResponseEntity getTasksByAssignee(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long assigneeId){
         try{

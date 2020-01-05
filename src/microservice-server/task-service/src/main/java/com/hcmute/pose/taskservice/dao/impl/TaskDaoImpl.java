@@ -24,6 +24,7 @@ public class TaskDaoImpl implements TaskDao {
     private static String SQl_SELECT_TASK_BY_ASSIGNEE = "SELECT * FROM tasks WHERE employee_assignee = ? AND project_id = ?";
     private static String SQl_SELECT_TASK_BY_PROJECT = "SELECT * FROM tasks WHERE project_id = ?";
     private static String SQl_SELECT_CREATOR_BY_PROJECT = "SELECT employee_creator as value FROM tasks WHERE project_id = ? GROUP BY employee_creator";
+    private static String SQl_SELECT_ASSIGNEE_BY_PROJECT = "SELECT employee_assignee as value FROM tasks WHERE project_id = ? GROUP BY employee_creator";
 
     private static String SQL_UPDATE_POINT = "UPDATE tasks SET point=?, updated_at=? WHERE id=? AND employee_creator=?";
     private static String SQL_UPDATE_STATE = "UPDATE tasks SET state=?, updated_at=? WHERE id=? AND ( employee_creator=? OR employee_assignee=? )";
@@ -112,6 +113,16 @@ public class TaskDaoImpl implements TaskDao {
             return databaseHelper.executeQueryListObject(LongValue[].class,SQl_SELECT_CREATOR_BY_PROJECT,projectId);
         } catch (SQLException e) {
             LOGGER.error("[TaskDaoImpl]:[getCreatorByProject]",e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<LongValue> getAssigneeByProject(Long projectId) throws SQLException {
+        try {
+            return databaseHelper.executeQueryListObject(LongValue[].class,SQl_SELECT_ASSIGNEE_BY_PROJECT,projectId);
+        } catch (SQLException e) {
+            LOGGER.error("[TaskDaoImpl]:[getAssigneeByProject]",e);
             throw e;
         }
     }
