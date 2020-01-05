@@ -143,10 +143,6 @@ const manageRoutes = [
             path: "",
             component: ProjectOverview,
             layout: "/lead/projects",
-            name: "OverView",
-            rtlName: "Quản lý dự án",
-            icon: FolderOpen,
-            breadcrumb: "OverView",
           },
           {
             path: "/:projectId",
@@ -154,24 +150,6 @@ const manageRoutes = [
             layout: "/lead/projects",
           }
         ]
-      },
-      {
-        path: "/:projectId/tasks",
-        name: "Tasks Management",
-        rtlName: "Quản lý Tasks",
-        icon: Assignment,
-        component: TaskManagement,
-        layout: "/lead",
-        breadcrumb: "TasksManagement"
-      },
-      {
-        path: "/:projectId/timeline",
-        name: "TimeLine",
-        rtlName: "Lịch công việc",
-        icon: TimeLine,
-        component: GanttChart,
-        layout: "/staff",
-        breadcrumb: "TimeLine"
       },
       {
         path: "/request",
@@ -212,7 +190,7 @@ const manageRoutes = [
         breadcrumb: "Dashboard"
       },
       {
-        path: "/:projectId/projects",
+        path: "/projects",
         name: "Projects",
         rtlName: "Quản lý dự án",
         icon: FolderOpen,
@@ -222,31 +200,14 @@ const manageRoutes = [
         routes: [{
             path: "",
             component: ProjectOverview,
-            layout: "/admin/projects",
+            layout: "/staff/projects",
           },
           {
-            path: "/:idProject",
+            path: "/:projectId",
             component: ProjectView,
-            layout: "/admin/projects",
+            layout: "/staff/projects",
           }
         ]
-      },
-      {
-        path: "/:projectId/tasks",
-        name: "Tasks Management",
-        rtlName: "Quản lý Tasks",
-        icon: Assignment,
-        component: TaskManagement,
-        layout: "/staff",
-        breadcrumb: "TasksManagement"
-      }, {
-        path: "/:projectId/timeline",
-        name: "TimeLine",
-        rtlName: "Lịch công việc",
-        icon: TimeLine,
-        component: GanttChart,
-        layout: "/staff",
-        breadcrumb: "TimeLine"
       }, {
         path: "/request",
         name: "Request",
