@@ -44,8 +44,38 @@ class PieBarChart extends Component {
 		super();
 		this.options = {};
 		this.visitorsChartDrilldownHandler = this.visitorsChartDrilldownHandler.bind(this);
+		this.state = {
+			dataPie : [],
+			dataDone : [],
+			dataDoing: []
+        }
 	}
-	
+	componentDidMount(){
+		var dataPie = [
+			{ y: 25, name: "Done", color: "#E7823A" },
+			{ y: 75, name: "Doing", color: "#546BC1" }
+		]
+
+		var dataDone = [
+			{ x: Liem, y: 37000 },
+			{ x: Hung, y: 39960 },
+			{ x: Dieu, y: 41160 },
+			{ x: Taan, y: 42240 },
+		]
+
+		var dataDoing = [
+			{ x: Liem, y: 37000 },
+			{ x: Hung, y: 39960 },
+			{ x: Dieu, y: 41160 },
+			{ x: Taan, y: 42240 },
+		]
+		this.setState ({
+			dataPie : dataPie,
+			dataDone : dataDone,
+			dataDoing : dataDoing
+		})
+
+	}
 	visitorsChartDrilldownHandler(e) {
 		var chart = this.chart;
 		chart.options = visitorsDrilldownedChartOptions;
@@ -57,59 +87,30 @@ class PieBarChart extends Component {
 	
 	render() {	
 		this.options = {
-			"New vs Returning Visitors": [{
+			"Tasks": [{
 				click: this.visitorsChartDrilldownHandler,
 				cursor: "pointer",
 				explodeOnClick: false,
 				innerRadius: "75%",
 				legendMarkerType: "square",
-				name: "New vs Returning Visitors",
+				name: "Tasks",
 				radius: "100%",
 				showInLegend: true,
 				startAngle: 90,
 				type: "doughnut",
-				dataPoints: [
-					{ y: 522460, name: "New Visitors", color: "#E7823A" },
-					{ y: 307040, name: "Returning Visitors", color: "#546BC1" }
-				]
+				dataPoints: this.state.dataPie
 			}],
-			"New Visitors": [{
+			"Done": [{
 				color: "#E7823A",
-				name: "New Visitors",
+				name: "Done",
 				type: "column",
-				dataPoints: [
-					{ x: new Date("1 Jan 2017"), y: 37000 },
-					{ x: new Date("1 Feb 2017"), y: 39960 },
-					{ x: new Date("1 Mar 2017"), y: 41160 },
-					{ x: new Date("1 Apr 2017"), y: 42240 },
-					{ x: new Date("1 May 2017"), y: 42200 },
-					{ x: new Date("1 Jun 2017"), y: 43600 },
-					{ x: new Date("1 Jul 2017"), y: 45560 },
-					{ x: new Date("1 Aug 2017"), y: 47280 },
-					{ x: new Date("1 Sep 2017"), y: 48800 },
-					{ x: new Date("1 Oct 2017"), y: 52720 },
-					{ x: new Date("1 Nov 2017"), y: 56840 },
-					{ x: new Date("1 Dec 2017"), y: 58400 }
-				]
+				dataPoints: this.state.dataDone
 			}],
-			"Returning Visitors": [{
+			"Doing": [{
 				color: "#546BC1",
-				name: "Returning Visitors",
+				name: "Doing",
 				type: "column",
-				dataPoints: [
-					{ x: new Date("1 Jan 2017"), y: 19000 },
-					{ x: new Date("1 Feb 2017"), y: 21040 },
-					{ x: new Date("1 Mar 2017"), y: 21840 },
-					{ x: new Date("1 Apr 2017"), y: 22760 },
-					{ x: new Date("1 May 2017"), y: 24800 },
-					{ x: new Date("1 Jun 2017"), y: 24400 },
-					{ x: new Date("1 Jul 2017"), y: 25440 },
-					{ x: new Date("1 Aug 2017"), y: 27720 },
-					{ x: new Date("1 Sep 2017"), y: 27200 },
-					{ x: new Date("1 Oct 2017"), y: 29280 },
-					{ x: new Date("1 Nov 2017"), y: 31160 },
-					{ x: new Date("1 Dec 2017"), y: 32400 }
-				]
+				dataPoints:this.state.dataDoing
 			}]
 		}
 		const buttonStyle={
@@ -139,13 +140,13 @@ class PieBarChart extends Component {
 		var chart = this.chart;
 		var options = this.options
 			chart.options = newVSReturningVisitorsOptions;
-			chart.options.data = options["New vs Returning Visitors"];
+			chart.options.data = options["Tasks"];
 			chart.render();
 		
 		$("#backButton").click(function() { 
 			$(this).toggleClass("invisible");
 			chart.options = newVSReturningVisitorsOptions;
-			chart.options.data = options["New vs Returning Visitors"];
+			chart.options.data = options["Tasks"];
 			chart.render();
 		});
 	}
