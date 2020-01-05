@@ -12,7 +12,7 @@
  Target Server Version : 100011
  File Encoding         : 65001
 
- Date: 01/01/2020 11:45:17
+ Date: 06/01/2020 01:46:30
 */
 
 
@@ -30,6 +30,6 @@ CREATE TABLE "public"."genuid" (
 -- ----------------------------
 -- Records of genuid
 -- ----------------------------
-INSERT INTO "public"."genuid" VALUES (1, 5, 5);
-INSERT INTO "public"."genuid" VALUES (3, 5, 15);
-INSERT INTO "public"."genuid" VALUES (2, 7, 137);
+INSERT INTO "public"."genuid" VALUES (1, 9, 9);
+INSERT INTO "public"."genuid" VALUES (3, 7, 17);
+INSERT INTO "public"."genuid" VALUES (2, 4, 194);

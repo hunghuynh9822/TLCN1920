@@ -12,7 +12,7 @@
  Target Server Version : 100011
  File Encoding         : 65001
 
- Date: 01/01/2020 11:46:33
+ Date: 06/01/2020 01:47:34
 */
 
 
@@ -39,4 +39,4 @@ ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "taskcomments_pkey" PRIMARY K
 -- Foreign Keys structure for table taskcomments
 -- ----------------------------
 ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "comment_of_employee" FOREIGN KEY ("employee_id") REFERENCES "public"."users" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
-ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "comment_of_task" FOREIGN KEY ("task_id") REFERENCES "public"."tasks" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."taskcomments" ADD CONSTRAINT "comment_of_task" FOREIGN KEY ("task_id") REFERENCES "public"."tasks" ("id") ON DELETE CASCADE ON UPDATE CASCADE;

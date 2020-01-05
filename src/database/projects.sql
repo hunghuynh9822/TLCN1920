@@ -12,7 +12,7 @@
  Target Server Version : 100011
  File Encoding         : 65001
 
- Date: 01/01/2020 11:46:02
+ Date: 06/01/2020 01:47:07
 */
 
 
@@ -35,6 +35,8 @@ CREATE TABLE "public"."projects" (
 -- ----------------------------
 INSERT INTO "public"."projects" VALUES (15776774274194, 'Website thương mại điện tử', 'Xây dựng website thương mại điện tử với Reactjs', 0, 1577677427419, 1577677427419);
 INSERT INTO "public"."projects" VALUES (15776775042945, 'Website bán điện thoại', 'Xây dựng website như thế giới di động', 0, 1577677504295, 1577677504295);
+INSERT INTO "public"."projects" VALUES (15782413529296, 'Website bán quần áo', 'Bán quần áo chuyên về đồ nam', 0, 1578241352980, 1578241352980);
+INSERT INTO "public"."projects" VALUES (15782413529787, 'Website bán quần áo', 'Bán quần áo chuyên về đồ nam', 0, 1578241352980, 1578241352980);
 
 -- ----------------------------
 -- Primary Key structure for table projects
