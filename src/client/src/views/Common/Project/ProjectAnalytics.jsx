@@ -19,6 +19,8 @@ class ProjectAnalytics extends Component {
         this.state = {
             loadingStateChart: false,
             dataTaskState: [],
+            loadingBarChart: false,
+            dataBarChart: [],
         }
         this.loadData = this.loadData.bind(this);
         this.findEmployee = this.findEmployee.bind(this);
@@ -45,7 +47,8 @@ class ProjectAnalytics extends Component {
 
     loadData() {
         this.setState({
-            loadingStateChart: true
+            loadingStateChart: true,
+            loadingBarChart: true
         })
         const { alert } = this.props;
         const { projectItem } = this.props;
@@ -75,7 +78,7 @@ class ProjectAnalytics extends Component {
                 this.setState({
                     loadingStateChart: false,
                     dataTaskState: dataState,
-        
+
                 })
             }).catch(error => {
                 console.log(error);
@@ -85,31 +88,57 @@ class ProjectAnalytics extends Component {
                     loadingStateChart: false,
                 })
             });
+        var dataBarChart = [];
 
         getTasksAssigneeWithStateOfProject(projectId)
             .then(response => {
                 console.log(response);
-                // let tasksState = response.tasks;
-                // let totalTasks = 0;
-                // TASK_STATE.forEach((state) => {
-                //     if (tasksState[state]) {
-                //         totalTasks += tasksState[state].length;
-                //     }
-                // })
-                // TASK_STATE.forEach((state) => {
-                //     if (tasksState[state]) {
-                //         let percent = (tasksState[state].length / totalTasks) * 100;
-                //         dataState.push({ name: state, y: percent });
-                //     }
-                // })
-                // console.log("DATA STATE : " + JSON.stringify(dataState))
+                let paserData = [];
+                let assignTasks = response.assignTasks;
+                assignTasks.forEach((assignee) => {
+                    let name = this.findEmployee(assignee.assigneeId);
+                    let assigneeState = {};
+                    let tasks = assignee.tasks.tasks;
+                    console.log("TASK : " + JSON.stringify(tasks));
+                    let totalTasks = 0;
+                    TASK_STATE.forEach((state) => {
+                        if (tasks[state]) {
+                            totalTasks += tasks[state].length;
+                        }
+                    })
+                    TASK_STATE.forEach((state) => {
+                        if (tasks[state]) {
+                            let percent = (tasks[state].length / totalTasks) * 100;
+                            assigneeState[state] = percent;
+                        } else {
+                            // assigneeState[state] = 0;
+                        }
+                    })
+                    paserData.push({ employee: name, assigneeState: assigneeState })
+                })
+                console.log("PASER DATA " + JSON.stringify(paserData))
+
+                TASK_STATE.forEach((state) => {
+                    let dataPercent = [];
+                    paserData.forEach((assignee) => {
+                        dataPercent.push({ label: assignee.employee, y: assignee.assigneeState[state] })
+                    })
+                    dataBarChart.push({ name: state, data: dataPercent })
+                })
+                console.log("DATA BAR CHART" + JSON.stringify(dataBarChart))
+                this.setState({
+                    loadingBarChart: false,
+                    dataBarChart: dataBarChart,
+
+                })
             }).catch(error => {
                 console.log(error);
                 //(error && error.message) || 
                 alert.error('Oops! Something went wrong. Please try again!');
+                this.setState({
+                    loadingBarChart: false,
+                })
             });
-
-        
     }
 
     componentDidMount() {
@@ -124,7 +153,9 @@ class ProjectAnalytics extends Component {
                 {
                     this.state.loadingStateChart ? <Loading /> : <PieChart data={this.state.dataTaskState} />
                 }
-                <BarChartNgang />
+                {
+                    this.state.loadingBarChart ? <Loading /> : <BarChartNgang dataInput={this.state.dataBarChart} />
+                }
                 {/* <PieBarChart /> */}
             </React.Fragment>
         );
