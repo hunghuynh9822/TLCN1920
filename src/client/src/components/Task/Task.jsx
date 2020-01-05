@@ -35,6 +35,11 @@ const styles = theme => ({
     "fa": { "fontSize": "10px" },
     "root": {
         "padding": "10px"
+    },
+    title: {
+        fontSize: '15px',
+        minWidth: '130px',
+        width: '200px'
     }
 });
 const grid = 8;
@@ -99,7 +104,7 @@ class Task extends Component {
                             false, {}
                         )}
                     >
-                        <div>
+                        <div className={classes.title}>
                             {task.title}
                         </div>
                         <div>
@@ -108,10 +113,10 @@ class Task extends Component {
                                 value={task.point}
                                 getLabelText={getLabelText}
                                 precision={0.5}
-                                icon={<FiberManualRecordIcon fontSize="small" />}
+                                icon={<FiberManualRecordIcon fontSize="small" style={{ fontSize: 15 }} />}
                                 readOnly
                             />
-                            {task.state}
+                            {/* {task.state} */}
                         </div>
                     </div>
                 </div>
@@ -134,7 +139,7 @@ class Task extends Component {
                                     provided.draggableProps.style
                                 )}
                             >
-                                <div>
+                                <div className={classes.title}>
                                     {task.title}
                                 </div>
                                 <div>
@@ -143,10 +148,10 @@ class Task extends Component {
                                         value={task.point}
                                         getLabelText={getLabelText}
                                         precision={0.5}
-                                        icon={<FiberManualRecordIcon fontSize="small" />}
+                                        icon={<FiberManualRecordIcon fontSize="small" style={{ fontSize: 15 }} />}
                                         readOnly
                                     />
-                                    {task.state}
+                                    {/* {task.state} */}
                                 </div>
                             </div>
                         ))}
