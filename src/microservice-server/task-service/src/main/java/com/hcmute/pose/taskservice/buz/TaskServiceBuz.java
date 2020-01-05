@@ -27,6 +27,10 @@ public interface TaskServiceBuz {
     Optional<TaskComments> createTaskComment(TaskCommentRequest taskCommentRequest);
     List<TaskComments> getListTaskComment(Long taskId) throws SQLException;
     void updateTaskComment(TaskCommentRequest request) throws SQLException, TransactionException;
+
+    TasksWithState getAllTasksWithStateByProject(Long projectId) throws SQLException;
+    TasksWithState getTasksWithStateByAssignee(Long projectId, Long assigneeId) throws SQLException;
+
 }
 
 
