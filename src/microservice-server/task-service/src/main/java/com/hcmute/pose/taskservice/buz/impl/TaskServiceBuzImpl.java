@@ -15,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class TaskServiceBuzImpl implements TaskServiceBuz {
     private static Logger LOGGER = LoggerFactory.getLogger(TaskServiceBuzImpl.class);
@@ -58,6 +57,16 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         try{
             List<Task> tasks = taskService.getTasksByProject(projectId);
             return new AllTasksProjectResponse(projectId, tasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public TasksWithState getAllTasksWithStateByProject(Long projectId) throws SQLException {
+        try{
+            List<Task> tasks = taskService.getTasksByProject(projectId);
+            return getTasksWithState(tasks);
         } finally {
             databaseHelper.closeConnection();
         }
@@ -110,6 +119,31 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         } finally {
             databaseHelper.closeConnection();
         }
+    }
+
+    @Override
+    public TasksWithState getTasksWithStateByAssignee(Long projectId, Long assigneeId) throws SQLException {
+        try{
+            List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
+            return getTasksWithState(tasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    private TasksWithState getTasksWithState(List<Task> tasks) {
+        Map<TaskState, List<Task>> tasksWithState = new HashMap<>();
+        for (Task task: tasks
+        ) {
+            if(tasksWithState.containsKey(task.getState())) {
+                tasksWithState.get(task.getState()).add(task);
+            } else {
+                List<Task> tasksState = new ArrayList<>();
+                tasksState.add(task);
+                tasksWithState.put(task.getState(), tasksState);
+            }
+        }
+        return new TasksWithState(tasksWithState);
     }
 
     @Override
