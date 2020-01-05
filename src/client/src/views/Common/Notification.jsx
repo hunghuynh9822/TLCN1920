@@ -63,11 +63,13 @@ class Notification extends Component {
                 // var hour = a.getHours();
                 // var muti = a.getMinutes();
                 // var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
-                var time = this.unixTime(element.create_time)
+                //var time = this.unixTime(element.create_time)
+                var datestart = new Date(element.create_time);
+                datestart = datestart.getDate() +"/"+(datestart.getMonth() + 1) + "/" + datestart.getFullYear(); 
                 if(element.view == false){
-                    rows.push(this.createData(no , element.content ,element.create_name, time, element.id)) ;
+                    rows.push(this.createData(no , element.content ,element.create_name, datestart, element.id)) ;
                 }else{
-                    rows.push(this.createDataDelete(no , element.content ,element.create_name, time, element.id)) ;
+                    rows.push(this.createDataDelete(no , element.content ,element.create_name, datestart, element.id)) ;
                 }
             })
             
@@ -114,10 +116,12 @@ class Notification extends Component {
             // var hour = a.getHours();
             // var muti = a.getMinutes();
             // var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
-            var time = this.unixTime(res.data.create_time);
+            //var time = this.unixTime(res.data.create_time);
+            var datestart = new Date(res.data.create_time);
+                datestart = datestart.getDate() +"/"+(datestart.getMonth() + 1) + "/" + datestart.getFullYear(); 
             var id = res.data.receive_id
             if (currentUser.id === id){
-                temp.push(this.createData(no , res.data.content ,res.data.create_name, time , id)) ;
+                temp.push(this.createData(no , res.data.content ,res.data.create_name, datestart , id)) ;
                 this.setState({ rows : temp });
             }
             

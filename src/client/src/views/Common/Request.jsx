@@ -232,31 +232,40 @@ class Request extends Component {
     }
 
     callActionDelete(method, row) {
-        console.log("callActionView" + JSON.stringify(row));
-        var rows = this.state.confirms;
-        
-        
-        for(var i=0 ; i < rows.length ;i++){
-            if( rows[i].no === row.no ){
-                //rows[i].confirm = true;
-                //console.log(rows[i].data);
-                var url = serverUrl+"/api/requests/delete/"+rows[i].data 
-                axios.put(url)
-                .then(res => {
-                console.log(res);
-                console.log(res.data);
-                }).catch(err=>{ 
-                    console.log(err);
-                }) 
+        const {currentUser} = this.props;
+        var isAdmin = 0;
+        currentUser.roles.forEach(element => {
+            if(element.id === 1)
+                isAdmin = 1;
+                // console.log("isAdmin: "+isAdmin +"name: "+ element.name);    
+        });
+        if(isAdmin == 1){
+            console.log("callActionView" + JSON.stringify(row));
+            var rows = this.state.confirms;
+            
+            
+            for(var i=0 ; i < rows.length ;i++){
+                if( rows[i].no === row.no ){
+                    //rows[i].confirm = true;
+                    //console.log(rows[i].data);
+                    var url = serverUrl+"/api/requests/delete/"+rows[i].data 
+                    axios.put(url)
+                    .then(res => {
+                    console.log(res);
+                    console.log(res.data);
+                    }).catch(err=>{ 
+                        console.log(err);
+                    }) 
+                }
             }
-        }
-        var lConfirm = this.state.confirms;
-        for(var i = lConfirm.length - 1; i >= 0; i--) {
-            if(lConfirm[i].no === row.no) {
-               lConfirm.splice(i, 1);
+            var lConfirm = this.state.confirms;
+            for(var i = lConfirm.length - 1; i >= 0; i--) {
+                if(lConfirm[i].no === row.no) {
+                lConfirm.splice(i, 1);
+                }
             }
+            this.setState({confirms : lConfirm})
         }
-        this.setState({confirms : lConfirm})
     }
 
     render() {
