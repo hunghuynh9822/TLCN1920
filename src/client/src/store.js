@@ -1,8 +1,8 @@
 import { createStore, combineReducers } from 'redux';
-import { layout, auth, project } from './reducers';
+import { layout, auth, project, tasks } from './reducers';
 
 const reducers = combineReducers({
-  layout, auth, project
+  layout, auth, project, tasks
 });
 
 const store = createStore(reducers);

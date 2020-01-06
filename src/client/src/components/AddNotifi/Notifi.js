@@ -87,7 +87,7 @@ export default function Notifi({addNot}) {
   return (
     <div>
       <Button variant="contained" color="primary"  onClick={handleOpen} className={classes.button}>
-        Thong Bao
+        Add Notify
       </Button>
       <Modal
         aria-labelledby="spring-modal-title"
@@ -104,12 +104,12 @@ export default function Notifi({addNot}) {
         <Fade in={open}>
         <form onSubmit={handleSubmit}>
           <div className={classes.paper}>
-            <h2 id="spring-modal-title" className={classes.title}>Thong bao</h2>
+            <h2 id="spring-modal-title" className={classes.title}>Add Notify</h2>
             <div>          
-            <FormControl>
+            {/* <FormControl>
             <InputLabel htmlFor="my-input">Title</InputLabel>
             <Input id="my-input" aria-describedby="my-helper-text" onChange={handleTitle}/>
-            </FormControl>
+            </FormControl> */}
             </div>
             <div>
             <FormControl>

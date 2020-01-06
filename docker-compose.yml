@@ -183,21 +183,21 @@ services:
       - "8005:8005"
     networks:
       - pose
-  # client:
-  #   build:
-  #     context: ./src/client/
-  #     dockerfile: Dockerfile
-  #   image: pose/client-reactjs
-  #   container_name: client-reactjs
-  #   restart: unless-stopped
-  #   links:
-  #     - gateway
-  #   depends_on: 
-  #     - gateway
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - pose
+  client:
+    build:
+      context: ./src/client/
+      dockerfile: Dockerfile
+    image: pose/client-reactjs
+    container_name: client-reactjs
+    restart: unless-stopped
+    # links:
+    #   - gateway
+    # depends_on: 
+      # - gateway
+    ports:
+      - "3000:3000"
+    networks:
+      - pose
   # nginx:
   #   build:
   #     context: ./src/nginx/

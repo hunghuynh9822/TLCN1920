@@ -114,7 +114,7 @@ class ProjectDetails extends Component {
 
     removeMember(member) {
         const { alert } = this.props;
-        const { projectItem, freeEmployees, updateFreeEmployee } = this.props;
+        const { projectItem, freeEmployees, updateFreeEmployee, loadProject } = this.props;
         let projectId = projectItem.project.id;
         let role = member.role;
         let removeRequest = {
@@ -136,6 +136,7 @@ class ProjectDetails extends Component {
                     let newMember = { ...member, role: '' };
                     freeEmployees.push(newMember);
                     updateFreeEmployee(freeEmployees);
+                    loadProject();
                 } else if (role === 'MEMBER') {
                     this.setState(prevState => {
                         let projectMembers = [...prevState.projectMembers];
@@ -147,6 +148,7 @@ class ProjectDetails extends Component {
                     let newMember = { ...member, role: '' };
                     freeEmployees.push(newMember)
                     updateFreeEmployee(freeEmployees);
+                    loadProject();
                 }
             }).catch(error => {
                 console.log(error);
@@ -170,7 +172,7 @@ class ProjectDetails extends Component {
 
     handleListItemClick(member, role) {
         const { alert } = this.props;
-        const { updateFreeEmployee, freeEmployees, projectItem } = this.props;
+        const { updateFreeEmployee, freeEmployees, projectItem, loadProject } = this.props;
         let projectId = projectItem.project.id;
         if (role === 'ADMIN') {
             let inviteRequest = {
@@ -191,6 +193,7 @@ class ProjectDetails extends Component {
                     updateFreeEmployee(freeEmployees.filter(free => {
                         return free.id !== member.id;
                     }));
+                    loadProject();
                 }).catch(error => {
                     console.log(error);
                     alert.error('Oops! Something went wrong. Please try again!');
@@ -213,6 +216,7 @@ class ProjectDetails extends Component {
                     updateFreeEmployee(freeEmployees.filter(free => {
                         return free.id !== member.id;
                     }));
+                    loadProject();
                 }).catch(error => {
                     console.log(error);
                     alert.error('Oops! Something went wrong. Please try again!');
@@ -247,7 +251,7 @@ class ProjectDetails extends Component {
                                 <div className={classes.title_name}>{project.title}</div>
                                 <div className={classes.title_details}>
                                     <span>Created by </span>
-                                    <span className={classes.highlight}>{this.getName(projectOwner)}</span>
+                                    <span className={classes.highlight}>{projectOwner ? this.getName(projectOwner) : ""}</span>
                                 </div>
                             </div>
                             <div className={classes.divider} />
@@ -259,8 +263,8 @@ class ProjectDetails extends Component {
                             </div>
                             <div className={classes.divider} />
                             <Grid item container className={classes.paraph}>
-                                <Grid item xs={6}>Hello Project Details</Grid>
-                                <Grid item xs={6}>Hello Project Details</Grid>
+                                <Grid item xs={6}>Mục tiêu</Grid>
+                                <Grid item xs={6}>Xây dựng ứng dụng bán hàng qua mạng, tiệu dụng</Grid>
                             </Grid>
                             <div className={classes.divider} />
                         </Paper>
@@ -326,7 +330,7 @@ class ProjectDetails extends Component {
                                         )
                                     }
                                 </ListItemAvatar>
-                                <ListItemText primary={member.email} />
+                                <ListItemText primary={this.getName(member)} />
                             </ListItem>
                         )) : (
                                 <ListItemText primary="No employee" />
@@ -342,5 +346,6 @@ ProjectDetails.propTypes = {
     projectItem: PropTypes.object.isRequired,
     freeEmployees: PropTypes.array.isRequired,
     updateFreeEmployee: PropTypes.func.isRequired,
+    loadProject: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(withAlert()(ProjectDetails));

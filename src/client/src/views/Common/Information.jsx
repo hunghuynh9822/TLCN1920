@@ -4,7 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 
 import styles from '../../assets/jss/styles/views/infomationStyle'
-import { InformationForm, Avartar } from '../../components'
+import Avatar from 'react-avatar';
+import { InformationForm } from '../../components'
 
 import { updateUser } from '../../action/auth'
 
@@ -44,7 +45,13 @@ class Information extends Component {
                         <Typography className={classes.title} variant="h5" component="h2">
                             Information Staff
                         </Typography>
-                        <Avartar />
+                        <div style={{textAlign: 'center'}}>
+                            {curEmployee.imageUrl ? (
+                                <Avatar src={curEmployee.imageUrl} round="25px" size="50" />
+                            ) : (
+                                    <Avatar name={curEmployee.lastName + " " + curEmployee.firstName} round="25px" size="50" />
+                                )}
+                        </div>
                         <InformationForm curEmployee={curEmployee} handleUpdate={this.handleUpdate} />
                     </CardContent>
                 </Card>

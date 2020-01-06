@@ -8,11 +8,19 @@ const styles = theme => ({
 });
 const data = {
     data: [
-        { id: 1, text: 'Task #1', start_date: '2019/04/15', duration: 3, progress: 0.6 },
-        { id: 2, text: 'Task #2', start_date: '2019/04/18', duration: 3, progress: 0.4 }
+        { id: 1, text: 'Task #1', start_date: '2020/01/15', duration: 3, progress: 0.6 },
+        { id: 2, text: 'Task #2', start_date: '2020/01/18', duration: 3, progress: 0.0 },
+        { id: 3, text: 'Task #3', start_date: '2020/01/15', duration: 5, progress: 0.4 },
+        { id: 4, text: 'Task #4', start_date: '2020/01/20', duration: 3, progress: 0.0 },
+        { id: 5, text: 'Task #5', start_date: '2020/01/17', duration: 2, progress: 0.5 },
+        { id: 6, text: 'Task #6', start_date: '2020/01/19', duration: 3, progress: 0.0 },
+        { id: 7, text: 'Task #7', start_date: '2020/01/22', duration: 5, progress: 0.0 }
     ],
     links: [
-        { id: 1, source: 1, target: 2, type: '0' }
+        { id: 1, source: 1, target: 2, type: '0' },
+        { id: 2, source: 3, target: 4, type: '0' },
+        { id: 3, source: 5, target: 6, type: '0' },
+        { id: 4, source: 6, target: 7, type: '0' }
     ]
 };
 class GanttChart extends Component {

@@ -15,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class TaskServiceBuzImpl implements TaskServiceBuz {
     private static Logger LOGGER = LoggerFactory.getLogger(TaskServiceBuzImpl.class);
@@ -54,6 +53,26 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     }
 
     @Override
+    public AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException {
+        try{
+            List<Task> tasks = taskService.getTasksByProject(projectId);
+            return new AllTasksProjectResponse(projectId, tasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public TasksWithState getAllTasksWithStateByProject(Long projectId) throws SQLException {
+        try{
+            List<Task> tasks = taskService.getTasksByProject(projectId);
+            return getTasksWithState(tasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
     public ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException {
         List<CreatorTasksResponse> creatorTasks = new ArrayList<>();
         try{
@@ -63,6 +82,21 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 creatorTasks.add(new CreatorTasksResponse(creatorId, assigneeTasks));
             }
             return new ProjectTasksResponse(projectId, creatorTasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ProjectTasksAssigneeWithStateResponse getTasksAssigneeWithStateByProject(Long projectId) throws SQLException {
+        List<AssigneeTasksWithStateResponse> assigneeTasks = new ArrayList<>();
+        try{
+            List<Long> assignIds = taskService.getAsigneeByProject(projectId);
+            for(Long assigneeId : assignIds) {
+                List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
+                assigneeTasks.add(new AssigneeTasksWithStateResponse(assigneeId, getTasksWithState(tasks)));
+            }
+            return new ProjectTasksAssigneeWithStateResponse(projectId, assigneeTasks);
         } finally {
             databaseHelper.closeConnection();
         }
@@ -92,6 +126,20 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         }
     }
 
+    private List<AssigneeTasksWithStateResponse> getAssigneeTasksWithState(Long projectId, Long creatorId) throws SQLException {
+        List<AssigneeTasksWithStateResponse> assigneeTasksWithStateResponses = new ArrayList<>();
+        try{
+            List<Long> assigneeIds = taskService.getAssigneeByCreator(projectId, creatorId);
+            for(Long assigneeId : assigneeIds) {
+                List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
+                assigneeTasksWithStateResponses.add(new AssigneeTasksWithStateResponse(assigneeId, getTasksWithState(tasks)));
+            }
+            return assigneeTasksWithStateResponses;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
     @Override
     public AssigneeTasksResponse getTasksByAssignee(Long projectId, Long assigneeId) throws SQLException {
         try{
@@ -100,6 +148,31 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         } finally {
             databaseHelper.closeConnection();
         }
+    }
+
+    @Override
+    public TasksWithState getTasksWithStateByAssignee(Long projectId, Long assigneeId) throws SQLException {
+        try{
+            List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
+            return getTasksWithState(tasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    private TasksWithState getTasksWithState(List<Task> tasks) {
+        Map<TaskState, List<Task>> tasksWithState = new HashMap<>();
+        for (Task task: tasks
+        ) {
+            if(tasksWithState.containsKey(task.getState())) {
+                tasksWithState.get(task.getState()).add(task);
+            } else {
+                List<Task> tasksState = new ArrayList<>();
+                tasksState.add(task);
+                tasksWithState.put(task.getState(), tasksState);
+            }
+        }
+        return new TasksWithState(tasksWithState);
     }
 
     @Override

@@ -3,16 +3,16 @@
 
  Source Server         : TLCN_SERVER
  Source Server Type    : PostgreSQL
- Source Server Version : 100010
+ Source Server Version : 100011
  Source Host           : 192.168.200.1:5432
  Source Catalog        : postgres
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 100010
+ Target Server Version : 100011
  File Encoding         : 65001
 
- Date: 05/12/2019 20:00:24
+ Date: 06/01/2020 01:47:15
 */
 
 
@@ -35,12 +35,19 @@ CREATE TABLE "public"."requests" (
 -- ----------------------------
 -- Records of requests
 -- ----------------------------
-INSERT INTO "public"."requests" VALUES (15752142668940, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575214255103, 1575300600000, 'Di hoc', 't');
-INSERT INTO "public"."requests" VALUES (15752142925351, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1577460660000, 1577547060000, 'Di ban nha', 'f');
-INSERT INTO "public"."requests" VALUES (15752541704051, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575254100000, 1575340500000, 'Đi học ', 't');
-INSERT INTO "public"."requests" VALUES (15752542004592, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575254188067, 1575254188067, 'Đi làm', 'f');
+INSERT INTO "public"."requests" VALUES (15781546165702, 15714589149401, 'Huỳnh Lê Hữu Hưng', 'Management', 1579277760000, 1579364160000, 'Có việc riêng', 'f');
+INSERT INTO "public"."requests" VALUES (15781546341123, 15714589149401, 'Huỳnh Lê Hữu Hưng', 'Management', 1579277760000, 1578241020000, 'Đi khám bệnh', 't');
+INSERT INTO "public"."requests" VALUES (15782412682294, 15782398324826, 'Pham Ngoc Dieu', 'Staff', 1578241235742, 1578327600000, 'Vào ngân hàng làm thủ tục', 'f');
+INSERT INTO "public"."requests" VALUES (15782425877254, 15782405203918, 'Phan Thị  Thùy  Dương', 'Staff', 1575218520000, 1575304920000, 'Về quê có việc gấp', 'f');
+INSERT INTO "public"."requests" VALUES (15782410853822, 15782405203918, 'Phan Thị  Thùy  Dương', 'Staff', 1576599420000, 1576685820000, 'Đi họp phụ huynh cho con', 't');
+INSERT INTO "public"."requests" VALUES (15782409956701, 15751881480165, 'Thai Thanh  Liem', 'Team Leader', 1575994560000, 1576080960000, 'Bị đau mắt', 't');
 
 -- ----------------------------
 -- Primary Key structure for table requests
 -- ----------------------------
 ALTER TABLE "public"."requests" ADD CONSTRAINT "requests_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table requests
+-- ----------------------------
+ALTER TABLE "public"."requests" ADD CONSTRAINT "request_of" FOREIGN KEY ("employeeid") REFERENCES "public"."users" ("id") ON DELETE SET NULL ON UPDATE CASCADE;

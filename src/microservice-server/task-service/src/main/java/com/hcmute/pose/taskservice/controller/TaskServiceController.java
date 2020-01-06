@@ -4,10 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.taskservice.buz.TaskServiceBuz;
 import com.hcmute.pose.taskservice.model.Task;
 import com.hcmute.pose.taskservice.model.TaskComments;
-import com.hcmute.pose.taskservice.payload.AssigneeTasksResponse;
-import com.hcmute.pose.taskservice.payload.TaskCommentRequest;
-import com.hcmute.pose.taskservice.payload.TaskRequest;
-import com.hcmute.pose.taskservice.payload.TaskUpdateRequest;
+import com.hcmute.pose.taskservice.payload.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +38,50 @@ public class TaskServiceController {
         }
     }
 
+    @GetMapping("/project")
+    public ResponseEntity getAllTaskByProject(@RequestParam(name="project") Long projectId){
+        try{
+            AllTasksProjectResponse response = taskServiceBuz.getAllTasksByProject(projectId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/project/assignee/state")
+    public ResponseEntity getTasksWithStateByProject(@RequestParam(name="project") Long projectId){
+        try{
+            ProjectTasksAssigneeWithStateResponse response = taskServiceBuz.getTasksAssigneeWithStateByProject(projectId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/")
-    public ResponseEntity getTaskByProject(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long assigneeId){
+    public ResponseEntity getTasksByAssignee(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long assigneeId){
         try{
             AssigneeTasksResponse response = taskServiceBuz.getTasksByAssignee(projectId, assigneeId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/project/state")
+    public ResponseEntity getAllTaskWithStateByProject(@RequestParam(name="project") Long projectId){
+        try{
+            TasksWithState response = taskServiceBuz.getAllTasksWithStateByProject(projectId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/state")
+    public ResponseEntity getTasksWithStateByAssignee(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long assigneeId){
+        try{
+            TasksWithState response = taskServiceBuz.getTasksWithStateByAssignee(projectId, assigneeId);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);

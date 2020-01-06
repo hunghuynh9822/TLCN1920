@@ -7,8 +7,17 @@ const superUrl = '/api/admin/tasks';
 const leadUrl = '/api/lead/tasks';
 
 export const TASK_STATE = [
-    'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'DONE'
+    'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'DONE', 'FINISH'
 ]
+
+export const UPDATE_CREATOR_TASKS = 'UPDATE_CREATOR_TASKS';
+
+export function updateCreatorTasks(creatorTasks) {
+    return {
+        type: UPDATE_CREATOR_TASKS,
+        creatorTasks
+    };
+}
 
 /* 
 {
@@ -46,6 +55,27 @@ export function getTasksByEmployee(project, employee) {
 export function getTasksCreatedByLead(project, employee) {
     return request({
         url: leadUrl + "/" + "?" + "project=" + project + "&" + "employee=" + employee,
+        method: 'GET',
+    });
+}
+
+export function getTasksOfProject(project) {
+    return request({
+        url: url + "/project" + "?" + "project=" + project,
+        method: 'GET',
+    });
+}
+
+export function getTasksWithStateOfProject(project) {
+    return request({
+        url: url + "/project/state" + "?" + "project=" + project,
+        method: 'GET',
+    });
+}
+
+export function getTasksAssigneeWithStateOfProject(project) {
+    return request({
+        url: url + "/project/assignee/state" + "?" + "project=" + project,
         method: 'GET',
     });
 }
@@ -89,7 +119,7 @@ export function updatePointTasks(updateRequest) {
     return request({
         url: leadUrl + "/update-point",
         method: 'PATCH',
-        data: JSON.stringify(createRequest)
+        data: JSON.stringify(updateRequest)
     });
 }
 
@@ -104,7 +134,7 @@ export function updateStateTasks(updateRequest) {
     return request({
         url: url + "/update-state",
         method: 'PATCH',
-        data: JSON.stringify(createRequest)
+        data: JSON.stringify(updateRequest)
     });
 }
 

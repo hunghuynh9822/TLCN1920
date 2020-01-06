@@ -63,6 +63,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Long> getAsigneeByProject(Long projectId) throws SQLException {
+        List<Long> assignees = new ArrayList<>();
+        List<LongValue> values = taskDao.getAssigneeByProject(projectId);
+        for(LongValue value : values) {
+            assignees.add(value.getValue());
+        }
+        return assignees;
+    }
+
+    @Override
     public void updatePoint(Long taskId, Long creatorId, Integer point) throws SQLException, TransactionException {
         taskDao.updatePoint(taskId, creatorId, point);
     }

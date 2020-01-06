@@ -75,4 +75,15 @@ public class EmployeeServiceController {
     public ResponseEntity<String> checkValid(@PathVariable("phoneOrEmail") String phoneOrEmail){
         return new ResponseEntity<>(employeeServiceBuz.checkPhoneOrEmail(phoneOrEmail),HttpStatus.OK);
     }
+
+    @PatchMapping("/password")
+    public ResponseEntity updatePassword(@RequestBody UpdatePasswordRequest passwordRequest){
+        try {
+            employeeServiceBuz.updatePassword(passwordRequest);
+            return new ResponseEntity(new ApiResponse(true, "Update user success"),HttpStatus.OK);
+        } catch (SQLException | TransactionException e) {
+            return new ResponseEntity(new ApiResponse(false, e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
 }

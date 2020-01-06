@@ -16,6 +16,7 @@ public interface UserService {
     List<User> getUsers() throws SQLException;
     List<User> getUsersWaiting() throws SQLException;
     void updateStatus(Long userId, UserStatus status) throws SQLException, TransactionException;
+    void updatePassword(Long userId, String password) throws SQLException, TransactionException;
     Optional<User> findByEmail(String email) throws SQLException;
     Optional<User> findByPhone(String phone) throws SQLException;
     Optional<User> findByPhoneOrEmail(String phoneOrEmail) throws SQLException;

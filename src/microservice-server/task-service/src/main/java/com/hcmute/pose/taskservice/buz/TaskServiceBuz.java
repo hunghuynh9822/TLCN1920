@@ -3,7 +3,6 @@ package com.hcmute.pose.taskservice.buz;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.taskservice.model.Task;
 import com.hcmute.pose.taskservice.model.TaskComments;
-import com.hcmute.pose.taskservice.model.TaskState;
 import com.hcmute.pose.taskservice.payload.*;
 
 import java.sql.SQLException;
@@ -13,6 +12,7 @@ import java.util.Optional;
 public interface TaskServiceBuz {
     Optional<Task> createTask (TaskRequest taskRequest) throws Exception, TransactionException;
     Task getTasksById(Long taskId) throws Exception;
+    AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException;
     ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException;
     CreatorTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException;
     AssigneeTasksResponse getTasksByAssignee(Long projectId, Long assigneeId) throws SQLException;
@@ -26,6 +26,11 @@ public interface TaskServiceBuz {
     Optional<TaskComments> createTaskComment(TaskCommentRequest taskCommentRequest);
     List<TaskComments> getListTaskComment(Long taskId) throws SQLException;
     void updateTaskComment(TaskCommentRequest request) throws SQLException, TransactionException;
+
+    TasksWithState getAllTasksWithStateByProject(Long projectId) throws SQLException;
+    TasksWithState getTasksWithStateByAssignee(Long projectId, Long assigneeId) throws SQLException;
+    ProjectTasksAssigneeWithStateResponse getTasksAssigneeWithStateByProject(Long projectId) throws SQLException;
+
 }
 
 

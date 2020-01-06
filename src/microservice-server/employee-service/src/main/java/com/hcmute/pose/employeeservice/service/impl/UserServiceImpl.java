@@ -66,6 +66,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updatePassword(Long userId, String password) throws SQLException, TransactionException {
+        userDao.updatePassword(userId, encoder.encode(password));
+    }
+
+    @Override
     public Optional<User> findByEmail(String email) throws SQLException {
         return userDao.findByEmail(email);
     }

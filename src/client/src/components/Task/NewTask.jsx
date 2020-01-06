@@ -4,10 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert';
 
-import { TagMember } from '../../components';
-
 import { create } from '../../action/task';
 
+import { TagMember } from '../../components';
 import {
     DatePicker
 } from '@material-ui/pickers';
@@ -28,7 +27,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = theme => ({
     buttonAdd: {
-        margin: theme.spacing(1),
+        // margin: theme.spacing(1),
         marginLeft: theme.spacing(3)
     },
     paper: {
@@ -140,12 +139,13 @@ class NewTask extends Component {
             title: this.state.request.title,
             description: this.state.request.description,
             startedAt: this.state.request.startedAt,
-            duration: this.state.request.duration
+            duration: this.state.request.duration ? this.state.request.duration : 1
         }
         console.log("Request create task : " + JSON.stringify(request));
         create(request)
             .then(response => {
                 console.log(response);
+                this.props.loadTasks();
                 this.setState({
                     open: false,
                     openAdd: false,
@@ -329,7 +329,7 @@ class NewTask extends Component {
                                         )
                                     }
                                 </ListItemAvatar>
-                                <ListItemText primary={member.email} />
+                                <ListItemText primary={this.getName(member)} />
                             </ListItem>
                         )) : (
                                 <ListItemText primary="No employee" />
@@ -342,6 +342,7 @@ class NewTask extends Component {
 }
 NewTask.propTypes = {
     classes: PropTypes.object.isRequired,
+    loadTasks: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

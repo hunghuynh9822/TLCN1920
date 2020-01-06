@@ -1,4 +1,7 @@
 const path = require('path');
+process.env.SERVER_HOST = 'localhost:8080'
+process.env.SERVER_HOST_AUTH = 'localhost:8000'
+console.log("HOST : " + process.env.SERVER_HOST)
 const express = require('express');
 const app = express();
 

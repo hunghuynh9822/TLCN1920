@@ -40,6 +40,13 @@ export function getEmployeeFree(projectId) {
     });
 }
 
+export function getProject(projectId) {
+    return request({
+        url: url + "/" + projectId,
+        method: 'GET',
+    });
+}
+
 //Get project by admin
 export function getAllProjects() {
     return request({

@@ -22,9 +22,10 @@ const appStyle = theme => ({
         position: "relative",
         float: "right",
         ...transition,
-        maxHeight: "100%",
+        // maxHeight: "100%",
         width: "100%",
         overflowScrolling: "touch",
+        backgroundColor: "white",
     },
     mainPanelOpen: {
         [theme.breakpoints.up("md")]: {
@@ -33,7 +34,7 @@ const appStyle = theme => ({
     },
     content: {
         marginTop: "54px",
-        height: "calc(100vh - 60px)",
+        // height: "calc(100vh - 60px)",
         // height: "100vh"
     },
     contentClose: {

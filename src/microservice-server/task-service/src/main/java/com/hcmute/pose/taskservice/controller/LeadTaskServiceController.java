@@ -35,6 +35,16 @@ public class LeadTaskServiceController {
         }
     }
 
+    @GetMapping("/state")
+    public ResponseEntity getTaskWithStateByProject(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long creatorId){
+        try{
+            CreatorTasksResponse response = taskServiceBuz.getTasksByCreator(projectId, creatorId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PatchMapping("/update-point")
     public ResponseEntity<String> updatePoint (@Valid @RequestBody TaskUpdateRequest request){
         try{
