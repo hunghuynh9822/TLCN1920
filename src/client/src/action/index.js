@@ -3,7 +3,8 @@ import {
     ACCESS_TOKEN
 } from '../constants';
 
-export const serverUrl = process.env.SERVER_HOST || 'http://192.168.200.1:8080';
+// export const serverUrl = process.env.SERVER_HOST || 'http://192.168.200.1:8080';
+export const serverUrl = 'http://localhost:8080';
 const api = axios.create({
     baseURL: serverUrl
 });
