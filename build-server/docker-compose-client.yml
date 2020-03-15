@@ -1,0 +1,29 @@
+version: "3"
+services:
+  client:
+    build:
+      context: ./client/
+      dockerfile: Dockerfile
+    image: hcmute/client-reactjs
+    container_name: client-reactjs
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - ute
+  nginx:
+    build:
+      context: ./nginx/
+      dockerfile: Dockerfile
+    image: hcmute/nginx
+    container_name: nginx
+    restart: unless-stopped
+    links:
+      - client
+    ports:
+      - "80:80"
+    networks:
+      - ute
+networks:
+  ute:
+    driver: bridge

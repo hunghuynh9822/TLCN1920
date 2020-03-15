@@ -1,0 +1,163 @@
+version: "3"
+services:
+  discovery:
+    build:
+      context: ./server/discovery-server
+      dockerfile: Dockerfile
+    image: hcmute/server/discovery-server
+    container_name: discovery-server
+    restart: unless-stopped
+    volumes:
+      - ./logs/discovery-server:/server/discovery-server/logs
+    ports:
+      - "8761:8761"
+    networks:
+      - ute
+  gateway:
+    build:
+      context: ./server/gateway-proxy
+      dockerfile: Dockerfile
+    image: hcmute/server/gateway-proxy
+    container_name: gateway-proxy
+    restart: unless-stopped
+    volumes:  
+      - ./logs/gateway-proxy:/server/gateway-proxy/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+    links:
+      - discovery
+    depends_on:
+      - discovery
+    ports:
+      - "8080:8080"
+    networks:
+      - ute
+  auth:
+    build:
+      context: ./server/auth-service
+      dockerfile: Dockerfile
+    image: hcmute/server/auth
+    container_name: service-auth
+    restart: unless-stopped
+    volumes:  
+      - ./logs/auth-service:/server/auth-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+    links:
+      - discovery
+      - gateway
+    depends_on:
+      - discovery
+      - gateway
+    ports:
+      - "8000:8000"
+    networks:
+      - ute
+  employee:
+    build:
+      context: ./server/employee-service
+      dockerfile: Dockerfile
+    image: hcmute/server/employee
+    container_name: service-employee
+    restart: unless-stopped
+    volumes:
+      - ./logs/employee-service:/server/employee-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+    links:
+      - discovery
+      - gateway
+    depends_on:
+      - discovery
+      - gateway
+    ports:
+      - "8001:8001"
+    networks:
+      - ute
+  tasks:
+    build:
+      context: ./server/task-service
+      dockerfile: Dockerfile
+    image: hcmute/server/task
+    container_name: service-task
+    restart: unless-stopped
+    volumes:
+      - ./logs/task-service:/server/task-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+    links:
+      - discovery
+      - gateway
+    depends_on:
+      - discovery
+      - gateway
+    ports:
+      - "8002:8002"
+    networks:
+      - ute
+  projects:
+    build:
+      context: ./server/project-service
+      dockerfile: Dockerfile
+    image: hcmute/server/project
+    container_name: service-project
+    restart: unless-stopped
+    volumes:
+      - ./logs/project-service:/server/project-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+    links:
+      - discovery
+      - gateway
+    depends_on:
+      - discovery
+      - gateway
+    ports:
+      - "8003:8003"
+    networks:
+      - ute
+  notify:
+    build:
+      context: ./server/notify-service
+      dockerfile: Dockerfile
+    image: hcmute/server/notify
+    container_name: service-notify
+    restart: unless-stopped
+    volumes:
+      - ./logs/notify-service:/server/notify-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+    links:
+      - discovery
+      - gateway
+    depends_on:
+      - discovery
+      - gateway
+    ports:
+      - "8004:8004"
+    networks:
+      - ute
+  request:
+    build:
+      context: ./server/request-service
+      dockerfile: Dockerfile
+    image: hcmute/server/request
+    container_name: service-request
+    restart: unless-stopped
+    volumes:
+      - ./logs/request-service:/server/request-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761/eureka/
+    links:
+      - discovery
+      - gateway
+    depends_on:
+      - discovery
+      - gateway
+    ports:
+      - "8005:8005"
+    networks:
+      - ute
+networks:
+  ute:
+    driver: bridge
