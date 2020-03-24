@@ -76,4 +76,4 @@ zuul:
 #      - http://localhost:3000/oauth2/redirect
 #Will start the gateway server @8080
 server:
-  port: ${PORT}
+  port: ${PORT:8080}
