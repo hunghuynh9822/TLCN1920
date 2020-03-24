@@ -4,9 +4,11 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URI:http://localhost:8761}/eureka
   instance:
-    preferIpAddress: true
+    hostname: ${DOMAIN_NAME}
+    nonSecurePort: 80
+    preferIpAddress: false
 #Zuul routes. Here for /employee path, we are routing to localhost:8001 with extra path after that.
 zuul:
   routes:
@@ -74,4 +76,4 @@ zuul:
 #      - http://localhost:3000/oauth2/redirect
 #Will start the gateway server @8080
 server:
-  port: 8080
+  port: ${PORT}
