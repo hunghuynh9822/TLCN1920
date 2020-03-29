@@ -1,10 +1,12 @@
 // export const API_BASE_URL = process.env.SERVER_HOST || 'http://192.168.200.1:8080';
 // export const API_BASE_OAUTH2_URL = process.env.SERVER_HOST_AUTH || 'http://192.168.200.1:8000';
-export const API_BASE_URL = 'http://localhost:8080';
-export const API_BASE_OAUTH2_URL = 'http://localhost:8000';
+export const API_BASE_URL = 'https://app-gateway-proxy.herokuapp.com';
+export const API_BASE_OAUTH2_URL = 'https://app-auth-service.herokuapp.com';
+// export const API_BASE_OAUTH2_URL = process.env.SERVER_HOST_AUTH || 'http://localhost:8000';
 export const ACCESS_TOKEN = 'accessToken';
 
-export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'
+// export const OAUTH2_REDIRECT_URI = 'http://locahost:3000/oauth2/redirect';
+export const OAUTH2_REDIRECT_URI = 'https://app-client-react.herokuapp.com/oauth2/redirect';
 
 export const GOOGLE_AUTH_URL = API_BASE_OAUTH2_URL + '/auth/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
 export const FACEBOOK_AUTH_URL = API_BASE_OAUTH2_URL + '/auth/oauth2/authorize/facebook?redirect_uri=' + OAUTH2_REDIRECT_URI;

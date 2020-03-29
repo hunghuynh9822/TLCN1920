@@ -43,7 +43,6 @@ class SignIn extends Component {
         const target = event.target;
         const inputName = target.name;
         const inputValue = target.value;
-
         this.setState({
             [inputName]: inputValue
         });

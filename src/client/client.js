@@ -1,11 +1,10 @@
 const path = require('path');
-process.env.SERVER_HOST = 'localhost:8080'
-process.env.SERVER_HOST_AUTH = 'localhost:8000'
 console.log("HOST : " + process.env.SERVER_HOST)
+console.log("HOST AUTH : " + process.env.SERVER_HOST_AUTH)
 const express = require('express');
 const app = express();
 
-const port = process.env.PORT || process.env.CLIENT_PORT || 3000;
+const port = process.env.PORT || 3000;
 
 const cors = require('cors');
 
