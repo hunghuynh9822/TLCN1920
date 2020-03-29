@@ -21,6 +21,18 @@ public class EmployeeServiceController {
     @Autowired
     private EmployeeServiceBuz employeeServiceBuz;
 
+    @GetMapping("/test")
+    public ResponseEntity test() {
+        List<EmployeeResponse> employees = employeeServiceBuz.getEmployees();
+
+        if (employees.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(true, "No employees"),
+                    HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new AllEmployeesResponse(employees), HttpStatus.OK);
+    }
+
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN','STAFF','LEAD','HR')")
     public ResponseEntity getEmployees() {

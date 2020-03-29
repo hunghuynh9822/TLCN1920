@@ -1,14 +1,16 @@
 spring:
   application:
     name: gateway-proxy
+server:
+  port: ${PORT:8080}
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761}/eureka
   instance:
-    hostname: ${DOMAIN_NAME}
+    hostname: ${DOMAIN_NAME:localhost}
     nonSecurePort: 80
-    preferIpAddress: false
+#    preferIpAddress: true
 #Zuul routes. Here for /employee path, we are routing to localhost:8001 with extra path after that.
 zuul:
   routes:
@@ -21,59 +23,62 @@ zuul:
       # In case of auth, we need to pass the "/auth/" in the path to auth service. So, set strip-prefix to false
       strip-prefix: false
       # Exclude authorization from sensitive headers
-      sensitive-headers: Cookie,Set-Cookie
+      sensitive-headers:
+      ribbon:
+        ReadTimeout: 600000
     emloyees:
       path: /api/employees/**
       strip-prefix: false
       service-id: employee-service
+      ribbon:
+        ReadTimeout: 600000
     adminemloyees:
       path: /api/admin/employees/**
       strip-prefix: false
       service-id: employee-service
+      ribbon:
+        ReadTimeout: 600000
     tasks:
       path: /api/tasks/**
       strip-prefix: false
       service-id: task-service
+      ribbon:
+        ReadTimeout: 600000
     admintasks:
       path: /api/admin/tasks/**
       strip-prefix: false
       service-id: task-service
+      ribbon:
+        ReadTimeout: 600000
     leadtasks:
       path: /api/lead/tasks/**
       strip-prefix: false
       service-id: task-service
+      ribbon:
+        ReadTimeout: 600000
     projects:
       path: /api/projects/**
       strip-prefix: false
       service-id: project-service
+      ribbon:
+        ReadTimeout: 600000
     adminprojects:
       path: /api/admin/projects/**
       strip-prefix: false
       service-id: project-service
+      ribbon:
+        ReadTimeout: 600000
     requests:
       path: /api/requests/**
       strip-prefix: false
       service-id: request-service
+      ribbon:
+        ReadTimeout: 600000
     notify:
       path: /api/notify/**
       strip-prefix: false
       service-id: notify-service
+      ribbon:
+        ReadTimeout: 600000
   host:
-    connect-timeout-millis: 60000
-#security:
-#  jwt:
-#    uris: /auth/**,/oauth2/**
-#    header: Authorization
-#    prefix: Bearer
-#    expiration: 32400‬
-#    secret: JwtSecretKey
-#  oauth2:
-#    # After successfully authenticating with the OAuth2 Provider,
-#    # we'll be generating an auth token for the user and sending the token to the
-#    # redirectUri mentioned by the client in the /oauth2/authorize request.
-#    # We're not using cookies because they won't work well in mobile clients.
-#    authorizedRedirectUris:
-#      - http://localhost:3000/oauth2/redirect
-#Will start the gateway server @8080
-server:
-  port: ${PORT:8080}
+    connect-timeout-millis: 600000
