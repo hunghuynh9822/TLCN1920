@@ -1,0 +1,65 @@
+heroku login
+heroku container:login
+
+heroku container:push web -a {app-name}
+heroku container:release web -a {app-name}
+
+heroku config -a {app-name}
+
+heroku config:set {name}={value}
+
+-------------------------------------------------------------------------------------------------------------------------------------
+-- Notify service
+heroku config -a app-notify-service
+
+heroku config:set DOMAIN_NAME=app-notify-service.herokuapp.com -a app-notify-service
+heroku config:set EUREKA_URI=https://app-discovery-server.herokuapp.com/ -a app-notify-service
+heroku config:set PSQL_PASSWORD=3ce5be3c3a6b31de8c745de4886a4c258c9dc82b545491278c53e1fc6f19351b -a app-notify-service
+heroku config:set PSQL_URL=jdbc:postgresql://ec2-52-71-231-180.compute-1.amazonaws.com:5432/d2560l9lk9b88 -a app-notify-service
+heroku config:set PSQL_USERNAME=ujrdrfdbxoqlqc -a app-notify-service
+
+mvn clean package -DskipTests
+heroku container:push web -a app-notify-service
+heroku container:release web -a app-notify-service
+
+-------------------------------------------------------------------------------------------------------------------------------------
+-- Project service
+heroku config -a app-project-service
+
+heroku config:set DOMAIN_NAME=app-project-service.herokuapp.com -a app-project-service
+heroku config:set EUREKA_URI=https://app-discovery-server.herokuapp.com/ -a app-project-service
+heroku config:set PSQL_PASSWORD=3ce5be3c3a6b31de8c745de4886a4c258c9dc82b545491278c53e1fc6f19351b -a app-project-service
+heroku config:set PSQL_URL=jdbc:postgresql://ec2-52-71-231-180.compute-1.amazonaws.com:5432/d2560l9lk9b88 -a app-project-service
+heroku config:set PSQL_USERNAME=ujrdrfdbxoqlqc -a app-project-service
+
+mvn clean package -DskipTests
+heroku container:push web -a app-project-service
+heroku container:release web -a app-project-service
+
+-------------------------------------------------------------------------------------------------------------------------------------
+-- Task service
+heroku config -a app-task-service
+
+heroku config:set DOMAIN_NAME=app-task-service.herokuapp.com -a app-task-service
+heroku config:set EUREKA_URI=https://app-discovery-server.herokuapp.com/ -a app-task-service
+heroku config:set PSQL_PASSWORD=3ce5be3c3a6b31de8c745de4886a4c258c9dc82b545491278c53e1fc6f19351b -a app-task-service
+heroku config:set PSQL_URL=jdbc:postgresql://ec2-52-71-231-180.compute-1.amazonaws.com:5432/d2560l9lk9b88 -a app-task-service
+heroku config:set PSQL_USERNAME=ujrdrfdbxoqlqc -a app-task-service
+
+mvn clean package -DskipTests
+heroku container:push web -a app-task-service
+heroku container:release web -a app-task-service
+
+-------------------------------------------------------------------------------------------------------------------------------------
+-- Request service
+heroku config -a app-request-service
+
+heroku config:set DOMAIN_NAME=app-project-service.herokuapp.com -a app-request-service
+heroku config:set EUREKA_URI=https://app-discovery-server.herokuapp.com/ -a app-request-service
+heroku config:set PSQL_PASSWORD=3ce5be3c3a6b31de8c745de4886a4c258c9dc82b545491278c53e1fc6f19351b -a app-request-service
+heroku config:set PSQL_URL=jdbc:postgresql://ec2-52-71-231-180.compute-1.amazonaws.com:5432/d2560l9lk9b88 -a app-request-service
+heroku config:set PSQL_USERNAME=ujrdrfdbxoqlqc -a app-request-service
+
+mvn clean package -DskipTests
+heroku container:push web -a app-request-service
+heroku container:release web -a app-request-service
