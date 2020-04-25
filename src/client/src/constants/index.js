@@ -1,8 +1,7 @@
-// export const API_BASE_URL = process.env.SERVER_HOST || 'http://192.168.200.1:8080';
-// export const API_BASE_OAUTH2_URL = process.env.SERVER_HOST_AUTH || 'http://192.168.200.1:8000';
-export const API_BASE_URL = 'https://app-gateway-proxy.herokuapp.com';
-export const API_BASE_OAUTH2_URL = 'https://app-auth-service.herokuapp.com';
-// export const API_BASE_OAUTH2_URL = process.env.SERVER_HOST_AUTH || 'http://localhost:8000';
+export const API_BASE_URL = 'http://192.168.200.1:8080';
+export const API_BASE_OAUTH2_URL = 'http://192.168.200.1:8000';
+// export const API_BASE_URL = 'https://app-gateway-proxy.herokuapp.com';
+// export const API_BASE_OAUTH2_URL = 'https://app-auth-service.herokuapp.com';
 export const ACCESS_TOKEN = 'accessToken';
 
 // export const OAUTH2_REDIRECT_URI = 'http://locahost:3000/oauth2/redirect';

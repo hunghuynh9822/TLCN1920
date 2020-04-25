@@ -1,0 +1,2 @@
+scp -r ./target/discovery-server-1.0.0.jar hung@192.168.200.1:/home/hung/UTE/discovery-server
+scp -r Dockerfile hung@192.168.200.1:/home/hung/UTE/discovery-server

@@ -1,10 +1,12 @@
 import axios from 'axios';
 import {
-    ACCESS_TOKEN
+    ACCESS_TOKEN,
+    API_BASE_URL
 } from '../constants';
 
 // export const serverUrl = process.env.SERVER_HOST || 'http://localhost:8080';
-export const serverUrl = 'https://app-gateway-proxy.herokuapp.com';
+// export const serverUrl = 'https://app-gateway-proxy.herokuapp.com';
+export const serverUrl = API_BASE_URL;
 const api = axios.create({
     baseURL: serverUrl
 });
