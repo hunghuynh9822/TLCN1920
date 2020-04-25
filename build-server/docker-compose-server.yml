@@ -23,7 +23,7 @@ services:
     volumes:  
       - ./logs/gateway-proxy:/server/gateway-proxy/logs
     environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
+      - EUREKA_URI=http://discovery:8761
     links:
       - discovery
     depends_on:
@@ -66,9 +66,10 @@ services:
     volumes:
       - ./logs/employee-service:/server/employee-service/logs
     environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
+      - EUREKA_URI=http://discovery:8761
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
       - DOMAIN_NAME=employee:8001
+      - NON_SECURE_PORT=8001
     links:
       - discovery
       - gateway
@@ -89,9 +90,10 @@ services:
     volumes:
       - ./logs/task-service:/server/task-service/logs
     environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
+      - EUREKA_URI=http://discovery:8761
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
       - DOMAIN_NAME=tasks:8002
+      - NON_SECURE_PORT=8002
     links:
       - discovery
       - gateway
@@ -112,9 +114,10 @@ services:
     volumes:
       - ./logs/project-service:/server/project-service/logs
     environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
+      - EUREKA_URI=http://discovery:8761
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
       - DOMAIN_NAME=projects:8003
+      - NON_SECURE_PORT=8003
     links:
       - discovery
       - gateway
@@ -135,9 +138,10 @@ services:
     volumes:
       - ./logs/notify-service:/server/notify-service/logs
     environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
+      - EUREKA_URI=http://discovery:8761
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
       - DOMAIN_NAME=notify:8004
+      - NON_SECURE_PORT=8004
     links:
       - discovery
       - gateway
@@ -158,9 +162,10 @@ services:
     volumes:
       - ./logs/request-service:/server/request-service/logs
     environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
+      - EUREKA_URI=http://discovery:8761
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
       - DOMAIN_NAME=request:8005
+      - NON_SECURE_PORT=8005
     links:
       - discovery
       - gateway
