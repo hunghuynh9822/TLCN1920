@@ -42,8 +42,9 @@ services:
     volumes:  
       - ./logs/auth-service:/server/auth-service/logs
     environment:
-      - EUREKA_URI=http://discovery:8761/eureka/
+      - EUREKA_URI=http://discovery:8761
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - DOMAIN_NAME=auth:8000
     links:
       - discovery
       - gateway
@@ -66,6 +67,7 @@ services:
     environment:
       - EUREKA_URI=http://discovery:8761/eureka/
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - DOMAIN_NAME=employee:8001
     links:
       - discovery
       - gateway
@@ -88,6 +90,7 @@ services:
     environment:
       - EUREKA_URI=http://discovery:8761/eureka/
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - DOMAIN_NAME=tasks:8002
     links:
       - discovery
       - gateway
@@ -110,6 +113,7 @@ services:
     environment:
       - EUREKA_URI=http://discovery:8761/eureka/
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - DOMAIN_NAME=projects:8003
     links:
       - discovery
       - gateway
@@ -132,6 +136,7 @@ services:
     environment:
       - EUREKA_URI=http://discovery:8761/eureka/
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - DOMAIN_NAME=notify:8004
     links:
       - discovery
       - gateway
@@ -154,6 +159,7 @@ services:
     environment:
       - EUREKA_URI=http://discovery:8761/eureka/
       - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - DOMAIN_NAME=request:8005
     links:
       - discovery
       - gateway
