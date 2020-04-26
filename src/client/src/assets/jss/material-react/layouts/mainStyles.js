@@ -1,5 +1,6 @@
 import {
     drawerWidth,
+    drawerWidthClose,
     transition,
     container
 } from "../../material-react.js";
@@ -7,6 +8,7 @@ import {
 const appStyle = theme => ({
     '@global': {
         body: {
+            height: '100%',
             padding: 0,
             margin: 0,
         },
@@ -14,15 +16,15 @@ const appStyle = theme => ({
     },
     wrapper: {
         position: "relative",
-        top: "0",
-        height: "100vh"
+        top: "0"
+        // height: "100vh"
     },
     mainPanel: {
-        overflow: "auto",
+        // overflow: "hidden",
         position: "relative",
         float: "right",
         ...transition,
-        // maxHeight: "100%",
+        maxHeight: "100%",
         width: "100%",
         overflowScrolling: "touch",
         backgroundColor: "white",
@@ -38,7 +40,7 @@ const appStyle = theme => ({
         // height: "100vh"
     },
     contentClose: {
-        marginLeft: "68px",
+        marginLeft: `${drawerWidthClose}px`,
     },
     container: {
         width: '100%',
