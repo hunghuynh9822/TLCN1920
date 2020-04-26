@@ -74,6 +74,7 @@ const headerStyle = (theme) => ({
   container: {
     ...container,
     minHeight: "54px",
+    paddingLeft: "5px",
   },
   flex: {
     flex: 1

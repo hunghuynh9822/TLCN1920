@@ -50,7 +50,7 @@ class Notification extends Component {
         var url = serverUrl + "/api/notify/" + currentUser.id
         axios.get(url)
         .then(response =>{
-            const temp = response.data;
+            const temp = response.data.reverse();
             console.log(response.data);
             
             var rows = []
