@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
 import { withStyles } from '@material-ui/core/styles';
 import { withAlert } from 'react-alert'
 
@@ -19,12 +22,18 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
-import { AccountForm, PersonalForm, Review } from './Form';
+import { AccountForm, PersonalForm, Review } from '../components/AddStaff/Form';
 
-import { create } from '../../action/employee'
+import { create } from '../action/employee'
 
-import { generatePassword } from '../../action'
+import { generatePassword } from '../action';
+
 const styles = theme => ({
+    content: {
+        textAlign: 'center',
+        height: '100vh',
+        lineHeight: '100vh'
+    },
     modal: {
         // display: 'flex',
         // alignItems: 'center',
@@ -37,6 +46,11 @@ const styles = theme => ({
             marginLeft: 'auto',
             marginRight: 'auto',
         },
+    },
+    dialog: {
+        width: 600,
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     paper: {
         marginTop: '0px',
@@ -62,7 +76,8 @@ const styles = theme => ({
         marginLeft: theme.spacing(1),
     },
 });
-class RequestAddStaff extends Component {
+
+class SignUp extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -279,6 +294,11 @@ class RequestAddStaff extends Component {
             }
         };
 
+        const handleBackToHome = () => {
+            console.log("Back to home");
+            this.props.history.push("/");
+        }
+
         const renderResponse = () => {
             if (activeStep === steps.length) {
                 if (error) {
@@ -309,14 +329,13 @@ class RequestAddStaff extends Component {
         };
 
         return (
-            <div>
+            <div className={classes.content}>
+                <Button variant="contained" color="primary" onClick={handleBackToHome} className={classes.button}>
+                    Back to home
+                </Button>
                 <Button variant="contained" color="primary" onClick={handleOpen} className={classes.button}>
                     Add Staff
                 </Button>
-                <Link variant="body2" onClick={handleOpen}>
-                    Add new
-                                </Link>
-
                 <Dialog
                     open={open}
                     onClose={handleClose}
@@ -348,7 +367,8 @@ class RequestAddStaff extends Component {
         );
     }
 }
-RequestAddStaff.propTypes = {
+
+SignUp.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(withAlert()(RequestAddStaff));
+export default withStyles(styles)(withAlert()(SignUp));

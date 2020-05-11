@@ -70,6 +70,12 @@ class MainRouter extends Component {
         LoadingComponent: Loading
       }
     );
+    const AsyncSignUp = importedComponent(
+      () => import(/* webpackChunkName:'signup' */ './layouts/SignUp.jsx'),
+      {
+        LoadingComponent: Loading
+      }
+    );
 
     const AsyncHome = importedComponent(
       () => import(/* webpackChunkName:'home' */ './layouts/Home.jsx'),
@@ -95,6 +101,7 @@ class MainRouter extends Component {
           <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>
           <Route path="/notfound" component={AsyncNoMatch} />
           <Route exact path="/(login|)" render={(props) => <AsyncSignIn {...props} />} />
+          <Route exact path="/new" render={(props) => <AsyncSignUp {...props} />} />
           <Route component={AsyncNoMatch} />
         </Switch>
       </React.Fragment>
