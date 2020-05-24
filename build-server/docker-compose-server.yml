@@ -5,7 +5,7 @@ services:
       context: ./server/discovery-server
       dockerfile: Dockerfile
     image: hcmute/server/discovery-server
-    container_name: discovery-server
+    container_name: discovery
     restart: unless-stopped
     volumes:
       - ./logs/discovery-server:/server/discovery-server/logs
@@ -18,12 +18,14 @@ services:
       context: ./server/gateway-proxy
       dockerfile: Dockerfile
     image: hcmute/server/gateway-proxy
-    container_name: gateway-proxy
+    container_name: gateway
     restart: unless-stopped
     volumes:  
       - ./logs/gateway-proxy:/server/gateway-proxy/logs
     environment:
       - EUREKA_URI=http://discovery:8761
+      - DOMAIN_NAME=auth
+      - NON_SECURE_PORT=8080
     links:
       - discovery
     depends_on:
@@ -37,7 +39,7 @@ services:
       context: ./server/auth-service
       dockerfile: Dockerfile
     image: hcmute/server/auth
-    container_name: service-auth
+    container_name: auth
     restart: unless-stopped
     volumes:  
       - ./logs/auth-service:/server/auth-service/logs
@@ -61,7 +63,7 @@ services:
       context: ./server/employee-service
       dockerfile: Dockerfile
     image: hcmute/server/employee
-    container_name: service-employee
+    container_name: employee
     restart: unless-stopped
     volumes:
       - ./logs/employee-service:/server/employee-service/logs
@@ -85,7 +87,7 @@ services:
       context: ./server/task-service
       dockerfile: Dockerfile
     image: hcmute/server/task
-    container_name: service-task
+    container_name: tasks
     restart: unless-stopped
     volumes:
       - ./logs/task-service:/server/task-service/logs
@@ -109,7 +111,7 @@ services:
       context: ./server/project-service
       dockerfile: Dockerfile
     image: hcmute/server/project
-    container_name: service-project
+    container_name: projects
     restart: unless-stopped
     volumes:
       - ./logs/project-service:/server/project-service/logs
@@ -133,7 +135,7 @@ services:
       context: ./server/notify-service
       dockerfile: Dockerfile
     image: hcmute/server/notify
-    container_name: service-notify
+    container_name: notify
     restart: unless-stopped
     volumes:
       - ./logs/notify-service:/server/notify-service/logs
@@ -157,7 +159,7 @@ services:
       context: ./server/request-service
       dockerfile: Dockerfile
     image: hcmute/server/request
-    container_name: service-request
+    container_name: request
     restart: unless-stopped
     volumes:
       - ./logs/request-service:/server/request-service/logs
