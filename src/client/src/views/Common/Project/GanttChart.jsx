@@ -72,7 +72,7 @@ class GanttChart extends Component {
                     }
                 })
                 this.setState({
-                    data: { data: data, links: [] },
+                    data: { data: data, links: response.links},
                     loading: false
                 })
             }).catch(error => {
