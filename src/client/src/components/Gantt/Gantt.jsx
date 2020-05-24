@@ -51,6 +51,7 @@ class Gantt extends Component {
          * item: data object object
          */
         const onDataUpdated = this.props.onDataUpdated;
+        console.log("[Gantt] initGanttDataProcessor");
         this.dataProcessor = gantt.createDataProcessor((type, action, item, id) => {
             return new Promise((resolve, reject) => {
                 if (onDataUpdated) {
@@ -65,17 +66,22 @@ class Gantt extends Component {
     }
 
     shouldComponentUpdate(nextProps) {
+        console.log("[Gantt] shouldComponentUpdate")
         return this.props.zoom !== nextProps.zoom;
     }
 
     componentDidUpdate() {
+        console.log("[Gantt] componentDidUpdate")
         gantt.render();
     }
 
     componentWillUnmount() {
+        console.log("[Gantt] componentWillUnmount")
+        gantt.clearAll();
         if (this.dataProcessor) {
             this.dataProcessor.destructor();
             this.dataProcessor = null;
+            console.log("[Gantt] componentWillUnmount -> destructor")
         }
     }
 
@@ -83,9 +89,11 @@ class Gantt extends Component {
         count = count + 1;
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
         const { tasks } = this.props;
+        console.log("[Gantt] componentDidMount with tasks " + JSON.stringify(tasks));
         gantt.init(this.ganttContainer);
         this.initGanttDataProcessor();
         gantt.parse(tasks);
+        gantt.render();
     }
 
     render() {

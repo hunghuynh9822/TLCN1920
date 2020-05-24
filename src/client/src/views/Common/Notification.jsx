@@ -48,37 +48,37 @@ class Notification extends Component {
                 // console.log("isAdmin: "+isAdmin +"name: "+ element.name);    
         });
         var url = serverUrl + "/api/notify/" + currentUser.id
-        axios.get(url)
-        .then(response =>{
-            const temp = response.data.reverse();
-            console.log(response.data);
+        // axios.get(url)
+        // .then(response =>{
+        //     const temp = response.data.reverse();
+        //     console.log(response.data);
             
-            var rows = []
-            temp.forEach(element =>{
-                var no = rows.length + 1 ;
-                // var a = new Date(element.create_time * 1000);
-                // var year = a.getFullYear();
-                // var month = a.getMonth() + 1;
-                // var date = a.getDate();
-                // var hour = a.getHours();
-                // var muti = a.getMinutes();
-                // var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
-                //var time = this.unixTime(element.create_time)
-                var datestart = new Date(element.create_time);
-                datestart = datestart.getDate() +"/"+(datestart.getMonth() + 1) + "/" + datestart.getFullYear(); 
-                if(element.view == false){
-                    rows.push(this.createData(no , element.content ,element.create_name, datestart, element.id)) ;
-                }else{
-                    rows.push(this.createDataDelete(no , element.content ,element.create_name, datestart, element.id)) ;
-                }
-            })
+        //     var rows = []
+        //     temp.forEach(element =>{
+        //         var no = rows.length + 1 ;
+        //         // var a = new Date(element.create_time * 1000);
+        //         // var year = a.getFullYear();
+        //         // var month = a.getMonth() + 1;
+        //         // var date = a.getDate();
+        //         // var hour = a.getHours();
+        //         // var muti = a.getMinutes();
+        //         // var time = hour+":"+muti+" - "+ date +"/"+month+"/"+year
+        //         //var time = this.unixTime(element.create_time)
+        //         var datestart = new Date(element.create_time);
+        //         datestart = datestart.getDate() +"/"+(datestart.getMonth() + 1) + "/" + datestart.getFullYear(); 
+        //         if(element.view == false){
+        //             rows.push(this.createData(no , element.content ,element.create_name, datestart, element.id)) ;
+        //         }else{
+        //             rows.push(this.createDataDelete(no , element.content ,element.create_name, datestart, element.id)) ;
+        //         }
+        //     })
             
-        this.setState({
-            rows: rows,
-            isAdmin :isAdmin
-        })
-        })
-        .catch(error => console.log("ok loi ne notify lisst"+error))
+        // this.setState({
+        //     rows: rows,
+        //     isAdmin :isAdmin
+        // })
+        // })
+        // .catch(error => console.log("ok loi ne notify lisst"+error))
 
 
         var url =  serverUrl +"/api/employees/"
