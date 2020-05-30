@@ -1,4 +1,4 @@
-discovery-server/
+cd discovery-server/
 java -jar -Xmx300M -Xms200M target/discovery-server-1.0.0.jar > ~/ute/TLCN1920/logs/discovery.log&
 cd ..
 cd gateway-proxy/

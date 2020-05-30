@@ -29,6 +29,7 @@ import java.util.Map;
 public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     private static Logger LOGGER = LoggerFactory.getLogger(ProjectServiceBuzImpl.class);
     private static final String EMPLOYEE_SERVICE = "http://employee-service/api/employees";
+    private static final String TASK_SERVICE = "http://task-service/api/tasks";
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -130,7 +131,10 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             employeeResponse.setRole(per.getRole());
             members.add(employeeResponse);
         }
-        return new ProjectResponse(project, members);
+        String url = TASK_SERVICE + "/project?project=" + project.getId();
+        GetTaskByProjectResponse getTaskByProjectResponse = restTemplate.getForObject(url, GetTaskByProjectResponse.class);
+        assert getTaskByProjectResponse != null;
+        return new ProjectResponse(project, members, getTaskByProjectResponse.getTasks());
     }
 
     @Override
