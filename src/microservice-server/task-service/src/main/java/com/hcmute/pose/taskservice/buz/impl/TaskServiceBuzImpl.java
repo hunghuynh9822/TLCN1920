@@ -5,6 +5,7 @@ import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.taskservice.buz.TaskServiceBuz;
 import com.hcmute.pose.taskservice.model.Task;
 import com.hcmute.pose.taskservice.model.TaskComments;
+import com.hcmute.pose.taskservice.model.TaskLink;
 import com.hcmute.pose.taskservice.model.TaskState;
 import com.hcmute.pose.taskservice.payload.*;
 import com.hcmute.pose.taskservice.service.TaskCommentService;
@@ -56,7 +57,20 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     public AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException {
         try{
             List<Task> tasks = taskService.getTasksByProject(projectId);
-            return new AllTasksProjectResponse(projectId, tasks);
+            List<TaskLink> links = new ArrayList<>();
+            long index = 1L;
+            Long source = null;
+            for (Task task : tasks
+                 ) {
+                TaskLink taskLink = null;
+                if(source!=null) {
+                    taskLink = new TaskLink(index, source, task.getId(), 0, System.currentTimeMillis(), System.currentTimeMillis());
+                    links.add(taskLink);
+                    index = index + 1;
+                }
+                source = task.getId();
+            }
+            return new AllTasksProjectResponse(projectId, tasks, links);
         } finally {
             databaseHelper.closeConnection();
         }

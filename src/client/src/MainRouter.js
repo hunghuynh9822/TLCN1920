@@ -71,7 +71,7 @@ class MainRouter extends Component {
       }
     );
     const AsyncSignUp = importedComponent(
-      () => import(/* webpackChunkName:'signup' */ './layouts/SignUp.jsx'),
+      () => import(/* webpackChunkName:'signup' */ './layouts/Signup.jsx'),
       {
         LoadingComponent: Loading
       }

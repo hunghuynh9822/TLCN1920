@@ -1,5 +1,7 @@
-export const API_BASE_URL = 'http://ute.dev.com:8080';
-export const API_BASE_OAUTH2_URL = 'http://ute.dev.com:8000';
+export const API_BASE_URL = 'http://localhost:8080';
+export const API_BASE_OAUTH2_URL = 'http://localhost:8000';
+// export const API_BASE_URL = 'http://ute.dev.com:8080';
+// export const API_BASE_OAUTH2_URL = 'http://ute.dev.com:8000';
 // export const API_BASE_URL = 'https://app-gateway-proxy.herokuapp.com';
 // export const API_BASE_OAUTH2_URL = 'https://app-auth-service.herokuapp.com';
 export const ACCESS_TOKEN = 'accessToken';

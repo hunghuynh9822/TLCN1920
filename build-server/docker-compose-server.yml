@@ -5,7 +5,7 @@ services:
       context: ./server/discovery-server
       dockerfile: Dockerfile
     image: hcmute/server/discovery-server
-    container_name: discovery-server
+    container_name: discovery
     restart: unless-stopped
     volumes:
       - ./logs/discovery-server:/server/discovery-server/logs
@@ -18,12 +18,14 @@ services:
       context: ./server/gateway-proxy
       dockerfile: Dockerfile
     image: hcmute/server/gateway-proxy
-    container_name: gateway-proxy
+    container_name: gateway
     restart: unless-stopped
     volumes:  
       - ./logs/gateway-proxy:/server/gateway-proxy/logs
     environment:
       - EUREKA_URI=http://discovery:8761
+      - DOMAIN_NAME=auth
+      - NON_SECURE_PORT=8080
     links:
       - discovery
     depends_on:
@@ -37,13 +39,13 @@ services:
       context: ./server/auth-service
       dockerfile: Dockerfile
     image: hcmute/server/auth
-    container_name: service-auth
+    container_name: auth
     restart: unless-stopped
     volumes:  
       - ./logs/auth-service:/server/auth-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
       - DOMAIN_NAME=auth
       - NON_SECURE_PORT=8000
     links:
@@ -61,13 +63,13 @@ services:
       context: ./server/employee-service
       dockerfile: Dockerfile
     image: hcmute/server/employee
-    container_name: service-employee
+    container_name: employee
     restart: unless-stopped
     volumes:
       - ./logs/employee-service:/server/employee-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
       - DOMAIN_NAME=employee
       - NON_SECURE_PORT=8001
     links:
@@ -85,13 +87,13 @@ services:
       context: ./server/task-service
       dockerfile: Dockerfile
     image: hcmute/server/task
-    container_name: service-task
+    container_name: tasks
     restart: unless-stopped
     volumes:
       - ./logs/task-service:/server/task-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
       - DOMAIN_NAME=tasks
       - NON_SECURE_PORT=8002
     links:
@@ -109,13 +111,13 @@ services:
       context: ./server/project-service
       dockerfile: Dockerfile
     image: hcmute/server/project
-    container_name: service-project
+    container_name: projects
     restart: unless-stopped
     volumes:
       - ./logs/project-service:/server/project-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
       - DOMAIN_NAME=projects
       - NON_SECURE_PORT=8003
     links:
@@ -133,13 +135,13 @@ services:
       context: ./server/notify-service
       dockerfile: Dockerfile
     image: hcmute/server/notify
-    container_name: service-notify
+    container_name: notify
     restart: unless-stopped
     volumes:
       - ./logs/notify-service:/server/notify-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
       - DOMAIN_NAME=notify
       - NON_SECURE_PORT=8004
     links:
@@ -157,13 +159,13 @@ services:
       context: ./server/request-service
       dockerfile: Dockerfile
     image: hcmute/server/request
-    container_name: service-request
+    container_name: request
     restart: unless-stopped
     volumes:
       - ./logs/request-service:/server/request-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.200.1:5432/postgres
+      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
       - DOMAIN_NAME=request
       - NON_SECURE_PORT=8005
     links:
