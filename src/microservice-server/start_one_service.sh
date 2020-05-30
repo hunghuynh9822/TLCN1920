@@ -15,10 +15,10 @@ for i in $(cat list_service.txt); do
     then
         echo "------------------------"
         kill -9 $(ps -ef | grep $i | grep -v 'color'| awk '{print $2}')
-        #mvn clean install -DskipTests
+        mvn clean install -DskipTests
         echo $i
         cd ./$i
-        #mvn clean package -DskipTests
+        mvn clean package -DskipTests
         file_jar=$(ls ./target | grep '.jar' | grep -v '.original')
         if [[ $service == 0 || $service == 1 ]]
         then
