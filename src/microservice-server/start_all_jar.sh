@@ -1,5 +1,5 @@
 #!/bin/bash
-root="/home/liem/TLCN1920/src/microservice-server"
+root="."
 #----
 rm -f $root/logs/*
 mvn clean install -DskipTests

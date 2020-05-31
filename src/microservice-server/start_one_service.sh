@@ -1,5 +1,5 @@
 #!/bin/bash
-root="/home/liem/TLCN1920/src/microservice-server"
+root="."
 #-------------------------------------------------
 temp=0
 for i in $(cat list_service.txt); do
