@@ -66,8 +66,10 @@ class NewTask extends Component {
         this.state = {
             open: false,
             openAdd: false,
+            openAddPrevious: false,
             scroll: 'body',
             assignee: null,
+            // previousTasks: [],
             request: {
                 projectId: '',
                 employeeCreator: '',
@@ -91,6 +93,9 @@ class NewTask extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleOpenAdd = this.handleOpenAdd.bind(this);
         this.handleCloseAdd = this.handleCloseAdd.bind(this);
+        this.handleOpenAddPrevious = this.handleOpenAddPrevious.bind(this);
+        this.handleCloseAddPrevious = this.handleCloseAddPrevious.bind(this);
+        this.handleListItemTaskClick = this.handleListItemTaskClick(this);
     }
 
     getName(employee) {
@@ -150,6 +155,7 @@ class NewTask extends Component {
                     open: false,
                     openAdd: false,
                     assignee: null,
+                    // previousTasks: [],
                     request: {
                         projectId: '',
                         employeeCreator: '',
@@ -180,6 +186,16 @@ class NewTask extends Component {
         });
     }
 
+    handleListItemTaskClick(task) {
+        let tasks = [];
+        tasks.push(task);
+        // console.log("[NewTask][previousTasks] " + JSON.stringify(tasks));
+        // this.setState({
+        //     previousTasks: tasks,
+        //     openAddPrevious: false,
+        // });
+    }
+
     handleOpen() {
         this.setState({
             open: true,
@@ -190,7 +206,9 @@ class NewTask extends Component {
         this.setState({
             open: false,
             openAdd: false,
+            openAddPrevious: false,
             assignee: null,
+            // previousTasks: [],
             request: {
                 projectId: '',
                 employeeCreator: '',
@@ -201,6 +219,18 @@ class NewTask extends Component {
                 duration: '',
                 endAt: new Date()
             }
+        })
+    }
+
+    handleOpenAddPrevious() {
+        this.setState({
+            openAddPrevious: true,
+        })
+    }
+
+    handleCloseAddPrevious() {
+        this.setState({
+            openAddPrevious: false,
         })
     }
 
@@ -219,9 +249,11 @@ class NewTask extends Component {
     render() {
         const { classes } = this.props;
         const { projectItem } = this.props;
-        const { open, openAdd, request, scroll } = this.state;
+        const { open, openAdd, openAddPrevious, request, scroll } = this.state;
         let members = projectItem.members;
+        let tasks = projectItem.tasks;
         // console.log(members);
+        console.log("[NewTask][projectItem][tasks] " + JSON.stringify(tasks));
         return (
             <React.Fragment>
                 <Button onClick={this.handleOpen} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
@@ -266,6 +298,17 @@ class NewTask extends Component {
                                     value={request.description}
                                     onChange={this.handleInputChange}
                                 />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Grid item xs={4}>Previous task : </Grid>
+                                <Grid item xs={8}>
+                                    <div>
+                                        <Button onClick={this.handleOpenAddPrevious} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
+                                        {/* {this.state.assignee !== null ? (
+                                            <TagMember member={this.state.assignee} removeMember={this.removeAssignee} />
+                                        ) : null} */}
+                                    </div>
+                                </Grid>
                             </Grid>
                             <Grid item xs={12}>
                                 <Grid item xs={2}>Assignee</Grid>
@@ -333,6 +376,18 @@ class NewTask extends Component {
                             </ListItem>
                         )) : (
                                 <ListItemText primary="No employee" />
+                            )}
+                    </List>
+                </Dialog>
+                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious}>
+                    <DialogTitle id="simple-dialog-title">Select previous task</DialogTitle>
+                    <List>
+                        {tasks.length !== 0 ? tasks.map((task, index) => (
+                            <ListItem button onClick={() => this.handleListItemTaskClick(task)} key={index}>
+                                <ListItemText primary={task.title} />
+                            </ListItem>
+                        )) : (
+                                <ListItemText primary="No task" />
                             )}
                     </List>
                 </Dialog>
