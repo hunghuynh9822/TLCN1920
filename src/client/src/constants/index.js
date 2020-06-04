@@ -6,7 +6,7 @@ export const API_BASE_OAUTH2_URL = 'http://localhost:8000';
 // export const API_BASE_OAUTH2_URL = 'https://app-auth-service.herokuapp.com';
 export const ACCESS_TOKEN = 'accessToken';
 
-export const OAUTH2_REDIRECT_URI = 'http://locahost:3000/oauth2/redirect';
+export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect';
 // export const OAUTH2_REDIRECT_URI = 'https://app-client-react.herokuapp.com/oauth2/redirect';
 
 export const GOOGLE_AUTH_URL = API_BASE_OAUTH2_URL + '/auth/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
