@@ -31,6 +31,8 @@
         <module>employee-service</module>
 		<module>project-service</module>
 		<module>notify-service</module>
+		<module>webhook-service</module>
+		<module>webhook-service</module>
 	</modules>
 
 	<dependencyManagement>
