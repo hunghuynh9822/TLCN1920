@@ -24,12 +24,15 @@ public class Task implements Serializable {
     private Long createdAt;
     @SerializedName("updated_at")
     private Long updatedAt;
+    @SerializedName("pre_task_id")
+    private String preTaskId;
 
     public Task() {
     }
 
-    public Task(Long id, Long projectId, Long employeeCreator, Long employeeAssignee, String title, String description, Long startedAt, Integer duration, TaskState state, Integer point, Long createdAt, Long updatedAt) {
+    public Task(String preTaskId,Long id, Long projectId, Long employeeCreator, Long employeeAssignee, String title, String description, Long startedAt, Integer duration, TaskState state, Integer point, Long createdAt, Long updatedAt) {
         this.id = id;
+        this.preTaskId = preTaskId;
         this.projectId = projectId;
         this.employeeCreator = employeeCreator;
         this.employeeAssignee = employeeAssignee;
@@ -43,7 +46,7 @@ public class Task implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Task(Long id, Long employeeAssignee, String title, String description, Long startedAt, Integer duration, TaskState state, Long updatedAt) {
+    public Task(Long id,String preTaskId, Long employeeAssignee, String title, String description, Long startedAt, Integer duration, TaskState state, Long updatedAt) {
         this.id = id;
         this.employeeAssignee = employeeAssignee;
         this.title = title;
@@ -52,6 +55,7 @@ public class Task implements Serializable {
         this.duration = duration;
         this.state = state;
         this.updatedAt = updatedAt;
+        this.preTaskId = preTaskId;
     }
 
     public Long getId() {
@@ -148,5 +152,13 @@ public class Task implements Serializable {
 
     public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getPreTaskId() {
+        return preTaskId;
+    }
+
+    public void setPreTaskId(String preTaskId) {
+        this.preTaskId = preTaskId;
     }
 }

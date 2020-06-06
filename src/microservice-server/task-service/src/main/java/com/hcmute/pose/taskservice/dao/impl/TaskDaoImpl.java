@@ -18,7 +18,7 @@ import java.util.Optional;
 @Repository
 public class TaskDaoImpl implements TaskDao {
     private static Logger LOGGER = LoggerFactory.getLogger(TaskDaoImpl.class);
-    private static String SQL_INSERT_TASK = "INSERT INTO tasks(id,project_id,employee_creator,employee_assignee,title,description,started_at,duration,state,point,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static String SQL_INSERT_TASK = "INSERT INTO tasks(id,project_id,employee_creator,employee_assignee,title,description,started_at,duration,state,point,created_at,updated_at,pre_task_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static String SQl_SELECT_TASK_BY_ID = "SELECT * FROM tasks WHERE id = ?";
     private static String SQl_SELECT_ASSIGNEE_BY_CREATOR = "SELECT employee_assignee as value FROM tasks WHERE employee_creator = ? AND project_id = ? GROUP BY employee_assignee";
     private static String SQl_SELECT_TASK_BY_ASSIGNEE = "SELECT * FROM tasks WHERE employee_assignee = ? AND project_id = ?";
@@ -58,7 +58,8 @@ public class TaskDaoImpl implements TaskDao {
                     task.getState().ordinal(),
                     task.getPoint(),
                     task.getCreatedAt(),
-                    task.getUpdatedAt()
+                    task.getUpdatedAt(),
+                    task.getPreTaskId()
                     );
             return Optional.of(task);
         } catch (SQLException | TransactionException e) {

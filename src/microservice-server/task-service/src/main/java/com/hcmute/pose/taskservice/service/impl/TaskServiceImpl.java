@@ -22,9 +22,9 @@ public class TaskServiceImpl implements TaskService {
     private TaskDao taskDao;
 
     @Override
-    public Task createTask(Long projectId, Long employeeCreator, Long employeeAssignee, String title, String description, Long startedAt, Integer duration) throws Exception {
+    public Task createTask(String preTaskId,Long projectId, Long employeeCreator, Long employeeAssignee, String title, String description, Long startedAt, Integer duration) throws Exception {
         Long taskId = taskDao.getLastID().orElseThrow(()-> new Exception("Not get task generate id"));
-        Task task = new Task(taskId,projectId,employeeCreator,employeeAssignee,title,description,startedAt,duration,TaskState.NEW,0,System.currentTimeMillis(),System.currentTimeMillis());
+        Task task = new Task(preTaskId,taskId,projectId,employeeCreator,employeeAssignee,title,description,startedAt,duration,TaskState.NEW,0,System.currentTimeMillis(),System.currentTimeMillis());
         return  taskDao.createTask(task).orElseThrow(()-> new Exception("Can not create new task"));
     }
 
@@ -88,8 +88,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void updateTask(Long taskId, Long assigneeId, String title, String description, Long startedAt, Integer duration, TaskState state) throws SQLException, TransactionException {
-        Task task = new Task(taskId, assigneeId, title, description, startedAt, duration, state, System.currentTimeMillis());
+    public void updateTask(Long taskId,String preTaskId, Long assigneeId, String title, String description, Long startedAt, Integer duration, TaskState state) throws SQLException, TransactionException {
+        Task task = new Task(taskId, preTaskId, assigneeId, title, description, startedAt, duration, state, System.currentTimeMillis());
         taskDao.updateTask(task);
     }
 

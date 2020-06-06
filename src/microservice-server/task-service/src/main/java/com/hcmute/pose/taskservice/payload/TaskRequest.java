@@ -13,6 +13,7 @@ public class TaskRequest {
     @NotBlank(message = "Not null title")
     @Size(max = 255,message = "Not long character 255")
     private String title;
+    private String preTaskId;
     @NotBlank(message = "Not null title")
     private String description;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -77,5 +78,14 @@ public class TaskRequest {
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+
+    public String getPreTaskId() {
+        return preTaskId;
+    }
+
+    public void setPreTaskId(String preTaskId) {
+        this.preTaskId = preTaskId;
     }
 }
