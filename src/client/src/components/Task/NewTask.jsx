@@ -138,7 +138,15 @@ class NewTask extends Component {
         const { currentUser, projectItem } = this.props;
         let projectId = projectItem.project.id;
         console.log("Assignee " + JSON.stringify(this.state.assignee));
-        let preTaskId = this.state.previousTasks.join();
+        let preTaskId = "";
+        this.state.previousTasks.forEach((task, index) => {
+            if (index === this.state.previousTasks.length - 1) {
+                preTaskId = preTaskId + task.id;
+            } else {
+                preTaskId = preTaskId + task.id + ","
+            }
+        })
+        console.log("[NewTask] preTaskId " + preTaskId)
         const request = {
             projectId: projectId,
             preTaskId: preTaskId,
