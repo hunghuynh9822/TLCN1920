@@ -300,6 +300,7 @@ CREATE TABLE "public"."tasks" (
   "duration" int4,
   "state" int4,
   "point" int4,
+  "pre_task_id" varchar(255) COLLATE "pg_catalog"."default",
   "employee_creator" int8,
   "description" text COLLATE "pg_catalog"."default",
   "created_at" int8,
