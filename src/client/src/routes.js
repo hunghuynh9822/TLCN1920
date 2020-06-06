@@ -37,7 +37,9 @@ import {
   AdminHumanManagement,
   AdminDashboard,
   ProjectOverview,
-  ProjectView
+  ProjectView,
+  WikiManagement,
+  WebHookMangement
 } from "./views";
 
 const manageRoutes = [
@@ -117,6 +119,24 @@ const manageRoutes = [
         component: Information,
         layout: "/admin",
         breadcrumb: "Information"
+      },
+      {
+        path: "/wiki",
+        name: "Wiki",
+        rtlName: "Wiki",
+        icon: Person,
+        component: WikiManagement,
+        layout: "/admin",
+        breadcrumb: "Wiki"
+      },
+      {
+        path: "/webhook",
+        name: "Webhook",
+        rtlName: "Webhook",
+        icon: Person,
+        component: WebHookMangement,
+        layout: "/admin",
+        breadcrumb: "Webhook"
       }
     ]
   },

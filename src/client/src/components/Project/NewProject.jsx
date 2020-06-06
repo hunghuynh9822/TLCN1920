@@ -13,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import CKEditor from 'ckeditor4-react';
 
 import { create } from '../../action/project';
 const styles = theme => ({
@@ -158,6 +159,12 @@ class NewProject extends Component {
                   variant="outlined"
                   value={request.description}
                   onChange={this.handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <h2>Using CKEditor 4 in React</h2>
+                <CKEditor
+                  data="<p>Hello from CKEditor 4!</p>"
                 />
               </Grid>
             </Grid>
