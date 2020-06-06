@@ -41,19 +41,19 @@ zuul:
     tasks:
       path: /api/tasks/**
       strip-prefix: false
-      service-id: task-service
+      service-id: project-service
       ribbon:
         ReadTimeout: 600000
     admintasks:
       path: /api/admin/tasks/**
       strip-prefix: false
-      service-id: task-service
+      service-id: project-service
       ribbon:
         ReadTimeout: 600000
     leadtasks:
       path: /api/lead/tasks/**
       strip-prefix: false
-      service-id: task-service
+      service-id: project-service
       ribbon:
         ReadTimeout: 600000
     projects:

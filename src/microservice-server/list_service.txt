@@ -2,7 +2,6 @@ discovery-server
 gateway-proxy
 auth-service
 employee-service
-notify-service
 project-service
+notify-service
 request-service
-task-service

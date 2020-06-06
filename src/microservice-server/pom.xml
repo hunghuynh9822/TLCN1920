@@ -29,7 +29,6 @@
         <module>gateway-proxy</module>
         <module>auth-service</module>
         <module>employee-service</module>
-        <module>task-service</module>
 		<module>project-service</module>
 		<module>request-service</module>
 		<module>notify-service</module>
