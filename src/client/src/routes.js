@@ -25,6 +25,8 @@ import Assignment from "@material-ui/icons/AssignmentOutlined";
 import Today from "@material-ui/icons/TodayOutlined";
 import FolderOpen from "@material-ui/icons/FolderOpenOutlined";
 import TimeLine from "@material-ui/icons/Timeline";
+import LibraryBook from "@material-ui/icons/LibraryBooks"
+import SettingsEthernet from "@material-ui/icons/SettingsEthernet"
 import {
   TaskManagement,
   GanttChart,
@@ -124,7 +126,7 @@ const manageRoutes = [
         path: "/wiki",
         name: "Wiki",
         rtlName: "Wiki",
-        icon: Person,
+        icon: LibraryBook,
         component: WikiManagement,
         layout: "/admin",
         breadcrumb: "Wiki"
@@ -133,7 +135,7 @@ const manageRoutes = [
         path: "/webhook",
         name: "Webhook",
         rtlName: "Webhook",
-        icon: Person,
+        icon: SettingsEthernet,
         component: WebHookMangement,
         layout: "/admin",
         breadcrumb: "Webhook"
