@@ -171,3 +171,8 @@ export {
     default as Task
 }
 from './Task/Task.jsx';
+//Dialog
+export {
+    default as DialogTitleCustom
+}
+from './Dialog/DialogTitle.jsx';

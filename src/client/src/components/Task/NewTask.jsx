@@ -6,7 +6,7 @@ import { withAlert } from 'react-alert';
 
 import { create } from '../../action/task';
 
-import { TagMember, TagTask } from '../../components';
+import { TagMember, TagTask, DialogTitleCustom } from '../../components';
 import {
     DatePicker
 } from '@material-ui/pickers';
@@ -414,7 +414,9 @@ class NewTask extends Component {
                     </List>
                 </Dialog>
                 <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious}>
-                    <DialogTitle id="simple-dialog-title">Select previous task</DialogTitle>
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAddPrevious}>
+                        Select previous tasks :
+                    </DialogTitleCustom>
                     <List>
                         {tasks.length !== 0 ? tasks.map((task, index) => (
                             <ListItem button onClick={() => this.handleListItemClick(task)} key={index}>
