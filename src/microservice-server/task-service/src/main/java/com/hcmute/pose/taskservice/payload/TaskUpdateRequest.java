@@ -9,11 +9,12 @@ public class TaskUpdateRequest {
     private Integer state;
     private Long startedAt;
     private Integer duration;
+    private String preTaskId;
 
     public TaskUpdateRequest() {
     }
 
-    public TaskUpdateRequest(Long taskId, Long employeeId, String title, String description, Integer point, Integer state, Long startedAt, Integer duration) {
+    public TaskUpdateRequest(Long taskId, String preTaskId, Long employeeId, String title, String description, Integer point, Integer state, Long startedAt, Integer duration) {
         this.taskId = taskId;
         this.employeeId = employeeId;
         this.title = title;
@@ -22,6 +23,7 @@ public class TaskUpdateRequest {
         this.state = state;
         this.startedAt = startedAt;
         this.duration = duration;
+        this.preTaskId = preTaskId;
     }
 
     public Long getTaskId() {
@@ -86,5 +88,13 @@ public class TaskUpdateRequest {
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public String getPreTaskId() {
+        return preTaskId;
+    }
+
+    public void setPreTaskId(String preTaskId) {
+        this.preTaskId = preTaskId;
     }
 }

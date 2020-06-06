@@ -34,7 +34,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     public Optional<Task> createTask(TaskRequest taskRequest) throws TransactionException {
         try{
             databaseHelper.beginTransaction();
-            Task task = taskService.createTask(taskRequest.getProjectId(),taskRequest.getEmployeeCreator(),taskRequest.getEmployeeAssignee(), taskRequest.getTitle(), taskRequest.getDescription(), taskRequest.getStartedAt().getTime(), taskRequest.getDuration());
+            Task task = taskService.createTask(taskRequest.getPreTaskId(),taskRequest.getProjectId(),taskRequest.getEmployeeCreator(),taskRequest.getEmployeeAssignee(), taskRequest.getTitle(), taskRequest.getDescription(), taskRequest.getStartedAt().getTime(), taskRequest.getDuration());
             databaseHelper.commit();
             return Optional.of(task);
         }catch (Exception e) {
@@ -230,7 +230,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     public void updateTask(TaskUpdateRequest request) throws SQLException, TransactionException {
         try{
             databaseHelper.beginTransaction();
-            taskService.updateTask(request.getTaskId(), request.getEmployeeId(), request.getTitle(), request.getDescription(), request.getStartedAt(), request.getDuration(), TaskState.values()[request.getState()]);
+            taskService.updateTask(request.getTaskId(),request.getPreTaskId(), request.getEmployeeId(), request.getTitle(), request.getDescription(), request.getStartedAt(), request.getDuration(), TaskState.values()[request.getState()]);
             databaseHelper.commit();
         } finally {
             databaseHelper.closeConnection();
