@@ -71,7 +71,7 @@ zuul:
     requests:
       path: /api/requests/**
       strip-prefix: false
-      service-id: request-service
+      service-id: notify-service
       ribbon:
         ReadTimeout: 600000
     notify:

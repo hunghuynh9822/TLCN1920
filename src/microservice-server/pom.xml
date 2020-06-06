@@ -30,7 +30,6 @@
         <module>auth-service</module>
         <module>employee-service</module>
 		<module>project-service</module>
-		<module>request-service</module>
 		<module>notify-service</module>
 	</modules>
 

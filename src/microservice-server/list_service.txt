@@ -4,4 +4,3 @@ auth-service
 employee-service
 project-service
 notify-service
-request-service

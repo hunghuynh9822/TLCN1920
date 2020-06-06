@@ -15,6 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.sql.SQLException;
 
 @Configuration
-public class NotifyConfig {
+public class RequestConfig {
 
 }
