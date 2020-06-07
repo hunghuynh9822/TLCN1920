@@ -28,13 +28,41 @@ class TreeViewCustom extends Component {
             defaultExpanded: [],
             index: 1
         }
+        //
+        this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+        //
         this.getData = this.getData.bind(this);
         this.setExpanded = this.setExpanded.bind(this);
         this.getIndex = this.getIndex.bind(this);
     }
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+    /**
+ * Set the wrapper ref
+ */
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+
+    /**
+     * Alert if clicked on outside of element
+     */
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            console.log("[WikiManagement] Outside tree view")
+        }
+    }
+
     getData() {
         return [{
-            id: this.getIndex()
+            id: this.getIndex(),
+            title: "Wiki Title"
         }];
     }
     getIndex() {
@@ -43,12 +71,11 @@ class TreeViewCustom extends Component {
         this.setState({
             index: index
         })
-        return index;
+        return index + "";
     }
     setExpanded(id) {
         let defaultExpanded = this.state.defaultExpanded;
         if (defaultExpanded.includes(id)) {
-            console.log("[WikiManagement] Expanded includes " + id);
             defaultExpanded.pop(id);
         } else {
             defaultExpanded.push(id);
@@ -56,24 +83,26 @@ class TreeViewCustom extends Component {
         this.setState({
             defaultExpanded: defaultExpanded
         })
-        console.log("[WikiManagement] setExpanded " + JSON.stringify(this.state.defaultExpanded))
     }
     render() {
         const { classes } = this.props;
         let { defaultExpanded } = this.state;
         let data = {
-            id: 0
+            id: '0',
+            title: "Wiki Title"
         }
         return (
-            <TreeView
-                className={classes.root}
-                defaultExpanded={defaultExpanded}
-                defaultCollapseIcon={<ArrowDropDownIcon />}
-                defaultExpandIcon={<ArrowRightIcon />}
-                defaultEndIcon={<div style={{ width: 24 }} />}
-            >
-                <TreeItemCustom dataCurrent={data} getData={this.getData} setExpanded={this.setExpanded} getIndex={this.getIndex} />
-            </TreeView >
+            <div ref={this.setWrapperRef}>
+                <TreeView
+                    className={classes.root}
+                    defaultExpanded={defaultExpanded}
+                    defaultCollapseIcon={<ArrowDropDownIcon />}
+                    defaultExpandIcon={<ArrowRightIcon />}
+                    defaultEndIcon={<div style={{ width: 24 }} />}
+                >
+                    <TreeItemCustom dataCurrent={data} getData={this.getData} setExpanded={this.setExpanded} getIndex={this.getIndex} />
+                </TreeView >
+            </div>
         );
     }
 }

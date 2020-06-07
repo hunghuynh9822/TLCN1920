@@ -22,10 +22,9 @@ class TreeItemCustom extends Component {
         console.log("[WikiManagement] Item tree click -> icon");
     }
     handleLabelClick() {
-        console.log("[WikiManagement] Item tree click -> label " + JSON.stringify(this.state.dataChild));
+        console.log("[WikiManagement] Item tree click -> label");
         const { dataCurrent, getData, setExpanded } = this.props;
         let data = getData();
-        console.log("[WikiManagement] Item tree click " + JSON.stringify(data))
         this.setState({
             dataChild: data
         })
@@ -35,11 +34,10 @@ class TreeItemCustom extends Component {
         const { classes } = this.props;
         const { dataCurrent, getData, setExpanded } = this.props;
         const { dataChild } = this.state;
-        console.log("[WikiManagement] DataCurrent " + dataCurrent.id);
         return (
-            <StyledTreeItem nodeId={dataCurrent.id} labelText="Categories" labelIcon={Label} onIconClick={this.handleIconClick} onLabelClick={this.handleLabelClick}>
+            <StyledTreeItem nodeId={dataCurrent.id} labelText={dataCurrent.title} labelIcon={Label} onIconClick={this.handleIconClick} onLabelClick={this.handleLabelClick}>
                 {dataChild.map((item, index) =>
-                    <TreeItemCustom classes={classes} key={item.id} dataCurrent={item} getData={getData} setExpanded={setExpanded} ></TreeItemCustom>
+                    <TreeItemCustom classes={classes} key={item.id} dataCurrent={item} getData={getData} setExpanded={setExpanded}></TreeItemCustom>
                 )}
             </StyledTreeItem>
         );

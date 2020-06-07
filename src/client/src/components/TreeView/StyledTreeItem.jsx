@@ -59,8 +59,7 @@ class StyledTreeItem extends Component {
         super(props);
     }
     render() {
-        const { classes } = this.props;
-        const { labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = this.props;
+        const { classes, labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = this.props;
         return (
             <TreeItem
                 label={
@@ -84,7 +83,7 @@ class StyledTreeItem extends Component {
                     expanded: classes.expanded,
                     selected: classes.selected,
                     group: classes.group,
-                    label: classes.label,
+                    label: classes.label
                 }}
                 {...other}
             />
