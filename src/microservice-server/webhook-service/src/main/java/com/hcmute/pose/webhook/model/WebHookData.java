@@ -9,6 +9,8 @@ public class WebHookData implements Serializable {
     private Long id;
     @SerializedName("id_project")
     private Long idPro;
+    @SerializedName("name_webhook")
+    private String name;
     @SerializedName("bot_token")
     private String botToken;
     @SerializedName("chat_id")
@@ -20,14 +22,23 @@ public class WebHookData implements Serializable {
     @SerializedName("update_state")
     private boolean updateState;
 
-    public WebHookData(Long id, Long idPro, String botToken, String chatId, boolean createTask, boolean updateTask, boolean updateState) {
+    public WebHookData(Long id, Long idPro,String name,String botToken, String chatId, boolean createTask, boolean updateTask, boolean updateState) {
         this.id = id;
         this.idPro = idPro;
+        this.name = name;
         this.botToken = botToken;
         this.chatId = chatId;
         this.createTask = createTask;
         this.updateTask = updateTask;
         this.updateState = updateState;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {

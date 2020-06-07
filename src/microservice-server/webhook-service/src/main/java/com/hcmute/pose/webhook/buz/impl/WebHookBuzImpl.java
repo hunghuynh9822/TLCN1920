@@ -39,7 +39,7 @@ public class WebHookBuzImpl implements WebHookBuz {
     public void updateWebhook(WebHookRequest webHookRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
-            webHookService.updateWebhook(webHookRequest.getId(), webHookRequest.getIdPro(),webHookRequest.getBotToken(),webHookRequest.getChatId(),webHookRequest.getCreateTask(),webHookRequest.getUpdateTask(),webHookRequest.getUpdateState());
+            webHookService.updateWebhook(webHookRequest.getId(), webHookRequest.getIdPro(),webHookRequest.getName(),webHookRequest.getBotToken(),webHookRequest.getChatId(),webHookRequest.getCreateTask(),webHookRequest.getUpdateTask(),webHookRequest.getUpdateState());
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
             LOGGER.error("[updateWebhook]",e);
@@ -63,7 +63,7 @@ public class WebHookBuzImpl implements WebHookBuz {
     public WebHookData createWebhook(WebHookRequest webHookRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
-            WebHookData webHookData = webHookService.createWebhook(webHookRequest.getIdPro(),webHookRequest.getBotToken(),webHookRequest.getChatId(),webHookRequest.getCreateTask(),webHookRequest.getUpdateTask(),webHookRequest.getUpdateState());
+            WebHookData webHookData = webHookService.createWebhook(webHookRequest.getIdPro(),webHookRequest.getName(),webHookRequest.getBotToken(),webHookRequest.getChatId(),webHookRequest.getCreateTask(),webHookRequest.getUpdateTask(),webHookRequest.getUpdateState());
             databaseHelper.commit();
             return webHookData;
         }catch (Exception | TransactionException e){

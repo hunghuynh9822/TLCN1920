@@ -19,9 +19,9 @@ public class WebHookServiceImpl implements WebHookService {
     private WebHookDao webHookDao;
 
     @Override
-    public WebHookData createWebhook(Long idPro, String bot_token, String chat_id, Boolean create_task, Boolean update_task, Boolean update_state) throws Exception {
+    public WebHookData createWebhook(Long idPro,String name, String bot_token, String chat_id, Boolean create_task, Boolean update_task, Boolean update_state) throws Exception {
         Long id = webHookDao.getLastID().orElseThrow(()-> new Exception("Can not get generated id"));
-        WebHookData webHookData = new WebHookData(id, idPro, bot_token,chat_id,create_task,update_task,update_state);
+        WebHookData webHookData = new WebHookData(id, idPro, name, bot_token,chat_id,create_task,update_task,update_state);
         return  webHookDao.createWebhook(webHookData).orElseThrow(()-> new Exception("Can not create webhook"));
     }
 
@@ -31,8 +31,8 @@ public class WebHookServiceImpl implements WebHookService {
     }
 
     @Override
-    public void updateWebhook(Long id,Long idPro, String bot_token, String chat_id, Boolean create_task, Boolean update_task, Boolean update_state) throws SQLException, TransactionException {
-        WebHookData webHookData = new WebHookData(id,idPro, bot_token, chat_id, create_task,update_task,update_state);
+    public void updateWebhook(Long id,Long idPro,String name, String bot_token, String chat_id, Boolean create_task, Boolean update_task, Boolean update_state) throws SQLException, TransactionException {
+        WebHookData webHookData = new WebHookData(id,idPro,name, bot_token, chat_id, create_task,update_task,update_state);
         webHookDao.updateWebhook(webHookData);
     }
 

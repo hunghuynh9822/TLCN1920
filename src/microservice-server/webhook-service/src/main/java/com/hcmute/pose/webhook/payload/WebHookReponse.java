@@ -3,20 +3,30 @@ package com.hcmute.pose.webhook.payload;
 public class WebHookReponse {
     private Long id;
     private Long idPro;
+    private String name;
     private String botToken;
     private String chatId;
     private Boolean createTask;
     private Boolean updateTask;
     private Boolean updateState;
 
-    public WebHookReponse(Long id, Long idPro, String botToken, String chatId, Boolean createTask, Boolean updateTask, Boolean updateState) {
+    public WebHookReponse(Long id, Long idPro,String name, String botToken, String chatId, Boolean createTask, Boolean updateTask, Boolean updateState) {
         this.id = id;
         this.idPro = idPro;
+        this.name = name;
         this.botToken = botToken;
         this.chatId = chatId;
         this.createTask = createTask;
         this.updateTask = updateTask;
         this.updateState = updateState;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {
