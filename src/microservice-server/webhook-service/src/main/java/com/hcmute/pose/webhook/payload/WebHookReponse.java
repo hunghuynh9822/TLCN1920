@@ -1,28 +1,16 @@
-package com.hcmute.pose.webhook.model;
+package com.hcmute.pose.webhook.payload;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
-
-public class WebHookData implements Serializable {
-    @SerializedName("id_webhook")
+public class WebHookReponse {
     private Long id;
-    @SerializedName("id_project")
     private Long idPro;
-    @SerializedName("name_webhook")
     private String name;
-    @SerializedName("bot_token")
     private String botToken;
-    @SerializedName("chat_id")
     private String chatId;
-    @SerializedName("create_task")
-    private boolean createTask;
-    @SerializedName("update_task")
-    private boolean updateTask;
-    @SerializedName("update_state")
-    private boolean updateState;
+    private Boolean createTask;
+    private Boolean updateTask;
+    private Boolean updateState;
 
-    public WebHookData(Long id, Long idPro,String name,String botToken, String chatId, boolean createTask, boolean updateTask, boolean updateState) {
+    public WebHookReponse(Long id, Long idPro,String name, String botToken, String chatId, Boolean createTask, Boolean updateTask, Boolean updateState) {
         this.id = id;
         this.idPro = idPro;
         this.name = name;
@@ -73,29 +61,27 @@ public class WebHookData implements Serializable {
         this.chatId = chatId;
     }
 
-    public boolean isCreateTask() {
+    public Boolean getCreateTask() {
         return createTask;
     }
 
-    public void setCreateTask(boolean createTask) {
+    public void setCreateTask(Boolean createTask) {
         this.createTask = createTask;
     }
 
-    public boolean isUpdateTask() {
+    public Boolean getUpdateTask() {
         return updateTask;
     }
 
-    public void setUpdateTask(boolean updateTask) {
+    public void setUpdateTask(Boolean updateTask) {
         this.updateTask = updateTask;
     }
 
-    public boolean isUpdateState() {
+    public Boolean getUpdateState() {
         return updateState;
     }
 
-    public void setUpdateState(boolean updateState) {
+    public void setUpdateState(Boolean updateState) {
         this.updateState = updateState;
     }
-
-
 }
