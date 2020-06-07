@@ -58,6 +58,7 @@ class NewProject extends Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.onEditorChange = this.onEditorChange.bind(this);
   }
 
   handleInputChange(event) {
@@ -68,6 +69,16 @@ class NewProject extends Component {
       request[name] = value;
       return { request };
     })
+  }
+
+  onEditorChange(evt) {
+    // console.log("[NewProject] " + evt.editor.getData())
+    this.setState(prevState => {
+      let request = Object.assign({}, prevState.request);
+      request["description"] = evt.editor.getData();
+      return { request };
+    });
+    // console.log("[NewProject] " + this.state.request.description);
   }
 
   handleSubmit() {
@@ -146,7 +157,7 @@ class NewProject extends Component {
                   onChange={this.handleInputChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   id="description"
                   name="description"
@@ -160,11 +171,12 @@ class NewProject extends Component {
                   value={request.description}
                   onChange={this.handleInputChange}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
-                <h2>Using CKEditor 4 in React</h2>
+                <p>Description</p>
                 <CKEditor
-                  data="<p>Hello from CKEditor 4!</p>"
+                  data={request.description}
+                  onChange={this.onEditorChange}
                 />
               </Grid>
             </Grid>
