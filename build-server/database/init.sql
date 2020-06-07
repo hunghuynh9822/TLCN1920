@@ -518,3 +518,18 @@ CREATE TABLE "public"."webhook" (
   "update_state" bool
 )
 ;
+
+-- ----------------------------
+-- Table structure for wiki
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."wiki";
+CREATE TABLE "public"."wiki" (
+  "wiki_id" bigint PRIMARY KEY,
+  "wiki_title" varchar(255),
+  "id_project" bigint,
+  "parent_path" varchar(500),
+  "content" text,
+  "created_at" bigint,
+  "updated_at" bigint
+)
+;
