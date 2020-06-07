@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { StyledTreeItem } from '..'
+import { TreeItemCustom, StyledTreeItem } from '..'
 //
 import TreeView from '@material-ui/lab/TreeView';
 import MailIcon from '@material-ui/icons/Mail';
@@ -24,55 +24,56 @@ const styles = theme => ({
 class TreeViewCustom extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            defaultExpanded: [],
+            index: 1
+        }
+        this.getData = this.getData.bind(this);
+        this.setExpanded = this.setExpanded.bind(this);
+        this.getIndex = this.getIndex.bind(this);
+    }
+    getData() {
+        return [{
+            id: this.getIndex()
+        }];
+    }
+    getIndex() {
+        let index = this.state.index;
+        index = index + 1;
+        this.setState({
+            index: index
+        })
+        return index;
+    }
+    setExpanded(id) {
+        let defaultExpanded = this.state.defaultExpanded;
+        if (defaultExpanded.includes(id)) {
+            console.log("[WikiManagement] Expanded includes " + id);
+            defaultExpanded.pop(id);
+        } else {
+            defaultExpanded.push(id);
+        }
+        this.setState({
+            defaultExpanded: defaultExpanded
+        })
+        console.log("[WikiManagement] setExpanded " + JSON.stringify(this.state.defaultExpanded))
     }
     render() {
         const { classes } = this.props;
+        let { defaultExpanded } = this.state;
+        let data = {
+            id: 0
+        }
         return (
             <TreeView
                 className={classes.root}
-                defaultExpanded={['3']}
+                defaultExpanded={defaultExpanded}
                 defaultCollapseIcon={<ArrowDropDownIcon />}
                 defaultExpandIcon={<ArrowRightIcon />}
                 defaultEndIcon={<div style={{ width: 24 }} />}
             >
-                <StyledTreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon} />
-                <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
-                <StyledTreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
-                    <StyledTreeItem
-                        nodeId="5"
-                        labelText="Social"
-                        labelIcon={SupervisorAccountIcon}
-                        labelInfo="90"
-                        color="#1a73e8"
-                        bgColor="#e8f0fe"
-                    />
-                    <StyledTreeItem
-                        nodeId="6"
-                        labelText="Updates"
-                        labelIcon={InfoIcon}
-                        labelInfo="2,294"
-                        color="#e3742f"
-                        bgColor="#fcefe3"
-                    />
-                    <StyledTreeItem
-                        nodeId="7"
-                        labelText="Forums"
-                        labelIcon={ForumIcon}
-                        labelInfo="3,566"
-                        color="#a250f5"
-                        bgColor="#f3e8fd"
-                    />
-                    <StyledTreeItem
-                        nodeId="8"
-                        labelText="Promotions"
-                        labelIcon={LocalOfferIcon}
-                        labelInfo="733"
-                        color="#3c8039"
-                        bgColor="#e6f4ea"
-                    />
-                </StyledTreeItem>
-                <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
-            </TreeView>
+                <TreeItemCustom dataCurrent={data} getData={this.getData} setExpanded={this.setExpanded} getIndex={this.getIndex} />
+            </TreeView >
         );
     }
 }

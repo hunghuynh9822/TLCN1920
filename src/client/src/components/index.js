@@ -185,3 +185,7 @@ export {
     default as TreeViewCustom
 }
 from './TreeView/TreeViewCustom.jsx';
+export {
+    default as TreeItemCustom
+}
+from './TreeView/TreeItemCustom.jsx'

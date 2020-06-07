@@ -129,7 +129,12 @@ const manageRoutes = [
         icon: LibraryBook,
         component: WikiManagement,
         layout: "/admin",
-        breadcrumb: "Wiki"
+        breadcrumb: "Wiki",
+        routes: [{
+          path: "/:wikiId",
+          component: WikiManagement,
+          layout: "/admin/wiki",
+        }]
       },
       {
         path: "/webhook",

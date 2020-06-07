@@ -97,6 +97,6 @@ StyledTreeItem.propTypes = {
     color: PropTypes.string,
     labelIcon: PropTypes.elementType.isRequired,
     labelInfo: PropTypes.string,
-    labelText: PropTypes.string.isRequired,
+    labelText: PropTypes.string,
 };
 export default withStyles(styles)(StyledTreeItem);
