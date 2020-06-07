@@ -133,8 +133,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             employeeResponse.setRole(per.getRole());
             members.add(employeeResponse);
         }
-        AllTasksProjectResponse allTasksByProject = taskServiceBuz.getAllTasksByProject(project.getId());
-
+        AllTasksProjectResponse allTasksByProject = taskServiceBuz.getDataOfProject(project.getId());
         return new ProjectResponse(project, members, allTasksByProject.getTasks());
     }
 

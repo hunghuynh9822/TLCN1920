@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -54,26 +55,33 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     }
 
     @Override
+    public AllTasksProjectResponse getDataOfProject(Long projectId) throws SQLException {
+        List<Task> tasks = taskService.getTasksByProject(projectId);
+        List<TaskResponse> taskResponses = new ArrayList<>();
+        List<TaskLink> links = new ArrayList<>();
+        long index = 1L;
+        for (Task task : tasks
+        ) {
+            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
+            taskResponses.add(taskResponse);
+            String preTaskIds = task.getPreTaskId();
+            if (StringUtils.isEmpty(preTaskIds)) {
+                continue;
+            }
+            for (String taskId : preTaskIds.split(",")) {
+                TaskLink taskLink = null;
+                taskLink = new TaskLink(index, new Long(taskId), task.getId(), 0, System.currentTimeMillis(), System.currentTimeMillis());
+                links.add(taskLink);
+                index = index + 1;
+            }
+        }
+        return new AllTasksProjectResponse(projectId, taskResponses, links);
+    }
+
+    @Override
     public AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException {
         try{
-            List<Task> tasks = taskService.getTasksByProject(projectId);
-            List<TaskResponse> taskResponses = new ArrayList<>();
-            List<TaskLink> links = new ArrayList<>();
-            long index = 1L;
-            Long source = null;
-            for (Task task : tasks
-                 ) {
-                TaskLink taskLink = null;
-                if(source!=null) {
-                    taskLink = new TaskLink(index, source, task.getId(), 0, System.currentTimeMillis(), System.currentTimeMillis());
-                    links.add(taskLink);
-                    index = index + 1;
-                }
-                source = task.getId();
-                TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
-                taskResponses.add(taskResponse);
-            }
-            return new AllTasksProjectResponse(projectId, taskResponses, links);
+            return getDataOfProject(projectId);
         } finally {
             databaseHelper.closeConnection();
         }
