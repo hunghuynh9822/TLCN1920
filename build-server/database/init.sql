@@ -534,3 +534,19 @@ ALTER TABLE "public"."tasks" ADD CONSTRAINT "of_project" FOREIGN KEY ("project_i
 -- ----------------------------
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "role_id" FOREIGN KEY ("role_id") REFERENCES "public"."roles" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "public"."user_roles" ADD CONSTRAINT "user_id" FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- ----------------------------
+-- Table structure for webhook
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."webhook";
+CREATE TABLE "public"."webhook" (
+  "id_webhook" bigint PRIMARY KEY,
+  "id_project" bigint NOT NULL,
+  "name_webhook" varchar(255) NOT NULL,
+  "bot_token" varchar(255) NOT NULL,
+  "chat_id" varchar(355) NOT NULL,
+  "create_task" bool,
+  "update_task" bool,
+  "update_state" bool
+)
+;
