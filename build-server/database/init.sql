@@ -527,6 +527,7 @@ CREATE TABLE "public"."wiki" (
   "wiki_id" bigint PRIMARY KEY,
   "wiki_title" varchar(255),
   "id_project" bigint,
+  "created_by" bigint NOT NULL,
   "parent_path" varchar(500),
   "content" text,
   "created_at" bigint,
