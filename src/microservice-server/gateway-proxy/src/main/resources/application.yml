@@ -80,5 +80,11 @@ zuul:
       service-id: notify-service
       ribbon:
         ReadTimeout: 600000
+    webhook:
+      path: /api/webhook/**
+      strip-prefix: false
+      service-id: webhook-service
+      ribbon:
+        ReadTimeout: 600000
   host:
     connect-timeout-millis: 600000
