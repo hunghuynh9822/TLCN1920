@@ -25,6 +25,11 @@ public class ProjectServiceController {
         return new ResponseEntity("Test successfully", HttpStatus.OK);
     }
 
+    /**
+     * Create project
+     * @param projectRequest
+     * @return
+     */
     @PostMapping("/")
     public ResponseEntity createProject(@Valid @RequestBody ProjectRequest projectRequest){
         try{
@@ -35,6 +40,11 @@ public class ProjectServiceController {
         }
     }
 
+    /**
+     * Get project and employee in project
+     * @param projectId
+     * @return
+     */
     @GetMapping("/{projectId}")
     public ResponseEntity getProject(@PathVariable("projectId") Long projectId){
         try{
@@ -45,6 +55,11 @@ public class ProjectServiceController {
         }
     }
 
+    /**
+     * Get project of employee
+     * @param employeeId
+     * @return
+     */
     @GetMapping("/{employeeId}/all")
     public ResponseEntity getProjectOfEmployee(@PathVariable("employeeId") Long employeeId){
         try{
@@ -55,6 +70,11 @@ public class ProjectServiceController {
         }
     }
 
+    /**
+     *
+     * @param projectId
+     * @return
+     */
     @GetMapping("/{projectId}/employees")
     public ResponseEntity getEmployee(@PathVariable("projectId") Long projectId){
         try{

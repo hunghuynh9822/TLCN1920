@@ -183,15 +183,6 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     }
 
     @Override
-    public List<PerOfProject> getListPOP(Long projectId) throws SQLException {
-        try {
-            return perOfProjectService.getListPOP(projectId);
-        } finally {
-            databaseHelper.closeConnection();
-        }
-    }
-
-    @Override
     public void deletePOP(PerOfProjectRequest perOfProjectRequest) throws SQLException, TransactionException {
         try{
             databaseHelper.beginTransaction();

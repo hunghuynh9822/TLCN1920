@@ -16,7 +16,6 @@ public interface ProjectServiceBuz {
     void updateState(Long id, ProjectState state) throws SQLException, TransactionException;
     ProjectResponse getProject(Long id) throws Exception;
     void createPOP (PerOfProjectRequest perOfProjectRequest) throws Exception, TransactionException;
-    List<PerOfProject> getListPOP (Long projectId) throws SQLException;
     void deletePOP (PerOfProjectRequest perOfProjectRequest) throws SQLException, TransactionException;
     AllEmployeeResponse getEmployeesFreeForProject(Long projectId) throws Exception;
 }
