@@ -5,7 +5,7 @@
 -- Dumped from database version 10.13
 -- Dumped by pg_dump version 12.3
 
--- Started on 2020-06-13 15:04:59 +07
+-- Started on 2020-06-13 15:50:30 +07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -621,8 +621,9 @@ COPY public.webhook (id_webhook, id_project, bot_token, chat_id, create_task, up
 --
 
 COPY public.wiki (wiki_id, wiki_title, project_id, created_by, path, content, state, created_at, updated_at) FROM stdin;
-15920278852171	test	1	1	/	abc	0	\N	\N
-15920316124551	test2	1	1	/15920278852171	Child of 15920278852171	0	\N	\N
+15920378398961	test0	1	1	/	Project 1	0	\N	\N
+15920379208971	test0-1	1	1	/15920378398961/	Project 1 - Child of 15920378398961	0	\N	\N
+15920379259551	test0-2	1	1	/15920378398961/	Project 1 - Child of 15920378398961	0	\N	\N
 \.
 
 
@@ -869,7 +870,7 @@ ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2020-06-13 15:05:03 +07
+-- Completed on 2020-06-13 15:50:34 +07
 
 --
 -- PostgreSQL database dump complete
