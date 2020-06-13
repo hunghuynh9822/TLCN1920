@@ -5,7 +5,7 @@
 -- Dumped from database version 10.11
 -- Dumped by pg_dump version 11.6 (Ubuntu 11.6-1.pgdg18.04+1)
 
--- Started on 2020-06-13 12:07:10 +07
+-- Started on 2020-06-13 12:10:22 +07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -830,7 +830,7 @@ ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2020-06-13 12:07:14 +07
+-- Completed on 2020-06-13 12:10:25 +07
 
 --
 -- PostgreSQL database dump complete
