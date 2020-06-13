@@ -6,6 +6,7 @@ import com.hcmute.pose.wiki.model.WikiState;
 import java.io.Serializable;
 
 public class WikiRequest implements Serializable {
+    private Long id;
     private String title;
     private Long projectId;
     private Long createdUser;
@@ -14,6 +15,14 @@ public class WikiRequest implements Serializable {
     private WikiState state;
 
     public WikiRequest() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
