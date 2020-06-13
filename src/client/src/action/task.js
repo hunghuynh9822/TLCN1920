@@ -12,6 +12,7 @@ export const TASK_STATE = [
 
 export const UPDATE_CREATOR_TASKS = 'UPDATE_CREATOR_TASKS';
 
+//Redux
 export function updateCreatorTasks(creatorTasks) {
     return {
         type: UPDATE_CREATOR_TASKS,
