@@ -26,7 +26,8 @@ class TreeViewCustom extends Component {
         super(props);
         this.state = {
             defaultExpanded: [],
-            index: 1
+            index: 1,
+            selected: null
         }
         //
         this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -35,6 +36,8 @@ class TreeViewCustom extends Component {
         this.getData = this.getData.bind(this);
         this.setExpanded = this.setExpanded.bind(this);
         this.getIndex = this.getIndex.bind(this);
+        //
+        this.handleSelectItem = this.handleSelectItem.bind(this);
     }
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
@@ -55,8 +58,16 @@ class TreeViewCustom extends Component {
      */
     handleClickOutside(event) {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            console.log("[WikiManagement] Outside tree view")
+            console.log("[WikiManagement] Outside tree view");
+            this.handleSelectItem(null);
         }
+    }
+
+    handleSelectItem(item) {
+        console.log("[WikiManagement] Select item " + JSON.stringify(item));
+        this.setState({
+            selected: item
+        })
     }
 
     getData() {
@@ -100,7 +111,7 @@ class TreeViewCustom extends Component {
                     defaultExpandIcon={<ArrowRightIcon />}
                     defaultEndIcon={<div style={{ width: 24 }} />}
                 >
-                    <TreeItemCustom dataCurrent={data} getData={this.getData} setExpanded={this.setExpanded} getIndex={this.getIndex} />
+                    <TreeItemCustom dataCurrent={data} getData={this.getData} setExpanded={this.setExpanded} getIndex={this.getIndex} handleSelectItem={this.handleSelectItem} />
                 </TreeView >
             </div>
         );
