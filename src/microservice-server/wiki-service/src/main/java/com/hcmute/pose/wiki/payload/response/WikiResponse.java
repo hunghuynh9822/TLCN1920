@@ -1,41 +1,20 @@
-package com.hcmute.pose.wiki.model;
+package com.hcmute.pose.wiki.payload.response;
 
 import com.google.gson.annotations.SerializedName;
+import com.hcmute.pose.wiki.model.WikiState;
 
-import java.io.Serializable;
-
-public class WikiPage implements Serializable {
-    @SerializedName("wiki_id")
+public class WikiResponse {
     private Long id;
-    @SerializedName("wiki_title")
     private String title;
-    @SerializedName("project_id")
     private Long projectId;
-    @SerializedName("created_by")
     private Long createdUser;
-    @SerializedName("path")
     private String path;
     private String content;
     private WikiState state;
-    @SerializedName("created_at")
     private Long createdAt;
-    @SerializedName("updated_at")
     private Long updatedAt;
 
-    public WikiPage() {
-
-    }
-
-    public WikiPage(Long id, String title, Long projectId, Long createdUser, String path, String content, WikiState state, Long createdAt, Long updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.projectId = projectId;
-        this.createdUser = createdUser;
-        this.path = path;
-        this.content = content;
-        this.state = state;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public WikiResponse() {
     }
 
     public Long getId() {

@@ -526,10 +526,11 @@ DROP TABLE IF EXISTS "public"."wiki";
 CREATE TABLE "public"."wiki" (
   "wiki_id" bigint PRIMARY KEY,
   "wiki_title" varchar(255),
-  "id_project" bigint,
+  "project_id" bigint,
   "created_by" bigint NOT NULL,
-  "parent_path" varchar(500),
+  "path" varchar(500),
   "content" text,
+  "state" int,
   "created_at" bigint,
   "updated_at" bigint
 )

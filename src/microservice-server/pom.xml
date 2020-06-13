@@ -33,7 +33,8 @@
 		<module>notify-service</module>
 		<module>webhook-service</module>
 		<module>webhook-service</module>
-	</modules>
+        <module>wiki-service</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>
