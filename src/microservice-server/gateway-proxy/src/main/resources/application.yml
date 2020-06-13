@@ -86,5 +86,11 @@ zuul:
       service-id: webhook-service
       ribbon:
         ReadTimeout: 600000
+    wiki:
+      path: /api/wiki/**
+      strip-prefix: false
+      service-id: wiki-service
+      ribbon:
+        ReadTimeout: 600000
   host:
     connect-timeout-millis: 600000
