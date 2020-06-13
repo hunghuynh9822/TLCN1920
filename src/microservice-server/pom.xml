@@ -32,7 +32,6 @@
 		<module>project-service</module>
 		<module>notify-service</module>
 		<module>webhook-service</module>
-		<module>webhook-service</module>
         <module>wiki-service</module>
     </modules>
 
