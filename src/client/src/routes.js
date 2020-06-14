@@ -105,15 +105,6 @@ const manageRoutes = [
         breadcrumb: "Notification"
       },
       {
-        path: "/info",
-        name: "Infomation",
-        rtlName: "Thông tin cá nhân",
-        icon: Person,
-        component: Information,
-        layout: "/admin",
-        breadcrumb: "Information"
-      },
-      {
         path: "/wiki",
         name: "Wiki",
         rtlName: "Wiki",
@@ -135,7 +126,16 @@ const manageRoutes = [
         component: WebHookMangement,
         layout: "/admin",
         breadcrumb: "Webhook"
-      }
+      },
+      {
+        path: "/info",
+        name: "Infomation",
+        rtlName: "Thông tin cá nhân",
+        icon: Person,
+        component: Information,
+        layout: "/admin",
+        breadcrumb: "Information"
+      },
     ]
   },
   {
