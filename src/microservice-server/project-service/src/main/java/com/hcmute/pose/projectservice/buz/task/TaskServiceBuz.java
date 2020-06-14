@@ -15,6 +15,8 @@ public interface TaskServiceBuz {
 
     AllTasksProjectResponse getDataOfProject(Long projectId) throws SQLException;
 
+    AllTasksProjectResponse getDataTasksOfProject(Long projectId) throws SQLException;
+
     AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException;
     ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException;
     CreatorTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException;

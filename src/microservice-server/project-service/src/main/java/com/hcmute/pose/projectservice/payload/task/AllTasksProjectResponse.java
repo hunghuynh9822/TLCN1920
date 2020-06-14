@@ -4,11 +4,13 @@ import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskLink;
 
 import java.util.List;
+import java.util.Map;
 
 public class AllTasksProjectResponse {
     private Long projectId;
     private List<TaskResponse> tasks;
     private List<TaskLink> links;
+    private Map<String, Object> tasksInfo;
 
     public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks) {
         this.projectId = projectId;
@@ -46,5 +48,13 @@ public class AllTasksProjectResponse {
 
     public void setLinks(List<TaskLink> links) {
         this.links = links;
+    }
+
+    public Map<String, Object> getTasksInfo() {
+        return tasksInfo;
+    }
+
+    public void setTasksInfo(Map<String, Object> tasksInfo) {
+        this.tasksInfo = tasksInfo;
     }
 }

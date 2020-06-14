@@ -15,6 +15,7 @@ public class TaskResponse {
     private Integer point;
     private Long createdAt;
     private Long updatedAt;
+    private Double process;
 
     public TaskResponse() {
     }
@@ -128,5 +129,13 @@ public class TaskResponse {
 
     public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Double getProcess() {
+        return process;
+    }
+
+    public void setProcess(Double process) {
+        this.process = process;
     }
 }
