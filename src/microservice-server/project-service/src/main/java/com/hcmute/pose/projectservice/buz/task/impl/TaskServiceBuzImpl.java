@@ -106,7 +106,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         taskInfo.put("taskState", taskState);
         taskInfo.put("total", tasks.size());
         taskInfo.put("finish", taskState.get(TaskState.FINISH) == null ? 0 : taskState.get(TaskState.FINISH));
-        taskInfo.put("process", df.format(process / tasks.size()));
+        taskInfo.put("process", df.format(process / tasks.size() * 100));
         AllTasksProjectResponse allTasksProjectResponse = new AllTasksProjectResponse(projectId, taskResponses);
         allTasksProjectResponse.setTasksInfo(taskInfo);
         return allTasksProjectResponse;
