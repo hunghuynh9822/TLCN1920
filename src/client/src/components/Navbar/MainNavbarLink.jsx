@@ -5,6 +5,7 @@ import classNames from "classnames";
 
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert'
+import { NavLink } from "react-router-dom";
 import axios from 'axios';
 // @material-ui/core components
 import MenuItem from "@material-ui/core/MenuItem";
@@ -35,38 +36,39 @@ class MainNavbarLink extends Component {
         this.state = ({
             openNotification: null,
             openProfile: null,
-            rows : [],
-            notify : 0
+            rows: [],
+            notify: 0
         });
     }
-    componentDidMount(){
+    componentDidMount() {
         this.getData();
-        setInterval(this.getData, 60000); 
+        setInterval(this.getData, 60000);
     }
 
     getData = () => {
-        const {currentUser} = this.props;
-        var url = serverUrl+"/api/notify/" + currentUser.id
-        // axios.get(url)
-        // .then(response =>{
-        //     var temp = response.data;    
-        //     // console.log(temp);
-        //     var temp_false = []
-        //     var notify = 0;
-        //     temp.forEach(element => {
-        //         if (element.view == false){
-        //             temp_false.push(element)
-        //             notify += 1 ;
-        //         }
-        // });
-        // this.setState({
-        //     rows: temp_false,
-        //     notify : notify
-        // })
+        const { currentUser } = this.props;
+        var url = serverUrl + "/api/notify/" + currentUser.id
+        //Show notify
+        axios.get(url)
+            .then(response => {
+                var temp = response.data;
+                // console.log(temp);
+                var temp_false = []
+                var notify = 0;
+                temp.forEach(element => {
+                    if (element.view == false) {
+                        temp_false.push(element)
+                        notify += 1;
+                    }
+                });
+                this.setState({
+                    rows: temp_false,
+                    notify: notify
+                })
 
-        // })
-        // .catch(error => console.log("ok loi ne notify lisst"+error))
-      }
+            })
+            .catch(error => console.log("ok loi ne notify lisst" + error))
+    }
 
     render() {
         const { classes } = this.props;
@@ -104,7 +106,11 @@ class MainNavbarLink extends Component {
                 openProfile: null,
             })
         };
-
+        const handleViewProfile = () => {
+            this.setState({
+                openProfile: null,
+            })
+        };
         const handleLogout = () => {
             this.props.logout();
             localStorage.removeItem(ACCESS_TOKEN);
@@ -113,11 +119,11 @@ class MainNavbarLink extends Component {
 
         var numNotify;
         if (this.state.notify > 0) {
-        numNotify = <span className={classes.notifications}>{this.state.notify}</span>;
+            numNotify = <span className={classes.notifications}>{this.state.notify}</span>;
         }
         return (
             <React.Fragment>
-                <div className={classes.searchWrapper}>
+                {/* <div className={classes.searchWrapper}>
                     <CustomInput
                         formControlProps={{
                             className: classes.margin + " " + classes.search
@@ -136,7 +142,7 @@ class MainNavbarLink extends Component {
                     <CustomButton color="white" aria-label="edit" justIcon round>
                         <Search />
                     </CustomButton>
-                </div>
+                </div> */}
                 <div className={classes.manager}>
                     <CustomButton
                         color={window.innerWidth > 959 ? "transparent" : "white"}
@@ -149,10 +155,10 @@ class MainNavbarLink extends Component {
                         style={{ padding: 0 }}
                     >
                         <Notifications className={classes.icons} />
-                       
+
                         {/* <span className={classes.notifications}>{this.state.notify}</span> */}
                         {numNotify}
-                    
+
                         <Hidden mdUp implementation="css">
                             <p onClick={handleCloseNotification} className={classes.linkText}>
                                 Notification
@@ -182,17 +188,18 @@ class MainNavbarLink extends Component {
                                 <Paper>
                                     <ClickAwayListener onClickAway={handleCloseNotification}>
                                         <MenuList role="menu">
-                                            {this.state.rows.map((element, i) => {     
-                                            // console.log("Entered");                 
-                                            // Return the element. Also pass key     
-                                            return ( 
-                                                <MenuItem
-                                                onClick={handleCloseNotification}
-                                                className={classes.dropdownItem}                                             
-                                            >
-                                                {element.content}
-                                            </MenuItem>
-                                            ) 
+                                            {this.state.rows.map((element, i) => {
+                                                // console.log("Entered");                 
+                                                // Return the element. Also pass key     
+                                                return (
+                                                    <MenuItem
+                                                        key={i}
+                                                        onClick={handleCloseNotification}
+                                                        className={classes.dropdownItem}
+                                                    >
+                                                        {element.content}
+                                                    </MenuItem>
+                                                )
                                             })}
                                         </MenuList>
                                     </ClickAwayListener>
@@ -213,10 +220,10 @@ class MainNavbarLink extends Component {
                     >
                         {/* <Person className={classes.icons} /> */}
                         {currentUser.imageUrl ? (
-                            <Avatar src={currentUser.imageUrl} round="20px" size="30"/>
-                        ):(
-                            <Avatar name={currentUser.lastName + " " + currentUser.firstName} round="20px" size="30"/>
-                        )}
+                            <Avatar src={currentUser.imageUrl} round="20px" size="30" />
+                        ) : (
+                                <Avatar name={currentUser.lastName + " " + currentUser.firstName} round="20px" size="30" />
+                            )}
                         <Hidden mdUp implementation="css">
                             <p className={classes.linkText}>Profile</p>
                         </Hidden>
@@ -245,24 +252,27 @@ class MainNavbarLink extends Component {
                                     <ClickAwayListener onClickAway={handleCloseProfile}>
                                         <MenuList role="menu">
                                             <MenuItem
-                                                onClick={({element}) => handleCloseProfile}
+                                                onClick={handleViewProfile}
                                                 className={classes.dropdownItem}
                                             >
-                                                Profile
-                                </MenuItem>
-                                            <MenuItem
+                                                <NavLink
+                                                    to={this.props.defaultPath + "/info"}
+                                                >Profile</NavLink>
+
+                                            </MenuItem>
+                                            {/* <MenuItem
                                                 onClick={handleCloseProfile}
                                                 className={classes.dropdownItem}
                                             >
                                                 Settings
-                                </MenuItem>
+                                            </MenuItem> */}
                                             <Divider light />
                                             <MenuItem
                                                 onClick={handleLogout}
                                                 className={classes.dropdownItem}
                                             >
                                                 Logout
-                                </MenuItem>
+                                            </MenuItem>
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>
@@ -281,6 +291,7 @@ MainNavbarLink.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     return {
         currentUser: state.auth.currentUser,
+        defaultPath: state.auth.defaultPath,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

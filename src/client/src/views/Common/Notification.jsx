@@ -36,6 +36,7 @@ class Notification extends Component {
                 isAdmin = 1;
             // console.log("isAdmin: "+isAdmin +"name: "+ element.name);    
         });
+        //Show notify
         var url = serverUrl + "/api/notify/" + currentUser.id
         axios.get(url)
             .then(response => {
