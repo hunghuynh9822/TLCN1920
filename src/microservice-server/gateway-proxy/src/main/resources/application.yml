@@ -12,6 +12,18 @@ eureka:
     nonSecurePort: ${NON_SECURE_PORT:8080}
 #    preferIpAddress: true
 #Zuul routes. Here for /employee path, we are routing to localhost:8001 with extra path after that.
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+ribbon:
+  ReadTimeout: 60000
+  connection-timeout: 3000
+  eureka:
+    enabled: true
 zuul:
   routes:
     auth:
@@ -93,4 +105,10 @@ zuul:
       ribbon:
         ReadTimeout: 600000
   host:
-    connect-timeout-millis: 600000
+    time-to-live: -1
+    connect-timeout-millis: 5000
+    max-per-route-connections: 10000
+    max-total-connections: 5000
+    socket-timeout-millis: 6000000
+  semaphore:
+    max-semaphores: 500
