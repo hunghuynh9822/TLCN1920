@@ -96,15 +96,6 @@ const manageRoutes = [
         breadcrumb: "Request"
       },
       {
-        path: "/timekeeping",
-        name: "Timekeeping",
-        rtlName: "Chấm công",
-        icon: Today,
-        component: TimeKeeping,
-        layout: "/admin",
-        breadcrumb: "Timekeeping"
-      },
-      {
         path: "/notification",
         name: "Notification",
         rtlName: "Thông báo",
@@ -281,14 +272,6 @@ const manageRoutes = [
         component: EmployeeManagement,
         layout: "/hr",
         breadcrumb: "HumanResources"
-      }, {
-        path: "/timekeeping",
-        name: "Timekeeping",
-        rtlName: "Chấm công",
-        icon: Today,
-        component: TimeKeeping,
-        layout: "/hr",
-        breadcrumb: "Timekeeping"
       }, {
         path: "/request",
         name: "Request",
