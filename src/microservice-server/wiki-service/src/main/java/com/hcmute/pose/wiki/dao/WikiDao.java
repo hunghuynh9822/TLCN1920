@@ -13,6 +13,7 @@ public interface WikiDao {
     void updateWikiPage(WikiPage wikiPage) throws SQLException, TransactionException;
     void deleteWikiPage(Long id) throws SQLException, TransactionException;
     Optional<WikiPage> selectWikiPage(Long id) throws SQLException;
-    Optional<WikiPage> selectWikiPageByProject(Long id) throws SQLException;
+    List<WikiPage> selectWikiPageByProject(Long id) throws SQLException;
     List<WikiPage> selectWikiPageByPath(String path) throws SQLException;
+    List<WikiPage> selectAllWiki() throws SQLException;
 }

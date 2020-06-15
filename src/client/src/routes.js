@@ -96,15 +96,6 @@ const manageRoutes = [
         breadcrumb: "Request"
       },
       {
-        path: "/timekeeping",
-        name: "Timekeeping",
-        rtlName: "Chấm công",
-        icon: Today,
-        component: TimeKeeping,
-        layout: "/admin",
-        breadcrumb: "Timekeeping"
-      },
-      {
         path: "/notification",
         name: "Notification",
         rtlName: "Thông báo",
@@ -112,15 +103,6 @@ const manageRoutes = [
         component: Notification,
         layout: "/admin",
         breadcrumb: "Notification"
-      },
-      {
-        path: "/info",
-        name: "Infomation",
-        rtlName: "Thông tin cá nhân",
-        icon: Person,
-        component: Information,
-        layout: "/admin",
-        breadcrumb: "Information"
       },
       {
         path: "/wiki",
@@ -144,7 +126,16 @@ const manageRoutes = [
         component: WebHookMangement,
         layout: "/admin",
         breadcrumb: "Webhook"
-      }
+      },
+      {
+        path: "/info",
+        name: "Infomation",
+        rtlName: "Thông tin cá nhân",
+        icon: Person,
+        component: Information,
+        layout: "/admin",
+        breadcrumb: "Information"
+      },
     ]
   },
   {
@@ -281,14 +272,6 @@ const manageRoutes = [
         component: EmployeeManagement,
         layout: "/hr",
         breadcrumb: "HumanResources"
-      }, {
-        path: "/timekeeping",
-        name: "Timekeeping",
-        rtlName: "Chấm công",
-        icon: Today,
-        component: TimeKeeping,
-        layout: "/hr",
-        breadcrumb: "Timekeeping"
       }, {
         path: "/request",
         name: "Request",

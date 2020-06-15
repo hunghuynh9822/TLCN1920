@@ -24,19 +24,26 @@ class TreeItemCustom extends Component {
     handleLabelClick() {
         console.log("[WikiManagement] Item tree click -> label");
         const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
-        let data = getData();
-        this.setState({
-            dataChild: data
-        })
-        setExpanded(dataCurrent.id);
-        handleSelectItem(dataCurrent);
+        console.log("[WikiManagement] DataCurrent " + JSON.stringify(dataCurrent));
+        getData(dataCurrent.path + dataCurrent.id + "/")
+            .then(response => {
+                this.setState({
+                    dataChild: response
+                })
+                setExpanded(dataCurrent.id + "");
+                handleSelectItem(dataCurrent);
+            }).catch(error => {
+                console.log(error);
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+            });
     }
     render() {
         const { classes } = this.props;
         const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
         const { dataChild } = this.state;
         return (
-            <StyledTreeItem nodeId={dataCurrent.id} labelText={dataCurrent.title} labelIcon={Label} onIconClick={this.handleIconClick} onLabelClick={this.handleLabelClick}>
+            <StyledTreeItem nodeId={dataCurrent.id + ""} labelText={dataCurrent.title} labelIcon={Label} onIconClick={this.handleIconClick} onLabelClick={this.handleLabelClick}>
                 {dataChild.map((item, index) =>
                     <TreeItemCustom classes={classes} key={item.id} dataCurrent={item} getData={getData} setExpanded={setExpanded} handleSelectItem={handleSelectItem}></TreeItemCustom>
                 )}

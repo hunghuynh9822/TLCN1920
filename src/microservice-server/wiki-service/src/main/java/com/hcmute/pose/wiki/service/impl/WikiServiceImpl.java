@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class WikiServiceImpl implements WikiService {
@@ -47,17 +46,22 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public Optional<WikiPage> getWikiPage(Long id) throws SQLException {
-        return wikiDao.selectWikiPage(id);
+    public WikiPage getWikiPage(Long id) throws Exception {
+        return wikiDao.selectWikiPage(id).orElseThrow(() -> new Exception("Not found wiki with id " + id));
     }
 
     @Override
-    public Optional<WikiPage> getWikiPageByProject(Long projectId) throws SQLException {
+    public List<WikiPage> getWikiPageByProject(Long projectId) throws SQLException {
         return wikiDao.selectWikiPageByProject(projectId);
     }
 
     @Override
     public List<WikiPage> getWikiPageByPath(String path) throws SQLException {
         return wikiDao.selectWikiPageByPath(path);
+    }
+
+    @Override
+    public List<WikiPage> getWikiPages() throws SQLException {
+        return wikiDao.selectAllWiki();
     }
 }

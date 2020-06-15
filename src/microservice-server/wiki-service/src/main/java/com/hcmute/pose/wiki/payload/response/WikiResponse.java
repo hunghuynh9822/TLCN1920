@@ -17,6 +17,18 @@ public class WikiResponse {
     public WikiResponse() {
     }
 
+    public WikiResponse(Long id, String title, Long projectId, Long createdUser, String path, String content, WikiState state, Long createdAt, Long updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.projectId = projectId;
+        this.createdUser = createdUser;
+        this.path = path;
+        this.content = content;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Long getId() {
         return id;
     }

@@ -24,6 +24,7 @@ public class WikiDaoImpl implements WikiDao {
     private static String SQL_SELECT_WIKI_ACTIVE = "SELECT * FROM wiki WHERE wiki_id = ? AND state = ?";
     private static String SQL_SELECT_WIKI_BY_PROJECT = "SELECT * FROM wiki WHERE project_id = ? AND state = ?";
     private static String SQL_SELECT_WIKI_BY_PATH = "SELECT * FROM wiki WHERE path = ? AND state = ?";
+    private static String SQL_SELECT_ALL_WIKI = "SELECT * FROM wiki";
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -74,8 +75,8 @@ public class WikiDaoImpl implements WikiDao {
     }
 
     @Override
-    public Optional<WikiPage> selectWikiPageByProject(Long id) throws SQLException {
-         return databaseHelper.executeQueryObject(WikiPage.class, SQL_SELECT_WIKI_BY_PROJECT,
+    public List<WikiPage> selectWikiPageByProject(Long id) throws SQLException {
+         return databaseHelper.executeQueryListObject(WikiPage[].class, SQL_SELECT_WIKI_BY_PROJECT,
                  id,
                  WikiState.ACTIVE.ordinal());
     }
@@ -85,5 +86,10 @@ public class WikiDaoImpl implements WikiDao {
         return databaseHelper.executeQueryListObject(WikiPage[].class, SQL_SELECT_WIKI_BY_PATH,
                 path,
                 WikiState.ACTIVE.ordinal());
+    }
+
+    @Override
+    public List<WikiPage> selectAllWiki() throws SQLException {
+        return databaseHelper.executeQueryListObject(WikiPage[].class, SQL_SELECT_ALL_WIKI);
     }
 }

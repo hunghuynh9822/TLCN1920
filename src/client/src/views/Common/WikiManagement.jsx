@@ -50,6 +50,9 @@ const styles = theme => ({
     button_create: {
         background: "#35C53F"
     },
+    paperWidthSm: {
+        maxWidth: 1000,
+    },
     paper: {
         marginTop: '0px',
         marginBottom: '0px',
@@ -71,18 +74,30 @@ class WikiManagement extends Component {
             scroll: 'body',
             request: {
                 title: "",
-                description: "",
-            }
+                content: "",
+                projectId: null,
+                createdUser: null,
+                path: ""
+            },
+            selected: null
         }
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.onEditorChange = this.onEditorChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSelectItem = this.handleSelectItem.bind(this);
     }
+
+    handleSelectItem(item) {
+        console.log("[WikiManagement] Select item " + JSON.stringify(item));
+        this.setState({
+            selected: item
+        })
+    }
+
     handleClick() {
         console.log("[WikiManagement] Click button on header");
-        this.handleOpen();
     }
     handleOpen() {
         this.setState({
@@ -95,7 +110,10 @@ class WikiManagement extends Component {
             open: false,
             request: {
                 title: "",
-                description: "",
+                content: "",
+                projectId: null,
+                createdUser: null,
+                path: ""
             }
         })
     }
@@ -112,7 +130,7 @@ class WikiManagement extends Component {
     onEditorChange(evt) {
         this.setState(prevState => {
             let request = Object.assign({}, prevState.request);
-            request["description"] = evt.editor.getData();
+            request["content"] = evt.editor.getData();
             return { request };
         });
     }
@@ -133,7 +151,7 @@ class WikiManagement extends Component {
         return (
             <React.Fragment>
                 <Grid container spacing={3} className={classes.wiki_page}>
-                    <Grid item xs={3} sm={3}><TreeViewCustom /></Grid>
+                    <Grid item xs={3} sm={3}><TreeViewCustom handleSelectItem={this.handleSelectItem} isCreate={this.state.open} /></Grid>
                     <Grid item xs={9} sm={9}>
                         <div className={classes.sub_layout_header}>
                             <div className={classes.sub_header}>
@@ -146,7 +164,7 @@ class WikiManagement extends Component {
                                     {/* Center */}
                                 </div>
                                 <div className={classes.sub_header_section}>
-                                    <Button onClick={this.handleClick} variant="contained" size="medium" color="primary" className={classNames(classes.margin, classes.button, classes.button_create)}>
+                                    <Button onClick={this.handleOpen} variant="contained" size="medium" color="primary" className={classNames(classes.margin, classes.button, classes.button_create)}>
                                         <AddIcon style={{ fontSize: 20 }} />
                                         Create Wiki
                                     </Button>
@@ -158,7 +176,7 @@ class WikiManagement extends Component {
                             </div>
                         </div>
                         <div className={classes.content}>
-                            Wiki content
+                            {this.state.selected == null ? "Select wiki" : this.state.selected.content}
                         </div>
                     </Grid>
                 </Grid>
@@ -168,6 +186,9 @@ class WikiManagement extends Component {
                     aria-labelledby="scroll-dialog-title"
                     disableBackdropClick
                     disableEscapeKeyDown
+                    classes={{
+                        paperWidthSm: classes.paperWidthSm
+                    }}
                 >
                     <DialogTitle id="scroll-dialog-title">New wiki</DialogTitle>
                     <Paper className={classes.paper}>
@@ -187,7 +208,7 @@ class WikiManagement extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <p>Description</p>
+                                <p>Centent</p>
                                 <CKEditor
                                     data={request.description}
                                     onChange={this.onEditorChange}

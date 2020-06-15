@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.11
--- Dumped by pg_dump version 11.6 (Ubuntu 11.6-1.pgdg18.04+1)
+-- Dumped from database version 10.13
+-- Dumped by pg_dump version 12.3
 
--- Started on 2020-06-13 12:23:49 +07
+-- Started on 2020-06-13 15:50:30 +07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,8 +19,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- TOC entry 196 (class 1259 OID 16384)
@@ -276,7 +274,7 @@ CREATE SEQUENCE public.webhook_id_webhook_seq
 ALTER TABLE public.webhook_id_webhook_seq OWNER TO postgres;
 
 --
--- TOC entry 3009 (class 0 OID 0)
+-- TOC entry 3017 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: webhook_id_webhook_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -285,7 +283,27 @@ ALTER SEQUENCE public.webhook_id_webhook_seq OWNED BY public.webhook.id_webhook;
 
 
 --
--- TOC entry 2832 (class 2604 OID 16452)
+-- TOC entry 210 (class 1259 OID 16545)
+-- Name: wiki; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wiki (
+    wiki_id bigint NOT NULL,
+    wiki_title character varying(255),
+    project_id bigint,
+    created_by bigint NOT NULL,
+    path character varying(500),
+    content text,
+    state integer,
+    created_at bigint,
+    updated_at bigint
+);
+
+
+ALTER TABLE public.wiki OWNER TO postgres;
+
+--
+-- TOC entry 2837 (class 2604 OID 16452)
 -- Name: webhook id_webhook; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -293,7 +311,7 @@ ALTER TABLE ONLY public.webhook ALTER COLUMN id_webhook SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2990 (class 0 OID 16384)
+-- TOC entry 2997 (class 0 OID 16384)
 -- Dependencies: 196
 -- Data for Name: employees; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -313,7 +331,7 @@ COPY public.employees (id, created_at, updated_at, first_name, middle_name, last
 
 
 --
--- TOC entry 2991 (class 0 OID 16390)
+-- TOC entry 2998 (class 0 OID 16390)
 -- Dependencies: 197
 -- Data for Name: genuid; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -326,7 +344,7 @@ COPY public.genuid (id, index, count) FROM stdin;
 
 
 --
--- TOC entry 2992 (class 0 OID 16393)
+-- TOC entry 2999 (class 0 OID 16393)
 -- Dependencies: 198
 -- Data for Name: notify; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -399,7 +417,7 @@ COPY public.notify (id, create_id, create_name, create_time, content, receive_id
 
 
 --
--- TOC entry 2993 (class 0 OID 16399)
+-- TOC entry 3000 (class 0 OID 16399)
 -- Dependencies: 199
 -- Data for Name: perofproject; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -426,7 +444,7 @@ COPY public.perofproject (pro_id, employee_id, role) FROM stdin;
 
 
 --
--- TOC entry 2994 (class 0 OID 16402)
+-- TOC entry 3001 (class 0 OID 16402)
 -- Dependencies: 200
 -- Data for Name: positions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -440,7 +458,7 @@ COPY public.positions (id, name, created_at, updated_at) FROM stdin;
 
 
 --
--- TOC entry 2995 (class 0 OID 16405)
+-- TOC entry 3002 (class 0 OID 16405)
 -- Dependencies: 201
 -- Data for Name: projects; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -454,7 +472,7 @@ COPY public.projects (id, title, description, state, created_at, updated_at) FRO
 
 
 --
--- TOC entry 2996 (class 0 OID 16411)
+-- TOC entry 3003 (class 0 OID 16411)
 -- Dependencies: 202
 -- Data for Name: requests; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -470,7 +488,7 @@ COPY public.requests (id, employeeid, name, "position", timestart, timeend, reas
 
 
 --
--- TOC entry 2997 (class 0 OID 16417)
+-- TOC entry 3004 (class 0 OID 16417)
 -- Dependencies: 203
 -- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -484,7 +502,7 @@ COPY public.roles (id, name, created_at, updated_at) FROM stdin;
 
 
 --
--- TOC entry 2998 (class 0 OID 16423)
+-- TOC entry 3005 (class 0 OID 16423)
 -- Dependencies: 204
 -- Data for Name: taskcomments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -494,7 +512,7 @@ COPY public.taskcomments (id, task_id, employee_id, comment, created_at, updated
 
 
 --
--- TOC entry 2999 (class 0 OID 16429)
+-- TOC entry 3006 (class 0 OID 16429)
 -- Dependencies: 205
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -536,7 +554,7 @@ COPY public.tasks (id, project_id, title, started_at, duration, state, point, em
 
 
 --
--- TOC entry 3000 (class 0 OID 16435)
+-- TOC entry 3007 (class 0 OID 16435)
 -- Dependencies: 206
 -- Data for Name: user_roles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -563,7 +581,7 @@ COPY public.user_roles (user_id, role_id, created_at, updated_at) FROM stdin;
 
 
 --
--- TOC entry 3001 (class 0 OID 16438)
+-- TOC entry 3008 (class 0 OID 16438)
 -- Dependencies: 207
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -583,7 +601,7 @@ COPY public.users (id, email, phone, password, provider, provider_id, oauth2_nam
 
 
 --
--- TOC entry 3002 (class 0 OID 16444)
+-- TOC entry 3009 (class 0 OID 16444)
 -- Dependencies: 208
 -- Data for Name: webhook; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -597,7 +615,20 @@ COPY public.webhook (id_webhook, id_project, bot_token, chat_id, create_task, up
 
 
 --
--- TOC entry 3010 (class 0 OID 0)
+-- TOC entry 3011 (class 0 OID 16545)
+-- Dependencies: 210
+-- Data for Name: wiki; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wiki (wiki_id, wiki_title, project_id, created_by, path, content, state, created_at, updated_at) FROM stdin;
+15920378398961	test0	1	1	/	Project 1	0	\N	\N
+15920379208971	test0-1	1	1	/15920378398961/	Project 1 - Child of 15920378398961	0	\N	\N
+15920379259551	test0-2	1	1	/15920378398961/	Project 1 - Child of 15920378398961	0	\N	\N
+\.
+
+
+--
+-- TOC entry 3018 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: webhook_id_webhook_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -606,7 +637,7 @@ SELECT pg_catalog.setval('public.webhook_id_webhook_seq', 1, false);
 
 
 --
--- TOC entry 2844 (class 2606 OID 16454)
+-- TOC entry 2849 (class 2606 OID 16454)
 -- Name: roles Roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -615,7 +646,7 @@ ALTER TABLE ONLY public.roles
 
 
 --
--- TOC entry 2850 (class 2606 OID 16456)
+-- TOC entry 2855 (class 2606 OID 16456)
 -- Name: user_roles employee_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -624,7 +655,7 @@ ALTER TABLE ONLY public.user_roles
 
 
 --
--- TOC entry 2834 (class 2606 OID 16458)
+-- TOC entry 2839 (class 2606 OID 16458)
 -- Name: notify notify_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -633,7 +664,7 @@ ALTER TABLE ONLY public.notify
 
 
 --
--- TOC entry 2836 (class 2606 OID 16460)
+-- TOC entry 2841 (class 2606 OID 16460)
 -- Name: perofproject perofproject_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -642,7 +673,7 @@ ALTER TABLE ONLY public.perofproject
 
 
 --
--- TOC entry 2838 (class 2606 OID 16462)
+-- TOC entry 2843 (class 2606 OID 16462)
 -- Name: positions positions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -651,7 +682,7 @@ ALTER TABLE ONLY public.positions
 
 
 --
--- TOC entry 2840 (class 2606 OID 16464)
+-- TOC entry 2845 (class 2606 OID 16464)
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -660,7 +691,7 @@ ALTER TABLE ONLY public.projects
 
 
 --
--- TOC entry 2842 (class 2606 OID 16466)
+-- TOC entry 2847 (class 2606 OID 16466)
 -- Name: requests requests_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -669,7 +700,7 @@ ALTER TABLE ONLY public.requests
 
 
 --
--- TOC entry 2846 (class 2606 OID 16468)
+-- TOC entry 2851 (class 2606 OID 16468)
 -- Name: taskcomments taskcomments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -678,7 +709,7 @@ ALTER TABLE ONLY public.taskcomments
 
 
 --
--- TOC entry 2848 (class 2606 OID 16470)
+-- TOC entry 2853 (class 2606 OID 16470)
 -- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -687,7 +718,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- TOC entry 2852 (class 2606 OID 16472)
+-- TOC entry 2857 (class 2606 OID 16472)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -696,7 +727,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 2854 (class 2606 OID 16474)
+-- TOC entry 2859 (class 2606 OID 16474)
 -- Name: webhook webhook_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -705,7 +736,16 @@ ALTER TABLE ONLY public.webhook
 
 
 --
--- TOC entry 2862 (class 2606 OID 16475)
+-- TOC entry 2861 (class 2606 OID 16552)
+-- Name: wiki wiki_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wiki
+    ADD CONSTRAINT wiki_pkey PRIMARY KEY (wiki_id);
+
+
+--
+-- TOC entry 2869 (class 2606 OID 16475)
 -- Name: taskcomments comment_of_employee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -714,7 +754,7 @@ ALTER TABLE ONLY public.taskcomments
 
 
 --
--- TOC entry 2863 (class 2606 OID 16480)
+-- TOC entry 2870 (class 2606 OID 16480)
 -- Name: taskcomments comment_of_task; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -723,7 +763,7 @@ ALTER TABLE ONLY public.taskcomments
 
 
 --
--- TOC entry 2857 (class 2606 OID 16485)
+-- TOC entry 2864 (class 2606 OID 16485)
 -- Name: notify creator_employee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -732,7 +772,7 @@ ALTER TABLE ONLY public.notify
 
 
 --
--- TOC entry 2864 (class 2606 OID 16490)
+-- TOC entry 2871 (class 2606 OID 16490)
 -- Name: tasks employee_assignee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -741,7 +781,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- TOC entry 2865 (class 2606 OID 16495)
+-- TOC entry 2872 (class 2606 OID 16495)
 -- Name: tasks employee_creator; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -750,7 +790,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- TOC entry 2855 (class 2606 OID 16500)
+-- TOC entry 2862 (class 2606 OID 16500)
 -- Name: employees employee_position; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -759,7 +799,7 @@ ALTER TABLE ONLY public.employees
 
 
 --
--- TOC entry 2859 (class 2606 OID 16505)
+-- TOC entry 2866 (class 2606 OID 16505)
 -- Name: perofproject employee_project; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -768,7 +808,7 @@ ALTER TABLE ONLY public.perofproject
 
 
 --
--- TOC entry 2866 (class 2606 OID 16510)
+-- TOC entry 2873 (class 2606 OID 16510)
 -- Name: tasks of_project; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -777,7 +817,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- TOC entry 2860 (class 2606 OID 16515)
+-- TOC entry 2867 (class 2606 OID 16515)
 -- Name: perofproject project_constraint; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -786,7 +826,7 @@ ALTER TABLE ONLY public.perofproject
 
 
 --
--- TOC entry 2858 (class 2606 OID 16520)
+-- TOC entry 2865 (class 2606 OID 16520)
 -- Name: notify receiver_employee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -795,7 +835,7 @@ ALTER TABLE ONLY public.notify
 
 
 --
--- TOC entry 2861 (class 2606 OID 16525)
+-- TOC entry 2868 (class 2606 OID 16525)
 -- Name: requests request_of; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -804,7 +844,7 @@ ALTER TABLE ONLY public.requests
 
 
 --
--- TOC entry 2867 (class 2606 OID 16530)
+-- TOC entry 2874 (class 2606 OID 16530)
 -- Name: user_roles role_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -813,7 +853,7 @@ ALTER TABLE ONLY public.user_roles
 
 
 --
--- TOC entry 2856 (class 2606 OID 16535)
+-- TOC entry 2863 (class 2606 OID 16535)
 -- Name: employees user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -822,7 +862,7 @@ ALTER TABLE ONLY public.employees
 
 
 --
--- TOC entry 2868 (class 2606 OID 16540)
+-- TOC entry 2875 (class 2606 OID 16540)
 -- Name: user_roles user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -830,7 +870,7 @@ ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2020-06-13 12:23:51 +07
+-- Completed on 2020-06-13 15:50:34 +07
 
 --
 -- PostgreSQL database dump complete

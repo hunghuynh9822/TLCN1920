@@ -17,9 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.sql.SQLException;
+<<<<<<< HEAD
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+=======
+import java.text.DecimalFormat;
+>>>>>>> ce2a3baef824e48520ab68c4a90537b4b2c6d741
 import java.util.*;
 
 @Service
@@ -67,6 +71,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         for (Task task : tasks
         ) {
             TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
+            taskResponse.setProcess(0.2*task.getState().ordinal());
             taskResponses.add(taskResponse);
             String preTaskIds = task.getPreTaskId();
             if (StringUtils.isEmpty(preTaskIds)) {
@@ -97,6 +102,38 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             }
         }
         return new AllTasksProjectResponse(projectId, taskResponses, links, messages);
+    }
+
+    private static DecimalFormat df = new DecimalFormat("0.00");
+
+    @Override
+    public AllTasksProjectResponse getDataTasksOfProject(Long projectId) throws SQLException {
+        List<Task> tasks = taskService.getTasksByProject(projectId);
+        List<TaskResponse> taskResponses = new ArrayList<>();
+        Map<String, Object> taskInfo = new HashMap<>();
+        Map<TaskState, Integer> taskState = new HashMap<>();
+        Integer number = 0;
+        Double process = 0D;
+        for (Task task : tasks
+        ) {
+            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getStartedAt(), task.getDuration(), task.getState().name(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
+            taskResponse.setProcess(new Double(df.format(0.2*task.getState().ordinal())));
+            taskResponses.add(taskResponse);
+            number = taskState.get(task.getState());
+            if(number == null) {
+                taskState.put(task.getState(), 1);
+            } else {
+                taskState.put(task.getState(), number + 1);
+            }
+            process = process + taskResponse.getProcess();
+        }
+        taskInfo.put("taskState", taskState);
+        taskInfo.put("total", tasks.size());
+        taskInfo.put("finish", taskState.get(TaskState.FINISH) == null ? 0 : taskState.get(TaskState.FINISH));
+        taskInfo.put("process", new Double(df.format(process / tasks.size() * 100)));
+        AllTasksProjectResponse allTasksProjectResponse = new AllTasksProjectResponse(projectId, taskResponses);
+        allTasksProjectResponse.setTasksInfo(taskInfo);
+        return allTasksProjectResponse;
     }
 
     @Override

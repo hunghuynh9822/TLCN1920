@@ -9,8 +9,11 @@ import com.hcmute.pose.projectservice.model.project.PerOfProject;
 import com.hcmute.pose.projectservice.model.project.Project;
 import com.hcmute.pose.projectservice.model.project.ProjectRole;
 import com.hcmute.pose.projectservice.model.project.ProjectState;
+import com.hcmute.pose.projectservice.model.task.Task;
+import com.hcmute.pose.projectservice.model.task.TaskState;
 import com.hcmute.pose.projectservice.payload.project.*;
 import com.hcmute.pose.projectservice.payload.task.AllTasksProjectResponse;
+import com.hcmute.pose.projectservice.payload.task.TaskResponse;
 import com.hcmute.pose.projectservice.service.project.PerOfProjectService;
 import com.hcmute.pose.projectservice.service.project.ProjectService;
 import org.slf4j.Logger;
@@ -133,8 +136,10 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             employeeResponse.setRole(per.getRole());
             members.add(employeeResponse);
         }
-        AllTasksProjectResponse allTasksByProject = taskServiceBuz.getDataOfProject(project.getId());
-        return new ProjectResponse(project, members, allTasksByProject.getTasks());
+        AllTasksProjectResponse allTasksByProject = taskServiceBuz.getDataTasksOfProject(project.getId());
+        ProjectResponse projectResponse =  new ProjectResponse(project, members, allTasksByProject.getTasks());
+        projectResponse.setMore(allTasksByProject.getTasksInfo());
+        return projectResponse;
     }
 
     @Override
