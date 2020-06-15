@@ -16,38 +16,5 @@ import java.sql.SQLException;
 
 @Configuration
 public class NotifyConfig {
-    @Bean
-    @LoadBalanced
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
 
-    @Bean
-    @LoadBalanced
-    public WebClient.Builder builder(){
-        return WebClient.builder();
-    }
-
-    @Value("${psql.url}")
-    private String DBUrl;
-    @Value("${psql.username}")
-    private String DBUsername;
-    @Value("${psql.password}")
-    private String DBPassword;
-
-    @Bean
-    public DataSource dataSource() throws SQLException {
-        return new DataSourceImpl(this.DBUrl, this.DBUsername, this.DBPassword);
-    }
-
-    @Bean
-    public DatabaseHelper databaseHelper(DataSource dataSource){
-        return new DatabaseHelperImpl(dataSource);
-    }
-
-    private Integer serviceId = 2;
-    @Bean
-    public GenerateUID generateUID() throws SQLException {
-        return new GenerateUID(DBUrl,DBUsername,DBPassword,serviceId);
-    }
 }

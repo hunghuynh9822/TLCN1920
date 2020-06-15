@@ -96,27 +96,27 @@ class ProjectView extends Component {
         const { projectItem, updateProjectItem } = this.props;
         const projectId = projectItem.project.id;
         getProject(projectId)
-                .then(response => {
-                    console.log("Get project : " + JSON.stringify(response));
-                    updateProjectItem(response);
-                    getEmployeeFree(projectId)
-                        .then(responseEmployee => {
-                            console.log("Free employee : " + JSON.stringify(responseEmployee));
-                            this.setState({
-                                projectItem: response,
-                                projectId: projectId,
-                                freeEmployees: responseEmployee.employees
-                            })
+            .then(response => {
+                console.log("Get project : " + JSON.stringify(response));
+                updateProjectItem(response);
+                getEmployeeFree(projectId)
+                    .then(responseEmployee => {
+                        console.log("Free employee : " + JSON.stringify(responseEmployee));
+                        this.setState({
+                            projectItem: response,
+                            projectId: projectId,
+                            freeEmployees: responseEmployee.employees
                         })
-                        .catch(error => {
-                            console.log(error)
-                            alert.error('Oops! Something went wrong. Please try again!');
-                        })
-                })
-                .catch(error => {
-                    console.log(error)
-                    alert.error('Oops! Something went wrong. Please try again!');
-                })
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        alert.error('Oops! Something went wrong. Please try again!');
+                    })
+            })
+            .catch(error => {
+                console.log(error)
+                alert.error('Oops! Something went wrong. Please try again!');
+            })
     }
 
     componentDidMount() {
@@ -214,7 +214,7 @@ class ProjectView extends Component {
                             <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.sub_header_section}>
-                            {/* Search */}
+                            {"WikiPage"}
                         </div>
                     </div>
                 </div>

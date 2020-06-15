@@ -95,11 +95,11 @@ class ProjectOverview extends Component {
             allName = allName.concat(" ( ", projects !== undefined ? projects.length : 0, " )");
             return (
                 <div className={classes.wrapper}>
-                    <CollapsibleSection title={recentName}>
+                    {/* <CollapsibleSection title={recentName}>
                         <SlideContainer>
                             {projects && projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
                         </SlideContainer>
-                    </CollapsibleSection>
+                    </CollapsibleSection> */}
                     <CollapsibleSection title={allName}>
                         <div className={classes.viewproject}>
                             {projects && projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
@@ -116,11 +116,11 @@ class ProjectOverview extends Component {
             joinName = joinName.concat(" ( ", projects.joinProjects !== undefined ? projects.joinProjects.length : 0, " )")
             return (
                 <div className={classes.wrapper}>
-                    <CollapsibleSection title={recentName}>
+                    {/* <CollapsibleSection title={recentName}>
                         <SlideContainer>
                             {projects.ownProjects && projects.ownProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
                         </SlideContainer>
-                    </CollapsibleSection>
+                    </CollapsibleSection> */}
                     <CollapsibleSection title={ownName}>
                         <SlideContainer>
                             {projects.ownProjects && projects.ownProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}

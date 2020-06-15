@@ -1,5 +1,6 @@
 import {
   drawerWidth,
+  drawerWidthClose,
   transition,
   boxShadow,
   defaultFont,
@@ -58,7 +59,7 @@ const sidebarStyle = theme => ({
     }),
     width: theme.spacing(7),
     [theme.breakpoints.up('sm')]: {
-      width: "68px",
+      width: `${drawerWidthClose}px`,
     },
   },
   hidden: {
@@ -181,7 +182,7 @@ const sidebarStyle = theme => ({
   itemLink: {
     width: "auto",
     transition: "all 300ms linear",
-    margin: "10px 15px 0",
+    margin: "10px 5px 0",
     borderRadius: "3px",
     position: "relative",
     display: "block",
@@ -190,10 +191,10 @@ const sidebarStyle = theme => ({
     ...defaultFont
   },
   itemIcon: {
-    width: "24px",
-    height: "30px",
-    fontSize: "24px",
-    lineHeight: "30px",
+    width: "20px",
+    height: "26px",
+    fontSize: "20px",
+    lineHeight: "26px",
     float: "left",
     marginRight: "15px",
     textAlign: "center",
@@ -310,7 +311,7 @@ const sidebarStyle = theme => ({
     position: "relative",
     height: "calc(100vh - 75px)",
     overflow: "auto",
-    width: "260px",
+    width: `${drawerWidth}px`,
     zIndex: "4",
     overflowScrolling: "touch"
   },

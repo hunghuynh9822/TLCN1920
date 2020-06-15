@@ -9,7 +9,7 @@ spring:
 #            https://console.developers.google.com/apis/credentials?project=pose1920
             clientId: 570332744553-gf7eeqc01cpmjf0rm67jdnc6cmvhvciv.apps.googleusercontent.com
             clientSecret: -DF9buAhX5IV5QSipbH-BIt6
-            redirectUriTemplate: ${SERVICE_URL}/auth/oauth2/callback/{registrationId}
+            redirectUriTemplate: ${SERVICE_URL:http://localhost:8000}/auth/oauth2/callback/{registrationId}
             scope:
               - email
               - profile
@@ -37,9 +37,9 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761}/eureka
   instance:
-    hostname: ${DOMAIN_NAME}
-    nonSecurePort: 80
-#    preferIpAddress: true
+    hostname: ${DOMAIN_NAME:localhost}
+    nonSecurePort: ${NON_SECURE_PORT:8000}
+    preferIpAddress: true
 
 #security:
 #  jwt:

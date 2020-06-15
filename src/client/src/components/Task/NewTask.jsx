@@ -6,7 +6,7 @@ import { withAlert } from 'react-alert';
 
 import { create } from '../../action/task';
 
-import { TagMember } from '../../components';
+import { TagMember, TagTask, DialogTitleCustom } from '../../components';
 import {
     DatePicker
 } from '@material-ui/pickers';
@@ -66,8 +66,10 @@ class NewTask extends Component {
         this.state = {
             open: false,
             openAdd: false,
+            openAddPrevious: false,
             scroll: 'body',
             assignee: null,
+            previousTasks: new Array(),
             request: {
                 projectId: '',
                 employeeCreator: '',
@@ -86,11 +88,15 @@ class NewTask extends Component {
         this.handleDuration = this.handleDuration.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.removeAssignee = this.removeAssignee.bind(this);
-        this.handleListItemClick = this.handleListItemClick.bind(this);
+        this.handleListItemMemberClick = this.handleListItemMemberClick.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleOpenAdd = this.handleOpenAdd.bind(this);
         this.handleCloseAdd = this.handleCloseAdd.bind(this);
+        this.handleOpenAddPrevious = this.handleOpenAddPrevious.bind(this);
+        this.handleCloseAddPrevious = this.handleCloseAddPrevious.bind(this);
+        this.handleListItemClick = this.handleListItemClick.bind(this);
+        this.removePreviousTask = this.removePreviousTask.bind(this);
     }
 
     getName(employee) {
@@ -132,8 +138,18 @@ class NewTask extends Component {
         const { currentUser, projectItem } = this.props;
         let projectId = projectItem.project.id;
         console.log("Assignee " + JSON.stringify(this.state.assignee));
+        let preTaskId = "";
+        this.state.previousTasks.forEach((task, index) => {
+            if (index === this.state.previousTasks.length - 1) {
+                preTaskId = preTaskId + task.id;
+            } else {
+                preTaskId = preTaskId + task.id + ","
+            }
+        })
+        console.log("[NewTask] preTaskId " + preTaskId)
         const request = {
             projectId: projectId,
+            preTaskId: preTaskId,
             employeeCreator: currentUser.id,
             employeeAssignee: this.state.assignee.id,
             title: this.state.request.title,
@@ -150,6 +166,7 @@ class NewTask extends Component {
                     open: false,
                     openAdd: false,
                     assignee: null,
+                    previousTasks: new Array(),
                     request: {
                         projectId: '',
                         employeeCreator: '',
@@ -173,11 +190,37 @@ class NewTask extends Component {
         })
     }
 
-    handleListItemClick(member) {
+    removePreviousTask(task) {
+        let tasks = this.state.previousTasks;
+        if (tasks === undefined || tasks === null || tasks === []) {
+            return;
+        }
+        tasks = tasks.filter((item, index) => {
+            return item.id !== task.id;
+        })
+        this.setState({
+            previousTasks: tasks
+        })
+    }
+
+    handleListItemMemberClick(member) {
         this.setState({
             assignee: member,
             openAdd: false,
         });
+    }
+
+    handleListItemClick(task) {
+        let tasks = this.state.previousTasks === undefined ? new Array() : this.state.previousTasks;
+        tasks.push(task);
+        tasks = tasks.filter((item, index) => {
+            console.log(item, index, tasks.indexOf(item), tasks.indexOf(item) === index);
+            return tasks.indexOf(item) === index;
+        })
+        console.log("[NewTask][previousTasks] " + JSON.stringify(tasks));
+        this.setState({
+            previousTasks: tasks
+        })
     }
 
     handleOpen() {
@@ -190,7 +233,9 @@ class NewTask extends Component {
         this.setState({
             open: false,
             openAdd: false,
+            openAddPrevious: false,
             assignee: null,
+            previousTasks: new Array(),
             request: {
                 projectId: '',
                 employeeCreator: '',
@@ -201,6 +246,18 @@ class NewTask extends Component {
                 duration: '',
                 endAt: new Date()
             }
+        })
+    }
+
+    handleOpenAddPrevious() {
+        this.setState({
+            openAddPrevious: true,
+        })
+    }
+
+    handleCloseAddPrevious() {
+        this.setState({
+            openAddPrevious: false,
         })
     }
 
@@ -216,12 +273,17 @@ class NewTask extends Component {
         })
     }
 
+    getTaskId(id) {
+        return "#" + id;
+    }
     render() {
         const { classes } = this.props;
         const { projectItem } = this.props;
-        const { open, openAdd, request, scroll } = this.state;
+        const { open, openAdd, openAddPrevious, request, scroll } = this.state;
         let members = projectItem.members;
+        let tasks = projectItem.tasks;
         // console.log(members);
+        // console.log("[NewTask][projectItem][tasks] " + JSON.stringify(tasks));
         return (
             <React.Fragment>
                 <Button onClick={this.handleOpen} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
@@ -268,8 +330,23 @@ class NewTask extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <Grid item xs={4}>Previous task : </Grid>
+                                <Grid item xs={12}>
+                                    <div>
+                                        <Button onClick={this.handleOpenAddPrevious} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
+                                        {this.state.previousTasks != undefined && this.state.previousTasks != null && this.state.previousTasks != [] ? (
+                                            this.state.previousTasks.map((task) => {
+                                                return (
+                                                    <TagTask task={task} removeTask={this.removePreviousTask} key={task.id} />
+                                                )
+                                            })
+                                        ) : null}
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={12}>
                                 <Grid item xs={2}>Assignee</Grid>
-                                <Grid item xs={10}>
+                                <Grid item xs={12}>
                                     <div>
                                         <Button onClick={this.handleOpenAdd} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
                                         {this.state.assignee !== null ? (
@@ -320,7 +397,7 @@ class NewTask extends Component {
                     <DialogTitle id="simple-dialog-title">Select employee</DialogTitle>
                     <List>
                         {members.length !== 0 ? members.map((member, index) => (
-                            <ListItem button onClick={() => this.handleListItemClick(member)} key={index}>
+                            <ListItem button onClick={() => this.handleListItemMemberClick(member)} key={index}>
                                 <ListItemAvatar>
                                     {member.imageUrl ? (
                                         <Avatar src={member.imageUrl} round="20px" size="30" />
@@ -333,6 +410,25 @@ class NewTask extends Component {
                             </ListItem>
                         )) : (
                                 <ListItemText primary="No employee" />
+                            )}
+                    </List>
+                </Dialog>
+                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious}>
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAddPrevious}>
+                        Select previous tasks :
+                    </DialogTitleCustom>
+                    <List>
+                        {tasks.length !== 0 ? tasks.map((task, index) => (
+                            <ListItem button onClick={() => this.handleListItemClick(task)} key={index}>
+                                <ListItemText >
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={6} sm={6}>{this.getTaskId(task.id)}</Grid>
+                                        <Grid item xs={6} sm={6}>{task.title}</Grid>
+                                    </Grid>
+                                </ListItemText>
+                            </ListItem>
+                        )) : (
+                                <ListItemText primary="No task" />
                             )}
                     </List>
                 </Dialog>

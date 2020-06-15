@@ -67,6 +67,8 @@ class Project extends Component {
     render() {
         const { classes } = this.props;
         const project = this.props.projectItem.project;
+        const moreInfo = this.props.projectItem.more;
+        console.log("[Project] moreInfo " + JSON.stringify(moreInfo));
         return (
             <Card className={classes.card} >
                 <CardHeader
@@ -110,13 +112,13 @@ class Project extends Component {
                     </Button>
                     <div style={{ marginBottom: '7px' }}>
                         <span className={classes.font} style={{ float: 'left' }}>
-                            50% Completed
+                            {moreInfo.process}% Completed
                         </span>
                         <span className={classes.font} style={{ float: 'right' }}>
-                            1/2 Tasks
+                            {moreInfo.finish}/{moreInfo.total} Tasks
                         </span>
                     </div>
-                    <CustomProcessBar variant="determinate" value={50} />
+                    <CustomProcessBar variant="determinate" value={moreInfo.process} />
                 </CardContent>
             </Card>
         );

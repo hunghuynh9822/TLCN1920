@@ -262,7 +262,7 @@ class RequestAddStaff extends Component {
                                 onClick={this.handleSubmit}
                             >
                                 Submit
-                                </Button>
+                            </Button>
                         ) : (
                                 <Button
                                     variant="contained"
@@ -271,7 +271,7 @@ class RequestAddStaff extends Component {
                                     className={classes.button}
                                 >
                                     Next
-                                    </Button>
+                                </Button>
                             )
                         }
                     </React.Fragment>
@@ -313,6 +313,9 @@ class RequestAddStaff extends Component {
                 <Button variant="contained" color="primary" onClick={handleOpen} className={classes.button}>
                     Add Staff
                 </Button>
+                <Link variant="body2" onClick={handleOpen}>
+                    Add new
+                                </Link>
 
                 <Dialog
                     open={open}

@@ -1,9 +1,9 @@
 package com.hcmute.pose.notifyservice.controller;
 
 import com.hcmute.pose.database.connector.exception.TransactionException;
-import com.hcmute.pose.notifyservice.buz.NotifyBuz;
-import com.hcmute.pose.notifyservice.model.Notify;
-import com.hcmute.pose.notifyservice.payload.NotifyRequest;
+import com.hcmute.pose.notifyservice.buz.notify.NotifyBuz;
+import com.hcmute.pose.notifyservice.model.notify.Notify;
+import com.hcmute.pose.notifyservice.payload.notify.NotifyRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

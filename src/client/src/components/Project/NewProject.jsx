@@ -13,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import CKEditor from 'ckeditor4-react';
 
 import { create } from '../../action/project';
 const styles = theme => ({
@@ -57,6 +58,7 @@ class NewProject extends Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.onEditorChange = this.onEditorChange.bind(this);
   }
 
   handleInputChange(event) {
@@ -67,6 +69,16 @@ class NewProject extends Component {
       request[name] = value;
       return { request };
     })
+  }
+
+  onEditorChange(evt) {
+    // console.log("[NewProject] " + evt.editor.getData())
+    this.setState(prevState => {
+      let request = Object.assign({}, prevState.request);
+      request["description"] = evt.editor.getData();
+      return { request };
+    });
+    // console.log("[NewProject] " + this.state.request.description);
   }
 
   handleSubmit() {
@@ -145,7 +157,7 @@ class NewProject extends Component {
                   onChange={this.handleInputChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   id="description"
                   name="description"
@@ -158,6 +170,13 @@ class NewProject extends Component {
                   variant="outlined"
                   value={request.description}
                   onChange={this.handleInputChange}
+                />
+              </Grid> */}
+              <Grid item xs={12}>
+                <p>Description</p>
+                <CKEditor
+                  data={request.description}
+                  onChange={this.onEditorChange}
                 />
               </Grid>
             </Grid>

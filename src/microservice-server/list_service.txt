@@ -1,0 +1,8 @@
+discovery-server
+gateway-proxy
+auth-service
+employee-service
+project-service
+notify-service
+webhook-service
+wiki-service

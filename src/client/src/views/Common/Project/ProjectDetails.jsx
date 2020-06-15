@@ -187,6 +187,7 @@ class ProjectDetails extends Component {
                         let projectAdmin = [...prevState.projectAdmin];
                         let openAdd = false;
                         let roleAdd = '';
+                        member.role = "ADMIN";
                         projectAdmin.push(member);
                         return { projectAdmin, openAdd, roleAdd };
                     });
@@ -210,6 +211,7 @@ class ProjectDetails extends Component {
                         let projectMembers = [...prevState.projectMembers];
                         let openAdd = false;
                         let roleAdd = '';
+                        member.role = "MEMBER";
                         projectMembers.push(member);
                         return { projectMembers, openAdd, roleAdd };
                     })
@@ -258,14 +260,14 @@ class ProjectDetails extends Component {
                             <div className={classes.description}>
                                 <div>Description</div>
                                 <div className={classes.description_details}>
-                                    <span>{project.description}</span>
+                                    <span dangerouslySetInnerHTML={{ __html: project.description }} />
                                 </div>
                             </div>
                             <div className={classes.divider} />
-                            <Grid item container className={classes.paraph}>
+                            {/* <Grid item container className={classes.paraph}>
                                 <Grid item xs={6}>Mục tiêu</Grid>
                                 <Grid item xs={6}>Xây dựng ứng dụng bán hàng qua mạng, tiệu dụng</Grid>
-                            </Grid>
+                            </Grid> */}
                             <div className={classes.divider} />
                         </Paper>
                     </Grid>

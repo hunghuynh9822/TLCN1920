@@ -82,7 +82,7 @@ public class DatabaseHelperImpl implements DatabaseHelper {
     public void commit() throws SQLException, TransactionException {
         LOGGER.info("[DatabaseHelperImpl] COMMITTING...");
         getTransaction().commit();
-        removeTransaction();
+//        removeTransaction();
         LOGGER.info("[DatabaseHelperImpl] COMMIT SUCCESS");
     }
 

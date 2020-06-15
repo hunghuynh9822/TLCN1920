@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, NavLink } from 'react-router-dom';
 
 import { withAlert } from 'react-alert'
 
@@ -23,6 +23,8 @@ import { withStyles } from '@material-ui/core/styles';
 import styles from '../assets/jss/styles/layouts/signinStyles';
 import { Copyright } from '../components';
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN } from '../constants';
+
+import { RequestAddStaff } from "../components"
 
 import googleLogo from '../assets/img/google-logo.png';
 
@@ -51,7 +53,7 @@ class SignIn extends Component {
     handleSubmit(event) {
         event.preventDefault();
         const { alert } = this.props;
-        const loginRequest = Object.assign({}, {phoneOrEmail:this.state.phoneOrEmail, password:this.state.password});
+        const loginRequest = Object.assign({}, { phoneOrEmail: this.state.phoneOrEmail, password: this.state.password });
         login(loginRequest)
             .then(response => {
                 // console.log(response.tokenType);
@@ -150,19 +152,22 @@ class SignIn extends Component {
                                 <span className={classes.socialBtnText}>Log in with Google</span>
                             </Button>
                         </div>
-                        {/* <Grid container>
+                        <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
+                                <NavLink
+                                    to="/new"
+                                    variant="body2"
+                                >New employee</NavLink>
                             </Grid>
-                        </Grid> */}
+                        </Grid>
+
                     </form>
+
                 </div>
                 <Box mt={8}>
                     <Copyright />

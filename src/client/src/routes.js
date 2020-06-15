@@ -25,6 +25,8 @@ import Assignment from "@material-ui/icons/AssignmentOutlined";
 import Today from "@material-ui/icons/TodayOutlined";
 import FolderOpen from "@material-ui/icons/FolderOpenOutlined";
 import TimeLine from "@material-ui/icons/Timeline";
+import LibraryBook from "@material-ui/icons/LibraryBooks"
+import SettingsEthernet from "@material-ui/icons/SettingsEthernet"
 import {
   TaskManagement,
   GanttChart,
@@ -37,7 +39,9 @@ import {
   AdminHumanManagement,
   AdminDashboard,
   ProjectOverview,
-  ProjectView
+  ProjectView,
+  WikiManagement,
+  WebHookMangement
 } from "./views";
 
 const manageRoutes = [
@@ -92,15 +96,6 @@ const manageRoutes = [
         breadcrumb: "Request"
       },
       {
-        path: "/timekeeping",
-        name: "Timekeeping",
-        rtlName: "Chấm công",
-        icon: Today,
-        component: TimeKeeping,
-        layout: "/admin",
-        breadcrumb: "Timekeeping"
-      },
-      {
         path: "/notification",
         name: "Notification",
         rtlName: "Thông báo",
@@ -110,6 +105,29 @@ const manageRoutes = [
         breadcrumb: "Notification"
       },
       {
+        path: "/wiki",
+        name: "Wiki",
+        rtlName: "Wiki",
+        icon: LibraryBook,
+        component: WikiManagement,
+        layout: "/admin",
+        breadcrumb: "Wiki",
+        routes: [{
+          path: "/:wikiId",
+          component: WikiManagement,
+          layout: "/admin/wiki",
+        }]
+      },
+      {
+        path: "/webhook",
+        name: "Webhook",
+        rtlName: "Webhook",
+        icon: SettingsEthernet,
+        component: WebHookMangement,
+        layout: "/admin",
+        breadcrumb: "Webhook"
+      },
+      {
         path: "/info",
         name: "Infomation",
         rtlName: "Thông tin cá nhân",
@@ -117,7 +135,7 @@ const manageRoutes = [
         component: Information,
         layout: "/admin",
         breadcrumb: "Information"
-      }
+      },
     ]
   },
   {
@@ -254,14 +272,6 @@ const manageRoutes = [
         component: EmployeeManagement,
         layout: "/hr",
         breadcrumb: "HumanResources"
-      }, {
-        path: "/timekeeping",
-        name: "Timekeeping",
-        rtlName: "Chấm công",
-        icon: Today,
-        component: TimeKeeping,
-        layout: "/hr",
-        breadcrumb: "Timekeeping"
       }, {
         path: "/request",
         name: "Request",

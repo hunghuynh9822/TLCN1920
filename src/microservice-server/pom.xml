@@ -29,11 +29,11 @@
         <module>gateway-proxy</module>
         <module>auth-service</module>
         <module>employee-service</module>
-        <module>task-service</module>
 		<module>project-service</module>
-		<module>request-service</module>
 		<module>notify-service</module>
-	</modules>
+		<module>webhook-service</module>
+        <module>wiki-service</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>

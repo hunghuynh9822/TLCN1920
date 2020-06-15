@@ -9,9 +9,21 @@ eureka:
       defaultZone: ${EUREKA_URI:http://localhost:8761}/eureka
   instance:
     hostname: ${DOMAIN_NAME:localhost}
-    nonSecurePort: 80
+    nonSecurePort: ${NON_SECURE_PORT:8080}
 #    preferIpAddress: true
 #Zuul routes. Here for /employee path, we are routing to localhost:8001 with extra path after that.
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+ribbon:
+  ReadTimeout: 60000
+  connection-timeout: 3000
+  eureka:
+    enabled: true
 zuul:
   routes:
     auth:
@@ -41,19 +53,19 @@ zuul:
     tasks:
       path: /api/tasks/**
       strip-prefix: false
-      service-id: task-service
+      service-id: project-service
       ribbon:
         ReadTimeout: 600000
     admintasks:
       path: /api/admin/tasks/**
       strip-prefix: false
-      service-id: task-service
+      service-id: project-service
       ribbon:
         ReadTimeout: 600000
     leadtasks:
       path: /api/lead/tasks/**
       strip-prefix: false
-      service-id: task-service
+      service-id: project-service
       ribbon:
         ReadTimeout: 600000
     projects:
@@ -71,7 +83,7 @@ zuul:
     requests:
       path: /api/requests/**
       strip-prefix: false
-      service-id: request-service
+      service-id: notify-service
       ribbon:
         ReadTimeout: 600000
     notify:
@@ -80,5 +92,23 @@ zuul:
       service-id: notify-service
       ribbon:
         ReadTimeout: 600000
+    webhook:
+      path: /api/webhook/**
+      strip-prefix: false
+      service-id: webhook-service
+      ribbon:
+        ReadTimeout: 600000
+    wiki:
+      path: /api/wiki/**
+      strip-prefix: false
+      service-id: wiki-service
+      ribbon:
+        ReadTimeout: 600000
   host:
-    connect-timeout-millis: 600000
+    time-to-live: -1
+    connect-timeout-millis: 5000
+    max-per-route-connections: 10000
+    max-total-connections: 5000
+    socket-timeout-millis: 6000000
+  semaphore:
+    max-semaphores: 500

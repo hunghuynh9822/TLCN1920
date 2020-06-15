@@ -47,7 +47,6 @@ public class EmployeeServiceController {
     }
 
     @PostMapping("/")
-    @PreAuthorize("hasAnyRole('ADMIN','HR')")
     public ResponseEntity<Object> createEmployee(@Valid @RequestBody  EmployeeRequest employeeRequest){
         EmployeeResponse employee;
         try {
