@@ -13,9 +13,9 @@ public interface TaskServiceBuz {
     Optional<Task> createTask (TaskRequest taskRequest) throws Exception, TransactionException;
     Task getTasksById(Long taskId) throws Exception;
 
-    AllTasksProjectResponse getDataOfProject(Long projectId) throws SQLException;
+    AllTasksProjectResponse getDataOfProject(Long projectId) throws Exception;
 
-    AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException;
+    AllTasksProjectResponse getAllTasksByProject(Long projectId) throws Exception;
     ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException;
     CreatorTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException;
     AssigneeTasksResponse getTasksByAssignee(Long projectId, Long assigneeId) throws SQLException;
@@ -33,6 +33,7 @@ public interface TaskServiceBuz {
     TasksWithState getAllTasksWithStateByProject(Long projectId) throws SQLException;
     TasksWithState getTasksWithStateByAssignee(Long projectId, Long assigneeId) throws SQLException;
     ProjectTasksAssigneeWithStateResponse getTasksAssigneeWithStateByProject(Long projectId) throws SQLException;
+    void deleteTask (Long taskId, Long projectId) throws SQLException, TransactionException;
 
 }
 

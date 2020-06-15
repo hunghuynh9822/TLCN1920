@@ -22,4 +22,6 @@ public interface TaskService {
     void updateTask(Long taskId, String preTaskId, Long assigneeId, String title, String description, Long startedAt, Integer duration, TaskState state) throws SQLException, TransactionException;
 
     void updateTaskTime(Long taskId, Long startedAt, Integer duration) throws SQLException, TransactionException;
+    void deleteTask(Long taskId) throws SQLException, TransactionException;
+    void updatePreTaskId (Long taskId , String preTask) throws SQLException, TransactionException;
 }

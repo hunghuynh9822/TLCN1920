@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -55,10 +58,11 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     }
 
     @Override
-    public AllTasksProjectResponse getDataOfProject(Long projectId) throws SQLException {
+    public AllTasksProjectResponse getDataOfProject(Long projectId) throws Exception {
         List<Task> tasks = taskService.getTasksByProject(projectId);
         List<TaskResponse> taskResponses = new ArrayList<>();
         List<TaskLink> links = new ArrayList<>();
+        List<String> messages = new ArrayList<>();
         long index = 1L;
         for (Task task : tasks
         ) {
@@ -75,11 +79,28 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 index = index + 1;
             }
         }
-        return new AllTasksProjectResponse(projectId, taskResponses, links);
+        for (TaskLink taskLink : links) {
+            Task source = taskService.getTasksById(taskLink.getSource());
+            Task target = taskService.getTasksById(taskLink.getTarget());
+            Calendar date_end_source = Calendar.getInstance();
+            date_end_source.setTimeInMillis(source.getStartedAt());
+            date_end_source.add(Calendar.DATE , source.getDuration());
+            Calendar date_start_target = Calendar.getInstance();
+            date_start_target.setTimeInMillis(target.getStartedAt());
+            Date sourceTime = date_end_source.getTime();
+            Date targetTime = date_start_target.getTime();
+//            LOGGER.info("Source : {}" ,sourceTime);
+//            LOGGER.info("Target: {}", targetTime);
+            if (targetTime.compareTo(sourceTime) <= 0) {
+                String message = String.format("Cần kiểm tra thời gian Task %s và Task %s", source.getTitle(), target.getTitle());
+                messages.add(message);
+            }
+        }
+        return new AllTasksProjectResponse(projectId, taskResponses, links, messages);
     }
 
     @Override
-    public AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException {
+    public AllTasksProjectResponse getAllTasksByProject(Long projectId) throws Exception {
         try{
             return getDataOfProject(projectId);
         } finally {
@@ -125,6 +146,30 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         } finally {
             databaseHelper.closeConnection();
         }
+    }
+
+    @Override
+    public void deleteTask(Long taskId, Long projectId) throws SQLException, TransactionException {
+        List<Task> tasks = taskService.getTasksByProject(projectId);
+        String newpreTask = "";
+        databaseHelper.beginTransaction();
+        for (Task task : tasks){
+            String preTaskId = task.getPreTaskId();
+            if (StringUtils.isEmpty(preTaskId)) {
+                continue;
+            }
+            for (String pretaskId : preTaskId.split(",")) {
+                if (pretaskId != (taskId).toString()){
+                    newpreTask = preTaskId + ",";
+                }
+            }
+            if (newpreTask.length() != 0) {
+                newpreTask = newpreTask.substring(0, newpreTask.length() - 1);
+            }
+            taskService.updatePreTaskId(task.getId(), newpreTask);
+        }
+        taskService.deleteTask(taskId);
+        databaseHelper.commit();
     }
 
     @Override

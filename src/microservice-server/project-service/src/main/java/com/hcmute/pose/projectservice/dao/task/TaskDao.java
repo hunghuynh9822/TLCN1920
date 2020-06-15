@@ -23,4 +23,6 @@ public interface TaskDao {
     void updateTask(Task task) throws SQLException, TransactionException;
     void updateTaskTime(Long taskId, Long startedAt, Integer duration) throws SQLException, TransactionException;
     void updateAssignee(Long taskId, Long employeeId) throws SQLException, TransactionException;
+    void deleteTask(Long taskId) throws SQLException, TransactionException;
+    void updatePreTask(Long taskId, String preTask) throws SQLException, TransactionException;
 }
