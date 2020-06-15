@@ -15,13 +15,8 @@ public interface TaskServiceBuz {
 
     AllTasksProjectResponse getDataOfProject(Long projectId) throws Exception;
 
-<<<<<<< HEAD
-    AllTasksProjectResponse getAllTasksByProject(Long projectId) throws Exception;
-=======
     AllTasksProjectResponse getDataTasksOfProject(Long projectId) throws SQLException;
-
-    AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException;
->>>>>>> ce2a3baef824e48520ab68c4a90537b4b2c6d741
+    AllTasksProjectResponse getAllTasksByProject(Long projectId) throws SQLException, Exception;
     ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException;
     CreatorTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException;
     AssigneeTasksResponse getTasksByAssignee(Long projectId, Long assigneeId) throws SQLException;

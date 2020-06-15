@@ -17,13 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.sql.SQLException;
-<<<<<<< HEAD
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-=======
 import java.text.DecimalFormat;
->>>>>>> ce2a3baef824e48520ab68c4a90537b4b2c6d741
 import java.util.*;
 
 @Service

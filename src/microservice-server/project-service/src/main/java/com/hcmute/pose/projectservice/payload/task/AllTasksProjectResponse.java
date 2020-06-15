@@ -1,6 +1,5 @@
 package com.hcmute.pose.projectservice.payload.task;
 
-import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskLink;
 
 import java.util.List;
@@ -10,16 +9,8 @@ public class AllTasksProjectResponse {
     private Long projectId;
     private List<TaskResponse> tasks;
     private List<TaskLink> links;
-<<<<<<< HEAD
     private List<String> message;
-
-    public List<String> getMessage() {
-        return message;
-    }
-
-    public void setMessage(List<String> message) {
-        this.message = message;
-    }
+    private Map<String, Object> tasksInfo;
 
     public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks, List<TaskLink> links, List<String> message) {
         this.projectId = projectId;
@@ -27,9 +18,6 @@ public class AllTasksProjectResponse {
         this.links = links;
         this.message = message;
     }
-=======
-    private Map<String, Object> tasksInfo;
->>>>>>> ce2a3baef824e48520ab68c4a90537b4b2c6d741
 
     public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks) {
         this.projectId = projectId;
@@ -75,5 +63,13 @@ public class AllTasksProjectResponse {
 
     public void setTasksInfo(Map<String, Object> tasksInfo) {
         this.tasksInfo = tasksInfo;
+    }
+
+    public List<String> getMessage() {
+        return message;
+    }
+
+    public void setMessage(List<String> message) {
+        this.message = message;
     }
 }
