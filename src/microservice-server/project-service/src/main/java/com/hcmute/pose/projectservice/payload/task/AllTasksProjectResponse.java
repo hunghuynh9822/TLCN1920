@@ -10,7 +10,26 @@ public class AllTasksProjectResponse {
     private Long projectId;
     private List<TaskResponse> tasks;
     private List<TaskLink> links;
+<<<<<<< HEAD
+    private List<String> message;
+
+    public List<String> getMessage() {
+        return message;
+    }
+
+    public void setMessage(List<String> message) {
+        this.message = message;
+    }
+
+    public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks, List<TaskLink> links, List<String> message) {
+        this.projectId = projectId;
+        this.tasks = tasks;
+        this.links = links;
+        this.message = message;
+    }
+=======
     private Map<String, Object> tasksInfo;
+>>>>>>> ce2a3baef824e48520ab68c4a90537b4b2c6d741
 
     public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks) {
         this.projectId = projectId;

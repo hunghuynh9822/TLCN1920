@@ -83,4 +83,14 @@ public class LeadTaskServiceController {
             return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteTaskByProject(@RequestParam(name="project") Long projectId, @RequestParam(name="taskId") Long taskId){
+        try{
+            taskServiceBuz.deleteTask(taskId, projectId);
+            return new ResponseEntity("Delete task success", HttpStatus.OK);
+        }catch (Exception | TransactionException e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }

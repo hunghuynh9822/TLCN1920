@@ -32,7 +32,8 @@ public class TaskDaoImpl implements TaskDao {
     private static String SQL_UPDATE_TASK = "UPDATE tasks SET employee_assignee=?, title=?, description=?, started_at=?, duration=?, state=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_TASK_TIME = "UPDATE tasks SET started_at=?, duration=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_ASSIGNEE = "UPDATE tasks SET employee_assignee=?, updated_at=? WHERE id=?";
-
+    private static String SQL_DELETE_TASK = "DELETE FROM tasks WHERE id=?";
+    private static String SQL_UPDATE_PRETASK = "UPDATE tasks SET pre_task_id=? WHERE id=?";
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -142,6 +143,16 @@ public class TaskDaoImpl implements TaskDao {
     @Override
     public void updateAssignee(Long taskId, Long employeeId) throws SQLException, TransactionException {
         databaseHelper.executeNonQuery(SQL_UPDATE_ASSIGNEE, employeeId, System.currentTimeMillis(), taskId);
+    }
+
+    @Override
+    public void deleteTask(Long taskId) throws SQLException, TransactionException {
+        databaseHelper.executeNonQuery(SQL_DELETE_TASK , taskId);
+    }
+
+    @Override
+    public void updatePreTask(Long taskId, String preTask) throws SQLException, TransactionException {
+        databaseHelper.executeNonQuery(SQL_UPDATE_PRETASK, preTask , taskId);
     }
 
     @Override

@@ -95,4 +95,14 @@ public class TaskServiceImpl implements TaskService {
     public void updateTaskTime(Long taskId, Long startedAt, Integer duration) throws SQLException, TransactionException {
         taskDao.updateTaskTime(taskId, startedAt, duration);
     }
+
+    @Override
+    public void deleteTask(Long taskId) throws SQLException, TransactionException {
+        taskDao.deleteTask(taskId);
+    }
+
+    @Override
+    public void updatePreTaskId(Long taskId, String preTask) throws SQLException, TransactionException {
+        taskDao.updatePreTask(taskId , preTask);
+    }
 }
