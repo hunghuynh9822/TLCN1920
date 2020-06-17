@@ -69,7 +69,12 @@ class GanttChart extends Component {
                 let tasks = response.tasks;
                 let data = tasks.map((task) => {
                     return {
-                        id: task.id, text: task.title, start_date: this.convertDateToString(task.startedAt), duration: task.duration == null ? 0 : task.duration, progress: 0.6
+                        id: task.id,
+                        text: task.title,
+                        start_date: this.convertDateToString(task.startedAt),
+                        duration: task.duration == null ? 0 : task.duration,
+                        progress: task.process,
+                        type: gantt.config.types.meeting
                     }
                 })
                 this.setState({
@@ -135,7 +140,6 @@ class GanttChart extends Component {
                 <Loading />
             )
         }
-        console.log("TASK OF PROJECT : " + JSON.stringify(this.state.data))
         return (
             <div>
                 <div className={classes.zoom_bar}>

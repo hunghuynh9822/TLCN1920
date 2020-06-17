@@ -89,23 +89,44 @@ class Gantt extends Component {
     componentDidMount() {
         count = count + 1;
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
+        //
+        gantt.config.types.meeting = "type_id";
+        gantt.locale.labels.type_meeting = "Meeting";
+        gantt.config.lightbox.meeting_sections = [
+            { name: "title", height: 20, map_to: "text", type: "textarea", focus: true },
+            { name: "details", height: 70, map_to: "details", type: "textarea" },
+            { name: "type", type: "typeselect", map_to: "type" },
+            { name: "time", height: 72, type: "time", map_to: "auto" }
+        ];
+        gantt.locale.labels.section_title = "Subject";
+        gantt.locale.labels.section_details = "Details";
+        gantt.templates.task_class = function (start, end, task) {
+            if (task.type == gantt.config.types.meeting) {
+                return "meeting_task";
+            }
+            return "";
+        };
+        gantt.templates.task_text = function (start, end, task) {
+            // if (task.type == gantt.config.types.meeting) {
+            //     return "Meeting: <b>" + task.text + "</b>";
+            // }
+            return task.text;
+        };
+        //
+        gantt.config.work_time = true;
+        gantt.config.correct_work_time = true;
+        gantt.config.drag_progress = false;
+        //
+        // default columns definition
+        gantt.config.columns = [
+            { name: "text", label: "Task name", tree: true, width: '*' },
+            { name: "start_date", label: "Start time", align: "center" },
+            { name: "duration", label: "Duration", align: "center" },
+        ];
+        //
         const { tasks } = this.props;
         console.log("[Gantt] componentDidMount with tasks " + JSON.stringify(tasks));
         gantt.init(this.ganttContainer);
-        // gantt.addTaskLayer(function draw_deadline(task) {
-        //     if (task.deadline) {
-        //         var el = document.createElement('div');
-        //         el.className = 'deadline';
-        //         var sizes = gantt.getTaskPosition(task, task.deadline);
-
-        //         el.style.left = sizes.left + 'px';
-        //         el.style.top = sizes.top + 'px';
-
-        //         el.setAttribute('title', gantt.templates.task_date(task.deadline));
-        //         return el;
-        //     }
-        //     return false;
-        // });
         this.initGanttDataProcessor();
         gantt.parse(tasks);
         gantt.render();
