@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { gantt } from 'dhtmlx-gantt';
+import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
 var count = 1;
 class Gantt extends Component {
     // instance of gantt.dataProcessor
@@ -91,6 +92,20 @@ class Gantt extends Component {
         const { tasks } = this.props;
         console.log("[Gantt] componentDidMount with tasks " + JSON.stringify(tasks));
         gantt.init(this.ganttContainer);
+        // gantt.addTaskLayer(function draw_deadline(task) {
+        //     if (task.deadline) {
+        //         var el = document.createElement('div');
+        //         el.className = 'deadline';
+        //         var sizes = gantt.getTaskPosition(task, task.deadline);
+
+        //         el.style.left = sizes.left + 'px';
+        //         el.style.top = sizes.top + 'px';
+
+        //         el.setAttribute('title', gantt.templates.task_date(task.deadline));
+        //         return el;
+        //     }
+        //     return false;
+        // });
         this.initGanttDataProcessor();
         gantt.parse(tasks);
         gantt.render();

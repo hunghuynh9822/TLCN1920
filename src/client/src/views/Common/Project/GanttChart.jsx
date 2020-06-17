@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { withAlert } from 'react-alert';
 
-import { Gantt, Toolbar, MessageArea, Loading} from '../../../components';
+import { Gantt, Toolbar, MessageArea, Loading } from '../../../components';
 import { getTasksOfProject } from '../../../action/task';
 const styles = theme => ({
-    gantt_container: { "height": "calc(100vh - 40px - 200px)" }
+    gantt_container: { "height": "calc(100vh - 40px - 200px)" },
+    zoom_bar: { background: "#ededed", height: "40px", lineHeight: "40px", padding: "5px 10px" }
 });
 const data = {
     data: [
@@ -72,7 +73,7 @@ class GanttChart extends Component {
                     }
                 })
                 this.setState({
-                    data: { data: data, links: response.links},
+                    data: { data: data, links: response.links },
                     loading: false
                 })
             }).catch(error => {
@@ -89,7 +90,7 @@ class GanttChart extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.index == 2) {
+        if (nextProps.index == 2) {
             this.loadTasks();
         }
     }
@@ -129,7 +130,7 @@ class GanttChart extends Component {
         const { projectItem } = this.props;
         let projectId = projectItem.project.id;
         console.log("Timeline of projectId : " + projectId);
-        if(this.state.loading) {
+        if (this.state.loading) {
             return (
                 <Loading />
             )
@@ -137,7 +138,7 @@ class GanttChart extends Component {
         console.log("TASK OF PROJECT : " + JSON.stringify(this.state.data))
         return (
             <div>
-                <div className="zoom-bar">
+                <div className={classes.zoom_bar}>
                     <Toolbar
                         zoom={currentZoom}
                         onZoomChange={this.handleZoomChange}
