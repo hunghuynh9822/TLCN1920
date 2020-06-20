@@ -256,7 +256,9 @@ class ProjectTasks extends Component {
         let previousTasks = new Array();
         preTaskIds.map((item, index) => {
             let task = tasks.find(element => element.id == item);
-            previousTasks.push(task)
+            if (task != undefined && task != null) {
+                previousTasks.push(task)
+            }
         })
         this.setState({
             open: true,
@@ -359,7 +361,7 @@ class ProjectTasks extends Component {
     }
 
     handleDuration(date) {
-        const diffTime = Math.abs(date - this.state.request.startedAt);
+        const diffTime = Math.abs(date - this.state.task.startedAt);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         this.handleDatePickerChange('duration', diffDays);
         this.handleDatePickerChange('endAt', date);
@@ -575,6 +577,7 @@ class ProjectTasks extends Component {
                                         <Button onClick={this.handleOpenAddPrevious} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
                                         {this.state.previousTasks != undefined && this.state.previousTasks != null && this.state.previousTasks != [] ? (
                                             this.state.previousTasks.map((task) => {
+                                                console.log("[ProjectTasks] previousTasks ", this.state.previousTasks)
                                                 return (
                                                     <TagTask task={task} removeTask={this.removePreviousTask} key={task.id} />
                                                 )

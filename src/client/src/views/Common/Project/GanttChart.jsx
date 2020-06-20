@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withAlert } from 'react-alert';
 
 import { Gantt, Toolbar, MessageArea, Loading } from '../../../components';
-import { getTasksOfProject } from '../../../action/task';
+import { getTasksOfProject, updateTask, TASK_STATE } from '../../../action/task';
 const styles = theme => ({
     gantt_container: { "height": "calc(100vh - 40px - 200px)" },
     zoom_bar: { background: "#ededed", height: "40px", lineHeight: "40px", padding: "5px 10px" }
@@ -73,8 +73,7 @@ class GanttChart extends Component {
                         text: task.title,
                         start_date: this.convertDateToString(task.startedAt),
                         duration: task.duration == null ? 0 : task.duration,
-                        progress: task.process,
-                        type: gantt.config.types.meeting
+                        progress: task.process
                     }
                 })
                 this.setState({
@@ -115,6 +114,10 @@ class GanttChart extends Component {
     }
 
     /**
+     * 
+     */
+
+    /**
      * type, action, item, id
          * type: "task"|"link"
          * action: "create"|"update"|"delete"
@@ -123,11 +126,72 @@ class GanttChart extends Component {
     logDataUpdate = (entityType, action, itemData, id) => {
         let text = itemData && itemData.text ? ` (${itemData.text})` : '';
         let message = `${entityType} ${action}: ${id} ${text}`;
-        if (entityType === 'link' && action !== 'delete') {
-            message += ` ( source: ${itemData.source}, target: ${itemData.target} )`;
+        //
+        const { projectItem } = this.props;
+        let tasks = projectItem.tasks;
+        console.log("[Gantt] Data change ", entityType, action, itemData, id);
+        const sourceTask = tasks.find(element => element.id == itemData.source);
+        console.log("[Gantt] Change task source " + JSON.stringify(sourceTask));
+        //{"id":15782717407117,"projectId":15776774274194,"employeeCreator":15751881480165,"employeeAssignee":15782398324826,"title":"Thiết kế biểu mẫu","description":"Chỉ tiết các form có thể xuất hiện ","startedAt":1575420420000,"duration":4,"state":"NEW","point":0,"createdAt":1578271740711,"updatedAt":1591425813387,"process":0}
+        const targetTask = tasks.find(element => element.id == itemData.target);
+        console.log("[Gantt] Change task target " + JSON.stringify(targetTask));
+        let request = {};
+        //Update link -> apply on target
+        if (entityType === 'link') {
+            request = {
+                taskId: targetTask.id,
+                employeeId: targetTask.employeeAssignee,
+                title: targetTask.title,
+                description: targetTask.description,
+                point: targetTask.point,
+                state: TASK_STATE.indexOf(targetTask.state),
+                startedAt: targetTask.startedAt,
+                duration: targetTask.duration,
+                preTaskId: targetTask.preTaskId
+            }
+            let preTaskId = request.preTaskId;
+            if (action === 'create') {
+                message += ` ( source: ${itemData.source}, target: ${itemData.target} )`;
+                if (preTaskId == undefined || preTaskId == null || preTaskId == "") {
+                    preTaskId = "" + sourceTask.id;
+                } else {
+                    preTaskId = preTaskId + "," + sourceTask.id;
+                }
+            } else if (action === 'delete') {
+                if (preTaskId != null && preTaskId != "") {
+                    let preTaskIds = preTaskId.split(",");
+                    preTaskId = "";
+                    preTaskIds.forEach((task, index) => {
+                        if (task != sourceTask.id) {
+                            if (index === preTaskIds.length - 1) {
+                                preTaskId = preTaskId + task;
+                            } else {
+                                preTaskId = preTaskId + task + ","
+                            }
+                        }
+                    })
+                }
+            }
+            request.preTaskId = preTaskId;
+
+            console.log("[UpdateTask][Link] Request : " + JSON.stringify(request));
+            updateTask(request)
+                .then(response => {
+                    console.log(response);
+                    // this.loadTasks();
+                }).catch(error => {
+                    console.log(error);
+                    //(error && error.message) || 
+                    alert.error('Oops! Something went wrong. Please try again!');
+                });
         }
-        console.log("[Gantt] Data change " + message);
+
+        //
+
+
+
         this.addMessage(message);
+
     }
 
     handleZoomChange = (zoom) => {
@@ -170,5 +234,6 @@ class GanttChart extends Component {
 }
 GanttChart.propTypes = {
     classes: PropTypes.object.isRequired,
+    projectItem: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(withAlert()(GanttChart));
