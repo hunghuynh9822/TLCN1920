@@ -15,6 +15,9 @@ public interface TaskDao {
     Optional<Task> getTasksById(Long taskId) throws SQLException;
     List<com.hcmute.pose.projectservice.modelmap.LongValue> getAssigneeByCreator(Long projectId, Long employeeId) throws SQLException;
     List<Task> getTasksByAssignee(Long projectId, Long employeeId) throws SQLException;
+
+    List<Task> getTasksByAssigneeAndCreator(Long projectId, Long employeeAssignee, Long employeeCreator) throws SQLException;
+
     List<Task> getTasksByProject(Long projectId) throws SQLException;
     List<LongValue> getCreatorByProject(Long projectId) throws SQLException;
     List<com.hcmute.pose.projectservice.modelmap.LongValue> getAssigneeByProject(Long projectId) throws SQLException;

@@ -23,13 +23,14 @@ public class TaskDaoImpl implements TaskDao {
     private static String SQl_SELECT_TASK_BY_ID = "SELECT * FROM tasks WHERE id = ?";
     private static String SQl_SELECT_ASSIGNEE_BY_CREATOR = "SELECT employee_assignee as value FROM tasks WHERE employee_creator = ? AND project_id = ? GROUP BY employee_assignee";
     private static String SQl_SELECT_TASK_BY_ASSIGNEE = "SELECT * FROM tasks WHERE employee_assignee = ? AND project_id = ?";
+    private static String SQl_SELECT_TASK_BY_ASSIGNEE_AND_CREATOR = "SELECT * FROM tasks WHERE employee_assignee = ? AND employee_creator = ? AND project_id = ?";
     private static String SQl_SELECT_TASK_BY_PROJECT = "SELECT * FROM tasks WHERE project_id = ?";
     private static String SQl_SELECT_CREATOR_BY_PROJECT = "SELECT employee_creator as value FROM tasks WHERE project_id = ? GROUP BY employee_creator";
     private static String SQl_SELECT_ASSIGNEE_BY_PROJECT = "SELECT employee_assignee as value FROM tasks WHERE project_id = ? GROUP BY employee_assignee";
 
     private static String SQL_UPDATE_POINT = "UPDATE tasks SET point=?, updated_at=? WHERE id=? AND employee_creator=?";
     private static String SQL_UPDATE_STATE = "UPDATE tasks SET state=?, updated_at=? WHERE id=? AND ( employee_creator=? OR employee_assignee=? )";
-    private static String SQL_UPDATE_TASK = "UPDATE tasks SET employee_assignee=?, title=?, description=?, started_at=?, duration=?, state=?, updated_at=? WHERE id=?";
+    private static String SQL_UPDATE_TASK = "UPDATE tasks SET employee_assignee=?, title=?, description=?, pre_task_id=?, started_at=?, duration=?, state=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_TASK_TIME = "UPDATE tasks SET started_at=?, duration=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_ASSIGNEE = "UPDATE tasks SET employee_assignee=?, updated_at=? WHERE id=?";
     private static String SQL_DELETE_TASK = "DELETE FROM tasks WHERE id=?";
@@ -101,6 +102,16 @@ public class TaskDaoImpl implements TaskDao {
     }
 
     @Override
+    public List<Task> getTasksByAssigneeAndCreator(Long projectId, Long employeeAssignee, Long employeeCreator) throws SQLException {
+        try {
+            return databaseHelper.executeQueryListObject(Task[].class,SQl_SELECT_TASK_BY_ASSIGNEE_AND_CREATOR, employeeAssignee, employeeCreator,projectId);
+        } catch (SQLException e) {
+            LOGGER.error("[TaskDaoImpl]:[getTasksByAssignee]",e);
+            throw e;
+        }
+    }
+
+    @Override
     public List<Task> getTasksByProject(Long projectId) throws SQLException {
         try {
             return databaseHelper.executeQueryListObject(Task[].class,SQl_SELECT_TASK_BY_PROJECT,projectId);
@@ -161,6 +172,7 @@ public class TaskDaoImpl implements TaskDao {
                 task.getEmployeeAssignee(),
                 task.getTitle(),
                 task.getDescription(),
+                task.getPreTaskId(),
                 task.getStartedAt(),
                 task.getDuration(),
                 task.getState().ordinal(),

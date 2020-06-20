@@ -12,6 +12,9 @@ public interface TaskService {
     Task getTasksById(Long taskId) throws Exception;
     List<Long> getAssigneeByCreator(Long projectId, Long creatorId) throws SQLException;
     List<Task> getTasksByAssignee(Long projectId, Long employeeId) throws SQLException;
+
+    List<Task> getTasksByAssigneeAndCreator(Long projectId, Long employeeAssignee, Long employeeCreator) throws SQLException;
+
     List<Task> getTasksByProject(Long projectId) throws SQLException;
     List<Long> getCreatorByProject(Long projectId) throws SQLException;
     List<Long> getAsigneeByProject(Long projectId) throws SQLException;

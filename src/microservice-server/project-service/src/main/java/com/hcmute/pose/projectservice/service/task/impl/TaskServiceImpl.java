@@ -46,6 +46,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Task> getTasksByAssigneeAndCreator(Long projectId, Long employeeAssignee, Long employeeCreator) throws SQLException {
+        return taskDao.getTasksByAssigneeAndCreator(projectId, employeeAssignee, employeeCreator);
+    }
+
+    @Override
     public List<Task> getTasksByProject(Long projectId) throws SQLException {
         return taskDao.getTasksByProject(projectId);
     }

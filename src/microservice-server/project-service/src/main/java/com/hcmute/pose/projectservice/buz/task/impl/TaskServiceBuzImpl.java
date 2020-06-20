@@ -222,7 +222,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         try{
             List<Long> assigneeIds = taskService.getAssigneeByCreator(projectId, creatorId);
             for(Long assigneeId : assigneeIds) {
-                List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
+                List<Task> tasks = taskService.getTasksByAssigneeAndCreator(projectId, assigneeId, creatorId);
                 assigneeTasksResponses.add(new AssigneeTasksResponse(assigneeId, tasks));
             }
             return assigneeTasksResponses;
