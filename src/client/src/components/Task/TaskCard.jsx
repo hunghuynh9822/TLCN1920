@@ -10,10 +10,13 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { Task } from '../../components'
 
+import classNames from "classnames";
+
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 
+const background = '#f5f8ff';
 const styles = theme => ({
     title: {
         margin: '5px 0px 0px 15px',
@@ -28,6 +31,15 @@ const styles = theme => ({
         display: 'flex', /* or inline-flex */
         flexDirection: 'column',
         padding: '3px 5px 0px 5px',
+        backgroundColor: `${background}`
+    },
+    card: {
+        backgroundColor: `${background}`
+    },
+    group_header: {
+        backgroundColor: `${background}`,
+        border: 'none',
+        marginBottom: '5px'
     }
 });
 
@@ -82,7 +94,7 @@ class TaskCard extends Component {
                         }} />
                     <CardContent className={classes.content}>
                         <ul className="list-group">
-                            <li className="list-group-item">
+                            <li className={classNames("list-group-item", classes.group_header)}>
                                 <div className="row">
                                     <div className="col-8"><a>Done task</a></div>
                                 </div>
@@ -112,7 +124,7 @@ class TaskCard extends Component {
                             }} />
                         <CardContent className={classes.content}>
                             <ul className="list-group">
-                                <li className="list-group-item">
+                                <li className={classNames("list-group-item", classes.group_header)}>
                                     <div className="row">
                                         <div className="col-7"><a>{finishTasks.length}/{tasks.length} Task</a></div>
                                         <div className="col-5"><a style={{ float: 'right' }}>{totalPoint} Point</a></div>
@@ -121,9 +133,9 @@ class TaskCard extends Component {
                                 {doTasks.map((item, index) => (
                                     <Task key={item.id} task={item} index={index} openForm={this.props.openForm} />
                                 ))}
-                                <li className="list-group-item ">
-                                    <div className="row" style={{ height: '6px' }}>
-                                        <a style={{ fontSize: '12px' }}>Completed Task</a>
+                                <li className={classNames("list-group-item", classes.group_header)}>
+                                    <div className="row" style={{ height: '20px' }}>
+                                        <a style={{ fontSize: '15px' }}>Completed Task</a>
                                     </div>
                                 </li>
                                 {finishTasks.map((item, index) => (
