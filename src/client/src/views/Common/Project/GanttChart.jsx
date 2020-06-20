@@ -114,13 +114,19 @@ class GanttChart extends Component {
         this.setState({ messages });
     }
 
+    /**
+     * type, action, item, id
+         * type: "task"|"link"
+         * action: "create"|"update"|"delete"
+         * item: data object object
+         */
     logDataUpdate = (entityType, action, itemData, id) => {
-        console.log("Data change");
         let text = itemData && itemData.text ? ` (${itemData.text})` : '';
         let message = `${entityType} ${action}: ${id} ${text}`;
         if (entityType === 'link' && action !== 'delete') {
             message += ` ( source: ${itemData.source}, target: ${itemData.target} )`;
         }
+        console.log("[Gantt] Data change " + message);
         this.addMessage(message);
     }
 

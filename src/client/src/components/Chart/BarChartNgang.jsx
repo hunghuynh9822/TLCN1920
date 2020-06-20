@@ -52,15 +52,15 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-        this.loadData();
-    }
+		this.loadData();
+	}
 
 	componentWillReceiveProps(nextProps) {
 		this.loadData();
 	}
 
 	render() {
-		console.log("BAR CHART DATA " + JSON.stringify(this.state.data))
+		// console.log("BAR CHART DATA " + JSON.stringify(this.state.data))
 		return (
 			<div>
 				<CanvasJSChart options={this.state.options}

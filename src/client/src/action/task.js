@@ -149,13 +149,14 @@ export function updateStateTasks(updateRequest) {
     state:
     startedAt:
     duration:
+    preTaskId:
 }
 */
-export function updateTasks(updateRequest) {
+export function updateTask(updateRequest) {
     return request({
         url: url + "/update",
         method: 'PUT',
-        data: JSON.stringify(createRequest)
+        data: JSON.stringify(updateRequest)
     });
 }
 

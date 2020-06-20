@@ -4,17 +4,16 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert'
 
-import { NewTask, Loading } from '../../../components';
 import { AssignTasks, CompleteTasks } from '../../';
 
 import { getTasksByAdmin, getTasksCreatedByLead, TASK_STATE, updateStateTasks, updatePointTasks } from '../../../action/task';
+import { updateCreatorTasks, updateTask } from '../../../action/task';
+
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
-import { updateCreatorTasks } from '../../../action/task';
 
 import SwipeableViews from 'react-swipeable-views';
-import { CenteredTabs, TabPanel } from '../../../components';
 
-import { TagMember } from '../../../components';
+import { NewTask, Loading, CenteredTabs, TabPanel, TagMember, TagTask, DialogTitleCustom } from '../../../components';
 import {
     DatePicker
 } from '@material-ui/pickers';
@@ -133,7 +132,10 @@ class ProjectTasks extends Component {
             open: false,
             openAdd: false,
             scroll: 'body',
+            openAddPrevious: false,
+            previousTasks: new Array(),
             task: {
+                taskId: null,
                 projectId: null,
                 employeeCreator: null,
                 employeeAssignee: null,
@@ -141,7 +143,9 @@ class ProjectTasks extends Component {
                 description: null,
                 startedAt: new Date(),
                 duration: null,
-                endAt: new Date()
+                endAt: new Date(),
+                state: 0,
+                point: 0
             },
         }
         this.handleChangeTabs = this.handleChangeTabs.bind(this);
@@ -158,11 +162,16 @@ class ProjectTasks extends Component {
         this.handleDuration = this.handleDuration.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.removeAssignee = this.removeAssignee.bind(this);
-        this.handleListItemClick = this.handleListItemClick.bind(this);
+        this.handleListItemMemberClick = this.handleListItemMemberClick.bind(this);
         this.handleOpenAdd = this.handleOpenAdd.bind(this);
         this.handleCloseAdd = this.handleCloseAdd.bind(this);
         this.handleSelectStateChange = this.handleSelectStateChange.bind(this);
         this.handlePointChange = this.handlePointChange.bind(this);
+        //
+        this.handleOpenAddPrevious = this.handleOpenAddPrevious.bind(this);
+        this.handleCloseAddPrevious = this.handleCloseAddPrevious.bind(this);
+        this.handleListItemClick = this.handleListItemClick.bind(this);
+        this.removePreviousTask = this.removePreviousTask.bind(this);
     }
 
     handleChangeTabs = (event, newValue) => {
@@ -182,6 +191,19 @@ class ProjectTasks extends Component {
     updateTasks(creatorTasks) {
         this.setState({
             creatorTasks: creatorTasks,
+        })
+    }
+
+    //
+    handleOpenAddPrevious() {
+        this.setState({
+            openAddPrevious: true,
+        })
+    }
+
+    handleCloseAddPrevious() {
+        this.setState({
+            openAddPrevious: false,
         })
     }
 
@@ -226,18 +248,29 @@ class ProjectTasks extends Component {
     }
 
     openForm(task) {
+        const { projectItem } = this.props;
+        let tasks = projectItem.tasks;
         console.log("OPEN TASK : " + JSON.stringify(task))
         let duration = task.duration == null ? 24 * 60 * 60 * 1000 : task.duration * 24 * 60 * 60 * 1000;
+        let preTaskIds = task.preTaskId == null ? new Array() : task.preTaskId.split(",");
+        let previousTasks = new Array();
+        preTaskIds.map((item, index) => {
+            let task = tasks.find(element => element.id == item);
+            previousTasks.push(task)
+        })
         this.setState({
             open: true,
-            task: {...task, endAt: task.startedAt + duration},
+            previousTasks: previousTasks,
+            task: { ...task, endAt: task.startedAt + duration },
         })
     }
 
     handleClose() {
         this.setState({
             open: false,
+            previousTasks: new Array(),
             task: {
+                taskId: null,
                 projectId: null,
                 employeeCreator: null,
                 employeeAssignee: null,
@@ -245,7 +278,9 @@ class ProjectTasks extends Component {
                 description: null,
                 startedAt: new Date(),
                 duration: null,
-                endAt: new Date()
+                endAt: new Date(),
+                state: 0,
+                point: 0
             },
         })
     }
@@ -335,41 +370,58 @@ class ProjectTasks extends Component {
         const { currentUser, projectItem } = this.props;
         const { task } = this.state;
         let projectId = projectItem.project.id;
+        let preTaskId = "";
+        let previousTasks = this.state.previousTasks;
+        if (previousTasks != undefined && previousTasks != null && previousTasks != []) {
+            previousTasks.forEach((task, index) => {
+                if (index === previousTasks.length - 1) {
+                    preTaskId = preTaskId + task.id;
+                } else {
+                    preTaskId = preTaskId + task.id + ","
+                }
+            })
+        }
+        console.log("[UpdateTask] Task : " + JSON.stringify(task));
         const request = {
+            taskId: task.id,
             projectId: projectId,
+            preTaskId: preTaskId,
             employeeCreator: task.employeeCreator,
-            employeeAssignee: task.employeeAssignee,
+            employeeId: task.employeeAssignee,
             title: task.title,
             description: task.description,
-            state: task.state,
+            state: TASK_STATE.indexOf(task.state),
             point: task.point,
             startedAt: task.startedAt,
             duration: task.duration
         }
-        console.log("Request update task : " + JSON.stringify(request));
-        // create(request)
-        //     .then(response => {
-        //         console.log(response);
-        //         this.props.loadTasks();
-        //         this.setState({
-        //             open: false,
-        //             openAdd: false,
-        //             assignee: null,
-        //             request: {
-        //                 projectId: '',
-        //                 employeeCreator: '',
-        //                 employeeAssignee: '',
-        //                 title: '',
-        //                 description: '',
-        //                 startedAt: new Date(),
-        //                 duration: ''
-        //             }
-        //         })
-        //     }).catch(error => {
-        //         console.log(error);
-        //         //(error && error.message) || 
-        //         alert.error('Oops! Something went wrong. Please try again!');
-        //     });
+        console.log("[UpdateTask] Request : " + JSON.stringify(request));
+        updateTask(request)
+            .then(response => {
+                console.log(response);
+                this.loadTasks();
+                this.setState({
+                    open: false,
+                    previousTasks: new Array(),
+                    task: {
+                        taskId: null,
+                        projectId: null,
+                        employeeCreator: null,
+                        employeeAssignee: null,
+                        title: null,
+                        description: null,
+                        startedAt: new Date(),
+                        duration: null,
+                        endAt: new Date(),
+                        state: 0,
+                        point: 0
+                    },
+                })
+            }).catch(error => {
+                console.log(error);
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+            });
     }
 
     removeAssignee(member) {
@@ -378,11 +430,41 @@ class ProjectTasks extends Component {
         })
     }
 
-    handleListItemClick(member) {
+    handleListItemMemberClick(member) {
         this.setState({
             task: { ...this.state.task, employeeAssignee: member.id },
             openAdd: false,
         });
+    }
+
+    getTaskId(id) {
+        return "#" + id;
+    }
+
+    handleListItemClick(task) {
+        let tasks = this.state.previousTasks === undefined ? new Array() : this.state.previousTasks;
+        tasks.push(task);
+        tasks = tasks.filter((item, index) => {
+            console.log(item, index, tasks.indexOf(item), tasks.indexOf(item) === index);
+            return tasks.indexOf(item) === index;
+        })
+        console.log("[UpdateTask][previousTasks] " + JSON.stringify(tasks));
+        this.setState({
+            previousTasks: tasks
+        })
+    }
+
+    removePreviousTask(task) {
+        let tasks = this.state.previousTasks;
+        if (tasks === undefined || tasks === null || tasks === []) {
+            return;
+        }
+        tasks = tasks.filter((item, index) => {
+            return item.id !== task.id;
+        })
+        this.setState({
+            previousTasks: tasks
+        })
     }
 
     handleOpenAdd() {
@@ -400,8 +482,9 @@ class ProjectTasks extends Component {
     render() {
         const { classes } = this.props;
         const { projectItem } = this.props;
-        const { open, scroll, task, openAdd } = this.state;
+        const { open, scroll, task, openAdd, openAddPrevious } = this.state;
         let members = projectItem.members;
+        let tasks = projectItem.tasks;
         const tabs = [
             {
                 name: "Complete Task",
@@ -486,6 +569,21 @@ class ProjectTasks extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <Grid item xs={4}>Previous task : </Grid>
+                                <Grid item xs={12}>
+                                    <div>
+                                        <Button onClick={this.handleOpenAddPrevious} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
+                                        {this.state.previousTasks != undefined && this.state.previousTasks != null && this.state.previousTasks != [] ? (
+                                            this.state.previousTasks.map((task) => {
+                                                return (
+                                                    <TagTask task={task} removeTask={this.removePreviousTask} key={task.id} />
+                                                )
+                                            })
+                                        ) : null}
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={12}>
                                 <Grid item xs={2}>Assignee</Grid>
                                 <Grid item xs={10}>
                                     <div>
@@ -510,7 +608,6 @@ class ProjectTasks extends Component {
                                     >
                                         {
                                             TASK_STATE.map((state, index) => {
-                                                console.log("STATE : " + task.state);
                                                 if (task.state === 'DONE' || task.state === 'FINISH') {
                                                     return (
                                                         <MenuItem key={index} value={index}>{state}</MenuItem>
@@ -583,7 +680,7 @@ class ProjectTasks extends Component {
                     <DialogTitle id="simple-dialog-title">Select employee</DialogTitle>
                     <List>
                         {members.length !== 0 ? members.map((member, index) => (
-                            <ListItem button onClick={() => this.handleListItemClick(member)} key={index}>
+                            <ListItem button onClick={() => this.handleListItemMemberClick(member)} key={index}>
                                 <ListItemAvatar>
                                     {member.imageUrl ? (
                                         <Avatar src={member.imageUrl} round="20px" size="30" />
@@ -596,6 +693,25 @@ class ProjectTasks extends Component {
                             </ListItem>
                         )) : (
                                 <ListItemText primary="No employee" />
+                            )}
+                    </List>
+                </Dialog>
+                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious}>
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAddPrevious}>
+                        Select previous tasks :
+                    </DialogTitleCustom>
+                    <List>
+                        {tasks.length !== 0 ? tasks.map((task, index) => (
+                            <ListItem button onClick={() => this.handleListItemClick(task)} key={index}>
+                                <ListItemText >
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={6} sm={6}>{this.getTaskId(task.id)}</Grid>
+                                        <Grid item xs={6} sm={6}>{task.title}</Grid>
+                                    </Grid>
+                                </ListItemText>
+                            </ListItem>
+                        )) : (
+                                <ListItemText primary="No task" />
                             )}
                     </List>
                 </Dialog>
