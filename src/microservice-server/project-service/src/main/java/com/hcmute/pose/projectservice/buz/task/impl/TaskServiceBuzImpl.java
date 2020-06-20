@@ -64,7 +64,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         long index = 1L;
         for (Task task : tasks
         ) {
-            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
+            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getPreTaskId(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
             taskResponse.setProcess(0.2*task.getState().ordinal());
             taskResponses.add(taskResponse);
             String preTaskIds = task.getPreTaskId();
@@ -72,6 +72,9 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 continue;
             }
             for (String taskId : preTaskIds.split(",")) {
+                if (StringUtils.isEmpty(taskId)) {
+                    continue;
+                }
                 TaskLink taskLink = null;
                 taskLink = new TaskLink(index, new Long(taskId), task.getId(), 0, System.currentTimeMillis(), System.currentTimeMillis());
                 links.add(taskLink);
@@ -83,7 +86,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             Task target = taskService.getTasksById(taskLink.getTarget());
             Calendar date_end_source = Calendar.getInstance();
             date_end_source.setTimeInMillis(source.getStartedAt());
-            date_end_source.add(Calendar.DATE , source.getDuration());
+            date_end_source.add(Calendar.DATE , source.getDuration() == null ? 0 : source.getDuration());
             Calendar date_start_target = Calendar.getInstance();
             date_start_target.setTimeInMillis(target.getStartedAt());
             Date sourceTime = date_end_source.getTime();
@@ -110,7 +113,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         Double process = 0D;
         for (Task task : tasks
         ) {
-            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getStartedAt(), task.getDuration(), task.getState().name(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
+            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getPreTaskId(), task.getStartedAt(), task.getDuration(), task.getState().name(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
             taskResponse.setProcess(new Double(df.format(0.2*task.getState().ordinal())));
             taskResponses.add(taskResponse);
             number = taskState.get(task.getState());
