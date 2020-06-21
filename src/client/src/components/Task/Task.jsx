@@ -223,9 +223,7 @@ class Task extends Component {
                             false, {}
                         )}
                     >
-                        <div className={classes.title}>
-                            {task.title}
-                        </div>
+                        {this.renderTitle(task)}
                         {this.renderState(task)}
                     </div>
                 </div>
