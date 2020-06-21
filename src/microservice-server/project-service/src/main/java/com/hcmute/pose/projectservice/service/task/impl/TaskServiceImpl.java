@@ -91,6 +91,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void updateCreatorToAssignee(Long projectId, Long assigneeId) throws SQLException, TransactionException {
+        taskDao.updateCreatorToAssignee(projectId, assigneeId, System.currentTimeMillis());
+    }
+
+    @Override
     public void updateTask(Long taskId,String preTaskId, Long assigneeId, String title, String description, Long startedAt, Integer duration, TaskState state) throws SQLException, TransactionException {
         Task task = new Task(taskId, preTaskId, assigneeId, title, description, startedAt, duration, state, System.currentTimeMillis());
         taskDao.updateTask(task);

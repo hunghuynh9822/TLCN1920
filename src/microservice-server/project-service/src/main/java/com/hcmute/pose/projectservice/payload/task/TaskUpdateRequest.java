@@ -2,6 +2,7 @@ package com.hcmute.pose.projectservice.payload.task;
 
 public class TaskUpdateRequest {
     private Long taskId;
+    private Long projectId;
     private Long employeeId;
     private String title;
     private String description;
@@ -32,6 +33,14 @@ public class TaskUpdateRequest {
 
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
     public Long getEmployeeId() {

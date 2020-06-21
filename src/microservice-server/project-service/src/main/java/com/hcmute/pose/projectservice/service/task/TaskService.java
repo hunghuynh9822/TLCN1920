@@ -22,6 +22,8 @@ public interface TaskService {
     void updateState(Long taskId, Long employeeId, TaskState state) throws SQLException, TransactionException;
     void updateAssignee(Long taskId, Long employeeId) throws SQLException, TransactionException;
 
+    void updateCreatorToAssignee(Long projectId, Long assigneeId) throws SQLException, TransactionException;
+
     void updateTask(Long taskId, String preTaskId, Long assigneeId, String title, String description, Long startedAt, Integer duration, TaskState state) throws SQLException, TransactionException;
 
     void updateTaskTime(Long taskId, Long startedAt, Integer duration) throws SQLException, TransactionException;

@@ -16,6 +16,7 @@ import com.hcmute.pose.projectservice.payload.task.AllTasksProjectResponse;
 import com.hcmute.pose.projectservice.payload.task.TaskResponse;
 import com.hcmute.pose.projectservice.service.project.PerOfProjectService;
 import com.hcmute.pose.projectservice.service.project.ProjectService;
+import com.hcmute.pose.projectservice.service.task.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private TaskService taskService;
 
     @Autowired
     private TaskServiceBuz taskServiceBuz;
@@ -192,6 +196,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         try{
             databaseHelper.beginTransaction();
             perOfProjectService.deletePOP(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId());
+            taskService.updateCreatorToAssignee(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId());
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
             LOGGER.error("[deletePOP]",e);
