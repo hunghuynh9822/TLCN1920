@@ -3,6 +3,7 @@ package com.hcmute.pose.projectservice.controller.task;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
 import com.hcmute.pose.projectservice.payload.task.CreatorTasksResponse;
+import com.hcmute.pose.projectservice.payload.task.ProjectTasksResponse;
 import com.hcmute.pose.projectservice.payload.task.TaskUpdateRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class LeadTaskServiceController {
     @GetMapping("/")
     public ResponseEntity getTaskByProject(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long creatorId){
         try{
-            CreatorTasksResponse response = taskServiceBuz.getTasksByCreator(projectId, creatorId);
+            ProjectTasksResponse response = taskServiceBuz.getTasksByCreator(projectId, creatorId);
             return new ResponseEntity(response, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
@@ -38,7 +39,7 @@ public class LeadTaskServiceController {
     @GetMapping("/state")
     public ResponseEntity getTaskWithStateByProject(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long creatorId){
         try{
-            CreatorTasksResponse response = taskServiceBuz.getTasksByCreator(projectId, creatorId);
+            ProjectTasksResponse response = taskServiceBuz.getTasksByCreator(projectId, creatorId);
             return new ResponseEntity(response, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);

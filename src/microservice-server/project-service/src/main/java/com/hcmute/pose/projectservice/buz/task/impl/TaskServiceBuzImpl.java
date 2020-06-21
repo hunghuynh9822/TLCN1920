@@ -160,11 +160,20 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     public ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException {
         List<CreatorTasksResponse> creatorTasks = new ArrayList<>();
         try{
-            List<Long> creatorIds = taskService.getCreatorByProject(projectId);
-            for(Long creatorId : creatorIds) {
-                List<AssigneeTasksResponse> assigneeTasks = getAssigneeTasks(projectId, creatorId);
-                creatorTasks.add(new CreatorTasksResponse(creatorId, assigneeTasks));
-            }
+            List<AssigneeTasksResponse> assigneeTasks = getAssigneeTasks(projectId);
+            creatorTasks.add(new CreatorTasksResponse(0L, assigneeTasks));
+            return new ProjectTasksResponse(projectId, creatorTasks);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ProjectTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException {
+        List<CreatorTasksResponse> creatorTasks = new ArrayList<>();
+        try{
+            List<AssigneeTasksResponse> assigneeTasks = getAssigneeTasks(projectId, creatorId);
+            creatorTasks.add(new CreatorTasksResponse(creatorId, assigneeTasks));
             return new ProjectTasksResponse(projectId, creatorTasks);
         } finally {
             databaseHelper.closeConnection();
@@ -210,16 +219,6 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         databaseHelper.commit();
     }
 
-    @Override
-    public CreatorTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException {
-        try{
-            List<AssigneeTasksResponse> assigneeTasks = getAssigneeTasks(projectId, creatorId);
-            return new CreatorTasksResponse(creatorId, assigneeTasks);
-        } finally {
-            databaseHelper.closeConnection();
-        }
-    }
-
     private List<AssigneeTasksResponse> getAssigneeTasks(Long projectId, Long creatorId) throws SQLException {
         List<AssigneeTasksResponse> assigneeTasksResponses = new ArrayList<>();
         try{
@@ -234,19 +233,33 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         }
     }
 
-    private List<AssigneeTasksWithStateResponse> getAssigneeTasksWithState(Long projectId, Long creatorId) throws SQLException {
-        List<AssigneeTasksWithStateResponse> assigneeTasksWithStateResponses = new ArrayList<>();
+    private List<AssigneeTasksResponse> getAssigneeTasks(Long projectId) throws SQLException {
+        List<AssigneeTasksResponse> assigneeTasksResponses = new ArrayList<>();
         try{
-            List<Long> assigneeIds = taskService.getAssigneeByCreator(projectId, creatorId);
+            List<Long> assigneeIds = taskService.getAssigneeByProject(projectId);
             for(Long assigneeId : assigneeIds) {
                 List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
-                assigneeTasksWithStateResponses.add(new AssigneeTasksWithStateResponse(assigneeId, getTasksWithState(tasks)));
+                assigneeTasksResponses.add(new AssigneeTasksResponse(assigneeId, tasks));
             }
-            return assigneeTasksWithStateResponses;
+            return assigneeTasksResponses;
         } finally {
             databaseHelper.closeConnection();
         }
     }
+
+//    private List<AssigneeTasksWithStateResponse> getAssigneeTasksWithState(Long projectId, Long creatorId) throws SQLException {
+//        List<AssigneeTasksWithStateResponse> assigneeTasksWithStateResponses = new ArrayList<>();
+//        try{
+//            List<Long> assigneeIds = taskService.getAssigneeByCreator(projectId, creatorId);
+//            for(Long assigneeId : assigneeIds) {
+//                List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
+//                assigneeTasksWithStateResponses.add(new AssigneeTasksWithStateResponse(assigneeId, getTasksWithState(tasks)));
+//            }
+//            return assigneeTasksWithStateResponses;
+//        } finally {
+//            databaseHelper.closeConnection();
+//        }
+//    }
 
     @Override
     public AssigneeTasksResponse getTasksByAssignee(Long projectId, Long assigneeId) throws SQLException {

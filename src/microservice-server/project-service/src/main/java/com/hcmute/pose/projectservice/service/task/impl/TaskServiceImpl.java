@@ -40,6 +40,17 @@ public class TaskServiceImpl implements TaskService {
         }
         return assigneeIds;
     }
+
+    @Override
+    public List<Long> getAssigneeByProject(Long projectId) throws SQLException {
+        List<Long> assigneeIds = new ArrayList<>();
+        List<LongValue> values = taskDao.getAssigneeByProject(projectId);
+        for(LongValue value : values) {
+            assigneeIds.add(value.getValue());
+        }
+        return assigneeIds;
+    }
+
     @Override
     public List<Task> getTasksByAssignee(Long projectId, Long employeeId) throws SQLException {
         return taskDao.getTasksByAssignee(projectId,employeeId);
