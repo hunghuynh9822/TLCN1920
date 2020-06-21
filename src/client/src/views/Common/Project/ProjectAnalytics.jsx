@@ -54,7 +54,7 @@ class ProjectAnalytics extends Component {
         const { projectItem } = this.props;
         let projectId = projectItem.project.id;
         let members = projectItem.members;
-        console.log("ANALYTICS : members " + JSON.stringify(members))
+        // console.log("ANALYTICS : members " + JSON.stringify(members))
         var dataState = [];
         getTasksWithStateOfProject(projectId)
             .then(response => {
@@ -74,7 +74,7 @@ class ProjectAnalytics extends Component {
                         dataState.push({ name: state, y: 0 });
                     }
                 })
-                console.log("DATA STATE : " + JSON.stringify(dataState))
+                // console.log("DATA STATE : " + JSON.stringify(dataState))
                 this.setState({
                     loadingStateChart: false,
                     dataTaskState: dataState,
@@ -116,7 +116,7 @@ class ProjectAnalytics extends Component {
                     })
                     paserData.push({ employee: name, assigneeState: assigneeState })
                 })
-                console.log("PASER DATA " + JSON.stringify(paserData))
+                // console.log("PASER DATA " + JSON.stringify(paserData))
 
                 TASK_STATE.forEach((state) => {
                     let dataPercent = [];
@@ -125,7 +125,7 @@ class ProjectAnalytics extends Component {
                     })
                     dataBarChart.push({ name: state, data: dataPercent })
                 })
-                console.log("DATA BAR CHART" + JSON.stringify(dataBarChart))
+                // console.log("DATA BAR CHART" + JSON.stringify(dataBarChart))
                 this.setState({
                     loadingBarChart: false,
                     dataBarChart: dataBarChart,

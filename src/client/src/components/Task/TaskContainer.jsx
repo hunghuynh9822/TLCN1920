@@ -135,7 +135,7 @@ class TaskContainer extends Component {
         let taskCards = creatorTasks[index].tasks;
 
         const { source, destination, draggableId } = result;
-        // console.log("onDragEnd : " + JSON.stringify(result))
+        console.log("[TaskContainer] onDragEnd : " + JSON.stringify(result))
         // dropped outside the list
         if (!destination) {
             return;

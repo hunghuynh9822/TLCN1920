@@ -139,7 +139,7 @@ class ProjectView extends Component {
                 })
                 .catch(error => {
                     console.log(error)
-                    alert.error('Oops! Something went wrong. Please try again!');
+                    alert.error('Oops! Something went wrong on get free employee. Please call check!');
                 })
         } else {
             // this.handleBack();
@@ -163,12 +163,12 @@ class ProjectView extends Component {
                         })
                         .catch(error => {
                             console.log(error)
-                            alert.error('Oops! Something went wrong. Please try again!');
+                            alert.error('Oops! Something went wrong when get free employee for ' + projectId + '. Please call check!');
                         })
                 })
                 .catch(error => {
                     console.log(error)
-                    alert.error('Oops! Something went wrong. Please try again!');
+                    alert.error('Oops! Something went wrong when get project ' + projectId + '. Please try again!');
                 })
         }
     }

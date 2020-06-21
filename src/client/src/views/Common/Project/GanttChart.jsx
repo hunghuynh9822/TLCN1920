@@ -82,7 +82,7 @@ class GanttChart extends Component {
                 })
             }).catch(error => {
                 console.log(error);
-                alert.error('Oops! Something went wrong. Please try again!');
+                alert.error('Oops! Something went wrong when get tasks of project. Please call check!');
                 this.setState({
                     loading: false
                 })
@@ -130,14 +130,14 @@ class GanttChart extends Component {
         const { projectItem } = this.props;
         let tasks = projectItem.tasks;
         console.log("[Gantt] Data change ", entityType, action, itemData, id);
-        const sourceTask = tasks.find(element => element.id == itemData.source);
-        console.log("[Gantt] Change task source " + JSON.stringify(sourceTask));
-        //{"id":15782717407117,"projectId":15776774274194,"employeeCreator":15751881480165,"employeeAssignee":15782398324826,"title":"Thiết kế biểu mẫu","description":"Chỉ tiết các form có thể xuất hiện ","startedAt":1575420420000,"duration":4,"state":"NEW","point":0,"createdAt":1578271740711,"updatedAt":1591425813387,"process":0}
-        const targetTask = tasks.find(element => element.id == itemData.target);
-        console.log("[Gantt] Change task target " + JSON.stringify(targetTask));
+
         let request = {};
         //Update link -> apply on target
         if (entityType === 'link') {
+            const sourceTask = tasks.find(element => element.id == itemData.source);
+            console.log("[Gantt] Change task source " + JSON.stringify(sourceTask));
+            const targetTask = tasks.find(element => element.id == itemData.target);
+            console.log("[Gantt] Change task target " + JSON.stringify(targetTask));
             request = {
                 taskId: targetTask.id,
                 employeeId: targetTask.employeeAssignee,
@@ -174,7 +174,7 @@ class GanttChart extends Component {
             }
             request.preTaskId = preTaskId;
 
-            console.log("[UpdateTask][Link] Request : " + JSON.stringify(request));
+            console.log("[Gantt][UpdateTask][Link] Request : " + JSON.stringify(request));
             updateTask(request)
                 .then(response => {
                     console.log(response);
@@ -182,10 +182,38 @@ class GanttChart extends Component {
                 }).catch(error => {
                     console.log(error);
                     //(error && error.message) || 
-                    alert.error('Oops! Something went wrong. Please try again!');
+                    alert.error('Oops! Something went wrong on [UpdateTask][Link] with Gantt Chart. Please call check!');
                 });
+        } else if (entityType === 'task') {
+            if (action === 'update') {
+                let task = tasks.find(element => element.id == itemData.id);
+                request = {
+                    taskId: task.id,
+                    employeeId: task.employeeAssignee,
+                    title: itemData.text,
+                    description: task.description,
+                    point: task.point,
+                    state: TASK_STATE.indexOf(task.state),
+                    startedAt: Date.parse(itemData.start_date),
+                    duration: itemData.duration,
+                    preTaskId: task.preTaskId
+                }
+                console.log("[Gantt][UpdateTask][Task] Request : " + JSON.stringify(request));
+                updateTask(request)
+                    .then(response => {
+                        console.log(response);
+                        // this.loadTasks();
+                    }).catch(error => {
+                        console.log(error);
+                        //(error && error.message) || 
+                        alert.error('Oops! Something went wrong on [UpdateTask][Task] with Gantt Chart. Please call check!');
+                    });
+            } else {
+                console.log("[Gantt] Unsupport action " + action);
+            }
+        } else {
+            console.log("[Gantt] Unsupport type " + entityType);
         }
-
         //
 
 

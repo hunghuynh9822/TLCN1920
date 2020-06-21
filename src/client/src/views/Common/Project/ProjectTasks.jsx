@@ -182,7 +182,6 @@ class ProjectTasks extends Component {
     }
 
     handleChangeIndex = index => {
-        this.loadTasks();
         this.setState({
             value: index,
         })
@@ -205,6 +204,33 @@ class ProjectTasks extends Component {
         this.setState({
             openAddPrevious: false,
         })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.index == 1) {
+            const { alert } = this.props;
+            const { loginRole, projectItem, currentUser } = this.props;
+            let projectId = projectItem.project.id;
+            if (loginAsAdmin(loginRole)) {
+                getTasksByAdmin(projectId)
+                    .then(response => {
+                        console.log("[ProjectTasks] Reload ", response.creatorTasks);
+                        this.setState({
+                            creatorTasks: response.creatorTasks,
+                        })
+                    })
+            } else if (loginAsLead(loginRole)) {
+                getTasksCreatedByLead(projectId, currentUser.id)
+                    .then(response => {
+                        console.log("[ProjectTasks] Reload ", response.creatorTasks);
+                        this.setState({
+                            creatorTasks: response.creatorTasks,
+                        })
+                    })
+            } else {
+                alert.error('Oops! Something went wrong on load task, you login on ' + loginRole + '. Please call check!');
+            }
+        }
     }
 
     loadTasks() {
@@ -236,7 +262,7 @@ class ProjectTasks extends Component {
                     })
                 })
         } else {
-            alert.error('Oops! Something went wrong. Please try again!');
+            alert.error('Oops! Something went wrong on load task, you login on ' + loginRole + '. Please call check!');
             this.setState({
                 loading: false
             })
@@ -524,7 +550,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component updateTasks={this.updateTasks} loadTasks={this.loadTasks} creatorTasks={this.state.creatorTasks} openForm={this.openForm} />
+                                        <tab.component updateTasks={this.updateTasks} creatorTasks={this.state.creatorTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
                                     </TabPanel>
                                 ))
                             }

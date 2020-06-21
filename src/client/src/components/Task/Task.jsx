@@ -144,7 +144,7 @@ class Task extends Component {
 
     renderState(task) {
         const { classes } = this.props;
-        console.log("[Task] ", task)
+        // console.log("[Task] ", task)
         return (
             <div style={{ borderTop: '1px solid #d0d3d9', paddingTop: '5px' }}>
                 <div style={{ float: 'left' }}>

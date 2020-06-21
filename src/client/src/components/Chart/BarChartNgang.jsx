@@ -56,7 +56,9 @@ class App extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.loadData();
+		if (nextProps.index == 3) {
+			this.loadData();
+		}
 	}
 
 	render() {
