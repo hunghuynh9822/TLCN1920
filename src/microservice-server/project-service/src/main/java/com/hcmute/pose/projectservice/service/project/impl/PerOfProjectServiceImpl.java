@@ -42,4 +42,13 @@ public class PerOfProjectServiceImpl implements PerOfProjectService {
         return perOfProjectDao.getListWithoutRole(employeeId, ProjectRole.OWNER);
     }
 
+    @Override
+    public PerOfProject getOwner(Long projectId) throws Exception {
+        List<PerOfProject> userWithRole = perOfProjectDao.getUserWithRole(projectId, ProjectRole.OWNER);
+        if(userWithRole == null || userWithRole.isEmpty()) {
+            throw new Exception("Not found owner of " + projectId);
+        }
+        return userWithRole.get(0);
+    }
+
 }

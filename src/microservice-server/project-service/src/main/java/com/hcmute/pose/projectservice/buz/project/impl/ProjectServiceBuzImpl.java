@@ -192,11 +192,12 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     }
 
     @Override
-    public void deletePOP(PerOfProjectRequest perOfProjectRequest) throws SQLException, TransactionException {
+    public void deletePOP(PerOfProjectRequest perOfProjectRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
+            PerOfProject owner = perOfProjectService.getOwner(perOfProjectRequest.getProjectId());
             perOfProjectService.deletePOP(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId());
-            taskService.updateCreatorToAssignee(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId());
+            taskService.updateTaskToOwner(perOfProjectRequest.getProjectId(), owner.getEmployeeId(), perOfProjectRequest.getEmployeeId());
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
             LOGGER.error("[deletePOP]",e);

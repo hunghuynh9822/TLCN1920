@@ -13,4 +13,6 @@ public interface PerOfProjectService {
     void deletePOP (Long projectId,Long employeeId) throws SQLException, TransactionException;
     List<PerOfProject> getListOwner(Long employeeId) throws SQLException;
     List<PerOfProject> getListJoin(Long employeeId) throws SQLException;
+
+    PerOfProject getOwner(Long projectId) throws Exception;
 }

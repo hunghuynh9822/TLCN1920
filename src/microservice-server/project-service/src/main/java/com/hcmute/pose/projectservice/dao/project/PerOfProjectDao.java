@@ -14,5 +14,8 @@ public interface PerOfProjectDao {
     List<PerOfProject> getListPOP (Long idPro) throws SQLException;
     void deletePOP (Long id,Long employeeId) throws SQLException, TransactionException;
     List<PerOfProject> getListWithRole(Long employeeId, ProjectRole role) throws SQLException;
+
+    List<PerOfProject> getUserWithRole(Long projectId, ProjectRole role) throws SQLException;
+
     List<PerOfProject> getListWithoutRole(Long employeeId, ProjectRole role) throws SQLException;
 }
