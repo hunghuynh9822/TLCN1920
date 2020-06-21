@@ -34,6 +34,7 @@ const styles = theme => ({
         '&:hover': {
             background: '#e6e6e6',
         },
+        cursor: 'pointer',
     },
     customTooltip: {
         fontSize: '0.8em',

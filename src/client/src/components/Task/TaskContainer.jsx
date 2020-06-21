@@ -135,7 +135,7 @@ class TaskContainer extends Component {
         let taskCards = creatorTasks[index].tasks;
 
         const { source, destination, draggableId } = result;
-        console.log("[TaskContainer] onDragEnd : " + JSON.stringify(result))
+        console.log("[TaskContainer] onDragEnd ", result)
         // dropped outside the list
         if (!destination) {
             return;
@@ -162,7 +162,7 @@ class TaskContainer extends Component {
                 source,
                 destination
             );
-            // console.log("Move result : " + JSON.stringify(result));
+            console.log("Move result : " + JSON.stringify(result));
             let items = this.state.items;
             let newTaskCards = taskCards.map((card) => {
                 console.log("New TaskCards : " + JSON.stringify(result[card.assigneeId]));
@@ -177,6 +177,7 @@ class TaskContainer extends Component {
             });
             console.log("Member TaskCards destination : " + JSON.stringify(memberTasks));
             if (memberTasks == undefined) {
+                console.log("[TaskContainer] ", destination)
                 let card = { assigneeId: Number(destination.droppableId), tasks: result[destination.droppableId] }
                 newTaskCards.push(card);
             }
@@ -204,8 +205,8 @@ class TaskContainer extends Component {
     render() {
         const { classes } = this.props;
         let { creatorTasks, index } = this.props;
-        const taskCards = creatorTasks[index] ? creatorTasks[index].tasks : [];
-        // const {taskCards} = this.state;
+        // const taskCards = creatorTasks[index] ? creatorTasks[index].tasks : [];
+        const { taskCards } = this.state;
         const settings = {
             className: classNames("center", classes.slider),
             infinite: false,
