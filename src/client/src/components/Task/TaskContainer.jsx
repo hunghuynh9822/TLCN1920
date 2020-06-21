@@ -295,7 +295,6 @@ TaskContainer.propTypes = {
     index: PropTypes.number.isRequired,
     updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    tasks: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
