@@ -22,6 +22,7 @@ const styles = theme => ({
     viewproject: {
         display: 'flex',
         flexWrap: 'wrap',
+        marginTop: '-10px',
     },
     sub_header: {
         minHeight: '45px',

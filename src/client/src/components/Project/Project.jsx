@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AddStafftoProject from '../AddStafftoProject/AddStafftoProject';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import Moment from 'moment';
 import axios from 'axios';
@@ -16,12 +17,9 @@ import axios from 'axios';
 import TuneIcon from '@material-ui/icons/Tune';
 const styles = theme => ({
     card: {
-        width: 245,
+        width: 275,
         height: 200,
-        marginLeft: theme.spacing(3),
-        marginRight: theme.spacing(3),
-        marginBottom: theme.spacing(1),
-        marginTop: theme.spacing(1),
+        margin: theme.spacing(2),
         position: 'relative',
     },
     font: {
@@ -30,13 +28,16 @@ const styles = theme => ({
     },
     title: {
         margin: '12px 0px 0px 15px',
-        fontSize: '1em',
+        fontSize: '0.8em',
         fontWeight: '400',
         color: '#464c59',
         '&:hover': {
             background: '#e6e6e6',
         },
-    }
+    },
+    customTooltip: {
+        fontSize: '0.8em',
+    },
 });
 const CustomProcessBar = withStyles({
     root: {
@@ -64,6 +65,14 @@ class Project extends Component {
         console.log("Click setting");
     }
 
+    truncate(str, n, useWordBoundary) {
+        if (str.length <= n) { return str; }
+        const subString = str.substr(0, n - 1); // the original check
+        return (useWordBoundary
+            ? subString.substr(0, subString.lastIndexOf(" "))
+            : subString) + " ...";
+    };
+
     render() {
         const { classes } = this.props;
         const project = this.props.projectItem.project;
@@ -78,9 +87,11 @@ class Project extends Component {
                         </IconButton>
                     }
                     title={
-                        <div className={classes.title} onClick={this.handleClick} >
-                            {project.title}
-                        </div>
+                        <Tooltip title={project.title} placement="top" arrow classes={{ tooltip: classes.customTooltip }}>
+                            <div className={classes.title} onClick={this.handleClick} >
+                                {this.truncate(project.title, 25, true)}
+                            </div>
+                        </Tooltip>
                     }
                     subheader={
                         <div style={{
