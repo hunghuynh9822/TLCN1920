@@ -16,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import CKEditor from 'ckeditor4-react';
 
 import { create } from '../../action/project';
+import { DialogTitleCustom } from '../../components'
 const styles = theme => ({
   buttonAdd: {
     margin: theme.spacing(1),
@@ -32,10 +33,13 @@ const styles = theme => ({
       paddingTop: '0px',
     },
     paddingTop: '0px',
+    boxShadow: 'none',
   },
   buttons: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   button: {
     // marginTop: theme.spacing(3),
@@ -140,7 +144,9 @@ class NewProject extends Component {
           disableBackdropClick
           disableEscapeKeyDown
         >
-          <DialogTitle id="scroll-dialog-title">New project</DialogTitle>
+          <DialogTitleCustom id="customized-dialog-title" onClose={this.handleClose} style={{
+            paddingBottom: '25px',
+          }}>New project</DialogTitleCustom>
           <Paper className={classes.paper}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
@@ -182,9 +188,9 @@ class NewProject extends Component {
             </Grid>
           </Paper>
           <DialogActions className={classes.buttons}>
-            <Button onClick={this.handleClose} className={classes.button}>
+            {/* <Button onClick={this.handleClose} className={classes.button}>
               Close
-            </Button>
+            </Button> */}
             <Button
               variant="contained"
               color="primary"

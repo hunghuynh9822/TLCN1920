@@ -50,6 +50,12 @@ const CustomProcessBar = withStyles({
         backgroundColor: '#30B1BD',
     }
 })(LinearProgress)
+const colorWord = "#ffffff";
+const mapColor = {
+    "NEW": "#0ac400",
+    "DEVELOPING": "#e69900",
+    "FINISH": "#0026ff"
+}
 class Project extends Component {
     constructor(props) {
         super(props);
@@ -73,6 +79,32 @@ class Project extends Component {
             ? subString.substr(0, subString.lastIndexOf(" "))
             : subString) + " ...";
     };
+
+    renderStateProject(process) {
+        let state = "";
+        if (process == 0) {
+            state = "NEW";
+        } else if (process == 100) {
+            state = "FINISH"
+        } else {
+            state = "DEVELOPING"
+        }
+        let color = mapColor[state];
+        return (
+            <Button disabled variant="outlined" size="small" color="primary" style={{
+                alignSelf: 'flex-start',
+                borderStyle: 'dashed',
+                fontSize: '0.6em',
+                marginBottom: '8px',
+                opacity: '0.7',
+                backgroundColor: `${color}`,
+                color: `${colorWord}`,
+            }}>
+                {state}
+            </Button>
+        )
+
+    }
 
     render() {
         const { classes } = this.props;
@@ -112,16 +144,7 @@ class Project extends Component {
                     display: 'flex', /* or inline-flex */
                     flexDirection: 'column',
                 }}>
-                    <Button disabled variant="outlined" size="small" color="primary" style={{
-                        alignSelf: 'flex-start',
-                        borderStyle: 'dashed',
-                        fontSize: '0.6em',
-                        marginBottom: '8px',
-                        opacity: '0.7',
-                        color: '#8d919a',
-                    }}>
-                        {project.state}
-                    </Button>
+                    {this.renderStateProject(moreInfo.process)}
                     <div style={{ marginBottom: '7px' }}>
                         <span className={classes.font} style={{ float: 'left' }}>
                             {moreInfo.process}% Completed

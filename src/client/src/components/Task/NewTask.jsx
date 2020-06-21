@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert';
 
-import { create } from '../../action/task';
+import { create, TASK_STATE } from '../../action/task';
 
 import { TagMember, TagTask, DialogTitleCustom } from '../../components';
 import {
@@ -41,10 +41,13 @@ const styles = theme => ({
             paddingTop: '0px',
         },
         paddingTop: '0px',
+        boxShadow: 'none',
     },
     buttons: {
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
     button: {
         // marginTop: theme.spacing(3),
@@ -59,7 +62,29 @@ const styles = theme => ({
         padding: '0px',
         margin: '0px 10px',
     },
+    dialog_list: {
+        width: '350px'
+    },
+    dialog_list_item: {
+        // backgroundColor: `${background}`,
+        // boxShadow: `${background} 0px 0px 5px 2px`,
+        '&:hover': {
+            // background: '#e6e6e6',
+        },
+    }
 });
+
+const background = '#f5f8ff';
+const colorWord = "#ffffff";
+const mapColor = {
+    "NEW": "#0ac400",
+    "DEVELOPING": "#e69900",
+    "DEVELOPED": "#00d8db",
+    "TESTING": "#ff0000",
+    "DONE": "#0026ff",
+    "FINISH": "#0026ff"
+}
+
 class NewTask extends Component {
     constructor(props) {
         super(props);
@@ -97,6 +122,10 @@ class NewTask extends Component {
         this.handleCloseAddPrevious = this.handleCloseAddPrevious.bind(this);
         this.handleListItemClick = this.handleListItemClick.bind(this);
         this.removePreviousTask = this.removePreviousTask.bind(this);
+    }
+
+    getColor(state) {
+        return mapColor[state];
     }
 
     getName(employee) {
@@ -297,7 +326,10 @@ class NewTask extends Component {
                     disableBackdropClick
                     disableEscapeKeyDown
                 >
-                    <DialogTitle id="scroll-dialog-title">New task</DialogTitle>
+                    {/* <DialogTitle id="scroll-dialog-title">New task</DialogTitle> */}
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleClose} style={{
+                        paddingBottom: '25px',
+                    }}>New task</DialogTitleCustom>
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
@@ -380,9 +412,9 @@ class NewTask extends Component {
                         </Grid>
                     </Paper>
                     <DialogActions className={classes.buttons}>
-                        <Button onClick={this.handleClose} className={classes.button}>
+                        {/* <Button onClick={this.handleClose} className={classes.button}>
                             Close
-            </Button>
+            </Button> */}
                         <Button
                             variant="contained"
                             color="primary"
@@ -394,8 +426,10 @@ class NewTask extends Component {
                     </DialogActions>
                 </Dialog>
                 <Dialog onClose={this.handleCloseAdd} aria-labelledby="simple-dialog-title" open={openAdd}>
-                    <DialogTitle id="simple-dialog-title">Select employee</DialogTitle>
-                    <List>
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAdd}>Select employee</DialogTitleCustom>
+                    <List classes={{
+                        root: classes.dialog_list
+                    }}>
                         {members.length !== 0 ? members.map((member, index) => (
                             <ListItem button onClick={() => this.handleListItemMemberClick(member)} key={index}>
                                 <ListItemAvatar>
@@ -413,17 +447,33 @@ class NewTask extends Component {
                             )}
                     </List>
                 </Dialog>
-                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious}>
+                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious} >
                     <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAddPrevious}>
                         Select previous tasks :
                     </DialogTitleCustom>
-                    <List>
+                    <List classes={{
+                        root: classes.dialog_list
+                    }}>
                         {tasks.length !== 0 ? tasks.map((task, index) => (
-                            <ListItem button onClick={() => this.handleListItemClick(task)} key={index}>
+                            <ListItem button onClick={() => this.handleListItemClick(task)} key={index} classes={{
+                                root: classes.dialog_list_item
+                            }}>
                                 <ListItemText >
                                     <Grid container spacing={3}>
-                                        <Grid item xs={6} sm={6}>{this.getTaskId(task.id)}</Grid>
-                                        <Grid item xs={6} sm={6}>{task.title}</Grid>
+                                        <Grid item xs={3} sm={3}>
+                                            <Button disabled variant="outlined" size="small" color="primary" style={{
+                                                alignSelf: 'flex-start',
+                                                borderStyle: 'dashed',
+                                                fontSize: '0.6em',
+                                                marginBottom: '8px',
+                                                opacity: '0.7',
+                                                color: `${colorWord}`,
+                                                backgroundColor: `${this.getColor(task.state)}`
+                                            }}>
+                                                {task.state}
+                                            </Button>
+                                        </Grid>
+                                        <Grid item xs={9} sm={9}>{task.title}</Grid>
                                     </Grid>
                                 </ListItemText>
                             </ListItem>
