@@ -55,12 +55,12 @@ class AssignTasks extends Component {
         const { creatorTasks } = this.props;
         return (
             <React.Fragment>
-                {creatorTasks && creatorTasks.map((creator, index) => {
+                {creatorTasks && creatorTasks.map((tasks, index) => {
                     // console.log("Creator : " + JSON.stringify(creator));
-                    let title = this.getNameMember(creator.creatorId);
+                    let title = this.getNameMember(tasks.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer updateTasks={this.props.updateTasks} index={index} creator={creator} loadTasks={this.props.loadTasks} openForm={this.props.openForm} />
+                            <TaskContainer updateTasks={this.props.updateTasks} index={index} tasks={tasks} loadTasks={this.props.loadTasks} openForm={this.props.openForm} />
                         </CollapsibleSection>
                     )
                 })}
@@ -71,9 +71,9 @@ class AssignTasks extends Component {
 AssignTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
-    creatorTasks: PropTypes.array.isRequired,
     updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
+    // creatorTasks: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -82,7 +82,7 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        // creatorTasks: state.tasks.creatorTasks,
+        creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

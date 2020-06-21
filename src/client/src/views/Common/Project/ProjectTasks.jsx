@@ -221,7 +221,7 @@ class ProjectTasks extends Component {
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
                         loading: false,
-                        creatorTasks: response.creatorTasks,
+                        // creatorTasks: response.creatorTasks,
                     })
                 })
         } else if (loginAsLead(loginRole)) {
@@ -231,7 +231,7 @@ class ProjectTasks extends Component {
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
                         loading: false,
-                        creatorTasks: response.creatorTasks,
+                        // creatorTasks: response.creatorTasks,
                     })
                 })
         } else {
@@ -523,7 +523,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component updateTasks={this.updateTasks} creatorTasks={this.state.creatorTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
+                                        <tab.component updateTasks={this.updateTasks} creatorTasks={this.props.creatorTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
                                     </TabPanel>
                                 ))
                             }

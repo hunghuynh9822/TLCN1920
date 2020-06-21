@@ -12,6 +12,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import classNames from "classnames";
 import Rating from '@material-ui/lab/Rating';
 import Button from '@material-ui/core/Button';
+import Avatar from 'react-avatar';
 
 //
 import sad from '../../assets/img/sad.png';
@@ -49,7 +50,6 @@ const styles = theme => ({
     title: {
         fontSize: '15px',
         minWidth: '130px',
-        width: '200px'
     },
     icon_rate: {
         marginTop: '3px',
@@ -110,6 +110,19 @@ class Task extends Component {
         this.handleOpen = this.handleOpen.bind(this);
         this.renderState = this.renderState.bind(this);
         this.renderIcon = this.renderIcon.bind(this);
+        this.getMember = this.getMember.bind(this);
+        this.renderTitle = this.renderTitle.bind(this);
+    }
+
+    getMember(memberId) {
+        const { projectItem } = this.props;
+        let members = projectItem.members;
+        let result = members.filter((member) => {
+            // console.log("getMember : compare " + member.id + " - " + memberId);
+            return member.id == memberId;
+        })[0];
+        console.log("getMember : " + JSON.stringify(result));
+        return result;
     }
 
     optionalPortal(styles, element) {
@@ -175,6 +188,30 @@ class Task extends Component {
         );
     }
 
+    getName(employee) {
+        return employee.lastName + " " + employee.firstName;
+    }
+
+    renderTitle(task) {
+        const { classes } = this.props;
+        let creator = this.getMember(task.employeeCreator);
+        return (
+            <div className={classes.title}>
+                <div style={{ float: 'left' }}>
+                    {task.title}
+                </div>
+                <div style={{ float: 'right', marginRight: '14px' }}>
+                    {creator.imageUrl ? (
+                        <Avatar src={creator.imageUrl} round="20px" size="25" />
+                    ) : (
+                            <Avatar name={this.getName(creator)} round="20px" size="25" />
+                        )
+                    }
+                </div>
+            </div>
+        )
+    }
+
     render() {
         const { classes } = this.props;
         const { task, index } = this.props;
@@ -211,9 +248,7 @@ class Task extends Component {
                                     provided.draggableProps.style
                                 )}
                             >
-                                <div className={classes.title}>
-                                    {task.title}
-                                </div>
+                                {this.renderTitle(task)}
                                 {this.renderState(task)}
                             </div>
                         ))}

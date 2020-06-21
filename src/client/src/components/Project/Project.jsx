@@ -114,11 +114,11 @@ class Project extends Component {
         return (
             <Card className={classes.card} >
                 <CardHeader
-                    action={
-                        <IconButton aria-label="settings" onClick={this.handleSetting} style={{ margin: '10px' }}>
-                            <TuneIcon />
-                        </IconButton>
-                    }
+                    // action={
+                    // <IconButton aria-label="settings" onClick={this.handleSetting} style={{ margin: '10px' }}>
+                    //     <TuneIcon />
+                    // </IconButton>
+                    // }
                     title={
                         <Tooltip title={project.title} placement="top" arrow classes={{ tooltip: classes.customTooltip }}>
                             <div className={classes.title} onClick={this.handleClick} >
