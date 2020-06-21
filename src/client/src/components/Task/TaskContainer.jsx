@@ -50,18 +50,18 @@ class TaskContainer extends Component {
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { creatorTasks, index } = this.props;
-        if (creatorTasks[index]) {
-            this.setState({
-                taskCards: creatorTasks[index].tasks,
-            })
-        } else {
-            this.setState({
-                taskCards: [],
-            })
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     const { creatorTasks, index } = this.props;
+    //     if (creatorTasks[index]) {
+    //         this.setState({
+    //             taskCards: creatorTasks[index].tasks,
+    //         })
+    //     } else {
+    //         this.setState({
+    //             taskCards: [],
+    //         })
+    //     }
+    // }
 
     componentDidMount() {
         const { creatorTasks, index } = this.props;
@@ -219,7 +219,7 @@ class TaskContainer extends Component {
         const { classes } = this.props;
         let { creatorTasks, index } = this.props;
         // const taskCards = creatorTasks[index] ? creatorTasks[index].tasks : [];
-        const { taskCards } = this.state;
+        let taskCards = [];
         const settings = {
             className: classNames("center", classes.slider),
             infinite: false,
@@ -259,6 +259,9 @@ class TaskContainer extends Component {
                 }
             ]
         };
+        if (creatorTasks[index]) {
+            taskCards = creatorTasks[index].tasks;
+        }
         const members = this.props.projectItem.members;
         return (
             <React.Fragment>
@@ -301,7 +304,6 @@ const mapStateToProps = (state, ownProps) => {
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
         creatorTasks: state.tasks.creatorTasks,
-
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
