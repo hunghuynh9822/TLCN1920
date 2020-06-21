@@ -42,7 +42,7 @@ class TaskContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            taskCards: [],
+            creatorTasks: new Array(),
         }
         this.getMember = this.getMember.bind(this);
         this.move = this.move.bind(this);
@@ -51,23 +51,21 @@ class TaskContainer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        // const { creatorTasks } = this.props;
+        // this.setState({
+        //     creatorTasks: creatorTasks
+        // })
         this.setState({
-            reload: true,
+            reload: true
         })
     }
 
-    componentDidMount() {
-        // const { creatorTasks, index } = this.props;
-        // if (creatorTasks[index]) {
-        //     this.setState({
-        //         taskCards: creatorTasks[index].tasks,
-        //     })
-        // } else {
-        //     this.setState({
-        //         taskCards: [],
-        //     })
-        // }
-    }
+    // componentDidMount() {
+    //     const { creatorTasks } = this.props;
+    //     this.setState({
+    //         creatorTasks: creatorTasks
+    //     })
+    // }
 
     getMember(memberId) {
         const { projectItem } = this.props;
@@ -121,7 +119,7 @@ class TaskContainer extends Component {
             return taskCard.assigneeId == cardId;
         })[0];
         let tasks = card && card.tasks ? card.tasks : [];
-        console.log("getList : " + JSON.stringify(tasks))
+        console.log("[TaskContainer] getList : " + JSON.stringify(tasks))
         return tasks;
     }
 
@@ -168,10 +166,10 @@ class TaskContainer extends Component {
                 source,
                 destination
             );
-            console.log("Move result : " + JSON.stringify(result));
+            console.log("[TaskContainer] Move result : ", result);
             let items = this.state.items;
             let newTaskCards = taskCards.map((card) => {
-                console.log("New TaskCards : " + JSON.stringify(result[card.assigneeId]));
+                console.log("[TaskContainer] New TaskCards : ", result[card.assigneeId]);
                 if (result[card.assigneeId] == undefined) {
                     return card;
                 }
@@ -181,29 +179,25 @@ class TaskContainer extends Component {
             let memberTasks = taskCards.find(card => {
                 return card.assigneeId == destination.droppableId;
             });
-            console.log("Member TaskCards destination : " + JSON.stringify(memberTasks));
+            console.log("[TaskContainer] Member TaskCards destination : ", memberTasks);
             if (memberTasks == undefined) {
                 console.log("[TaskContainer] ", destination)
                 let card = { assigneeId: Number(destination.droppableId), tasks: result[destination.droppableId] }
                 newTaskCards.push(card);
             }
-            console.log("New TaskCards : " + JSON.stringify(newTaskCards))
-            this.setState({
-                taskCards: newTaskCards,
-            });
+            console.log("New TaskCards : ", newTaskCards)
             // console.log("Update TaskCards : " + JSON.stringify(creatorTasks[index]))
+            // creatorTasks[index].tasks = newTaskCards;
+            // this.props.updateTasks(creatorTasks)
             changeAssignee(requestChange)
                 .then(response => {
-                    console.log("changeAssignee : " + JSON.stringify(response))
+                    this.props.loadTasks();
+                    console.log("[TaskContainer] changeAssignee : ", response)
                     // this.props.loadTasks();
                     // if(memberTasks == undefined) {
                     //     return this.props.loadTasks();
                     // }
-                    creatorTasks[index].tasks = newTaskCards;
-                    this.props.updateTasks(creatorTasks);
-                    this.setState({
-                        reload: true,
-                    })
+
                 })
                 .catch(error => {
                     console.log(error);
@@ -214,7 +208,6 @@ class TaskContainer extends Component {
     render() {
         const { classes } = this.props;
         let { creatorTasks, index } = this.props;
-        // const taskCards = creatorTasks[index] ? creatorTasks[index].tasks : [];
         let taskCards = [];
         const settings = {
             className: classNames("center", classes.slider),
@@ -258,6 +251,7 @@ class TaskContainer extends Component {
         if (creatorTasks[index]) {
             taskCards = creatorTasks[index].tasks;
         }
+        console.log("[TaskContainer] Render ", taskCards);
         const members = this.props.projectItem.members;
         return (
             <React.Fragment>
@@ -291,7 +285,7 @@ TaskContainer.propTypes = {
     index: PropTypes.number.isRequired,
     updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    creatorTasks: PropTypes.array.isRequired,
+    // creatorTasks: PropTypes.array.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -299,6 +293,7 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
+        creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

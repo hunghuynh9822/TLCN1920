@@ -60,7 +60,7 @@ class AssignTasks extends Component {
                     let title = this.getNameMember(tasks.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer updateTasks={this.props.updateTasks} index={index} tasks={tasks} creatorTasks={creatorTasks} loadTasks={this.props.loadTasks} openForm={this.props.openForm} />
+                            <TaskContainer updateTasks={this.props.updateTasks} index={index} tasks={tasks} loadTasks={this.props.loadTasks} openForm={this.props.openForm} />
                         </CollapsibleSection>
                     )
                 })}
@@ -73,7 +73,7 @@ AssignTasks.propTypes = {
     loadTasks: PropTypes.func.isRequired,
     updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    creatorTasks: PropTypes.array.isRequired,
+    // creatorTasks: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -82,7 +82,7 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        // creatorTasks: state.tasks.creatorTasks,
+        creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

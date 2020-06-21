@@ -219,6 +219,7 @@ class ProjectTasks extends Component {
             if (loginAsAdmin(loginRole)) {
                 getTasksByAdmin(projectId)
                     .then(response => {
+                        this.props.updateCreatorTasks(response.creatorTasks);
                         this.setState({
                             creatorTasks: response.creatorTasks,
                             reload: true
@@ -257,7 +258,7 @@ class ProjectTasks extends Component {
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
                         loading: false,
-                        creatorTasks: response.creatorTasks,
+                        // creatorTasks: response.creatorTasks,
                     })
                 })
         } else if (loginAsLead(loginRole)) {
@@ -267,7 +268,7 @@ class ProjectTasks extends Component {
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
                         loading: false,
-                        creatorTasks: response.creatorTasks,
+                        // creatorTasks: response.creatorTasks,
                     })
                 })
         } else {
@@ -342,21 +343,21 @@ class ProjectTasks extends Component {
         this.setState({
             task: { ...this.state.task, state: TASK_STATE[event.target.value] }
         });
-        let request = {
-            taskId: this.state.task.id,
-            employeeId: currentUser.id,
-            state: event.target.value
-        }
-        console.log("Request update task : " + JSON.stringify(request));
-        updateStateTasks(request)
-            .then(response => {
-                console.log(response);
-                this.loadTasks();
-            }).catch(error => {
-                console.log(error);
-                //(error && error.message) || 
-                alert.error('Oops! Something went wrong. Please try again!');
-            });
+        // let request = {
+        //     taskId: this.state.task.id,
+        //     employeeId: currentUser.id,
+        //     state: event.target.value
+        // }
+        // console.log("Request update task : " + JSON.stringify(request));
+        // updateStateTasks(request)
+        //     .then(response => {
+        //         console.log(response);
+        //         this.loadTasks();
+        //     }).catch(error => {
+        //         console.log(error);
+        //         //(error && error.message) || 
+        //         alert.error('Oops! Something went wrong. Please try again!');
+        //     });
     }
 
     handlePointChange(event, newValue) {
@@ -365,21 +366,21 @@ class ProjectTasks extends Component {
         this.setState({
             task: { ...this.state.task, point: newValue }
         });
-        let request = {
-            taskId: this.state.task.id,
-            employeeId: currentUser.id,
-            point: newValue
-        }
-        console.log("Request update task : " + JSON.stringify(request));
-        updatePointTasks(request)
-            .then(response => {
-                console.log(response);
-                this.loadTasks();
-            }).catch(error => {
-                console.log(error);
-                //(error && error.message) || 
-                alert.error('Oops! Something went wrong. Please try again!');
-            });
+        // let request = {
+        //     taskId: this.state.task.id,
+        //     employeeId: currentUser.id,
+        //     point: newValue
+        // }
+        // console.log("Request update task : " + JSON.stringify(request));
+        // updatePointTasks(request)
+        //     .then(response => {
+        //         console.log(response);
+        //         this.loadTasks();
+        //     }).catch(error => {
+        //         console.log(error);
+        //         //(error && error.message) || 
+        //         alert.error('Oops! Something went wrong. Please try again!');
+        //     });
     }
 
     handleDatePickerChange(name, date) {
@@ -432,6 +433,29 @@ class ProjectTasks extends Component {
             startedAt: task.startedAt,
             duration: task.duration
         }
+        if (request.state === TASK_STATE.indexOf("FINISH")) {
+            if (request.point === 0) {
+                alert.error('Oops! Please set point to task before update task finish!');
+                this.setState({
+                    open: false,
+                    previousTasks: new Array(),
+                    task: {
+                        taskId: null,
+                        projectId: null,
+                        employeeCreator: null,
+                        employeeAssignee: null,
+                        title: null,
+                        description: null,
+                        startedAt: new Date(),
+                        duration: null,
+                        endAt: new Date(),
+                        state: 0,
+                        point: 0
+                    },
+                })
+                return;
+            }
+        }
         console.log("[UpdateTask] Request : " + JSON.stringify(request));
         updateTask(request)
             .then(response => {
@@ -457,7 +481,7 @@ class ProjectTasks extends Component {
             }).catch(error => {
                 console.log(error);
                 //(error && error.message) || 
-                alert.error('Oops! Something went wrong. Please try again!');
+                alert.error('Oops! Something went wrong when update task. Please call check!');
             });
     }
 
@@ -559,7 +583,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component updateTasks={this.updateTasks} creatorTasks={this.state.creatorTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
+                                        <tab.component updateTasks={this.updateTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
                                     </TabPanel>
                                 ))
                             }
@@ -665,10 +689,11 @@ class ProjectTasks extends Component {
                                 <Box component="fieldset" mb={3} borderColor="transparent">
                                     <Typography component="legend">Point</Typography>
                                     <StyledRating
+                                        readOnly={task.state !== 'DONE' && task.state !== 'FINISH'}
                                         name="customized-color"
                                         value={task.point}
                                         getLabelText={getLabelText}
-                                        precision={0.5}
+                                        precision={1}
                                         icon={<FiberManualRecordIcon fontSize="inherit" />}
                                         onChange={(event, newValue) => {
                                             this.handlePointChange(event, newValue);

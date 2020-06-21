@@ -60,7 +60,7 @@ class CompleteTasks extends Component {
                     let title = this.getNameMember(creator.creatorId);
                     return (
                         <CollapsibleSection key={index} title={title}>
-                            <TaskContainer index={index} updateTasks={this.props.updateTasks} creatorTasks={creatorTasks} loadTasks={this.props.loadTasks} filter="DONE" openForm={this.props.openForm} />
+                            <TaskContainer index={index} updateTasks={this.props.updateTasks} loadTasks={this.props.loadTasks} filter="DONE" openForm={this.props.openForm} />
                         </CollapsibleSection>
                     )
                 })}
@@ -73,7 +73,7 @@ CompleteTasks.propTypes = {
     loadTasks: PropTypes.func.isRequired,
     updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    creatorTasks: PropTypes.array.isRequired,
+    // creatorTasks: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -82,7 +82,7 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        // creatorTasks: state.tasks.creatorTasks,
+        creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
