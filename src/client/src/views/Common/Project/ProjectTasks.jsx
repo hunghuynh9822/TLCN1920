@@ -206,33 +206,6 @@ class ProjectTasks extends Component {
         })
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.index == 1) {
-            const { alert } = this.props;
-            const { loginRole, projectItem, currentUser } = this.props;
-            let projectId = projectItem.project.id;
-            if (loginAsAdmin(loginRole)) {
-                getTasksByAdmin(projectId)
-                    .then(response => {
-                        console.log("[ProjectTasks] Reload ", response.creatorTasks);
-                        this.setState({
-                            creatorTasks: response.creatorTasks,
-                        })
-                    })
-            } else if (loginAsLead(loginRole)) {
-                getTasksCreatedByLead(projectId, currentUser.id)
-                    .then(response => {
-                        console.log("[ProjectTasks] Reload ", response.creatorTasks);
-                        this.setState({
-                            creatorTasks: response.creatorTasks,
-                        })
-                    })
-            } else {
-                alert.error('Oops! Something went wrong on load task, you login on ' + loginRole + '. Please call check!');
-            }
-        }
-    }
-
     loadTasks() {
         console.log("Loading task");
         this.setState({

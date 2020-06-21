@@ -50,6 +50,19 @@ class TaskContainer extends Component {
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { creatorTasks, index } = this.props;
+        if (creatorTasks[index]) {
+            this.setState({
+                taskCards: creatorTasks[index].tasks,
+            })
+        } else {
+            this.setState({
+                taskCards: [],
+            })
+        }
+    }
+
     componentDidMount() {
         const { creatorTasks, index } = this.props;
         if (creatorTasks[index]) {
