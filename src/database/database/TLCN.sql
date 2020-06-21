@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.13
--- Dumped by pg_dump version 12.3
+-- Dumped from database version 10.11
+-- Dumped by pg_dump version 11.6 (Ubuntu 11.6-1.pgdg18.04+1)
 
--- Started on 2020-06-21 10:14:09 +07
+-- Started on 2020-06-21 15:52:27 +07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,6 +19,8 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 SET default_tablespace = '';
+
+SET default_with_oids = false;
 
 --
 -- TOC entry 196 (class 1259 OID 16384)
@@ -283,7 +285,7 @@ ALTER SEQUENCE public.webhook_id_webhook_seq OWNED BY public.webhook.id_webhook;
 
 
 --
--- TOC entry 210 (class 1259 OID 16545)
+-- TOC entry 210 (class 1259 OID 16452)
 -- Name: wiki; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -303,7 +305,7 @@ CREATE TABLE public.wiki (
 ALTER TABLE public.wiki OWNER TO postgres;
 
 --
--- TOC entry 2837 (class 2604 OID 16452)
+-- TOC entry 2837 (class 2604 OID 16458)
 -- Name: webhook id_webhook; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -338,8 +340,8 @@ COPY public.employees (id, created_at, updated_at, first_name, middle_name, last
 
 COPY public.genuid (id, index, count) FROM stdin;
 1	0	10
-2	3	213
 3	2	32
+2	2	222
 \.
 
 
@@ -387,7 +389,6 @@ COPY public.notify (id, create_id, create_name, create_time, content, receive_id
 15781565073560	15714589149401	Huỳnh Lê Hữu Hưng	1578156507301	Team backend 3h họp 	15714589149401	t
 15782423044988	15751881480165	Thai Thanh  Liem	1578242298493	Tuần sau , Cty sẽ có một buổi tổng vệ sinh nha các ace	15782407734329	f
 15782423051792	15751881480165	Thai Thanh  Liem	1578242298493	Tuần sau , Cty sẽ có một buổi tổng vệ sinh nha các ace	15714589149401	f
-15781555385754	15714589149401	Huỳnh Lê Hữu Hưng	1578155537992	Ngay 1/1/2020 , Mọi người được nghỉ nhé!!	15751881480165	f
 15781555386675	15714589149401	Huỳnh Lê Hữu Hưng	1578155537992	Ngay 1/1/2020 , Mọi người được nghỉ nhé!!	15746072843063	f
 15781555386856	15714589149401	Huỳnh Lê Hữu Hưng	1578155537992	Ngay 1/1/2020 , Mọi người được nghỉ nhé!!	15746074348584	f
 15781555967168	15714589149401	Huỳnh Lê Hữu Hưng	1578155596632	Cảm ơn tất cả mọi người đã hoàn thành xuất sắc năm 2020 	15746074348584	f
@@ -408,11 +409,21 @@ COPY public.notify (id, create_id, create_name, create_time, content, receive_id
 15782424602297	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15746072843063	f
 15782424603299	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15782401353207	f
 15782424603930	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15782398324826	f
-15782424604931	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15751881480165	f
 15782424606022	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15782407734329	f
 15782424606433	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15782405203918	f
 15782424602838	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15746074348584	f
 15782424601966	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15714589149401	t
+15781555385754	15714589149401	Huỳnh Lê Hữu Hưng	1578155537992	Ngay 1/1/2020 , Mọi người được nghỉ nhé!!	15751881480165	t
+15782424604931	15751881480165	Thai Thanh  Liem	1578242460080	Team nhân sự, chiều nay họp ở phòng 2 nha	15751881480165	t
+15927103063515	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15782398324826	f
+15927103063424	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15782708385800	f
+15927103063626	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15714589149401	f
+15927103064317	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15746074348584	f
+15927103064378	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15746072843063	f
+15927103064559	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15751881480165	f
+15927103064850	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15782405203918	f
+15927103064941	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15782407734329	f
+15927103065132	15751881480165	Thai Thanh  Liem	1592710306115	Ngày 20/06/2020 , Công ty được người buổi chiều 	15782401353207	f
 \.
 
 
@@ -524,40 +535,40 @@ COPY public.tasks (id, project_id, title, started_at, duration, state, point, em
 15782700612879	15782413529787	Chức năng quản lý sản phẩm	1580084220000	5	5	5	15751881480165	Thực hiện bằng reactjs tren web , react native trên moblie	1578270061329	1578273286299	15782407734329	\N
 15776776576042	15776775042945	Phân tích xử lý	1577677608760	\N	5	5	15714589149401	Phân tích các chức năng có thể có	1577677657604	1592671004799	15714589149401	\N
 15776777180033	15776775042945	Giám sát quy trình	1577677664519	\N	5	1	15714589149401	Đảm bảo đúng tiến độ với kế hoạch	1577677718040	1592655861901	15714589149401	
-15927075807492	15921917957796	[BE] Research gRPC protocol	1592707489054	2	0	0	15714589149401	gRPC là gì ?\nSử dụng gRPC như thế nào	1592707580750	1592707586420	15751881480165	
 15782696929356	15782413529787	Chức năng xem sản phẩm	1578960720000	3	1	5	15751881480165	Có thể chọn các loại, theo giá, theo màu	1578269692936	1578274182717	15782401353207	\N
 15782698474708	15782413529787	Thiết kế giao diện 	1579133760000	6	5	4	15751881480165	Sử dung biểu mẫu và use-case để thực hiện	1578269847470	1578269889725	15782407734329	\N
 15782701408610	15782413529787	Dựng server trên aws	1580084460000	2	5	4	15751881480165	Chạy trên nền Ubuntu , Docker 	1578270140862	1578288761547	15782401353207	\N
-15776777978154	15776775042945	Xây dựng API tính năng mua hàng	1577677749221	\N	2	0	15714589149401	Xây dựng api cho tính năng mua hàng	1577677797835	1592670973396	15714589149401	\N
-15776780298297	15776775042945	Xây dựng API đăng nhập	1577677985459	\N	3	0	15714589149401	Xây dựng tính năng đăng nhập với mạng xã hội hiện có	1577678029829	1592670973396	15714589149401	\N
 15782414591315	15782413529787	Mô tả use-case	1578241354076	3	0	0	15751881480165	Chi tiết cho từng chức năng 	1578241459166	1578241488810	15782407734329	\N
 15782415862616	15782413529787	Thiết kế biểu mẫu	1578241495510	6	4	5	15751881480165	Xây dựng rõ ràng chi tiết cho từng form	1578241586261	1578270520073	15782401353207	\N
 15782697714607	15782413529787	Chức năng thanh toán	1578874440000	5	5	4	15751881480165	Cần cho thanh toán qua thẻ của tất cả ngân hàng	1578269771461	1578270598534	15751881480165	\N
-15782716755476	15776774274194	Thu thập thông tin 	1575161160000	2	0	0	15751881480165	Tìm kiểm đánh giá sản phẩm sắp thực hiện 	1578271675548	1578271675548	15714589149401	\N
-15782718038678	15776774274194	Thiết kế CSDL	1575852540000	3	0	0	15751881480165	Bằng postgress	1578271803868	1578271803868	15751881480165	\N
 15782729221470	15782413529296	Chức năng đăng nhập 	1578013680000	5	5	4	15751881480165	chức năng đăng nhập	1578272922147	1578272973912	15782405203918	\N
 15782695562435	15782413529787	Chức năng đăng nhập	1578874260000	3	2	5	15751881480165	Có gg authentica	1578269556244	1578274184074	15782401353207	\N
 15782416909167	15782413529787	Mô tả DB	1578846360000	4	3	5	15751881480165	Nêu ra rõ các bảng và mối quan hệ	1578241690916	1578275764929	15751881480165	\N
-15782717407117	15776774274194	Thiết kế biểu mẫu	1575420420000	4	0	0	15751881480165	Chỉ tiết các form có thể xuất hiện 	1578271740711	1591425813387	15782398324826	\N
 15782728829399	15782413529296	Xác định yêu cầu	1578272760000	2	0	0	15751881480165	Xác định yêu cầu	1578272882939	1592708929181	15751881480165	\N
 15782710871615	15782413529296	Mô tả dữ liệu 	1578011760000	1	0	0	15751881480165	full chức năng	1578271087162	1592708952698	15782398324826	\N
 15776779867316	15776775042945	Giám sát quy trình triển khai	1577677927342	\N	5	3	15714589149401	Đảm bảo quy trình triển khai đúng kế hoạch	1577677986731	1592648207021	15751881480165	
 15782888628711	15782413529787	xây dựng host	1580362320000	1	0	0	15751881480165	OS : Ubuntu	1578288862873	1592673121237	15751881480165	\N
 15782702328641	15782413529787	Dựng dbservice 	1579479720000	4	0	0	15751881480165	Control giữa database và app	1578270232864	1592672182511	15751881480165	\N
-15782704812173	15782413529787	Chức năng thống kê	1579825620000	4	0	0	15751881480165	Theo sản phẩm, theo giá bán , doanh thu	1578270481217	1592672182511	15751881480165	\N
 15782704253822	15782413529787	Chức năng search 123	1579134180000	7	0	0	15751881480165	Tìm kiếm tất cả sản phẩm	1578270425382	1592672623866	15751881480165	\N
 15782709970624	15782413529296	Gặp khách hàng	1577838900000	5	0	0	15751881480165	Gửi mail cho khách hàng hẹn gặp mặt	1578270997063	1592675160912	15751881480165	\N
-15921919342737	15921917957796	[BE] Research database cluster	1592191801687	2	0	0	15714589149401	Tìm hiểu về cách thao tác với dữ liệu lớn	1592191934274	1592707502327	15714589149401	
 15926292745059	15776774274194	Test chức năng update	1592629119694	2	4	5	15714589149401	Thực hiện update 1 task bất kì	1592629274506	1592631128833	15782398324826	15914257228033
-15776778448415	15776775042945	Giám sát quy trình kiểm thử	1577677802796	1	1	4	15714589149401	Đảm bảo đi đúng kế hoạch	1577677844877	1592671004799	15714589149401	
-15926384053251	15776774274194	Test load card 2	1592638369986	4	0	0	15714589149401	123123123123	1592638405325	1592638439100	15782398324826	
-15914257228033	15776774274194	Chọn Công Nghệ	1591425672732	3	0	0	15751881480165	Vd: Java, React	1591425722804	1592638486271	15782401353207	15782718038678
-15926383699530	15776774274194	Test load card task	1592638089462	2	0	0	15714589149401	12 34 	1592638369954	1592638510320	15782398324826	
-15776775543901	15776775042945	Khảo sát hiện trạng	1577677515118	\N	0	0	15714589149401	Tìm hiểu các website hiện có trên thị trường	1577677554390	1592707396199	15714589149401	
-15781417459898	15776775042945	Thiết kế biểu mẫu login	1578141684385	2	5	2	15714589149401	Mô tả chi tiết từng biểu biểu login	1578141746000	1592655850249	15751881480165	15776777180033
-15781650578270	15776775042945	Kiểm thử xem hàng	1578164992279	3	4	0	15714589149401	Thực hiện kiểm thử chức năng xem danh sách sản phẩm	1578165057828	1592670973396	15714589149401	
-15781633960389	15776775042945	Kiểm thử hoá đơn	1578163336617	2	0	0	15714589149401	Thực hiện kiểm thử chức năng xem đơn hàng	1578163396038	1592670973396	15714589149401	15776779867316
-15781633349228	15776775042945	Kiểm thử mua hàng	1578163190347	1	0	\N	15714589149401	Thực hiện kiểm thử chức năng mua danh sách sản phẩm	1578163334925	1592707452962	15782398324826	15776776576042
+15926384053251	15776774274194	Test load card 2	1592638369986	4	0	3	15714589149401	123123123123	1592638405325	1592727494996	15782398324826	
+15926383699530	15776774274194	Test load card task	1592638089462	2	0	0	15714589149401	12 34 	1592638369954	1592728273455	15782401353207	
+15914257228033	15776774274194	Chọn Công Nghệ	1591425672732	3	0	0	15751881480165	Vd: Java, React	1591425722804	1592728275799	15782398324826	15782718038678
+15781633960389	15776775042945	Kiểm thử hoá đơn	1578163336617	2	0	0	15714589149401	Thực hiện kiểm thử chức năng xem đơn hàng	1578163396038	1592710057691	15782398324826	15776779867316
+15776777978154	15776775042945	Xây dựng API tính năng mua hàng	1577677749221	\N	2	0	15714589149401	Xây dựng api cho tính năng mua hàng	1577677797835	1592710125082	15714589149401	\N
+15776775543901	15776775042945	Khảo sát hiện trạng	1577677515118	\N	0	0	15714589149401	Tìm hiểu các website hiện có trên thị trường	1577677554390	1592715493105	15751881480165	
+15921919342737	15921917957796	[BE] Research database cluster	1592154000000	4	0	0	15714589149401	Tìm hiểu về cách thao tác với dữ liệu lớn	1592191934274	1592718547806	15714589149401	
+15927075807492	15921917957796	[BE] Research gRPC protocol	1592758800000	1	0	0	15714589149401	gRPC là gì ?\nSử dụng gRPC như thế nào	1592707580750	1592718631487	15751881480165	
+15781650578270	15776775042945	Kiểm thử xem hàng	1578164992279	3	4	0	15714589149401	Thực hiện kiểm thử chức năng xem danh sách sản phẩm	1578165057828	1592718743402	15714589149401	15776780298297
+15776778448415	15776775042945	Giám sát quy trình kiểm thử	1577811600000	1	1	4	15714589149401	Đảm bảo đi đúng kế hoạch	1577677844877	1592718820936	15782398324826	
+15781633349228	15776775042945	Kiểm thử mua hàng	1577984400000	1	0	\N	15714589149401	Thực hiện kiểm thử chức năng mua danh sách sản phẩm	1578163334925	1592718846529	15751881480165	15776776576042
+15776780298297	15776775042945	Xây dựng API đăng nhập	1577552400000	1	3	0	15714589149401	Xây dựng tính năng đăng nhập với mạng xã hội hiện có	1577678029829	1592718891547	15782398324826	\N
+15781417459898	15776775042945	Thiết kế biểu mẫu login	1578243600000	2	5	2	15714589149401	Mô tả chi tiết từng biểu biểu login	1578141746000	1592719058461	15751881480165	15776777180033
+15782717407117	15776774274194	Thiết kế biểu mẫu	1575219600000	4	0	0	15751881480165	Chỉ tiết các form có thể xuất hiện 	1578271740711	1592727218650	15782398324826	15782716755476
+15782718038678	15776774274194	Thiết kế CSDL	1575852540000	3	0	0	15751881480165	Bằng postgress	1578271803868	1592720449242	15751881480165	15782717407117
+15782716755476	15776774274194	Thu thập thông tin 	1574960400000	2	0	0	15751881480165	Tìm kiểm đánh giá sản phẩm sắp thực hiện 	1578271675548	1592720492214	15714589149401	\N
+15782704812173	15782413529787	Chức năng thống kê	1579825620000	4	0	0	15751881480165	Theo sản phẩm, theo giá bán , doanh thu	1578270481217	1592721110810	15782407734329	\N
 \.
 
 
@@ -623,7 +634,7 @@ COPY public.webhook (id_webhook, id_project, bot_token, chat_id, create_task, up
 
 
 --
--- TOC entry 3011 (class 0 OID 16545)
+-- TOC entry 3011 (class 0 OID 16452)
 -- Dependencies: 210
 -- Data for Name: wiki; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -645,7 +656,7 @@ SELECT pg_catalog.setval('public.webhook_id_webhook_seq', 1, false);
 
 
 --
--- TOC entry 2849 (class 2606 OID 16454)
+-- TOC entry 2849 (class 2606 OID 16460)
 -- Name: roles Roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -654,7 +665,7 @@ ALTER TABLE ONLY public.roles
 
 
 --
--- TOC entry 2855 (class 2606 OID 16456)
+-- TOC entry 2855 (class 2606 OID 16462)
 -- Name: user_roles employee_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -663,7 +674,7 @@ ALTER TABLE ONLY public.user_roles
 
 
 --
--- TOC entry 2839 (class 2606 OID 16458)
+-- TOC entry 2839 (class 2606 OID 16464)
 -- Name: notify notify_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -672,7 +683,7 @@ ALTER TABLE ONLY public.notify
 
 
 --
--- TOC entry 2841 (class 2606 OID 16460)
+-- TOC entry 2841 (class 2606 OID 16466)
 -- Name: perofproject perofproject_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -681,7 +692,7 @@ ALTER TABLE ONLY public.perofproject
 
 
 --
--- TOC entry 2843 (class 2606 OID 16462)
+-- TOC entry 2843 (class 2606 OID 16468)
 -- Name: positions positions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -690,7 +701,7 @@ ALTER TABLE ONLY public.positions
 
 
 --
--- TOC entry 2845 (class 2606 OID 16464)
+-- TOC entry 2845 (class 2606 OID 16470)
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -699,7 +710,7 @@ ALTER TABLE ONLY public.projects
 
 
 --
--- TOC entry 2847 (class 2606 OID 16466)
+-- TOC entry 2847 (class 2606 OID 16472)
 -- Name: requests requests_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -708,7 +719,7 @@ ALTER TABLE ONLY public.requests
 
 
 --
--- TOC entry 2851 (class 2606 OID 16468)
+-- TOC entry 2851 (class 2606 OID 16474)
 -- Name: taskcomments taskcomments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -717,7 +728,7 @@ ALTER TABLE ONLY public.taskcomments
 
 
 --
--- TOC entry 2853 (class 2606 OID 16470)
+-- TOC entry 2853 (class 2606 OID 16476)
 -- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -726,7 +737,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- TOC entry 2857 (class 2606 OID 16472)
+-- TOC entry 2857 (class 2606 OID 16478)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -735,7 +746,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 2859 (class 2606 OID 16474)
+-- TOC entry 2859 (class 2606 OID 16480)
 -- Name: webhook webhook_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -744,7 +755,7 @@ ALTER TABLE ONLY public.webhook
 
 
 --
--- TOC entry 2861 (class 2606 OID 16552)
+-- TOC entry 2861 (class 2606 OID 16482)
 -- Name: wiki wiki_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -753,7 +764,7 @@ ALTER TABLE ONLY public.wiki
 
 
 --
--- TOC entry 2869 (class 2606 OID 16475)
+-- TOC entry 2869 (class 2606 OID 16483)
 -- Name: taskcomments comment_of_employee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -762,7 +773,7 @@ ALTER TABLE ONLY public.taskcomments
 
 
 --
--- TOC entry 2870 (class 2606 OID 16480)
+-- TOC entry 2870 (class 2606 OID 16488)
 -- Name: taskcomments comment_of_task; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -771,7 +782,7 @@ ALTER TABLE ONLY public.taskcomments
 
 
 --
--- TOC entry 2864 (class 2606 OID 16485)
+-- TOC entry 2864 (class 2606 OID 16493)
 -- Name: notify creator_employee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -780,7 +791,7 @@ ALTER TABLE ONLY public.notify
 
 
 --
--- TOC entry 2871 (class 2606 OID 16490)
+-- TOC entry 2871 (class 2606 OID 16498)
 -- Name: tasks employee_assignee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -789,7 +800,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- TOC entry 2872 (class 2606 OID 16495)
+-- TOC entry 2872 (class 2606 OID 16503)
 -- Name: tasks employee_creator; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -798,7 +809,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- TOC entry 2862 (class 2606 OID 16500)
+-- TOC entry 2862 (class 2606 OID 16508)
 -- Name: employees employee_position; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -807,7 +818,7 @@ ALTER TABLE ONLY public.employees
 
 
 --
--- TOC entry 2866 (class 2606 OID 16505)
+-- TOC entry 2866 (class 2606 OID 16513)
 -- Name: perofproject employee_project; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -816,7 +827,7 @@ ALTER TABLE ONLY public.perofproject
 
 
 --
--- TOC entry 2873 (class 2606 OID 16510)
+-- TOC entry 2873 (class 2606 OID 16518)
 -- Name: tasks of_project; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -825,7 +836,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- TOC entry 2867 (class 2606 OID 16515)
+-- TOC entry 2867 (class 2606 OID 16523)
 -- Name: perofproject project_constraint; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -834,7 +845,7 @@ ALTER TABLE ONLY public.perofproject
 
 
 --
--- TOC entry 2865 (class 2606 OID 16520)
+-- TOC entry 2865 (class 2606 OID 16528)
 -- Name: notify receiver_employee; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -843,7 +854,7 @@ ALTER TABLE ONLY public.notify
 
 
 --
--- TOC entry 2868 (class 2606 OID 16525)
+-- TOC entry 2868 (class 2606 OID 16533)
 -- Name: requests request_of; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -852,7 +863,7 @@ ALTER TABLE ONLY public.requests
 
 
 --
--- TOC entry 2874 (class 2606 OID 16530)
+-- TOC entry 2874 (class 2606 OID 16538)
 -- Name: user_roles role_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -861,7 +872,7 @@ ALTER TABLE ONLY public.user_roles
 
 
 --
--- TOC entry 2863 (class 2606 OID 16535)
+-- TOC entry 2863 (class 2606 OID 16543)
 -- Name: employees user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -870,7 +881,7 @@ ALTER TABLE ONLY public.employees
 
 
 --
--- TOC entry 2875 (class 2606 OID 16540)
+-- TOC entry 2875 (class 2606 OID 16548)
 -- Name: user_roles user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -878,7 +889,7 @@ ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2020-06-21 10:14:13 +07
+-- Completed on 2020-06-21 15:52:40 +07
 
 --
 -- PostgreSQL database dump complete
