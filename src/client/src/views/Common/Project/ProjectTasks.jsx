@@ -523,7 +523,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component updateTasks={this.updateTasks} creatorTasks={this.props.creatorTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
+                                        <tab.component updateTasks={this.updateTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
                                     </TabPanel>
                                 ))
                             }

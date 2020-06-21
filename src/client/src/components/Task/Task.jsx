@@ -21,6 +21,7 @@ import confused from '../../assets/img/confused.png';
 import smiling from '../../assets/img/smiling.png';
 import happy from '../../assets/img/happy.png';
 import question from '../../assets/img/question.png';
+import deadline from '../../assets/img/deadline.png';
 
 
 const StyledRating = withStyles({
@@ -54,7 +55,8 @@ const styles = theme => ({
     icon_rate: {
         marginTop: '3px',
         width: '25px',
-        height: '25px'
+        height: '25px',
+        marginLeft: '3px'
     }
 });
 const grid = 8;
@@ -96,6 +98,20 @@ const mapRate = {
     5: happy
 }
 
+const month = {
+    0: "Jan",
+    1: "Feb",
+    2: "Mar",
+    3: "Apr",
+    4: "May",
+    5: "Jun",
+    6: "Jul",
+    7: "Aug",
+    8: "Sep",
+    9: "Oct",
+    10: "Nov",
+    11: "Dec",
+}
 class Task extends Component {
     constructor(props) {
         super(props);
@@ -121,7 +137,7 @@ class Task extends Component {
             // console.log("getMember : compare " + member.id + " - " + memberId);
             return member.id == memberId;
         })[0];
-        console.log("getMember : " + JSON.stringify(result));
+        // console.log("getMember : " + JSON.stringify(result));
         return result;
     }
 
@@ -159,7 +175,7 @@ class Task extends Component {
         const { classes } = this.props;
         // console.log("[Task] ", task)
         return (
-            <div style={{ borderTop: '1px solid #d0d3d9', paddingTop: '5px' }}>
+            <div style={{ borderTop: '1px solid #d0d3d9', paddingTop: '5px', height: '35px' }}>
                 <div style={{ float: 'left' }}>
                     <Button disabled variant="outlined" size="small" color="primary" style={{
                         alignSelf: 'flex-start',
@@ -172,6 +188,9 @@ class Task extends Component {
                     }}>
                         {task.state}
                     </Button>
+                </div>
+                <div style={{ float: 'left' }}>
+                    {this.checkDealine(task)}
                 </div>
                 <div style={{ float: 'right', marginRight: '14px' }}>
                     {this.renderIcon(task.point)}
@@ -189,19 +208,48 @@ class Task extends Component {
     }
 
     getName(employee) {
-        return employee.lastName + " " + employee.firstName;
+        return employee == undefined ? "?" : employee.lastName + " " + employee.firstName;
     }
+
+    renderDateString(date) {
+        return date.getDate() + " " + month[date.getMonth()] + " " + date.getFullYear();
+    }
+
+    checkDealine(task) {
+        const { classes } = this.props;
+        if (task.state != "DONE" && task.state != "FINISH") {
+            let end = new Date(task.startedAt + (1000 * 60 * 60 * 24) * task.duration);
+            let current = new Date();
+            if (current > end) {
+                return (<img className={classes.icon_rate} src={deadline} alt="Deadline" />)
+            }
+        }
+    }
+
+    truncate(str, n, useWordBoundary) {
+        if (str.length <= n) { return str; }
+        const subString = str.substr(0, n - 1); // the original check
+        return (useWordBoundary
+            ? subString.substr(0, subString.lastIndexOf(" "))
+            : subString) + " ...";
+    };
 
     renderTitle(task) {
         const { classes } = this.props;
         let creator = this.getMember(task.employeeCreator);
+        let start = new Date(task.startedAt);
+        let end = new Date(task.startedAt + (1000 * 60 * 60 * 24) * task.duration);
+        // console.log("[Task] Data ", task)
         return (
             <div className={classes.title}>
                 <div style={{ float: 'left' }}>
-                    {task.title}
+                    {this.truncate(task.title, 25, true)}
+                    <div style={{ fontSize: '10px' }}>
+                        {this.renderDateString(start)} - {this.renderDateString(end)}
+                    </div>
                 </div>
                 <div style={{ float: 'right', marginRight: '14px' }}>
-                    {creator.imageUrl ? (
+                    {creator && creator.imageUrl ? (
                         <Avatar src={creator.imageUrl} round="20px" size="25" />
                     ) : (
                             <Avatar name={this.getName(creator)} round="20px" size="25" />

@@ -73,7 +73,6 @@ AssignTasks.propTypes = {
     loadTasks: PropTypes.func.isRequired,
     updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    // creatorTasks: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
