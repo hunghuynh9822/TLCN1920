@@ -243,7 +243,10 @@ class ProjectTasks extends Component {
 
     }
 
-    loadTasks() {
+    loadTasks(creatorTasks) {
+        if (creatorTasks != undefined) {
+            this.props.updateCreatorTasks(response.creatorTasks);
+        }
         console.log("Loading task");
         this.setState({
             loading: true

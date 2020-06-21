@@ -51,21 +51,21 @@ class TaskContainer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // const { creatorTasks } = this.props;
-        // this.setState({
-        //     creatorTasks: creatorTasks
-        // })
+        const { creatorTasks } = this.props;
         this.setState({
-            reload: true
+            creatorTasks: creatorTasks
         })
+        // this.setState({
+        //     reload: true
+        // })
     }
 
-    // componentDidMount() {
-    //     const { creatorTasks } = this.props;
-    //     this.setState({
-    //         creatorTasks: creatorTasks
-    //     })
-    // }
+    componentDidMount() {
+        const { creatorTasks } = this.props;
+        this.setState({
+            creatorTasks: creatorTasks
+        })
+    }
 
     getMember(memberId) {
         const { projectItem } = this.props;
@@ -113,7 +113,8 @@ class TaskContainer extends Component {
     };
 
     getList(cardId) {
-        let { creatorTasks, index } = this.props;
+        let { index } = this.props;
+        let { creatorTasks } = this.state;
         let taskCards = creatorTasks[index].tasks;
         let card = taskCards.filter((taskCard) => {
             return taskCard.assigneeId == cardId;
@@ -134,7 +135,8 @@ class TaskContainer extends Component {
      * }
      */
     onDragEnd(result) {
-        let { creatorTasks, index } = this.props;
+        let { index } = this.props;
+        let { creatorTasks } = this.state;
         // let taskCards = creatorTasks[index].tasks;
         let taskCards = creatorTasks[index].tasks;
 
@@ -182,22 +184,27 @@ class TaskContainer extends Component {
             console.log("[TaskContainer] Member TaskCards destination : ", memberTasks);
             if (memberTasks == undefined) {
                 console.log("[TaskContainer] ", destination)
-                let card = { assigneeId: Number(destination.droppableId), tasks: result[destination.droppableId] }
+                let card = {
+                    assigneeId: Number(destination.droppableId),
+                    tasks: result[destination.droppableId]
+                }
                 newTaskCards.push(card);
             }
             console.log("New TaskCards : ", newTaskCards)
             // console.log("Update TaskCards : " + JSON.stringify(creatorTasks[index]))
-            // creatorTasks[index].tasks = newTaskCards;
-            // this.props.updateTasks(creatorTasks)
+            creatorTasks[index].tasks = newTaskCards;
+            this.setState({
+                creatorTasks: creatorTasks
+            })
             changeAssignee(requestChange)
                 .then(response => {
-                    this.props.loadTasks();
                     console.log("[TaskContainer] changeAssignee : ", response)
                     // this.props.loadTasks();
                     // if(memberTasks == undefined) {
                     //     return this.props.loadTasks();
                     // }
-
+                    this.props.loadTasks(creatorTasks);
+                    // this.props.updateCreatorTasks(creatorTasks)
                 })
                 .catch(error => {
                     console.log(error);
@@ -207,7 +214,8 @@ class TaskContainer extends Component {
 
     render() {
         const { classes } = this.props;
-        let { creatorTasks, index } = this.props;
+        let { index } = this.props;
+        let { creatorTasks } = this.state;
         let taskCards = [];
         const settings = {
             className: classNames("center", classes.slider),
