@@ -134,6 +134,7 @@ class ProjectTasks extends Component {
             scroll: 'body',
             openAddPrevious: false,
             previousTasks: new Array(),
+            creatorTasks: new Array(),
             task: {
                 taskId: null,
                 projectId: null,
@@ -206,6 +207,41 @@ class ProjectTasks extends Component {
         })
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.state.reload) {
+            this.setState({
+                reload: false,
+            })
+        } else {
+            const { alert } = this.props;
+            const { loginRole, projectItem, currentUser } = this.props;
+            let projectId = projectItem.project.id;
+            if (loginAsAdmin(loginRole)) {
+                getTasksByAdmin(projectId)
+                    .then(response => {
+                        this.setState({
+                            creatorTasks: response.creatorTasks,
+                            reload: true
+                        })
+                    })
+            } else if (loginAsLead(loginRole)) {
+                getTasksCreatedByLead(projectId, currentUser.id)
+                    .then(response => {
+                        this.setState({
+                            creatorTasks: response.creatorTasks,
+                            reload: true
+                        })
+                    })
+            } else {
+                alert.error('Oops! Something went wrong on load task, you login on ' + loginRole + '. Please call check!');
+                this.setState({
+                    reload: true
+                })
+            }
+        }
+
+    }
+
     loadTasks() {
         console.log("Loading task");
         this.setState({
@@ -221,7 +257,7 @@ class ProjectTasks extends Component {
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
                         loading: false,
-                        // creatorTasks: response.creatorTasks,
+                        creatorTasks: response.creatorTasks,
                     })
                 })
         } else if (loginAsLead(loginRole)) {
@@ -231,7 +267,7 @@ class ProjectTasks extends Component {
                     this.props.updateCreatorTasks(response.creatorTasks);
                     this.setState({
                         loading: false,
-                        // creatorTasks: response.creatorTasks,
+                        creatorTasks: response.creatorTasks,
                     })
                 })
         } else {
@@ -523,7 +559,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component updateTasks={this.updateTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
+                                        <tab.component updateTasks={this.updateTasks} creatorTasks={this.state.creatorTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
                                     </TabPanel>
                                 ))
                             }

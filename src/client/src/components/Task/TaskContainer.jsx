@@ -50,30 +50,23 @@ class TaskContainer extends Component {
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     const { creatorTasks, index } = this.props;
-    //     if (creatorTasks[index]) {
-    //         this.setState({
-    //             taskCards: creatorTasks[index].tasks,
-    //         })
-    //     } else {
-    //         this.setState({
-    //             taskCards: [],
-    //         })
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            reload: true,
+        })
+    }
 
     componentDidMount() {
-        const { creatorTasks, index } = this.props;
-        if (creatorTasks[index]) {
-            this.setState({
-                taskCards: creatorTasks[index].tasks,
-            })
-        } else {
-            this.setState({
-                taskCards: [],
-            })
-        }
+        // const { creatorTasks, index } = this.props;
+        // if (creatorTasks[index]) {
+        //     this.setState({
+        //         taskCards: creatorTasks[index].tasks,
+        //     })
+        // } else {
+        //     this.setState({
+        //         taskCards: [],
+        //     })
+        // }
     }
 
     getMember(memberId) {
@@ -208,6 +201,9 @@ class TaskContainer extends Component {
                     // }
                     creatorTasks[index].tasks = newTaskCards;
                     this.props.updateTasks(creatorTasks);
+                    this.setState({
+                        reload: true,
+                    })
                 })
                 .catch(error => {
                     console.log(error);
@@ -295,6 +291,7 @@ TaskContainer.propTypes = {
     index: PropTypes.number.isRequired,
     updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
+    creatorTasks: PropTypes.array.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -302,7 +299,6 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        creatorTasks: state.tasks.creatorTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
