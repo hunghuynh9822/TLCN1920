@@ -189,3 +189,17 @@ export {
     default as TreeItemCustom
 }
 from './TreeView/TreeItemCustom.jsx'
+
+//Tree view animation
+export {
+    default as StyledTreeItemAnimation
+}
+from './TreeViewAnimation/StyledTreeItemAnimation.jsx';
+export {
+    default as TreeViewCustomAnimation
+}
+from './TreeViewAnimation/TreeViewCustomAnimation.jsx';
+export {
+    default as TreeItemCustomAnimation
+}
+from './TreeViewAnimation/TreeItemCustomAnimation.jsx'
