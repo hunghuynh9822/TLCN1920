@@ -119,8 +119,9 @@ class NewProject extends Component {
   }
 
   handleClose() {
+    const { handleClose } = this.props;
+    handleClose();
     this.setState({
-      open: false,
       request: {
         title: "",
         description: "",
@@ -130,13 +131,14 @@ class NewProject extends Component {
 
   render() {
     const { classes } = this.props;
-    const { open, request, scroll } = this.state;
+    const { request, scroll } = this.state;
+    const { open } = this.props;
     return (
       <React.Fragment>
-        <Button onClick={this.handleOpen} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
+        {/* <Button onClick={this.handleOpen} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
           <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
           New project
-        </Button>
+        </Button> */}
         <Dialog
           open={open}
           scroll={scroll}
@@ -210,5 +212,6 @@ NewProject.propTypes = {
   currentUser: PropTypes.object.isRequired,
   currentRole: PropTypes.array.isRequired,
   handleToProject: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(withAlert()(NewProject));

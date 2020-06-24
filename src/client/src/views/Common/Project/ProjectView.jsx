@@ -123,54 +123,54 @@ class ProjectView extends Component {
         const { match } = this.props;
         const { alert } = this.props;
         const { projectItem, updateProjectItem } = this.props;
-        if (projectItem !== undefined && projectItem !== null) {
-            const projectId = projectItem.project.id;
-            if (projectId != match.params.projectId) {
-                this.handleBack();
-            }
-            getEmployeeFree(projectId)
-                .then(response => {
-                    console.log("Free employee : " + JSON.stringify(response));
-                    this.setState({
-                        projectItem: projectItem,
-                        projectId: projectId,
-                        freeEmployees: response.employees,
+        // if (projectItem !== undefined && projectItem !== null) {
+        //     const projectId = projectItem.project.id;
+        //     if (projectId != match.params.projectId) {
+        //         this.handleBack();
+        //     }
+        //     getEmployeeFree(projectId)
+        //         .then(response => {
+        //             console.log("Free employee : " + JSON.stringify(response));
+        //             this.setState({
+        //                 projectItem: projectItem,
+        //                 projectId: projectId,
+        //                 freeEmployees: response.employees,
+        //             })
+        //         })
+        //         .catch(error => {
+        //             console.log(error)
+        //             alert.error('Oops! Something went wrong on get free employee. Please call check!');
+        //         })
+        // } else {
+        // this.handleBack();
+        this.setState({
+            loading: true
+        });
+        let projectId = match.params.projectId;
+        getProject(projectId)
+            .then(response => {
+                console.log("Get project : " + JSON.stringify(response));
+                updateProjectItem(response);
+                getEmployeeFree(projectId)
+                    .then(responseEmployee => {
+                        console.log("Free employee : " + JSON.stringify(responseEmployee));
+                        this.setState({
+                            projectItem: response,
+                            projectId: projectId,
+                            freeEmployees: responseEmployee.employees,
+                            loading: false
+                        })
                     })
-                })
-                .catch(error => {
-                    console.log(error)
-                    alert.error('Oops! Something went wrong on get free employee. Please call check!');
-                })
-        } else {
-            // this.handleBack();
-            this.setState({
-                loading: true
-            });
-            let projectId = match.params.projectId;
-            getProject(projectId)
-                .then(response => {
-                    console.log("Get project : " + JSON.stringify(response));
-                    updateProjectItem(response);
-                    getEmployeeFree(projectId)
-                        .then(responseEmployee => {
-                            console.log("Free employee : " + JSON.stringify(responseEmployee));
-                            this.setState({
-                                projectItem: response,
-                                projectId: projectId,
-                                freeEmployees: responseEmployee.employees,
-                                loading: false
-                            })
-                        })
-                        .catch(error => {
-                            console.log(error)
-                            alert.error('Oops! Something went wrong when get free employee for ' + projectId + '. Please call check!');
-                        })
-                })
-                .catch(error => {
-                    console.log(error)
-                    alert.error('Oops! Something went wrong when get project ' + projectId + '. Please try again!');
-                })
-        }
+                    .catch(error => {
+                        console.log(error)
+                        alert.error('Oops! Something went wrong when get free employee for ' + projectId + '. Please call check!');
+                    })
+            })
+            .catch(error => {
+                console.log(error)
+                alert.error('Oops! Something went wrong when get project ' + projectId + '. Please try again!');
+            })
+        // }
     }
 
     render() {

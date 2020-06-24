@@ -202,4 +202,9 @@ from './TreeViewAnimation/TreeViewCustomAnimation.jsx';
 export {
     default as TreeItemCustomAnimation
 }
-from './TreeViewAnimation/TreeItemCustomAnimation.jsx'
+from './TreeViewAnimation/TreeItemCustomAnimation.jsx';
+//Fab
+export {
+    default as SpeedDialTooltipOpen
+}
+from './Fab/SpeedDialTooltipOpen.jsx'

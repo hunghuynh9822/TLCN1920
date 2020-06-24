@@ -20,6 +20,8 @@ const styles = theme => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
         margin: theme.spacing(4),
+        display: 'flex',
+        flexWrap: 'nowrap',
     },
     form: {
         maxWidth: 400,
@@ -42,6 +44,9 @@ const styles = theme => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
     },
+    table_view: {
+
+    }
 });
 class WikiManagement extends Component {
     constructor(props) {
@@ -211,6 +216,9 @@ class WikiManagement extends Component {
                                 </List>
                             </Grid>
                         </Grid>
+                    </div>
+                    <div className={classes.table_view}>
+                        Hello
                     </div>
                 </div>
             </React.Fragment >
