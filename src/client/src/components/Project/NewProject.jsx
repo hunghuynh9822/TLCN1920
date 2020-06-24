@@ -163,7 +163,7 @@ class NewProject extends Component {
                   onChange={this.handleInputChange}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
+              <Grid item xs={12}>
                 <TextField
                   id="description"
                   name="description"
@@ -177,14 +177,14 @@ class NewProject extends Component {
                   value={request.description}
                   onChange={this.handleInputChange}
                 />
-              </Grid> */}
-              <Grid item xs={12}>
+              </Grid>
+              {/* <Grid item xs={12}>
                 <p>Description</p>
                 <CKEditor
                   data={request.description}
                   onChange={this.onEditorChange}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Paper>
           <DialogActions className={classes.buttons}>
