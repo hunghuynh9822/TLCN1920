@@ -86,7 +86,8 @@ class WikiManagement extends Component {
                 path: ""
             },
             selected: null,
-            data_wiki: new Array()
+            data_wiki: new Array(),
+            handleReloadData: undefined
         }
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -97,10 +98,11 @@ class WikiManagement extends Component {
         this.renderContent = this.renderContent.bind(this);
     }
 
-    handleSelectItem(item) {
+    handleSelectItem(item, handleReloadData) {
         console.log("[WikiManagement] Select item " + JSON.stringify(item));
         this.setState({
-            selected: item
+            selected: item,
+            handleReloadData: handleReloadData
         })
     }
 
@@ -146,6 +148,7 @@ class WikiManagement extends Component {
     handleSubmit() {
         const { alert } = this.props;
         const { currentUser } = this.props;
+        const { handleReloadData } = this.state;
         let selected = this.state.selected;
         let path = "/";
         let projectId = null;
@@ -163,33 +166,19 @@ class WikiManagement extends Component {
         console.log("[WikiManagement] Request create wiki : " + JSON.stringify(request));
         create(request)
             .then(response => {
-                getWikiByPath("/")
-                    .then(response_wiki => {
-                        this.setState({
-                            open: false,
-                            request: {
-                                title: "",
-                                content: "",
-                                projectId: null,
-                                createdUser: null,
-                                path: ""
-                            },
-                            data_wiki: response_wiki
-                        })
-                    }).catch(error => {
-                        this.setState({
-                            open: false,
-                            request: {
-                                title: "",
-                                content: "",
-                                projectId: null,
-                                createdUser: null,
-                                path: ""
-                            },
-                        })
-                        console.log(error);
-                        alert.error('Oops! Something went wrong when get wiki with path /. Please call check!');
-                    });
+                if (handleReloadData != undefined) {
+                    handleReloadData();
+                }
+                this.setState({
+                    open: false,
+                    request: {
+                        title: "",
+                        content: "",
+                        projectId: null,
+                        createdUser: null,
+                        path: ""
+                    },
+                })
             }).catch(error => {
                 this.setState({
                     open: false,

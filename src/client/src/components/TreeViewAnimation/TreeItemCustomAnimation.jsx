@@ -18,6 +18,7 @@ class TreeItemCustomAnimation extends Component {
         }
         this.handleIconClick = this.handleIconClick.bind(this);
         this.handleLabelClick = this.handleLabelClick.bind(this);
+        this.handleReloadData = this.handleReloadData.bind(this);
     }
     truncate(str, n, useWordBoundary) {
         if (str.length <= n) { return str; }
@@ -29,25 +30,35 @@ class TreeItemCustomAnimation extends Component {
     handleIconClick() {
         console.log("[WikiManagement] Item tree click -> icon");
         const { dataCurrent, setExpanded } = this.props;
-        if (this.state.dataChild.length != 0) {
-            setExpanded(dataCurrent.id + "");
-        }
     }
-    handleLabelClick() {
-        console.log("[WikiManagement] Item tree click -> label");
+    handleReloadData() {
         const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
-        console.log("[WikiManagement] DataCurrent " + JSON.stringify(dataCurrent));
         getData(dataCurrent.path + dataCurrent.id + "/")
             .then(response => {
                 this.setState({
                     dataChild: response
                 })
-                setExpanded(dataCurrent.id + "");
-                handleSelectItem(dataCurrent);
             }).catch(error => {
                 console.log(error);
-                //(error && error.message) || 
-                alert.error('Oops! Something went wrong. Please try again!');
+                alert.error('Oops! Something went wrong when reload data. Please try again!');
+            });
+    }
+    handleLabelClick() {
+        console.log("[WikiManagement] Item tree click -> label");
+        const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
+        handleSelectItem(dataCurrent, this.handleReloadData);
+    }
+    componentDidMount() {
+        const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
+        console.log("[WikiManagement] componentDidMount DataCurrent ", dataCurrent);
+        getData(dataCurrent.path + dataCurrent.id + "/")
+            .then(response => {
+                this.setState({
+                    dataChild: response
+                })
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong on get child on componentDidMount. Please try again!');
             });
     }
     render() {

@@ -84,7 +84,7 @@ class TreeViewCustomAnimation extends Component {
             setTimeout(function () { //Start the timer
                 if (!this.props.isCreate) {
                     console.log("[WikiManagement] Outside tree view");
-                    this.props.handleSelectItem(null);
+                    this.props.handleSelectItem(null, undefined);
                 } else {
                     console.log("[WikiManagement] Is creating...");
                 }
