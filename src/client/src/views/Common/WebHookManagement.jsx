@@ -4,11 +4,15 @@ import { withStyles } from '@material-ui/core/styles';
 //
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Switch from '@material-ui/core/Switch';
 //
 const styles = theme => ({
     paper: {
@@ -34,9 +38,9 @@ const styles = theme => ({
     input: {
         marginLeft: 10
     },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
+    settings: {
+        width: '100%',
+        backgroundColor: theme.palette.background.paper,
     },
 });
 class WikiManagement extends Component {
@@ -44,7 +48,7 @@ class WikiManagement extends Component {
         super(props);
         this.state = {
             request: {
-                idPro: null,
+                idPro: 0,
                 name: "",
                 botToken: "",
                 chatId: "",
@@ -55,6 +59,7 @@ class WikiManagement extends Component {
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     handleInputChange(event) {
         const { name, value } = event.target;
@@ -64,9 +69,18 @@ class WikiManagement extends Component {
             return { request };
         })
     }
-    handleChangeSelect = (event) => {
+    handleChangeSelect(event) {
 
     };
+
+    handleChange(event) {
+        const { name, checked } = event.target;
+        this.setState(prevState => {
+            let request = Object.assign({}, prevState.request);
+            request[name] = checked;
+            return { request };
+        })
+    }
     render() {
         const { classes } = this.props;
         const { request } = this.state;
@@ -134,13 +148,67 @@ class WikiManagement extends Component {
                                     inputProps={{ 'aria-label': 'Without label' }}
                                     className={classes.input}
                                 >
-                                    <MenuItem value="" disabled>
+                                    <MenuItem value={0} disabled>
                                         Placeholder
                                     </MenuItem>
                                     <MenuItem value={10}>Ten</MenuItem>
                                     <MenuItem value={20}>Twenty</MenuItem>
                                     <MenuItem value={30}>Thirty</MenuItem>
                                 </Select>
+                            </Grid>
+                            <Grid item xs={12} classes={{
+                                root: classes.flexContainer
+                            }}>
+                                <List subheader={<ListSubheader>Settings</ListSubheader>} className={classes.settings}>
+                                    <ListItem>
+                                        {/* <ListItemIcon>
+                                            <WifiIcon />
+                                        </ListItemIcon> */}
+                                        <ListItemText id="switch-list-label-create-task" primary="Create task" />
+                                        <ListItemSecondaryAction>
+                                            <Switch
+                                                edge="end"
+                                                checked={this.state.request.createTask}
+                                                onChange={this.handleChange}
+                                                color="primary"
+                                                name="createTask"
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                    <ListItem>
+                                        {/* <ListItemIcon>
+                                            <BluetoothIcon />
+                                        </ListItemIcon> */}
+                                        <ListItemText id="switch-list-label-update-task" primary="Update task" />
+                                        <ListItemSecondaryAction>
+                                            <Switch
+                                                edge="end"
+                                                checked={this.state.request.updateTask}
+                                                onChange={this.handleChange}
+                                                color="primary"
+                                                name="updateTask"
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                    <ListItem>
+                                        {/* <ListItemIcon>
+                                            <BluetoothIcon />
+                                        </ListItemIcon> */}
+                                        <ListItemText id="switch-list-label-update-state" primary="Update state" />
+                                        <ListItemSecondaryAction>
+                                            <Switch
+                                                edge="end"
+                                                checked={this.state.request.updateState}
+                                                onChange={this.handleChange}
+                                                color="primary"
+                                                name="updateState"
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                </List>
                             </Grid>
                         </Grid>
                     </div>
