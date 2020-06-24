@@ -32,7 +32,7 @@ class AdminHumanManagement extends Component {
             ],
 
             rowsActive: [],
-            rowsWaiting:[],
+            rowsWaiting: [],
 
             steps: [],
             open: false,
@@ -331,9 +331,15 @@ class AdminHumanManagement extends Component {
         const { openConfirm } = this.state;
         return (
             <div className={classes.root}>
-                <CollapsibleSection title="New Employees">
-                    <CustomPaginationTable columns={columns} rows={rowsWaiting} style={{ marginTop: '0px' }} />
-                </CollapsibleSection>
+                {() => {
+                    if (rowsWaiting != []) {
+                        return (
+                            <CollapsibleSection title="New Employees">
+                                <CustomPaginationTable columns={columns} rows={rowsWaiting} style={{ marginTop: '0px' }} />
+                            </CollapsibleSection>
+                        )
+                    }
+                }}
                 <CollapsibleSection title="All Employees">
                     <CustomPaginationTable columns={columns} rows={rowsActive} style={{ marginTop: '0px' }} />
                 </CollapsibleSection>
