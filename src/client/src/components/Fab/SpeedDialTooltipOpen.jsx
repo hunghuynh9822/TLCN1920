@@ -12,6 +12,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import PrintIcon from '@material-ui/icons/Print';
 import ShareIcon from '@material-ui/icons/Share';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import CreateIcon from '@material-ui/icons/Create';
 
 const styles = theme => ({
     // root: {
@@ -26,14 +27,6 @@ const styles = theme => ({
     },
 });
 
-const actions = [
-    { icon: <FileCopyIcon />, name: 'Copy' },
-    { icon: <SaveIcon />, name: 'Save' },
-    { icon: <PrintIcon />, name: 'Print' },
-    { icon: <ShareIcon />, name: 'Share' },
-    { icon: <FavoriteIcon />, name: 'Like' },
-];
-
 class SpeedDialTooltipOpen extends Component {
     constructor(props) {
         super(props);
@@ -42,6 +35,7 @@ class SpeedDialTooltipOpen extends Component {
         }
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.openCreate = this.openCreate.bind(this);
     }
     handleOpen() {
         this.setState({
@@ -54,9 +48,24 @@ class SpeedDialTooltipOpen extends Component {
             open: false
         })
     };
+
+    openCreate() {
+        this.props.openCreate();
+        this.setState({
+            open: false
+        })
+    }
+
     render() {
         const { classes } = this.props;
         const { open } = this.state;
+        const actions = [
+            { icon: <CreateIcon />, name: 'New', action: this.openCreate },
+            // { icon: <SaveIcon />, name: 'Save', action: this.handleClose },
+            // { icon: <PrintIcon />, name: 'Print', action: this.handleClose },
+            // { icon: <ShareIcon />, name: 'Share', action: this.handleClose },
+            // { icon: <FavoriteIcon />, name: 'Like', action: this.handleClose },
+        ];
         return (
             // <div className={classes.root}>
             <React.Fragment>
@@ -76,7 +85,7 @@ class SpeedDialTooltipOpen extends Component {
                             icon={action.icon}
                             tooltipTitle={action.name}
                             tooltipOpen
-                            onClick={this.handleClose}
+                            onClick={action.action}
                         />
                     ))}
                 </SpeedDial>
@@ -86,5 +95,6 @@ class SpeedDialTooltipOpen extends Component {
 }
 SpeedDialTooltipOpen.propTypes = {
     classes: PropTypes.object.isRequired,
+    openCreate: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(SpeedDialTooltipOpen);

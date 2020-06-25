@@ -188,7 +188,7 @@ class ProjectOverview extends Component {
                 {/* <div className={classes.sub_header}>
                 </div> */}
                 {this.renderProjects()}
-                <SpeedDialTooltipOpen />
+                <SpeedDialTooltipOpen openCreate={this.handleOpen} />
                 <NewProject currentUser={currentUser} currentRole={currentRole} handleToProject={this.handleToProject} open={this.state.openForm} handleClose={this.handleClose} />
             </div>
         );
