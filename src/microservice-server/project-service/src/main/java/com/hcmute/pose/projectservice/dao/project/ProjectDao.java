@@ -3,6 +3,7 @@ package com.hcmute.pose.projectservice.dao.project;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.model.project.Project;
 import com.hcmute.pose.projectservice.model.project.ProjectState;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,4 +16,6 @@ public interface ProjectDao {
     void updateProject(Project project) throws SQLException, TransactionException;
     void updateState(Long id, ProjectState state) throws SQLException, TransactionException;
     Optional<Project> getProject(Long id);
+
+    List<QueryReport> selectNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
 }

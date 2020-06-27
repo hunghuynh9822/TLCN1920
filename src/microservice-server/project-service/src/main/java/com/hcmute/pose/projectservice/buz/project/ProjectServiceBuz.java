@@ -4,6 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.model.project.PerOfProject;
 import com.hcmute.pose.projectservice.model.project.ProjectState;
 import com.hcmute.pose.projectservice.payload.project.*;
+import com.hcmute.pose.projectservice.payload.task.ReportResponse;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,4 +19,6 @@ public interface ProjectServiceBuz {
     void createPOP (PerOfProjectRequest perOfProjectRequest) throws Exception, TransactionException;
     void deletePOP (PerOfProjectRequest perOfProjectRequest) throws Exception, TransactionException;
     AllEmployeeResponse getEmployeesFreeForProject(Long projectId) throws Exception;
+
+    ReportResponse getNumberTaskOfEmployeeInProject() throws SQLException;
 }

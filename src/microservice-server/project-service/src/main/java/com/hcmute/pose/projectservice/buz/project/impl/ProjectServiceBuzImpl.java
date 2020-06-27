@@ -11,8 +11,11 @@ import com.hcmute.pose.projectservice.model.project.ProjectRole;
 import com.hcmute.pose.projectservice.model.project.ProjectState;
 import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskState;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
+import com.hcmute.pose.projectservice.modelmap.QueryReportItem;
 import com.hcmute.pose.projectservice.payload.project.*;
 import com.hcmute.pose.projectservice.payload.task.AllTasksProjectResponse;
+import com.hcmute.pose.projectservice.payload.task.ReportResponse;
 import com.hcmute.pose.projectservice.payload.task.TaskResponse;
 import com.hcmute.pose.projectservice.service.project.PerOfProjectService;
 import com.hcmute.pose.projectservice.service.project.ProjectService;
@@ -233,6 +236,23 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         } catch (Exception e){
             LOGGER.error("[getEmployeesFreeForProject]",e);
             throw e;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getNumberTaskOfEmployeeInProject() throws SQLException {
+        try{
+            ReportResponse reportResponse = new ReportResponse();
+            List<Project> listPro = projectService.getListPro();
+            List<QueryReportItem> listItem = new ArrayList<>();
+            for(Project pro : listPro) {
+                List<QueryReport> numberTaskOfProject = projectService.getNumberTaskOfEmployeeInProject(pro.getId());
+                listItem.add(new QueryReportItem(pro.getTitle(), numberTaskOfProject));
+            }
+            reportResponse.putData("taskEmployee", listItem);
+            return reportResponse;
         } finally {
             databaseHelper.closeConnection();
         }

@@ -6,6 +6,7 @@ import com.hcmute.pose.genuid.GenerateUID;
 import com.hcmute.pose.projectservice.dao.project.ProjectDao;
 import com.hcmute.pose.projectservice.model.project.Project;
 import com.hcmute.pose.projectservice.model.project.ProjectState;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class ProjectDaoImpl implements ProjectDao {
     private static String SQl_GET_PROJECT = "SELECT * FROM projects WHERE id = ?";
     private static String SQL_UPDATE_PROJECT = "UPDATE projects SET title=?, description=?, state=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_PROJECT_STATE = "UPDATE projects SET state=? WHERE id=?";
+    //report
+    private static String SQL_SELECT_TASK_EMPLOYEE_IN_PROJECT = "select employees.id as id, CONCAT(employees.last_name,' ',employees.first_name) as name, NULLIF(case when aaa.num is null then 0 else aaa.num end,-1) as number from employees LEFT JOIN (select tem.employee_id,NULLIF(case when tem2.num is null then 0 else tem2.num end,-1) as num from (select pro_id,employee_id from perofproject group by employee_id,pro_id) AS tem LEFT JOIN (select project_id,employee_assignee,count(1) as num from tasks group by tasks.employee_assignee,tasks.project_id) as tem2 on tem.pro_id = tem2.project_id and tem.employee_id = tem2.employee_assignee where tem.pro_id=?" +
+            ") as aaa on employees.id = aaa.employee_id;";
 
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -98,6 +102,16 @@ public class ProjectDaoImpl implements ProjectDao {
         } catch (SQLException e) {
             LOGGER.error("[ProjectDaoImpl]:[getProject]",e);
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<QueryReport> selectNumberTaskOfEmployeeInProject(Long projectId) throws SQLException {
+        try {
+            return databaseHelper.executeQueryListObject(QueryReport[].class, SQL_SELECT_TASK_EMPLOYEE_IN_PROJECT, projectId);
+        } catch (SQLException e) {
+            LOGGER.error("[TaskDaoImpl]:[selectNumberTaskOfEmployeeInProject]",e);
+            throw e;
         }
     }
 }

@@ -5,6 +5,7 @@ import com.hcmute.pose.projectservice.buz.project.ProjectServiceBuz;
 import com.hcmute.pose.projectservice.payload.project.AllProjectResponse;
 import com.hcmute.pose.projectservice.payload.project.ProjectRequest;
 import com.hcmute.pose.projectservice.payload.project.ProjectResponse;
+import com.hcmute.pose.projectservice.payload.task.ReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,16 @@ public class AdminProjectServiceController {
             return new ResponseEntity(projectList, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/report/task_of_employee_in_project")
+    public ResponseEntity getNumberTaskOfEmployeeInProject(){
+        try{
+            ReportResponse response = projectServiceBuz.getNumberTaskOfEmployeeInProject();
+            return new ResponseEntity(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }
