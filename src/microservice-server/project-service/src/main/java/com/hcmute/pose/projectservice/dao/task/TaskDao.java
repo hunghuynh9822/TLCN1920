@@ -4,6 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskState;
 import com.hcmute.pose.projectservice.modelmap.LongValue;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -33,4 +34,10 @@ public interface TaskDao {
 
     void deleteTask(Long taskId) throws SQLException, TransactionException;
     void updatePreTask(Long taskId, String preTask) throws SQLException, TransactionException;
+
+    List<QueryReport> selectNumberTaskOfProject() throws SQLException;
+
+    List<QueryReport> selectNumberTaskOfProjectOfEmployee(Long employeeId) throws SQLException;
+
+    List<QueryReport> selectNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
 }

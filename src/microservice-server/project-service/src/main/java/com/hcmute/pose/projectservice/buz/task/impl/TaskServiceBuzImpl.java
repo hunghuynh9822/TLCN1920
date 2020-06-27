@@ -7,6 +7,7 @@ import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskComments;
 import com.hcmute.pose.projectservice.model.task.TaskLink;
 import com.hcmute.pose.projectservice.model.task.TaskState;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import com.hcmute.pose.projectservice.payload.task.*;
 import com.hcmute.pose.projectservice.service.task.TaskCommentService;
 import com.hcmute.pose.projectservice.service.task.TaskService;
@@ -388,6 +389,54 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             databaseHelper.beginTransaction();
             taskCommentService.updateTaskComment(request.getTaskId(), request.getEmployeeId(), request.getComment());
             databaseHelper.commit();
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getNumberTaskOfProject() throws SQLException {
+        try{
+            List<QueryReport> numberTaskOfProject = taskService.getNumberTaskOfProject();
+            ReportResponse reportResponse = new ReportResponse();
+            int total = 0;
+            for (QueryReport report:numberTaskOfProject
+            ) {
+                total += report.getNumber();
+            }
+            reportResponse.putData("numberTasks", numberTaskOfProject);
+            reportResponse.putData("total", total);
+            return reportResponse;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getNumberTaskOfProjectOfEmployee(Long employeeId) throws SQLException {
+        try{
+            List<QueryReport> numberTaskOfProject = taskService.getNumberTaskOfProjectOfEmployee(employeeId);
+            ReportResponse reportResponse = new ReportResponse();
+            int total = 0;
+            for (QueryReport report:numberTaskOfProject
+            ) {
+                total += report.getNumber();
+            }
+            reportResponse.putData("numberTasks", numberTaskOfProject);
+            reportResponse.putData("total", total);
+            return reportResponse;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException {
+        try{
+            List<QueryReport> numberTaskOfProject = taskService.getNumberTaskOfEmployeeInProject(projectId);
+            ReportResponse reportResponse = new ReportResponse();
+            reportResponse.putData("taskOfEmployee", numberTaskOfProject);
+            return reportResponse;
         } finally {
             databaseHelper.closeConnection();
         }

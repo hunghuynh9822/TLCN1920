@@ -4,6 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
 import com.hcmute.pose.projectservice.payload.task.CreatorTasksResponse;
 import com.hcmute.pose.projectservice.payload.task.ProjectTasksResponse;
+import com.hcmute.pose.projectservice.payload.task.ReportResponse;
 import com.hcmute.pose.projectservice.payload.task.TaskUpdateRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +92,26 @@ public class LeadTaskServiceController {
             taskServiceBuz.deleteTask(taskId, projectId);
             return new ResponseEntity("Delete task success", HttpStatus.OK);
         }catch (Exception | TransactionException e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/report/number_task_on_project")
+    public ResponseEntity getNumberTaskOfProject(@RequestParam(name="employee") Long employeeId){
+        try{
+            ReportResponse response = taskServiceBuz.getNumberTaskOfProjectOfEmployee(employeeId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/report/task_of_employee_in_project")
+    public ResponseEntity getNumberTaskOfEmployeeInProject(@RequestParam(name="project") Long projectId){
+        try{
+            ReportResponse response = taskServiceBuz.getNumberTaskOfEmployeeInProject(projectId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }

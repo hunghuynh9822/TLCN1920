@@ -36,6 +36,11 @@ public interface TaskServiceBuz {
     ProjectTasksAssigneeWithStateResponse getTasksAssigneeWithStateByProject(Long projectId) throws SQLException;
     void deleteTask (Long taskId, Long projectId) throws SQLException, TransactionException;
 
+    ReportResponse getNumberTaskOfProject() throws SQLException;
+
+    ReportResponse getNumberTaskOfProjectOfEmployee(Long employeeId) throws SQLException;
+
+    ReportResponse getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
 }
 
 

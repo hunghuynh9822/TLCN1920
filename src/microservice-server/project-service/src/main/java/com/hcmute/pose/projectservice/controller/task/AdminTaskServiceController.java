@@ -2,6 +2,7 @@ package com.hcmute.pose.projectservice.controller.task;
 
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
 import com.hcmute.pose.projectservice.payload.task.ProjectTasksResponse;
+import com.hcmute.pose.projectservice.payload.task.ReportResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,16 @@ public class AdminTaskServiceController {
     public ResponseEntity getTaskByProject(@RequestParam(name="project") Long projectId){
         try{
             ProjectTasksResponse response = taskServiceBuz.getTasksByProject(projectId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/report/number_task_on_project")
+    public ResponseEntity getNumberTaskOfProject(){
+        try{
+            ReportResponse response = taskServiceBuz.getNumberTaskOfProject();
             return new ResponseEntity(response, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);

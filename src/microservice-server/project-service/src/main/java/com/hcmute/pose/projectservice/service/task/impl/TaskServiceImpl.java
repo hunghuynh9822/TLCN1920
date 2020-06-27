@@ -5,6 +5,7 @@ import com.hcmute.pose.projectservice.dao.task.TaskDao;
 import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskState;
 import com.hcmute.pose.projectservice.modelmap.LongValue;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import com.hcmute.pose.projectservice.service.task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -126,5 +127,20 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void updatePreTaskId(Long taskId, String preTask) throws SQLException, TransactionException {
         taskDao.updatePreTask(taskId , preTask);
+    }
+
+    @Override
+    public List<QueryReport> getNumberTaskOfProject() throws SQLException {
+        return taskDao.selectNumberTaskOfProject();
+    }
+
+    @Override
+    public List<QueryReport> getNumberTaskOfProjectOfEmployee(Long employeeId) throws SQLException {
+        return taskDao.selectNumberTaskOfProjectOfEmployee(employeeId);
+    }
+
+    @Override
+    public List<QueryReport> getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException {
+        return taskDao.selectNumberTaskOfEmployeeInProject(projectId);
     }
 }
