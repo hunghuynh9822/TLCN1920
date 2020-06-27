@@ -213,3 +213,8 @@ export {
     default as DropdownTree
 }
 from './DropdownTree/DropdownTree.jsx'
+//Chart
+export {
+    default as DrilldownChart
+}
+from './Chart/DrilldownChart.jsx'
