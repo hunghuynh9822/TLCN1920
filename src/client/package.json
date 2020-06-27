@@ -41,6 +41,7 @@
     "react-beautiful-dnd": "^12.1.1",
     "react-delay-render": "^0.1.2",
     "react-dom": "^16.8.6",
+    "react-dropdown-tree-select": "^2.3.3",
     "react-imported-component": "^5.5.3",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",

@@ -17,7 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import CKEditor from 'ckeditor4-react';
 //
-import { TreeViewCustom, TreeViewCustomAnimation } from '../../components';
+import { TreeViewCustom, TreeViewCustomAnimation, DropdownTree } from '../../components';
 //
 import { create, getWikiByPath } from '../../action/wiki.js';
 const styles = theme => ({
@@ -280,6 +280,14 @@ class WikiManagement extends Component {
                     <DialogTitle id="scroll-dialog-title">New wiki</DialogTitle>
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <p>Parent : </p>
+                                <DropdownTree />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <p>Parent : </p>
+                                {JSON.stringify(this.state.selected)}
+                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     id="title"
