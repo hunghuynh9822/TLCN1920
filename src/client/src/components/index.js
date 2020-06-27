@@ -222,3 +222,8 @@ export {
     default as StackedBarChart
 }
 from './Chart/StackedBarChart.jsx'
+//Request
+export {
+    default as NewRequest
+}
+from './AddRequest/NewRequest.jsx'
