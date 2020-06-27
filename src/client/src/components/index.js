@@ -227,3 +227,7 @@ export {
     default as NewRequest
 }
 from './AddRequest/NewRequest.jsx'
+export {
+    default as NewNotify
+}
+from './AddNotifi/NewNotify.jsx'
