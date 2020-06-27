@@ -12,14 +12,14 @@ file_jar=$(ls ./target | grep '.jar' | grep -v '.original')
 if [ $i == "gateway-proxy" ]
 then
 java -jar -Xmx300M -Xms250M ./target/$file_jar >> ../logs/$i.log &
-#sleep 10
+sleep 10
 elif [ $i == "discovery-server" ]
 then
 java -jar -Xmx300M -Xms250M ./target/$file_jar >> ../logs/$i.log &
-#sleep 10
+sleep 10
 else
 java -jar -Xmx500M -Xms300M ./target/$file_jar >> ../logs/$i.log &
-#sleep 10
+sleep 10
 fi
 cd ..
 done
