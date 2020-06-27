@@ -16,9 +16,10 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { CustomLineChart } from '../../components';
 import PieChart from '../../components/Chart/PieChart.jsx'
 import BarChartNgang from '../../components/Chart/BarChartNgang.jsx'
-import { Loading, DrilldownChart } from '../../components'
+import { Loading, DrilldownChart, StackedBarChart } from '../../components'
 //
 import { getNumberTasksByAdmin, getNumberTasksByLead, getTasksOfEmployeeInProject } from '../../action/task';
+import { getTasksOfAllEmployeeInProject } from '../../action/project';
 import { loginAsAdmin, loginAsLead } from '../../action/auth';
 
 const styles = theme => ({
@@ -45,10 +46,16 @@ class AdminDashboard extends Component {
         this.state = {
             numberTasks: new Array(),
             loadingViewTasksChart: false,
-            viewTaskChartOption: {}
+            viewTaskChartOption: {},
+
+            taskOfEmployeeByProject: new Array(),
+            loadingStackedBarChart: false,
+            stackedBarChartOption: {}
         }
         this.loadDataViewTaskChart = this.loadDataViewTaskChart.bind(this);
         this.loadDataDetail = this.loadDataDetail.bind(this);
+        this.loadStackedBarChart = this.loadStackedBarChart.bind(this);
+        this.loadChart = this.loadChart.bind(this);
     }
 
     createDataNumberTaskOfProject(id, number, projectTitle) {
@@ -91,9 +98,6 @@ class AdminDashboard extends Component {
     loadDataViewTaskChart() {
         const { alert } = this.props;
         const { currentUser, loginRole } = this.props;
-        this.setState({
-            loadingViewTasksChart: true,
-        })
         let numberTasks = this.state.numberTasks;
         let viewTaskChartOption = this.state.viewTaskChartOption;
         if (loginAsAdmin(loginRole)) {
@@ -180,8 +184,125 @@ class AdminDashboard extends Component {
             })
     }
 
+    getStackedBarOption() {
+        let options = {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Overview employee"
+            },
+            toolTip: {
+                shared: true
+            },
+            legend: {
+                cursor: "pointer",
+            }
+        }
+        return options
+    }
+
+    loadStackedBarChart() {
+        const { alert } = this.props;
+        const { currentUser, loginRole } = this.props;
+        let taskOfEmployeeByProject = this.state.taskOfEmployeeByProject;
+        let stackedBarChartOption = this.state.stackedBarChartOption;
+        if (loginAsAdmin(loginRole)) {
+            getTasksOfAllEmployeeInProject()
+                .then(response => {
+                    console.log("[Dashboard] taskEmployee ", response.data.taskEmployee);
+                    taskOfEmployeeByProject = response.data.taskEmployee
+                    stackedBarChartOption = this.getStackedBarOption();
+                }).catch(error => {
+                    console.log(error);
+                    alert.error('Oops! Something went wrong when get number tasks report of admin. Please try again!');
+                }).finally(() => {
+                    this.setState({
+                        loadingStackedBarChart: false,
+                        taskOfEmployeeByProject: taskOfEmployeeByProject,
+                        stackedBarChartOption: stackedBarChartOption
+                    })
+                });
+        } else if (loginAsLead(loginRole)) {
+            alert.error('Oops! Not support !');
+        } else {
+            alert.error('Oops! You do not have permision !');
+        }
+    }
+
+    loadChart() {
+        const { alert } = this.props;
+        const { currentUser, loginRole } = this.props;
+        let numberTasks = this.state.numberTasks;
+        let viewTaskChartOption = this.state.viewTaskChartOption;
+        let taskOfEmployeeByProject = this.state.taskOfEmployeeByProject;
+        let stackedBarChartOption = this.state.stackedBarChartOption;
+        this.setState({
+            loadingStackedBarChart: true,
+            loadingViewTasksChart: true,
+        })
+        if (loginAsAdmin(loginRole)) {
+            getNumberTasksByAdmin()
+                .then(response => {
+                    console.log("[Dashboard] numberTasks ", response.data.numberTasks);
+                    numberTasks = response.data.numberTasks.map((value, index) => {
+                        return this.createDataNumberTaskOfProject(value.id, value.number, value.name);
+                    });
+                    numberTasks.sort((a, b) => {
+                        return b.y - a.y
+                    })
+                    viewTaskChartOption = this.getViewTaskChartOption(response.data.total);
+                    getTasksOfAllEmployeeInProject()
+                        .then(response => {
+                            console.log("[Dashboard] taskEmployee ", response.data.taskEmployee);
+                            taskOfEmployeeByProject = response.data.taskEmployee
+                            stackedBarChartOption = this.getStackedBarOption();
+                        }).catch(error => {
+                            console.log(error);
+                            alert.error('Oops! Something went wrong when get number tasks report of admin. Please try again!');
+                        }).finally(() => {
+                            this.setState({
+                                loadingViewTasksChart: false,
+                                numberTasks: numberTasks,
+                                viewTaskChartOption: viewTaskChartOption,
+                                loadingStackedBarChart: false,
+                                taskOfEmployeeByProject: taskOfEmployeeByProject,
+                                stackedBarChartOption: stackedBarChartOption
+                            })
+                        });
+                }).catch(error => {
+                    console.log(error);
+                    alert.error('Oops! Something went wrong when get number tasks report of admin. Please try again!');
+                })
+        } else if (loginAsLead(loginRole)) {
+            getNumberTasksByLead(currentUser.id)
+                .then(response => {
+                    console.log("[Dashboard] numberTasks ", response.data.numberTasks);
+                    numberTasks = response.data.numberTasks.map((value, index) => {
+                        return this.createDataNumberTaskOfProject(value.id, value.number, value.name);
+                    });
+                    numberTasks.sort((a, b) => {
+                        return b.y - a.y
+                    })
+                    viewTaskChartOption = this.getViewTaskChartOption(response.data.total);
+                }).catch(error => {
+                    console.log(error);
+                    alert.error('Oops! Something went wrong when get number tasks report of lead ' + currentUser.id + '. Please try again!');
+                }).finally(() => {
+                    this.setState({
+                        loadingViewTasksChart: false,
+                        numberTasks: numberTasks,
+                        viewTaskChartOption: viewTaskChartOption
+                    })
+                });
+        } else {
+            alert.error('Oops! You do not have permision !');
+        }
+    }
+
     componentDidMount() {
-        this.loadDataViewTaskChart();
+        // this.loadDataViewTaskChart();
+        // this.loadStackedBarChart();
+        this.loadChart();
     }
 
     render() {
@@ -193,6 +314,9 @@ class AdminDashboard extends Component {
                     <Grid item xs={12} md={8} lg={9}>
                         {
                             this.state.loadingViewTasksChart ? <Loading /> : <DrilldownChart dataOnLoad={this.state.numberTasks} options={this.state.viewTaskChartOption} loadDetail={this.loadDataDetail} />
+                        }
+                        {
+                            this.state.loadingStackedBarChart ? <Loading /> : <StackedBarChart dataOnLoad={this.state.taskOfEmployeeByProject} options={this.state.stackedBarChartOption} />
                         }
                         {/* <BarChartNgang /> */}
                         {/* <Drilldown /> */}

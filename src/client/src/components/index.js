@@ -218,3 +218,7 @@ export {
     default as DrilldownChart
 }
 from './Chart/DrilldownChart.jsx'
+export {
+    default as StackedBarChart
+}
+from './Chart/StackedBarChart.jsx'
