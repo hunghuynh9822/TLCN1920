@@ -1,78 +1,75 @@
 /* App.js */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CanvasJSReact from './canvasjs.react'
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 var $ = require('jquery');
 
-var totalVisitors = 829500;
-
-var visitorsDrilldownedChartOptions = {
-	animationEnabled: true,
-	theme: "light2",
-	axisY: {
-		gridThickness: 0,
-		includeZero: false,
-		lineThickness: 1
-	},
-	data: []
-};
-
-var newVSReturningVisitorsOptions = {
-	animationEnabled: true,
-	theme: "light2",
-	title: {
-		text: "New vs Returning Visitors"
-	},
-	// subtitles: [{
-	// 	text: "Click on Any Segment to Drilldown",
-	// 	backgroundColor: "#2eacd1",
-	// 	fontSize: 16,
-	// 	fontColor: "white",
-	// 	padding: 5
-	// }],
-	legend: {
-		fontFamily: "calibri",
-		fontSize: 14,
-		itemTextFormatter: function (e) {
-			return e.dataPoint.name + ": " + Math.round(e.dataPoint.y / totalVisitors * 100) + "%";
-		}
-	},
-	data: []
-};
-
 class DrilldownChart extends Component {
 	constructor(props) {
 		super(props);
 		this.options = {};
-		this.visitorsChartDrilldownHandler = this.visitorsChartDrilldownHandler.bind(this);
+		this.onClickChartDrilldownHandler = this.onClickChartDrilldownHandler.bind(this);
 		this.setWrapperRef = this.setWrapperRef.bind(this);
-		this.state = {
-			data: [],
-
-		}
+		this.getOnLoadData = this.getOnLoadData.bind(this);
+		this.getDataDetail = this.getDataDetail.bind(this);
 	}
 
-	visitorsChartDrilldownHandler(e) {
-		var chart = this.chart;
-		chart.options = visitorsDrilldownedChartOptions;
-		chart.options.data = this.options[e.dataPoint.name];
-		chart.options.title = { text: e.dataPoint.name }
-		chart.render();
-		$("#backButton").toggleClass("invisible");
+	onClickChartDrilldownHandler(e) {
+		this.getDataDetail(e);
+	}
+
+	getDataDetail(input) {
+		let { loadDetail } = this.props;
+		loadDetail(input.dataPoint.id)
+			.then(dataOption => {
+				var chart = this.chart;
+				let optionDataDetail = dataOption.optionDataDetail;
+				let taskOfEmployee = dataOption.taskOfEmployee;
+				let data = [{
+					color: input.dataPoint.color,
+					name: input.dataPoint.name,
+					type: "column",
+					dataPoints: taskOfEmployee
+				}];
+				chart.options = optionDataDetail;
+				chart.options.data = data;
+				chart.options.title = { text: input.dataPoint.name }
+				chart.render();
+				$("#backButton").toggleClass("invisible");
+			})
+	}
+
+	getOnLoadData() {
+		let { dataOnLoad } = this.props;
+		return [{
+			click: this.onClickChartDrilldownHandler,
+			cursor: "pointer",
+			explodeOnClick: false,
+			innerRadius: "75%",
+			legendMarkerType: "square",
+			// name: "New vs Returning Visitors",
+			radius: "100%",
+			showInLegend: true,
+			startAngle: 90,
+			type: "doughnut",
+			dataPoints: dataOnLoad
+		}]
 	}
 
 	componentDidMount() {
-		var chart = this.chart;
-		var options = this.options
-		chart.options = newVSReturningVisitorsOptions;
-		chart.options.data = options["New vs Returning Visitors"];
+		let chart = this.chart;
+		let { dataOnLoad, options } = this.props;
+		let getOnLoadData = this.getOnLoadData();
+		chart.options = options;
+		chart.options.data = getOnLoadData;
 		chart.render();
-
+		console.log("[DrilldownChart] render chart ", chart)
 		$("#backButton").click(function () {
 			$(this).toggleClass("invisible");
-			chart.options = newVSReturningVisitorsOptions;
-			chart.options.data = options["New vs Returning Visitors"];
+			chart.options = options;
+			chart.options.data = getOnLoadData;
 			chart.render();
 		});
 	}
@@ -81,10 +78,19 @@ class DrilldownChart extends Component {
 		this.chart = node;
 	}
 
+	componentWillReceiveProps() {
+		let chart = this.chart;
+		let { dataOnLoad, options } = this.props;
+		let getOnLoadData = this.getOnLoadData();
+		chart.options = options;
+		chart.options.data = getOnLoadData;
+		chart.render();
+	}
+
 	render() {
 		this.options = {
 			"New vs Returning Visitors": [{
-				click: this.visitorsChartDrilldownHandler,
+				click: this.onClickChartDrilldownHandler,
 				cursor: "pointer",
 				explodeOnClick: false,
 				innerRadius: "75%",
@@ -161,4 +167,9 @@ class DrilldownChart extends Component {
 		);
 	}
 }
+DrilldownChart.propTypes = {
+	dataOnLoad: PropTypes.array.isRequired,
+	options: PropTypes.object.isRequired,
+	loadDetail: PropTypes.func.isRequired
+};
 export default DrilldownChart;       

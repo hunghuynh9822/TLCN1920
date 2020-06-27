@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import styles from '../../assets/jss/styles/views/adminDashboardStyle';
+import { connect } from 'react-redux';
+import { withAlert } from 'react-alert'
+
 import classnames from 'classnames';
+import randomColor from 'randomcolor'
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -13,28 +16,174 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { CustomLineChart } from '../../components';
 import PieChart from '../../components/Chart/PieChart.jsx'
 import BarChartNgang from '../../components/Chart/BarChartNgang.jsx'
-import DrilldownChart from '../../components/Chart/DrilldownChart.jsx';
-// Generate Sales Data
-function createData(time, amount) {
-    return { time, amount };
-}
+import { Loading, DrilldownChart } from '../../components'
+//
+import { getNumberTasksByAdmin, getNumberTasksByLead, getTasksOfEmployeeInProject } from '../../action/task';
+import { loginAsAdmin, loginAsLead } from '../../action/auth';
 
-const data = [
-    createData('00:00', 0),
-    createData('03:00', 300),
-    createData('06:00', 600),
-    createData('09:00', 800),
-    createData('12:00', 1500),
-    createData('15:00', 2000),
-    createData('18:00', 2400),
-    createData('21:00', 2400),
-    createData('24:00', undefined),
-];
+const styles = theme => ({
+    container: {
+        maxWidth: '1280px',
+    },
+    gridroot: {
+        margin: 0,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+    },
+    fixedHeight: {
+        height: 240,
+    },
+});
 
 class AdminDashboard extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            numberTasks: new Array(),
+            loadingViewTasksChart: false,
+            viewTaskChartOption: {}
+        }
+        this.loadDataViewTaskChart = this.loadDataViewTaskChart.bind(this);
+        this.loadDataDetail = this.loadDataDetail.bind(this);
     }
+
+    createDataNumberTaskOfProject(id, number, projectTitle) {
+        let color = randomColor({
+            luminosity: 'bright',
+            // hue: 'blue'
+        });
+        let y = number;
+        let name = projectTitle;
+        return { id, y, name, color };
+    }
+
+    getViewTaskChartOption(total) {
+        return {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Overview number task of project"
+            },
+            // subtitles: [{
+            // 	text: "Click on Any Segment to Drilldown",
+            // 	backgroundColor: "#2eacd1",
+            // 	fontSize: 16,
+            // 	fontColor: "white",
+            // 	padding: 5
+            // }],
+            legend: {
+                horizontalAlign: "right", // "center" , "right"
+                verticalAlign: "center",  // "top" , "bottom"
+                fontFamily: "calibri",
+                fontSize: 14,
+                itemTextFormatter: function (e) {
+                    return e.dataPoint.name + ": " + Math.round(e.dataPoint.y / total * 100) + "%";
+                }
+            },
+            data: []
+        }
+    }
+
+    loadDataViewTaskChart() {
+        const { alert } = this.props;
+        const { currentUser, loginRole } = this.props;
+        this.setState({
+            loadingViewTasksChart: true,
+        })
+        let numberTasks = this.state.numberTasks;
+        let viewTaskChartOption = this.state.viewTaskChartOption;
+        if (loginAsAdmin(loginRole)) {
+            getNumberTasksByAdmin()
+                .then(response => {
+                    console.log("[Dashboard] numberTasks ", response.data.numberTasks);
+                    numberTasks = response.data.numberTasks.map((value, index) => {
+                        return this.createDataNumberTaskOfProject(value.id, value.number, value.name);
+                    });
+                    numberTasks.sort((a, b) => {
+                        return b.y - a.y
+                    })
+                    viewTaskChartOption = this.getViewTaskChartOption(response.data.total);
+                }).catch(error => {
+                    console.log(error);
+                    alert.error('Oops! Something went wrong when get number tasks report of admin. Please try again!');
+                }).finally(() => {
+                    this.setState({
+                        loadingViewTasksChart: false,
+                        numberTasks: numberTasks,
+                        viewTaskChartOption: viewTaskChartOption
+                    })
+                });
+        } else if (loginAsLead(loginRole)) {
+            getNumberTasksByLead(currentUser.id)
+                .then(response => {
+                    console.log("[Dashboard] numberTasks ", response.data.numberTasks);
+                    numberTasks = response.data.numberTasks.map((value, index) => {
+                        return this.createDataNumberTaskOfProject(value.id, value.number, value.name);
+                    });
+                    numberTasks.sort((a, b) => {
+                        return b.y - a.y
+                    })
+                    viewTaskChartOption = this.getViewTaskChartOption(response.data.total);
+                }).catch(error => {
+                    console.log(error);
+                    alert.error('Oops! Something went wrong when get number tasks report of lead ' + currentUser.id + '. Please try again!');
+                }).finally(() => {
+                    this.setState({
+                        loadingViewTasksChart: false,
+                        numberTasks: numberTasks,
+                        viewTaskChartOption: viewTaskChartOption
+                    })
+                });
+        } else {
+            alert.error('Oops! You do not have permision !');
+        }
+    }
+
+    createDataDetail(nameEmployee, number) {
+        let label = nameEmployee;
+        let y = number
+        return { label, y }
+    }
+    getDetailChartOption() {
+        return {
+            animationEnabled: true,
+            theme: "light2",
+            axisY: {
+                gridThickness: 0,
+                includeZero: false,
+                lineThickness: 1
+            },
+            data: []
+        };
+    }
+
+    loadDataDetail(project) {
+        const { alert } = this.props;
+        return getTasksOfEmployeeInProject(project)
+            .then(response => {
+                console.log("[Dashboard] taskOfEmployee ", response.data.taskOfEmployee);
+                let taskOfEmployee = response.data.taskOfEmployee.map((value, index) => {
+                    return this.createDataDetail(value.name, value.number)
+                })
+                taskOfEmployee.sort((a, b) => {
+                    return b.y - a.y
+                })
+                let optionDataDetail = this.getDetailChartOption();
+                return { optionDataDetail, taskOfEmployee }
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong when get task of employee in project. Please try again!');
+            })
+    }
+
+    componentDidMount() {
+        this.loadDataViewTaskChart();
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -42,7 +191,9 @@ class AdminDashboard extends Component {
                 <Grid container spacing={3} className={classes.gridroot}>
                     {/* Chart */}
                     <Grid item xs={12} md={8} lg={9}>
-                        <DrilldownChart />
+                        {
+                            this.state.loadingViewTasksChart ? <Loading /> : <DrilldownChart dataOnLoad={this.state.numberTasks} options={this.state.viewTaskChartOption} loadDetail={this.loadDataDetail} />
+                        }
                         {/* <BarChartNgang /> */}
                         {/* <Drilldown /> */}
                     </Grid>
@@ -54,4 +205,17 @@ class AdminDashboard extends Component {
 AdminDashboard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(AdminDashboard);
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        currentUser: state.auth.currentUser,
+        currentRole: state.auth.currentRole,
+        loginRole: state.auth.loginRole,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(AdminDashboard)));
