@@ -94,7 +94,8 @@ class GanttChart extends Component {
                         text: task.title,
                         start_date: this.convertDateToString(task.startedAt),
                         duration: task.duration == null ? 0 : task.duration,
-                        progress: task.process
+                        progress: task.process,
+                        type: gantt.config.types.critical
                     }
                 })
                 let message = response.message;
@@ -145,6 +146,14 @@ class GanttChart extends Component {
          * action: "create"|"update"|"delete"
          * item: data object object
          */
+    /**
+     * link
+     * create
+     * 0 : FS
+     * 1 : SS
+     * 2 : FF
+     * 3 : SF
+     */
     logDataUpdate = (entityType, action, itemData, id) => {
         let text = itemData && itemData.text ? ` (${itemData.text})` : '';
         let message = `${entityType} ${action}: ${id} ${text}`;
@@ -156,6 +165,7 @@ class GanttChart extends Component {
         let request = {};
         //Update link -> apply on target
         if (entityType === 'link') {
+
             const sourceTask = tasks.find(element => element.id == itemData.source);
             console.log("[Gantt] Change task source " + JSON.stringify(sourceTask));
             const targetTask = tasks.find(element => element.id == itemData.target);
@@ -173,11 +183,13 @@ class GanttChart extends Component {
             }
             let preTaskId = request.preTaskId;
             if (action === 'create') {
-                message += ` ( source: ${itemData.source}, target: ${itemData.target} )`;
-                if (preTaskId == undefined || preTaskId == null || preTaskId == "") {
-                    preTaskId = "" + sourceTask.id;
-                } else {
-                    preTaskId = preTaskId + "," + sourceTask.id;
+                if (itemData.type === "0") {
+                    message += ` ( source: ${itemData.source}, target: ${itemData.target} )`;
+                    if (preTaskId == undefined || preTaskId == null || preTaskId == "") {
+                        preTaskId = "" + sourceTask.id;
+                    } else {
+                        preTaskId = preTaskId + "," + sourceTask.id;
+                    }
                 }
             } else if (action === 'delete') {
                 if (preTaskId != null && preTaskId != "") {
@@ -296,9 +308,9 @@ class GanttChart extends Component {
                         onDataUpdated={this.logDataUpdate}
                     />
                 </div>
-                {/* <MessageArea
+                <MessageArea
                     messages={messages}
-                /> */}
+                />
             </div>
         );
     }

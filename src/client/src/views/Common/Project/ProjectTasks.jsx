@@ -117,6 +117,16 @@ const styles = theme => ({
         maxWidth: 300,
     },
 });
+const background = '#f5f8ff';
+const colorWord = "#ffffff";
+const mapColor = {
+    "NEW": "#0ac400",
+    "DEVELOPING": "#e69900",
+    "DEVELOPED": "#00d8db",
+    "TESTING": "#ff0000",
+    "DONE": "#0026ff",
+    "FINISH": "#0026ff"
+}
 const CustomSwipeableViews = withStyles(theme => ({
     root: {
         minHeight: '100%',
@@ -543,6 +553,10 @@ class ProjectTasks extends Component {
         })
     }
 
+    getColor(state) {
+        return mapColor[state];
+    }
+
     render() {
         const { classes } = this.props;
         const { projectItem } = this.props;
@@ -762,17 +776,33 @@ class ProjectTasks extends Component {
                             )}
                     </List>
                 </Dialog>
-                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious}>
+                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious} >
                     <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAddPrevious}>
                         Select previous tasks :
                     </DialogTitleCustom>
-                    <List>
+                    <List classes={{
+                        root: classes.dialog_list
+                    }}>
                         {tasks.length !== 0 ? tasks.map((task, index) => (
-                            <ListItem button onClick={() => this.handleListItemClick(task)} key={index}>
+                            <ListItem button onClick={() => this.handleListItemClick(task)} key={index} classes={{
+                                root: classes.dialog_list_item
+                            }}>
                                 <ListItemText >
                                     <Grid container spacing={3}>
-                                        <Grid item xs={6} sm={6}>{this.getTaskId(task.id)}</Grid>
-                                        <Grid item xs={6} sm={6}>{task.title}</Grid>
+                                        <Grid item xs={3} sm={3}>
+                                            <Button disabled variant="outlined" size="small" color="primary" style={{
+                                                alignSelf: 'flex-start',
+                                                borderStyle: 'dashed',
+                                                fontSize: '0.6em',
+                                                marginBottom: '8px',
+                                                opacity: '0.7',
+                                                color: `${colorWord}`,
+                                                backgroundColor: `${this.getColor(task.state)}`
+                                            }}>
+                                                {task.state}
+                                            </Button>
+                                        </Grid>
+                                        <Grid item xs={9} sm={9}>{task.title}</Grid>
                                     </Grid>
                                 </ListItemText>
                             </ListItem>

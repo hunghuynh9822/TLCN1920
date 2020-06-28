@@ -90,9 +90,9 @@ class Gantt extends Component {
         count = count + 1;
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
         //
-        gantt.config.types.meeting = "type_id";
-        gantt.locale.labels.type_meeting = "Meeting";
-        gantt.config.lightbox.meeting_sections = [
+        gantt.config.types.critical = "critical";
+        gantt.locale.labels.type_critical = "Meeting";
+        gantt.config.lightbox.critical_sections = [
             { name: "title", height: 20, map_to: "text", type: "textarea", focus: true },
             { name: "details", height: 70, map_to: "details", type: "textarea" },
             { name: "type", type: "typeselect", map_to: "type" },
@@ -101,21 +101,22 @@ class Gantt extends Component {
         gantt.locale.labels.section_title = "Subject";
         gantt.locale.labels.section_details = "Details";
         gantt.templates.task_class = function (start, end, task) {
-            if (task.type == gantt.config.types.meeting) {
-                return "meeting_task";
+            if (task.type == gantt.config.types.critical) {
+                return "critical_class";
             }
             return "";
         };
         gantt.templates.task_text = function (start, end, task) {
-            // if (task.type == gantt.config.types.meeting) {
-            //     return "Meeting: <b>" + task.text + "</b>";
-            // }
+            if (task.type == gantt.config.types.critical) {
+                return "Critical: <b>" + task.text + "</b>";
+            }
             return task.text;
         };
         //
         gantt.config.work_time = true;
         gantt.config.correct_work_time = true;
         gantt.config.drag_progress = false;
+        gantt.config.drag_links = false;
         //
         // default columns definition
         gantt.config.columns = [
