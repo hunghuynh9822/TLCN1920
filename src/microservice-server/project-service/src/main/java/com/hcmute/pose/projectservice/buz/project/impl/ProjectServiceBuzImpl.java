@@ -249,7 +249,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             List<QueryReportItem> listItem = new ArrayList<>();
             for(Project pro : listPro) {
                 List<QueryReport> numberTaskOfProject = projectService.getNumberTaskOfEmployeeInProject(pro.getId());
-                listItem.add(new QueryReportItem(pro.getTitle(), numberTaskOfProject));
+                listItem.add(new QueryReportItem(pro.getId(), pro.getTitle(), numberTaskOfProject));
             }
             reportResponse.putData("taskEmployee", listItem);
             return reportResponse;
