@@ -17,7 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import CKEditor from 'ckeditor4-react';
 //
-import { TreeViewCustom, TreeViewCustomAnimation, DropdownTree } from '../../components';
+import { TreeViewCustom, TreeViewCustomAnimation, DropdownTree, DialogTitleCustom } from '../../components';
 //
 import { create, getWikiByPath } from '../../action/wiki.js';
 const styles = theme => ({
@@ -70,6 +70,11 @@ const styles = theme => ({
     wiki_title: {
         fontSize: '23px',
         fontWeight: '500'
+    },
+    label: {
+        margin: 0,
+        width: '100px',
+        lineHeight: '40px',
     }
 });
 class WikiManagement extends Component {
@@ -277,16 +282,17 @@ class WikiManagement extends Component {
                         paperWidthSm: classes.paperWidthSm
                     }}
                 >
-                    <DialogTitle id="scroll-dialog-title">New wiki</DialogTitle>
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleClose} style={{
+                        paddingBottom: '25px',
+                    }}>New wiki</DialogTitleCustom>
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <p>Parent : </p>
-                                <DropdownTree />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <p>Parent : </p>
-                                {JSON.stringify(this.state.selected)}
+                            <Grid item xs={12} style={{
+                                display: 'flex',
+                                flexWrap: 'nowrap',
+                            }}>
+                                <div className={classes.label}>Parent : </div>
+                                <div><DropdownTree /></div>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField

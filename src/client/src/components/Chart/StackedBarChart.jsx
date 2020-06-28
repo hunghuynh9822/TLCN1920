@@ -73,6 +73,7 @@ class StackedBarChart extends Component {
 			return {
 				type: "stackedBar",
 				name: value.name,
+				color: value.color,
 				showInLegend: "true",
 				dataPoints: this.createListData(value.values)
 			};

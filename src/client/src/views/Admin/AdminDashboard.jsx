@@ -50,12 +50,18 @@ class AdminDashboard extends Component {
 
             taskOfEmployeeByProject: new Array(),
             loadingStackedBarChart: false,
-            stackedBarChartOption: {}
+            stackedBarChartOption: {},
+
+            mapColor: {}
         }
         this.loadDataViewTaskChart = this.loadDataViewTaskChart.bind(this);
         this.loadDataDetail = this.loadDataDetail.bind(this);
         this.loadStackedBarChart = this.loadStackedBarChart.bind(this);
         this.loadChart = this.loadChart.bind(this);
+
+        this.createDataNumberTaskOfProject = this.createDataNumberTaskOfProject.bind(this);
+        this.addColorMap = this.addColorMap.bind(this);
+        this.getColorMap = this.getColorMap.bind(this);
     }
 
     createDataNumberTaskOfProject(id, number, projectTitle) {
@@ -65,7 +71,21 @@ class AdminDashboard extends Component {
         });
         let y = number;
         let name = projectTitle;
+        this.addColorMap(id, color);
         return { id, y, name, color };
+    }
+
+    addColorMap(id, color) {
+        let mapColor = this.state.mapColor;
+        mapColor[id] = color;
+        this.setState({
+            mapColor: mapColor
+        })
+    }
+
+    getColorMap(id) {
+        let mapColor = this.state.mapColor;
+        return mapColor[id];
     }
 
     getViewTaskChartOption(total) {
@@ -254,7 +274,12 @@ class AdminDashboard extends Component {
                     getTasksOfAllEmployeeInProject()
                         .then(response => {
                             console.log("[Dashboard] taskEmployee ", response.data.taskEmployee);
-                            taskOfEmployeeByProject = response.data.taskEmployee
+                            // console.log("[Dashboard] mapColor ", this.state.mapColor);
+                            taskOfEmployeeByProject = response.data.taskEmployee.map((value, index) => {
+                                value.color = this.state.mapColor[value.id];
+                                // console.log("[Dashboard] mapColor id " + value.id + " color " + value.color);
+                                return value;
+                            })
                             stackedBarChartOption = this.getStackedBarOption();
                         }).catch(error => {
                             console.log(error);
