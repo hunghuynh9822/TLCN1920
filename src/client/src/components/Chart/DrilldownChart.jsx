@@ -152,9 +152,10 @@ class DrilldownChart extends Component {
 			backgroundColor: '#2eacd1',
 			color: 'white',
 			position: 'absolute',
-			// top: '10px',
-			// right: '10px',
-			cursor: 'pointer'
+			top: '65px',
+			left: '40px',
+			cursor: 'pointer',
+			backgroundColor: '#3f51b5',
 		}
 		return (
 			<div>
