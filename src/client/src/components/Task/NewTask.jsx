@@ -190,6 +190,7 @@ class NewTask extends Component {
         create(request)
             .then(response => {
                 console.log(response);
+                this.props.loadProject();
                 this.props.loadTasks();
                 this.setState({
                     open: false,
@@ -489,6 +490,7 @@ class NewTask extends Component {
 NewTask.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
+    loadProject: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

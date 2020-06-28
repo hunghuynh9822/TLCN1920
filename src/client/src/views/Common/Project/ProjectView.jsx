@@ -214,7 +214,7 @@ class ProjectView extends Component {
                             <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.sub_header_section}>
-                            {"WikiPage"}
+                            {/* {"WikiPage"} */}
                         </div>
                     </div>
                 </div>

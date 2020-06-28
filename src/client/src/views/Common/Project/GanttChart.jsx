@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { withAlert } from 'react-alert';
 
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 import { Gantt, Toolbar, MessageArea, Loading } from '../../../components';
 import { getTasksOfProject, updateTask, TASK_STATE } from '../../../action/task';
 const styles = theme => ({
@@ -34,11 +36,14 @@ class GanttChart extends Component {
             messages: [],
             data: {
                 data: [],
-                links: []
+                links: [],
+                message: "",
             },
             loading: false,
         }
         this.loadTasks = this.loadTasks.bind(this);
+        this.reloadTaskMessage = this.reloadTaskMessage.bind(this);
+        this.renderMessage = this.renderMessage.bind(this);
     }
 
     convertDateToString(milisecond) {
@@ -55,6 +60,22 @@ class GanttChart extends Component {
         }
         var result = yyyy + '/' + mm + '/' + dd;
         return result;
+    }
+
+    reloadTaskMessage() {
+        const { alert } = this.props;
+        const { projectItem } = this.props;
+        let projectId = projectItem.project.id;
+        getTasksOfProject(projectId)
+            .then(response => {
+                let message = response.message;
+                this.setState({
+                    data: { ...this.state.data, message: message },
+                })
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong when get tasks of project. Please call check!');
+            });
     }
 
     loadTasks() {
@@ -76,8 +97,9 @@ class GanttChart extends Component {
                         progress: task.process
                     }
                 })
+                let message = response.message;
                 this.setState({
-                    data: { data: data, links: response.links },
+                    data: { data: data, links: response.links, message: message },
                     loading: false
                 })
             }).catch(error => {
@@ -179,6 +201,7 @@ class GanttChart extends Component {
                 .then(response => {
                     console.log(response);
                     // this.loadTasks();
+                    this.reloadTaskMessage();
                 }).catch(error => {
                     console.log(error);
                     //(error && error.message) || 
@@ -203,6 +226,7 @@ class GanttChart extends Component {
                     .then(response => {
                         console.log(response);
                         // this.loadTasks();
+                        this.reloadTaskMessage();
                     }).catch(error => {
                         console.log(error);
                         //(error && error.message) || 
@@ -227,6 +251,22 @@ class GanttChart extends Component {
             currentZoom: zoom
         });
     }
+
+    renderMessage() {
+        return this.state.data.message && this.state.data.message.map((value, index) => {
+            let params = value.params;
+            let message = value.message;
+            params.forEach((value, index) => {
+                message = message.replace('{{' + index + '}}', '<strong className\"match\">' + value + '</strong>')
+            })
+            return (
+                <Alert key={index} severity="warning">
+                    <span dangerouslySetInnerHTML={{ __html: message }} />
+                </Alert>
+            )
+        })
+    }
+
     render() {
         const { classes } = this.props;
         const { currentZoom, messages } = this.state;
@@ -240,6 +280,9 @@ class GanttChart extends Component {
         }
         return (
             <div>
+                <div>
+                    {this.renderMessage()}
+                </div>
                 <div className={classes.zoom_bar}>
                     <Toolbar
                         zoom={currentZoom}
@@ -253,9 +296,9 @@ class GanttChart extends Component {
                         onDataUpdated={this.logDataUpdate}
                     />
                 </div>
-                <MessageArea
+                {/* <MessageArea
                     messages={messages}
-                />
+                /> */}
             </div>
         );
     }

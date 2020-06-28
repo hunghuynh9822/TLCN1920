@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+
 import MTable from 'material-table';
+
+const styles = theme => ({
+
+});
+
 class MaterialTable extends Component {
     constructor(props) {
         super(props);
@@ -65,4 +73,8 @@ class MaterialTable extends Component {
         );
     }
 }
-export default MaterialTable;
+MaterialTable.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(MaterialTable);

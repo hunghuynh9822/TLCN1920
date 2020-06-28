@@ -568,7 +568,7 @@ class ProjectTasks extends Component {
                 <div className={classes.root}>
                     <div className={classes.header}>
                         <div className={classes.header_section}>
-                            <NewTask loadTasks={this.loadTasks} />
+                            <NewTask loadTasks={this.loadTasks} loadProject={this.props.loadProject} />
                         </div>
                         <div className={classes.header_section}>
                             <CenteredTabs handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
@@ -788,6 +788,7 @@ class ProjectTasks extends Component {
 ProjectTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     projectItem: PropTypes.object.isRequired,
+    loadProject: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

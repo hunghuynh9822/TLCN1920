@@ -14,6 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Switch from '@material-ui/core/Switch';
 //
+import { MaterialTable } from '../../components';
 const styles = theme => ({
     paper: {
         backgroundColor: theme.palette.background.paper,
@@ -218,7 +219,7 @@ class WikiManagement extends Component {
                         </Grid>
                     </div>
                     <div className={classes.table_view}>
-                        Hello
+                        <MaterialTable />
                     </div>
                 </div>
             </React.Fragment >
