@@ -3,10 +3,7 @@ package com.hcmute.pose.projectservice.buz.task.impl;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
-import com.hcmute.pose.projectservice.model.task.Task;
-import com.hcmute.pose.projectservice.model.task.TaskComments;
-import com.hcmute.pose.projectservice.model.task.TaskLink;
-import com.hcmute.pose.projectservice.model.task.TaskState;
+import com.hcmute.pose.projectservice.model.task.*;
 import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import com.hcmute.pose.projectservice.payload.task.*;
 import com.hcmute.pose.projectservice.service.task.TaskCommentService;
@@ -61,7 +58,6 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         List<Task> tasks = taskService.getTasksByProject(projectId);
         List<TaskResponse> taskResponses = new ArrayList<>();
         List<TaskLink> links = new ArrayList<>();
-        List<String> messages = new ArrayList<>();
         long index = 1L;
         for (Task task : tasks
         ) {
@@ -82,6 +78,8 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 index = index + 1;
             }
         }
+        List<MessageError> messages = new ArrayList<>();
+        MessageError messageError;
         for (TaskLink taskLink : links) {
             Task source = taskService.getTasksById(taskLink.getSource());
             Task target = taskService.getTasksById(taskLink.getTarget());
@@ -92,11 +90,12 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             date_start_target.setTimeInMillis(target.getStartedAt());
             Date sourceTime = date_end_source.getTime();
             Date targetTime = date_start_target.getTime();
-//            LOGGER.info("Source : {}" ,sourceTime);
-//            LOGGER.info("Target: {}", targetTime);
-            if (targetTime.compareTo(sourceTime) <= 0) {
-                String message = String.format("Cần kiểm tra thời gian Task %s và Task %s", source.getTitle(), target.getTitle());
-                messages.add(message);
+            if (targetTime.compareTo(sourceTime) < 0) {
+                messageError = new MessageError("Cần kiểm tra thời gian Task {{0}} -> Task {{1}}", new ArrayList<String>(){{
+                    add(source.getTitle());
+                    add(target.getTitle());
+                }});
+                messages.add(messageError);
             }
         }
         return new AllTasksProjectResponse(projectId, taskResponses, links, messages);
