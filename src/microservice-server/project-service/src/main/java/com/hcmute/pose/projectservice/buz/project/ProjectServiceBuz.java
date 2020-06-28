@@ -20,5 +20,5 @@ public interface ProjectServiceBuz {
     void deletePOP (PerOfProjectRequest perOfProjectRequest) throws Exception, TransactionException;
     AllEmployeeResponse getEmployeesFreeForProject(Long projectId) throws Exception;
 
-    ReportResponse getNumberTaskOfEmployeeInProject() throws SQLException;
+    ReportResponse getNumberTaskOfEmployeeInProject() throws Exception;
 }

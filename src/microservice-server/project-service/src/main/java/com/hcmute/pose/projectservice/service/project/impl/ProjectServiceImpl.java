@@ -47,6 +47,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<QueryReport> getListProSort() throws SQLException {
+        return projectDao.getListProSort();
+    }
+
+    @Override
+    public List<QueryReport> getListEmployeeSort() throws SQLException {
+        return projectDao.getListEmployeeSort();
+    }
+
+    @Override
     public List<QueryReport> getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException {
         return projectDao.selectNumberTaskOfEmployeeInProject(projectId);
     }

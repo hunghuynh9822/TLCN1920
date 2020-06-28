@@ -17,5 +17,9 @@ public interface ProjectDao {
     void updateState(Long id, ProjectState state) throws SQLException, TransactionException;
     Optional<Project> getProject(Long id);
 
+    List<QueryReport> getListProSort() throws SQLException;
+
+    List<QueryReport> getListEmployeeSort() throws SQLException;
+
     List<QueryReport> selectNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
 }

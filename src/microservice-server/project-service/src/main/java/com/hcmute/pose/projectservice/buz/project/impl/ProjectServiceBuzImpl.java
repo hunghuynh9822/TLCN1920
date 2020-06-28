@@ -27,10 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ProjectServiceBuzImpl implements ProjectServiceBuz {
@@ -241,15 +238,30 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         }
     }
 
+    private Integer getIndex(List<QueryReport> data, Long id) throws Exception {
+        for(int i = 0; i < data.size(); i++) {
+            if(data.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        throw new Exception("Not found id " + id);
+    }
+
     @Override
-    public ReportResponse getNumberTaskOfEmployeeInProject() throws SQLException {
+    public ReportResponse getNumberTaskOfEmployeeInProject() throws Exception {
         try{
             ReportResponse reportResponse = new ReportResponse();
-            List<Project> listPro = projectService.getListPro();
+            List<QueryReport> listPro = projectService.getListProSort();
+            List<QueryReport> listEmployee = projectService.getListEmployeeSort();
             List<QueryReportItem> listItem = new ArrayList<>();
-            for(Project pro : listPro) {
+            for(QueryReport pro : listPro) {
                 List<QueryReport> numberTaskOfProject = projectService.getNumberTaskOfEmployeeInProject(pro.getId());
-                listItem.add(new QueryReportItem(pro.getId(), pro.getTitle(), numberTaskOfProject));
+                QueryReport[] numberTaskOfProjectSort = new QueryReport[numberTaskOfProject.size()];
+                for (QueryReport employee : numberTaskOfProject
+                     ) {
+                    numberTaskOfProjectSort[getIndex(listEmployee, employee.getId())] = employee;
+                }
+                listItem.add(new QueryReportItem(pro.getId(), pro.getName(), Arrays.asList(numberTaskOfProjectSort)));
             }
             reportResponse.putData("taskEmployee", listItem);
             return reportResponse;

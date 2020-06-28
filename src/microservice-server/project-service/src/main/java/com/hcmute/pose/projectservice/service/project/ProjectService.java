@@ -15,5 +15,9 @@ public interface ProjectService {
     void updateState(Long id, ProjectState state) throws SQLException, TransactionException;
     Project getProject(Long id) throws Exception;
 
+    List<QueryReport> getListProSort() throws SQLException;
+
+    List<QueryReport> getListEmployeeSort() throws SQLException;
+
     List<QueryReport> getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
 }
