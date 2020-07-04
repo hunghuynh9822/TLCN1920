@@ -12,62 +12,50 @@ class MaterialTable extends Component {
     constructor(props) {
         super(props);
         this.state = ({
-            selectedRow: null,
-            columns: [
-                { title: 'Name', field: 'name' },
-                { title: 'Surname', field: 'surname' },
-                { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-                {
-                    title: 'Birth Place',
-                    field: 'birthCity',
-                    lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-                },
-            ],
-            data: [
-                { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-                {
-                    name: 'Zerya Betül',
-                    surname: 'Baran',
-                    birthYear: 2017,
-                    birthCity: 34,
-                },
-            ],
+            selectRow: null,
         });
-        this.selecteRow = this.selecteRow.bind(this);
+        this.selectRow = this.selectRow.bind(this);
     }
 
-    selecteRow(selectedRow) {
+    selectRow(rowData, isEdit) {
         this.setState({
-            selectedRow: selectedRow
+            selectedRow: rowData.tableData.id
         })
+        this.props.handleSelectData(rowData, isEdit)
     }
 
     render() {
         const { classes } = this.props;
         return (
             <MTable
-                title="Editable Example"
-                columns={this.state.columns}
-                data={this.state.data}
+                title={this.props.title}
+                columns={this.props.columns}
+                data={this.props.data}
                 actions={[
                     {
-                        icon: 'save',
-                        tooltip: 'Save User',
-                        onClick: (event, rowData) => alert("You saved " + rowData.name)
+                        icon: 'edit',
+                        tooltip: 'Edit',
+                        onClick: (event, rowData) => {
+                            this.selectRow(rowData, true)
+                            console.log("[Table] Select row ", rowData)
+                        }
                     },
                     {
                         icon: 'delete',
-                        tooltip: 'Delete User',
-                        onClick: (event, rowData) => confirm("You want to delete " + rowData.name)
+                        tooltip: 'Delete',
+                        onClick: (event, rowData) => {
+                            confirm("You want to delete " + rowData.name)
+                            this.props.onDelete(rowData.id)
+                        }
                     }
                 ]}
                 onRowClick={((event, rowData) => {
-                    alert("You saved " + rowData.name)
-                    this.selecteRow(rowData.tableData.id)
+                    this.selectRow(rowData, false)
+                    console.log("[Table] Select row ", rowData)
                 })}
                 options={{
                     rowStyle: rowData => ({
-                        backgroundColor: (this.state.selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
+                        backgroundColor: (this.state.selectRow === rowData.tableData.id) ? '#EEE' : '#FFF'
                     })
                 }}
             />
@@ -76,6 +64,11 @@ class MaterialTable extends Component {
 }
 MaterialTable.propTypes = {
     classes: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired,
+    columns: PropTypes.array.isRequired,
+    data: PropTypes.array.isRequired,
+    handleSelectData: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(MaterialTable);

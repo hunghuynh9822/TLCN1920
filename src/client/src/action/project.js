@@ -55,6 +55,14 @@ export function getAllProjects() {
     });
 }
 
+//Get project name by admin
+export function getAllProjectNames() {
+    return request({
+        url: superUrl + "/list_name",
+        method: 'GET',
+    });
+}
+
 export function updateState(projectId, state) {
     return request({
         url: url + "/" + projectId + "/update-state?state=" + state,
