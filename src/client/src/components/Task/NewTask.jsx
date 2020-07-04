@@ -400,7 +400,22 @@ class NewTask extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <DatePicker
+                                <Grid item xs={8}>
+                                    <TextField
+                                        id="duration"
+                                        name="duration"
+                                        type="number"
+                                        inputProps={{ min: "0", max: "10", step: "1" }}
+                                        fullWidth
+                                        required
+                                        label="Duration"
+                                        placeholder="Duration"
+                                        variant="standard"
+                                        value={request.duration}
+                                        onChange={this.handleInputChange}
+                                    />
+                                </Grid>
+                                {/* <DatePicker
                                     required
                                     disableToolbar
                                     variant="inline"
@@ -408,7 +423,7 @@ class NewTask extends Component {
                                     label="End Time"
                                     value={request.endAt}
                                     onChange={this.handleDuration}
-                                />
+                                /> */}
                             </Grid>
                         </Grid>
                     </Paper>

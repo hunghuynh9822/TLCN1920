@@ -416,10 +416,11 @@ class ProjectTasks extends Component {
         this.handleDatePickerChange('endAt', date);
     }
 
-    handleSubmit() {
+    handleSubmit(event) {
         const { alert } = this.props;
         const { currentUser, projectItem } = this.props;
         const { task } = this.state;
+        event.preventDefault();
         let projectId = projectItem.project.id;
         let preTaskId = "";
         let previousTasks = this.state.previousTasks;
@@ -473,7 +474,6 @@ class ProjectTasks extends Component {
         updateTask(request)
             .then(response => {
                 console.log(response);
-                this.loadTasks();
                 this.setState({
                     open: false,
                     previousTasks: new Array(),
@@ -491,6 +491,7 @@ class ProjectTasks extends Component {
                         point: 0
                     },
                 })
+                this.loadTasks();
             }).catch(error => {
                 console.log(error);
                 //(error && error.message) || 
@@ -730,15 +731,30 @@ class ProjectTasks extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <DatePicker
+                                <Grid item xs={8}>
+                                    <TextField
+                                        id="duration"
+                                        name="duration"
+                                        type="number"
+                                        inputProps={{ min: "0", max: "10", step: "1" }}
+                                        fullWidth
+                                        required
+                                        label="Duration"
+                                        placeholder="Duration"
+                                        variant="standard"
+                                        value={task.duration}
+                                        onChange={this.handleInputChange}
+                                    />
+                                </Grid>
+                                {/* <DatePicker
                                     required
                                     disableToolbar
                                     variant="inline"
                                     format="dd-MM-yyyy"
                                     label="End Time"
-                                    value={task.endAt}
+                                    value={request.endAt}
                                     onChange={this.handleDuration}
-                                />
+                                /> */}
                             </Grid>
                         </Grid>
                     </Paper>
