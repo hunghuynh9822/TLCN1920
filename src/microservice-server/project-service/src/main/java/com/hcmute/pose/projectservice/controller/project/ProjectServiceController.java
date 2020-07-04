@@ -33,7 +33,7 @@ public class ProjectServiceController {
     @PostMapping("/")
     public ResponseEntity createProject(@Valid @RequestBody ProjectRequest projectRequest){
         try{
-            ProjectResponse project = projectServiceBuz.createProject(projectRequest);
+            ProjectDetailResponse project = projectServiceBuz.createProject(projectRequest);
             return new ResponseEntity(project, HttpStatus.OK);
         }catch (Exception | TransactionException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -48,8 +48,8 @@ public class ProjectServiceController {
     @GetMapping("/{projectId}")
     public ResponseEntity getProject(@PathVariable("projectId") Long projectId){
         try{
-            ProjectResponse projectResponse = projectServiceBuz.getProject(projectId);
-            return new ResponseEntity(projectResponse, HttpStatus.OK);
+            ProjectDetailResponse projectDetailResponse = projectServiceBuz.getProject(projectId);
+            return new ResponseEntity(projectDetailResponse, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

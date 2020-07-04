@@ -23,7 +23,7 @@ import java.util.List;
 import static java.lang.Thread.*;
 
 @RestController
-@RequestMapping("/api/webhook")
+@RequestMapping("/api/admin/webhook")
 public class WebHookController {
     private static Logger LOGGER = LoggerFactory.getLogger(WebHookController.class);
 
@@ -52,6 +52,16 @@ public class WebHookController {
             AllWebHookReponse allWebHookReponse = webHookBuz.getWebhook(projectId);
             return new ResponseEntity(allWebHookReponse, HttpStatus.OK);
         }catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteWebhook(@RequestParam("id") Long webHookId){
+        try{
+            webHookBuz.deleteWebhook(webHookId);
+            return new ResponseEntity("Delete success", HttpStatus.OK);
+        }catch (Exception | TransactionException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

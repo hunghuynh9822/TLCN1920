@@ -98,6 +98,12 @@ zuul:
       service-id: webhook-service
       ribbon:
         ReadTimeout: 600000
+    adminwebhook:
+      path: /api/admin/webhook/**
+      strip-prefix: false
+      service-id: webhook-service
+      ribbon:
+        ReadTimeout: 600000
     wiki:
       path: /api/wiki/**
       strip-prefix: false

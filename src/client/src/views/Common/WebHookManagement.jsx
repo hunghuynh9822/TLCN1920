@@ -28,7 +28,7 @@ const styles = theme => ({
         maxWidth: 400,
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
+        padding: theme.spacing(2, 4, 2),
     },
     flexContainer: {
         display: "flex",
@@ -46,7 +46,8 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
     },
     table_view: {
-
+        margin: '0px 0px 0px 20px',
+        width: '70%'
     }
 });
 class WikiManagement extends Component {

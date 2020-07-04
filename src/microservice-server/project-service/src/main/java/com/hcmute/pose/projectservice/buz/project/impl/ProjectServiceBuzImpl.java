@@ -9,14 +9,11 @@ import com.hcmute.pose.projectservice.model.project.PerOfProject;
 import com.hcmute.pose.projectservice.model.project.Project;
 import com.hcmute.pose.projectservice.model.project.ProjectRole;
 import com.hcmute.pose.projectservice.model.project.ProjectState;
-import com.hcmute.pose.projectservice.model.task.Task;
-import com.hcmute.pose.projectservice.model.task.TaskState;
 import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import com.hcmute.pose.projectservice.modelmap.QueryReportItem;
 import com.hcmute.pose.projectservice.payload.project.*;
 import com.hcmute.pose.projectservice.payload.task.AllTasksProjectResponse;
 import com.hcmute.pose.projectservice.payload.task.ReportResponse;
-import com.hcmute.pose.projectservice.payload.task.TaskResponse;
 import com.hcmute.pose.projectservice.service.project.PerOfProjectService;
 import com.hcmute.pose.projectservice.service.project.ProjectService;
 import com.hcmute.pose.projectservice.service.task.TaskService;
@@ -52,7 +49,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     private TaskServiceBuz taskServiceBuz;
 
     @Override
-    public ProjectResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
+    public ProjectDetailResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
             Project project = projectService.createProject(projectRequest.getTitle(),projectRequest.getDescription());
@@ -67,7 +64,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
                     perOfProjectService.createPOP(project.getId(), employeeId, ProjectRole.MEMBER);
                 }
             }
-            ProjectResponse response = getProjectResponse(project);
+            ProjectDetailResponse response = getProjectResponse(project);
             databaseHelper.commit();
             return response;
         }catch (Exception | TransactionException e){
@@ -79,21 +76,36 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     }
 
     @Override
-    public AllProjectResponse getListProject() throws Exception {
+    public AllProjectDetailResponse getListProjectDetail() throws Exception {
         try {
-            List<ProjectResponse> projectResponses = new ArrayList<>();
+            List<ProjectDetailResponse> projectDetailResponse = new ArrayList<>();
             List<Project> projects =  projectService.getListPro();
             for(Project project : projects) {
-                projectResponses.add(getProjectResponse(project));
+                projectDetailResponse.add(getProjectResponse(project));
             }
-            return new AllProjectResponse(projectResponses);
+            return new AllProjectDetailResponse(projectDetailResponse);
         } finally {
             databaseHelper.closeConnection();
         }
     }
 
     @Override
-    public ProjectResponse getProject(Long id) throws Exception {
+    public ProjectsResponse getListProject() throws Exception {
+        try {
+            List<Project> projects =  projectService.getListPro();
+            List<ProjectResponse> projectResponses = new ArrayList<>();
+            for(Project project : projects) {
+                ProjectResponse projectResponse = new ProjectResponse(project.getId(), project.getTitle(), null,project.getState(), project.getCreatedAt(), project.getUpdatedAt());
+                projectResponses.add(projectResponse);
+            }
+            return new ProjectsResponse(projectResponses);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ProjectDetailResponse getProject(Long id) throws Exception {
         try {
             Project project = projectService.getProject(id);
             return getProjectResponse(project);
@@ -107,16 +119,16 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         try {
             List<PerOfProject> owner = perOfProjectService.getListOwner(employeeId);
             List<PerOfProject> join = perOfProjectService.getListJoin(employeeId);
-            List<ProjectResponse> ownProjects = getProjects(owner);
-            List<ProjectResponse> joinProjects = getProjects(join);
+            List<ProjectDetailResponse> ownProjects = getProjects(owner);
+            List<ProjectDetailResponse> joinProjects = getProjects(join);
             return new EmployeeProjectResponse(ownProjects, joinProjects);
         } finally {
             databaseHelper.closeConnection();
         }
     }
 
-    private List<ProjectResponse> getProjects(List<PerOfProject> perOfProjects) throws Exception {
-        List<ProjectResponse> projects = new ArrayList<>();
+    private List<ProjectDetailResponse> getProjects(List<PerOfProject> perOfProjects) throws Exception {
+        List<ProjectDetailResponse> projects = new ArrayList<>();
         for (PerOfProject per : perOfProjects) {
             try {
                 Project project = projectService.getProject(per.getProjectId());
@@ -128,7 +140,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         return projects;
     }
 
-    private ProjectResponse getProjectResponse(Project project) throws Exception {
+    private ProjectDetailResponse getProjectResponse(Project project) throws Exception {
         List<EmployeeResponse> members = new ArrayList<>();
         List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
         for (PerOfProject per : perOfProjects) {
@@ -141,9 +153,9 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             members.add(employeeResponse);
         }
         AllTasksProjectResponse allTasksByProject = taskServiceBuz.getDataTasksOfProject(project.getId());
-        ProjectResponse projectResponse =  new ProjectResponse(project, members, allTasksByProject.getTasks());
-        projectResponse.setMore(allTasksByProject.getTasksInfo());
-        return projectResponse;
+        ProjectDetailResponse projectDetailResponse =  new ProjectDetailResponse(project, members, allTasksByProject.getTasks());
+        projectDetailResponse.setMore(allTasksByProject.getTasksInfo());
+        return projectDetailResponse;
     }
 
     @Override

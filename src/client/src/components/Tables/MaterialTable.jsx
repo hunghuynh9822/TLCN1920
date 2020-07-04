@@ -12,6 +12,7 @@ class MaterialTable extends Component {
     constructor(props) {
         super(props);
         this.state = ({
+            selectedRow: null,
             columns: [
                 { title: 'Name', field: 'name' },
                 { title: 'Surname', field: 'surname' },
@@ -32,7 +33,15 @@ class MaterialTable extends Component {
                 },
             ],
         });
+        this.selecteRow = this.selecteRow.bind(this);
     }
+
+    selecteRow(selectedRow) {
+        this.setState({
+            selectedRow: selectedRow
+        })
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -40,34 +49,26 @@ class MaterialTable extends Component {
                 title="Editable Example"
                 columns={this.state.columns}
                 data={this.state.data}
-                editable={{
-                    onRowAdd: newData =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                const data = [...this.state.data];
-                                data.push(newData);
-                                this.setState({ ...this.state, data });
-                            }, 600);
-                        }),
-                    onRowUpdate: (newData, oldData) =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                const data = [...this.state.data];
-                                data[data.indexOf(oldData)] = newData;
-                                this.setState({ ...this.state, data });
-                            }, 600);
-                        }),
-                    onRowDelete: oldData =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                const data = [...this.state.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                this.setState({ ...this.state, data });
-                            }, 600);
-                        }),
+                actions={[
+                    {
+                        icon: 'save',
+                        tooltip: 'Save User',
+                        onClick: (event, rowData) => alert("You saved " + rowData.name)
+                    },
+                    {
+                        icon: 'delete',
+                        tooltip: 'Delete User',
+                        onClick: (event, rowData) => confirm("You want to delete " + rowData.name)
+                    }
+                ]}
+                onRowClick={((event, rowData) => {
+                    alert("You saved " + rowData.name)
+                    this.selecteRow(rowData.tableData.id)
+                })}
+                options={{
+                    rowStyle: rowData => ({
+                        backgroundColor: (this.state.selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
+                    })
                 }}
             />
         );

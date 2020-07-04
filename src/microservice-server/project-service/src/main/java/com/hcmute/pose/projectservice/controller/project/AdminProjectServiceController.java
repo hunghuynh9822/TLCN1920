@@ -2,9 +2,10 @@ package com.hcmute.pose.projectservice.controller.project;
 
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.buz.project.ProjectServiceBuz;
-import com.hcmute.pose.projectservice.payload.project.AllProjectResponse;
+import com.hcmute.pose.projectservice.payload.project.AllProjectDetailResponse;
 import com.hcmute.pose.projectservice.payload.project.ProjectRequest;
-import com.hcmute.pose.projectservice.payload.project.ProjectResponse;
+import com.hcmute.pose.projectservice.payload.project.ProjectDetailResponse;
+import com.hcmute.pose.projectservice.payload.project.ProjectsResponse;
 import com.hcmute.pose.projectservice.payload.task.ReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class AdminProjectServiceController {
     @PostMapping("/")
     public ResponseEntity createProject(@Valid @RequestBody ProjectRequest projectRequest){
         try{
-            ProjectResponse project = projectServiceBuz.createProject(projectRequest);
+            ProjectDetailResponse project = projectServiceBuz.createProject(projectRequest);
             return new ResponseEntity(project, HttpStatus.OK);
         }catch (Exception | TransactionException e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
@@ -37,7 +38,17 @@ public class AdminProjectServiceController {
     @GetMapping("/")
     public ResponseEntity getProjects(){
         try{
-            AllProjectResponse projectList = projectServiceBuz.getListProject();
+            AllProjectDetailResponse projectList = projectServiceBuz.getListProjectDetail();
+            return new ResponseEntity(projectList, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/list_name")
+    public ResponseEntity getProjectName(){
+        try{
+            ProjectsResponse projectList = projectServiceBuz.getListProject();
             return new ResponseEntity(projectList, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
