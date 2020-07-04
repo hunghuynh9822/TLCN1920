@@ -1,5 +1,6 @@
 package com.hcmute.pose.projectservice.buz.task.impl;
 
+import com.google.gson.Gson;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
@@ -98,9 +99,81 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 messages.add(messageError);
             }
         }
-        return new AllTasksProjectResponse(projectId, taskResponses, links, messages);
-    }
+//      =========================================
+//      Get List END_Task
+        List<Task> listEndTask = new ArrayList<>();
+        for (Task task : tasks){
+            boolean isEnd = true;
+            for (TaskLink taskLink : links){
+                if (task.getId().equals(taskLink.getSource())){
+                    isEnd = false;
+                    break;
+                }
+            }
+            if(isEnd) {
+                listEndTask.add(task);
+            }
+        }
+        LOGGER.info("End_task {}",new Gson().toJson(listEndTask));
 
+//      Find list gantt
+        List<List<Task>> list_gantt = new ArrayList<>();
+        List<Integer> list_gantt_dur = new ArrayList<>();
+        for ( Task task_end : listEndTask){
+            int duration = 0;
+            List<Task> list_Gantt_Task = new ArrayList<>();
+            LOGGER.info("task_end {}",new Gson().toJson(task_end));
+
+            list_Gantt_Task.add(task_end);
+            Task next_Task = task_end;
+            while (next_Task != null){
+                duration = duration + task_end.getDuration();
+                next_Task = get_preTask_max_dur(next_Task);
+                if (next_Task != null){
+                    list_Gantt_Task.add(next_Task);
+                }else {
+                    list_gantt.add(list_Gantt_Task);
+                    list_gantt_dur.add(duration);
+                }
+            }
+        }
+//      find gantt
+        int max_dur = 0;
+        int indexMax = 0;
+        for (int i=0; i < list_gantt_dur.size() ; i++){
+            if(max_dur < list_gantt_dur.get(i)){
+                max_dur = list_gantt_dur.get(i);
+                indexMax = i;
+            }
+        }
+        List<Task> listGantt = new ArrayList<>(list_gantt.get(indexMax));
+        LOGGER.info("List gannt {}",new Gson().toJson(listGantt));
+//      ===================================
+        return new AllTasksProjectResponse(projectId, taskResponses, links, messages , listGantt);
+    }
+    Task get_preTask_max_dur(Task task) throws Exception {
+        List<Task> list_pre_end = new ArrayList<>();
+        for (String taskId : task.getPreTaskId().split(",")) {
+            if (StringUtils.isEmpty(taskId)) {
+                continue;
+            }
+            Task task_pre_end = taskService.getTasksById(new Long(taskId));
+            list_pre_end.add(task_pre_end);
+        }
+        if (list_pre_end == null || list_pre_end.isEmpty())
+        {
+            return null;
+        }
+        int dur=0;
+        Task task_resufl = null;
+        for (Task task_pre : list_pre_end){
+            if (dur < task_pre.getDuration()){
+                dur = task_pre.getDuration();
+                task_resufl = task_pre;
+            }
+        }
+        return task_resufl;
+    }
     private static DecimalFormat df = new DecimalFormat("0.00");
 
     @Override

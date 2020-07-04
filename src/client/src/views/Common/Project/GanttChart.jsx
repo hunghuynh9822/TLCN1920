@@ -95,7 +95,7 @@ class GanttChart extends Component {
                         start_date: this.convertDateToString(task.startedAt),
                         duration: task.duration == null ? 0 : task.duration,
                         progress: task.process,
-                        type: gantt.config.types.critical
+                        // type: gantt.config.types.critical
                     }
                 })
                 let message = response.message;

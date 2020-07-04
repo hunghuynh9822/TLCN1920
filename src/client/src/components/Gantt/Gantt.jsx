@@ -113,8 +113,8 @@ class Gantt extends Component {
             return task.text;
         };
         //
-        gantt.config.work_time = true;
-        gantt.config.correct_work_time = true;
+        // gantt.config.work_time = true;
+        // gantt.config.correct_work_time = true;
         gantt.config.drag_progress = false;
         gantt.config.drag_links = false;
         //

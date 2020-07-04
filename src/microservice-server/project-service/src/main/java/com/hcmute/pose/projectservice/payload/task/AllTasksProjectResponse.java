@@ -1,6 +1,7 @@
 package com.hcmute.pose.projectservice.payload.task;
 
 import com.hcmute.pose.projectservice.model.task.MessageError;
+import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskLink;
 
 import java.util.List;
@@ -12,12 +13,15 @@ public class AllTasksProjectResponse {
     private List<TaskLink> links;
     private List<MessageError> message;
     private Map<String, Object> tasksInfo;
+    private List<Task> listGantt;
 
-    public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks, List<TaskLink> links, List<MessageError> message) {
+
+    public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks, List<TaskLink> links, List<MessageError> message, List<Task> listGantt) {
         this.projectId = projectId;
         this.tasks = tasks;
         this.links = links;
         this.message = message;
+        this.listGantt = listGantt;
     }
 
     public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks) {
