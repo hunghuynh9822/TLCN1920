@@ -23,10 +23,10 @@ import { create, update, deleteWebHook, getAllWebHook } from '../../action/webho
 
 const styles = theme => ({
     paper: {
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
+        backgroundColor: 'transparent',
+        // boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-        margin: theme.spacing(4),
+        // margin: theme.spacing(4),
         display: 'flex',
         flexWrap: 'nowrap',
     },

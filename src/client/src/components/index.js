@@ -222,6 +222,10 @@ export {
     default as StackedBarChart
 }
 from './Chart/StackedBarChart.jsx'
+export {
+    default as DoughnutChart
+}
+from './Chart/DoughnutChart.jsx'
 //Request
 export {
     default as NewRequest
@@ -231,3 +235,8 @@ export {
     default as NewNotify
 }
 from './AddNotifi/NewNotify.jsx'
+//Card
+export {
+    default as TotalUsers
+}
+from './Card/TotalUsers.jsx'

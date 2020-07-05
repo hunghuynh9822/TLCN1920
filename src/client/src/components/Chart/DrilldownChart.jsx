@@ -1,6 +1,9 @@
 /* App.js */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+//
+import Card from '@material-ui/core/Card';
+//
 import CanvasJSReact from './canvasjs.react'
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -96,19 +99,19 @@ class DrilldownChart extends Component {
 			backgroundColor: '#2eacd1',
 			color: 'white',
 			position: 'absolute',
-			top: '65px',
-			left: '40px',
+			// top: '60px',
+			// left: '40px',
 			cursor: 'pointer',
 			backgroundColor: '#3f51b5',
 		}
 		return (
-			<div>
+			<Card style={{ width: '100%', color: '#bfbfbf', marginTop: '10px' }}>
 				<CanvasJSChart options={this.options}
 					onRef={this.setWrapperRef}
 				/>
 				{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
 				<button className="btn invisible" id="backButton" style={buttonStyle}>&lt; Back</button>
-			</div>
+			</Card>
 		);
 	}
 }

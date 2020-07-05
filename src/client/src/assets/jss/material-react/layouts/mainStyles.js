@@ -35,7 +35,9 @@ const appStyle = theme => ({
         },
     },
     content: {
-        marginTop: "54px",
+        paddingTop: '75px',
+        backgroundColor: '#f4f6f8'
+        // marginTop: "54px",
         // height: "calc(100vh - 60px)",
         // height: "100vh"
     },
