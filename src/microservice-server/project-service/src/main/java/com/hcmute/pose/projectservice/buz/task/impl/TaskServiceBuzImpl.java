@@ -153,6 +153,9 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     }
     Task get_preTask_max_dur(Task task) throws Exception {
         List<Task> list_pre_end = new ArrayList<>();
+        if (StringUtils.isEmpty(task.getPreTaskId())){
+            return null;
+        }
         for (String taskId : task.getPreTaskId().split(",")) {
             if (StringUtils.isEmpty(taskId)) {
                 continue;
