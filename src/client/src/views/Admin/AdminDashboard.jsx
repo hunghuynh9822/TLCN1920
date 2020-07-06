@@ -12,11 +12,18 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import Card from '@material-ui/core/Card';
+//
+import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
 
+//
 import { CustomLineChart } from '../../components';
 import PieChart from '../../components/Chart/PieChart.jsx'
 import BarChartNgang from '../../components/Chart/BarChartNgang.jsx'
-import { Loading, DrilldownChart, StackedBarChart } from '../../components'
+
+import { Loading, DrilldownChart, StackedBarChart, DoughnutChart } from '../../components'
+import { TotalUsers } from '../../components'
 //
 import { getNumberTasksByAdmin, getNumberTasksByLead, getTasksOfEmployeeInProject } from '../../action/task';
 import { getTasksOfAllEmployeeInProject } from '../../action/project';
@@ -24,10 +31,12 @@ import { loginAsAdmin, loginAsLead } from '../../action/auth';
 
 const styles = theme => ({
     container: {
-        maxWidth: '1280px',
+        maxWidth: '100%',
+        margin: '0px',
     },
     gridroot: {
         margin: 0,
+        // marginTop: '75px'
     },
     paper: {
         padding: theme.spacing(2),
@@ -38,6 +47,18 @@ const styles = theme => ({
     fixedHeight: {
         height: 240,
     },
+    card: {
+        width: '100%',
+        height: 'auto',
+        margin: theme.spacing(2),
+        position: 'relative',
+        textAlign: 'center',
+        color: '#bfbfbf'
+    },
+    iconProject: {
+        color: '#FFFFFF',
+        backgroundColor: '#3f51b5',
+    }
 });
 
 class AdminDashboard extends Component {
@@ -333,18 +354,45 @@ class AdminDashboard extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <Container maxWidth="lg" className={classes.container}>
+            <Container className={classes.container}>
                 <Grid container spacing={3} className={classes.gridroot}>
-                    {/* Chart */}
-                    <Grid item xs={12} md={8} lg={9}>
-                        {
-                            this.state.loadingViewTasksChart ? <Loading /> : <DrilldownChart dataOnLoad={this.state.numberTasks} options={this.state.viewTaskChartOption} loadDetail={this.loadDataDetail} />
-                        }
-                        {
-                            this.state.loadingStackedBarChart ? <Loading /> : <StackedBarChart dataOnLoad={this.state.taskOfEmployeeByProject} options={this.state.stackedBarChartOption} />
-                        }
-                        {/* <BarChartNgang /> */}
-                        {/* <Drilldown /> */}
+                    <Grid xs={12} container spacing={3} direction="row">
+                        <Grid item xs={3}>
+                            <TotalUsers title="TOTAL PROJECTS" icon={InsertChartIcon} iconStyle={classes.iconProject} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <TotalUsers title="TOTAL USERS" icon={PeopleIcon} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <TotalUsers title="TOTAL REQUESTS" icon={PeopleIcon} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <TotalUsers title="TOTAL NOTIFICATIONS" icon={PeopleIcon} />
+                        </Grid>
+                    </Grid>
+                    <Grid xs={12} container spacing={3} direction="row">
+                        <Grid item xs={6} >
+                            {
+                                this.state.loadingViewTasksChart ? <Loading /> : <DoughnutChart title="Create by me" />
+                            }
+                        </Grid>
+                        <Grid item xs={6}>
+                            {
+                                this.state.loadingStackedBarChart ? <Loading /> : <DoughnutChart title="Assign to me" />
+                            }
+                        </Grid>
+                    </Grid>
+                    <Grid xs={12} container spacing={3} direction="row">
+                        <Grid item xs={6}>
+                            {
+                                this.state.loadingViewTasksChart ? <Loading /> : <DrilldownChart dataOnLoad={this.state.numberTasks} options={this.state.viewTaskChartOption} loadDetail={this.loadDataDetail} />
+                            }
+                        </Grid>
+                        <Grid item xs={6}>
+                            {
+                                this.state.loadingStackedBarChart ? <Loading /> : <StackedBarChart dataOnLoad={this.state.taskOfEmployeeByProject} options={this.state.stackedBarChartOption} />
+                            }
+                        </Grid>
                     </Grid>
                 </Grid>
             </Container>

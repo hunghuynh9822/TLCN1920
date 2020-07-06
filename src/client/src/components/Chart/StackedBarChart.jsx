@@ -1,6 +1,9 @@
 /* App.js */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+//
+import Card from '@material-ui/core/Card';
+//
 import CanvasJSReact from './canvasjs.react'
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -18,6 +21,7 @@ class StackedBarChart extends Component {
 	}
 
 	toggleDataSeries(e) {
+		console.log("[StackedBar] toggle ", e, this.chart)
 		if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
 			e.dataSeries.visible = false;
 		}
@@ -83,11 +87,11 @@ class StackedBarChart extends Component {
 
 	render() {
 		return (
-			<div>
+			<Card style={{ width: '100%', color: '#bfbfbf', marginTop: '10px' }}>
 				<CanvasJSChart options={this.props.options}
 					onRef={this.setWrapperRef}
 				/>
-			</div>
+			</Card>
 		);
 	}
 }
