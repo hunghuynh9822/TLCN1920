@@ -7,6 +7,7 @@ import com.hcmute.pose.projectservice.modelmap.QueryReport;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface ProjectService {
     Project createProject(String title, String description) throws Exception;
@@ -20,4 +21,5 @@ public interface ProjectService {
     List<QueryReport> getListEmployeeSort() throws SQLException;
 
     List<QueryReport> getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
+    Map<String,Object> getReport() throws SQLException;
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -59,5 +60,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<QueryReport> getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException {
         return projectDao.selectNumberTaskOfEmployeeInProject(projectId);
+    }
+
+    @Override
+    public Map<String, Object> getReport() throws SQLException {
+        return projectDao.get_report();
     }
 }

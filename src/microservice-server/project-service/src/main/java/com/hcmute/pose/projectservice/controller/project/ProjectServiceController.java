@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -84,6 +85,7 @@ public class ProjectServiceController {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
 
     @PatchMapping("/{projectId}/update-state")
     public ResponseEntity<String> updateState (@PathVariable("projectId") Long projectId, @RequestParam(name="state") Integer state){
