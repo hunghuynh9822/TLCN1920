@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.11
--- Dumped by pg_dump version 11.6 (Ubuntu 11.6-1.pgdg18.04+1)
+-- Dumped from database version 10.13
+-- Dumped by pg_dump version 12.3
 
--- Started on 2020-07-06 08:37:02 +07
+-- Started on 2020-07-11 13:08:10 +07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,8 +19,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- TOC entry 196 (class 1259 OID 16384)
@@ -341,7 +339,7 @@ COPY public.employees (id, created_at, updated_at, first_name, middle_name, last
 COPY public.genuid (id, index, count) FROM stdin;
 1	0	10
 2	2	222
-3	6	46
+3	7	47
 \.
 
 
@@ -647,11 +645,7 @@ COPY public.users (id, email, phone, password, provider, provider_id, oauth2_nam
 --
 
 COPY public.webhook (id_webhook, id_project, bot_token, chat_id, create_task, update_task, update_state, name_webhook) FROM stdin;
-15915200391321	789	bot938908907:AAH7QNkQXX4CQzOHsXQR6NT4u9M7EfWMhmE	-407375047	t	t	t	telegram_project_1
-15915200326730	456	bot938908907:AAH7QNkQXX4CQzOHsXQR6NT4u9M7EfWMhmE	-407375047	t	t	t	telegram_project_2
-15915199978979	123	bot938908907:AAH7QNkQXX4CQzOHsXQR6NT4u9M7EfWMhmE	-407375047	t	t	t	telegram_project_3
-15915200739942	123	bot938908907:AAH7QNkQXX4CQzOHsXQR6NT4u9M7EfWMhmE	-407375047	t	t	t	telegram
-15933226042005	7899999	bot1099509570:AAHOj7AgmU-zxaUEH3rwD_JCgqHect-scrk	-399446639	t	t	t	telegram_project_1
+15944476660857	15776775042945	bot938908907:AAH7QNkQXX4CQzOHsXQR6NT4u9M7EfWMhmE	-407375047	t	t	t	telegram_1
 \.
 
 
@@ -913,7 +907,7 @@ ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2020-07-06 08:37:07 +07
+-- Completed on 2020-07-11 13:08:13 +07
 
 --
 -- PostgreSQL database dump complete
