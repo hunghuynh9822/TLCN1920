@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/projects")
@@ -60,6 +61,15 @@ public class AdminProjectServiceController {
         try{
             ReportResponse response = projectServiceBuz.getNumberTaskOfEmployeeInProject();
             return new ResponseEntity(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/report/count")
+    public ResponseEntity getReportCount(){
+        try{
+            Map<String, Object> report = projectServiceBuz.getReport();
+            return new ResponseEntity(report, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }

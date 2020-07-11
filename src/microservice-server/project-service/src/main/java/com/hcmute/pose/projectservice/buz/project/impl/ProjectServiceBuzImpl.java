@@ -281,4 +281,9 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
             databaseHelper.closeConnection();
         }
     }
+
+    @Override
+    public Map<String, Object> getReport() throws SQLException {
+        return projectService.getReport();
+    }
 }

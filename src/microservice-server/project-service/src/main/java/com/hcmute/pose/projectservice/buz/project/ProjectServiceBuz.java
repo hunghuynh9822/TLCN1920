@@ -6,6 +6,7 @@ import com.hcmute.pose.projectservice.payload.project.*;
 import com.hcmute.pose.projectservice.payload.task.ReportResponse;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 public interface ProjectServiceBuz {
     ProjectDetailResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException;
@@ -23,4 +24,5 @@ public interface ProjectServiceBuz {
     AllEmployeeResponse getEmployeesFreeForProject(Long projectId) throws Exception;
 
     ReportResponse getNumberTaskOfEmployeeInProject() throws Exception;
+    Map<String, Object> getReport() throws SQLException;
 }
