@@ -54,16 +54,117 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         }
     }
 
+    private Task getTask(List<Task> tasks, Long id) throws Exception {
+        for (Task task : tasks) {
+            if(task.getId().equals(id)) {
+                return task;
+            }
+        }
+        throw new Exception("Can not get task id : " + id);
+    }
+
+    public Integer getActivity(List<Activity> activities, Long id) {
+        int index = 0;
+        for (Activity activity : activities
+             ) {
+            if(activity.getId().equals(id)) {
+                return index;
+            }
+            index ++ ;
+        }
+        return null;
+    }
+
+    public List<Activity> getActivities(List<Task> tasks) {
+        List<Activity> activities = new ArrayList<>();
+        for (Task task : tasks
+             ) {
+            Activity activity = new Activity(task.getId(), task.getTitle(), task.getDuration());
+            activities.add(activity);
+            if(StringUtils.isEmpty(task.getPreTaskId())) {
+                continue;
+            }
+            for (String taskId : task.getPreTaskId().split(",")) {
+                Integer preIndex = getActivity(activities, new Long(taskId));
+                if(preIndex == null) {
+                    LOGGER.error("Not found {}", taskId);
+                    continue;
+                }
+                activities.get(preIndex).getSuccessors().add(activity);
+                activity.getPredecessors().add(activities.get(preIndex));
+            }
+        }
+        return activities;
+    }
+
+    private static List<Activity> walkListAhead(List<Activity> list)
+    {
+        int na = list.size();
+        list.get(0).setEet(list.get(0).getEst() + list.get(0).getDuration());
+        for(int i = 1; i < na; i++)
+        {
+            for(Activity activity : list.get(i).getPredecessors())
+            {
+                if(list.get(i).getEst() < activity.getEet())
+                    list.get(i).setEst(activity.getEet());
+            }
+
+            list.get(i).setEet(list.get(i).getEst() + list.get(i).getDuration());
+        }
+        return list;
+    }
+
+    private static List<Activity> walkListAback(List<Activity> list)
+    {
+        int na = list.size();
+        list.get(na - 1).setLet(list.get(na - 1).getEet());
+        list.get(na - 1).setLst(list.get(na - 1).getLet() - list.get(na - 1).getDuration());
+
+        for(int i = na - 2; i >= 0; i--)
+        {
+            for(Activity activity : list.get(i).getSuccessors())
+            {
+                if(list.get(i).getLet() == 0)
+                    list.get(i).setLet(activity.getLst());
+                else
+                if(list.get(i).getLet() > activity.getLst()) {
+                    list.get(i).setLet(activity.getLst());
+                }
+            }
+            list.get(i).setLst(list.get(i).getLet() - list.get(i).getDuration());
+        }
+
+        return list;
+    }
+
+    private List<Long> getCriticalPath(List<Task> tasks) {
+        List<Long> criticalPath = new ArrayList<>();
+        List<Activity> list = getActivities(tasks);
+        walkListAhead(list);
+        walkListAback(list);
+        LOGGER.info("          Critical Path: ");
+        for(Activity activity : list) {
+            if((activity.getEet() - activity.getLet() == 0) && (activity.getEst() - activity.getLst() == 0)) {
+                criticalPath.add(activity.getId());
+                LOGGER.info("{} ", activity.getTitle());
+            }
+        }
+        LOGGER.info("         Total duration: {}\n", list.get(list.size() - 1).getEet());
+        return criticalPath;
+    }
+
     @Override
     public AllTasksProjectResponse getDataOfProject(Long projectId) throws Exception {
         List<Task> tasks = taskService.getTasksByProject(projectId);
         List<TaskResponse> taskResponses = new ArrayList<>();
         List<TaskLink> links = new ArrayList<>();
         long index = 1L;
+        List<MessageError> messages = new ArrayList<>();
+        MessageError messageError;
         for (Task task : tasks
         ) {
             TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getPreTaskId(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
-            taskResponse.setProcess(0.2*task.getState().ordinal());
+            taskResponse.setProcess(0.2 * task.getState().ordinal());
             taskResponses.add(taskResponse);
             String preTaskIds = task.getPreTaskId();
             if (StringUtils.isEmpty(preTaskIds)) {
@@ -77,106 +178,53 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 taskLink = new TaskLink(index, new Long(taskId), task.getId(), 0, System.currentTimeMillis(), System.currentTimeMillis());
                 links.add(taskLink);
                 index = index + 1;
+                //
             }
         }
-        List<MessageError> messages = new ArrayList<>();
-        MessageError messageError;
+
+//      =========================================
         for (TaskLink taskLink : links) {
             Task source = taskService.getTasksById(taskLink.getSource());
             Task target = taskService.getTasksById(taskLink.getTarget());
             Calendar date_end_source = Calendar.getInstance();
             date_end_source.setTimeInMillis(source.getStartedAt());
-            date_end_source.add(Calendar.DATE , source.getDuration() == null ? 0 : source.getDuration());
+            date_end_source.add(Calendar.DATE, source.getDuration() == null ? 0 : source.getDuration());
             Calendar date_start_target = Calendar.getInstance();
             date_start_target.setTimeInMillis(target.getStartedAt());
             Date sourceTime = date_end_source.getTime();
             Date targetTime = date_start_target.getTime();
             if (targetTime.compareTo(sourceTime) < 0) {
-                messageError = new MessageError("Cần kiểm tra thời gian Task {{0}} -> Task {{1}}", new ArrayList<String>(){{
+                messageError = new MessageError("Cần ki�<83>m tra th�<9D>i gian Task {{0}} -> Task {{1}}", new ArrayList<String>() {{
                     add(source.getTitle());
                     add(target.getTitle());
                 }});
                 messages.add(messageError);
             }
         }
-//      =========================================
-//      Get List END_Task
-        List<Task> listEndTask = new ArrayList<>();
-        for (Task task : tasks){
-            boolean isEnd = true;
-            for (TaskLink taskLink : links){
-                if (task.getId().equals(taskLink.getSource())){
-                    isEnd = false;
-                    break;
-                }
-            }
-            if(isEnd) {
-                listEndTask.add(task);
-            }
-        }
-        LOGGER.info("End_task {}",new Gson().toJson(listEndTask));
-
 //      Find list gantt
-        List<List<Task>> list_gantt = new ArrayList<>();
-        List<Integer> list_gantt_dur = new ArrayList<>();
-        for ( Task task_end : listEndTask){
-            int duration = 0;
-            List<Task> list_Gantt_Task = new ArrayList<>();
-            LOGGER.info("task_end {}",new Gson().toJson(task_end));
-
-            list_Gantt_Task.add(task_end);
-            Task next_Task = task_end;
-            while (next_Task != null){
-                duration = duration + task_end.getDuration();
-                next_Task = get_preTask_max_dur(next_Task);
-                if (next_Task != null){
-                    list_Gantt_Task.add(next_Task);
-                }else {
-                    list_gantt.add(list_Gantt_Task);
-                    list_gantt_dur.add(duration);
-                }
-            }
+        List<Long> criticalPath = new ArrayList<>();
+        if(messages.isEmpty()) {
+            criticalPath = getCriticalPath(tasks);
         }
-//      find gantt
-        int max_dur = 0;
-        int indexMax = 0;
-        for (int i=0; i < list_gantt_dur.size() ; i++){
-            if(max_dur < list_gantt_dur.get(i)){
-                max_dur = list_gantt_dur.get(i);
-                indexMax = i;
-            }
-        }
-        List<Task> listGantt = new ArrayList<>(list_gantt.get(indexMax));
-        LOGGER.info("List gannt {}",new Gson().toJson(listGantt));
 //      ===================================
-        return new AllTasksProjectResponse(projectId, taskResponses, links, messages , listGantt);
+        return new AllTasksProjectResponse(projectId, taskResponses, links, messages, criticalPath);
     }
-    Task get_preTask_max_dur(Task task) throws Exception {
-        List<Task> list_pre_end = new ArrayList<>();
+
+    List<Task> getPreTasks(List<Task> tasks, Task task) throws Exception {
+        List<Task> listPreTasks = new ArrayList<>();
         if (StringUtils.isEmpty(task.getPreTaskId())){
-            return null;
+            return listPreTasks;
         }
         for (String taskId : task.getPreTaskId().split(",")) {
             if (StringUtils.isEmpty(taskId)) {
                 continue;
             }
-            Task task_pre_end = taskService.getTasksById(new Long(taskId));
-            list_pre_end.add(task_pre_end);
+            Task preTask = getTask(tasks, new Long(taskId));
+            listPreTasks.add(preTask);
         }
-        if (list_pre_end == null || list_pre_end.isEmpty())
-        {
-            return null;
-        }
-        int dur=0;
-        Task task_resufl = null;
-        for (Task task_pre : list_pre_end){
-            if (dur < task_pre.getDuration()){
-                dur = task_pre.getDuration();
-                task_resufl = task_pre;
-            }
-        }
-        return task_resufl;
+        return listPreTasks;
     }
+
     private static DecimalFormat df = new DecimalFormat("0.00");
 
     @Override
