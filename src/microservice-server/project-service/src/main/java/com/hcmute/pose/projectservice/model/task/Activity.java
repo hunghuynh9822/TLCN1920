@@ -7,16 +7,22 @@ public class Activity {
     private Long id;
     private String title;
     private int duration;
+    //Early start time
     private int est;
+    //Late start time
     private int lst;
+    //Early end time
     private int eet;
+    //Late end time
     private int let;
+    private Long startedAt;
     private List<Activity> successors;
     private List<Activity> predecessors;
 
-    public Activity(Long id, String title, int duration) {
+    public Activity(Long id, String title, Long startedAt, int duration) {
         this.id = id;
         this.title = title;
+        this.startedAt = startedAt;
         this.duration = duration;
         this.est = 0;
         this.lst = 0;
@@ -96,5 +102,13 @@ public class Activity {
 
     public void setPredecessors(List<Activity> predecessors) {
         this.predecessors = predecessors;
+    }
+
+    public Long getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(Long startedAt) {
+        this.startedAt = startedAt;
     }
 }

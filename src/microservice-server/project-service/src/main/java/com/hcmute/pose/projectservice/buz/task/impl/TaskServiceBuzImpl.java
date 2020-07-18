@@ -75,14 +75,25 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         return null;
     }
 
-    public List<Activity> getActivities(List<Task> tasks) {
+    public ProcessActivity getActivities(List<Task> tasks) {
         List<Activity> activities = new ArrayList<>();
+        Long startTime = 0L;
+        Long endTime = 0L;
         for (Task task : tasks
              ) {
-            Activity activity = new Activity(task.getId(), task.getTitle(), task.getDuration());
+            Activity activity = new Activity(task.getId(), task.getTitle(), task.getStartedAt(), task.getDuration());
             activities.add(activity);
             if(StringUtils.isEmpty(task.getPreTaskId())) {
+                if(startTime.equals(0L)) {
+                    startTime = task.getStartedAt();
+                } else if(startTime > task.getStartedAt()){
+                    startTime = task.getStartedAt();
+                }
                 continue;
+            }
+            Long temp = plusDate(task.getStartedAt(),task.getDuration());
+            if(endTime.compareTo(temp) < 0) {
+                endTime = temp;
             }
             for (String taskId : task.getPreTaskId().split(",")) {
                 Integer preIndex = getActivity(activities, new Long(taskId));
@@ -94,28 +105,37 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 activity.getPredecessors().add(activities.get(preIndex));
             }
         }
-        return activities;
+        return new ProcessActivity(startTime, endTime, activities);
     }
 
-    private static List<Activity> walkListAhead(List<Activity> list)
-    {
+    private ProcessActivity walkListAhead(ProcessActivity processActivity) {
+        Long startTime = processActivity.getStartTime();
+        Long endTime = processActivity.getEndTime();
+        List<Activity> list = processActivity.getActivities();
         int na = list.size();
         list.get(0).setEet(list.get(0).getEst() + list.get(0).getDuration());
         for(int i = 1; i < na; i++)
         {
+            Activity currentActivity = list.get(i);
+            if(list.get(i).getPredecessors().size() == 0) {
+                Integer subDate = subDate(startTime, currentActivity.getStartedAt());
+                list.get(i).setEst(subDate);
+            }
             for(Activity activity : list.get(i).getPredecessors())
             {
-                if(list.get(i).getEst() < activity.getEet())
-                    list.get(i).setEst(activity.getEet());
+                if(list.get(i).getEst() < activity.getEet()) {
+                    list.get(i).setEst(activity.getEet()); // //subDate(startTime, list.get(i).getStartedAt())
+                }
             }
 
             list.get(i).setEet(list.get(i).getEst() + list.get(i).getDuration());
         }
-        return list;
+        processActivity.setActivities(list);
+        return processActivity;
     }
 
-    private static List<Activity> walkListAback(List<Activity> list)
-    {
+    private ProcessActivity walkListAback(ProcessActivity processActivity) {
+        List<Activity> list = processActivity.getActivities();
         int na = list.size();
         list.get(na - 1).setLet(list.get(na - 1).getEet());
         list.get(na - 1).setLst(list.get(na - 1).getLet() - list.get(na - 1).getDuration());
@@ -124,33 +144,83 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         {
             for(Activity activity : list.get(i).getSuccessors())
             {
-                if(list.get(i).getLet() == 0)
+                if(list.get(i).getLet() == 0) {
                     list.get(i).setLet(activity.getLst());
-                else
-                if(list.get(i).getLet() > activity.getLst()) {
+                } else if(list.get(i).getLet() > activity.getLst()) {
                     list.get(i).setLet(activity.getLst());
                 }
             }
             list.get(i).setLst(list.get(i).getLet() - list.get(i).getDuration());
         }
-
-        return list;
+        processActivity.setActivities(list);
+        return processActivity;
     }
 
     private List<Long> getCriticalPath(List<Task> tasks) {
-        List<Long> criticalPath = new ArrayList<>();
-        List<Activity> list = getActivities(tasks);
-        walkListAhead(list);
-        walkListAback(list);
+        List<Activity> criticalPath = new ArrayList<>();
+        List<Long> criticalPathId = new ArrayList<>();
+        ProcessActivity processActivity = getActivities(tasks);
+        walkListAhead(processActivity);
+        walkListAback(processActivity);
+        List<Activity> list = processActivity.getActivities();
+        LOGGER.info("{} {} {}", processActivity.getStartTime(), processActivity.getEndTime(), subDate(processActivity.getStartTime(), processActivity.getEndTime()));
         LOGGER.info("          Critical Path: ");
+        if(list.isEmpty()) {
+            LOGGER.info("Not find critical path");
+            return new ArrayList<>();
+        }
+        Activity firstActivity = list.get(0);
+        if(!isCriticalActivity(processActivity.getStartTime(), processActivity.getEndTime(), firstActivity)) {
+            LOGGER.info("First activity {} {} {} previous {} after {} EST {} LST {} EET {} LET {}",
+                    firstActivity.getId(), firstActivity.getTitle(), firstActivity.getDuration(), firstActivity.getPredecessors().size(), firstActivity.getSuccessors().size(), firstActivity.getEst(), firstActivity.getLst(), firstActivity.getEet(), firstActivity.getLet());
+            LOGGER.info("First activity not start the critical path");
+            return new ArrayList<>();
+        }
         for(Activity activity : list) {
-            if((activity.getEet() - activity.getLet() == 0) && (activity.getEst() - activity.getLst() == 0)) {
-                criticalPath.add(activity.getId());
-                LOGGER.info("{} ", activity.getTitle());
+            LOGGER.info("Activity {} {} {} previous {} after {} EST {} LST {} EET {} LET {}",
+                    activity.getId(), activity.getTitle(), activity.getDuration(), activity.getPredecessors().size(), activity.getSuccessors().size(), activity.getEst(), activity.getLst(), activity.getEet(), activity.getLet());
+            if(isCriticalActivity(processActivity.getStartTime(), processActivity.getEndTime(), activity)) {
+                if(activity.getPredecessors().size() == 0) {
+                    if(activity.getEst() == 0) {
+                        criticalPath.add(activity);
+                        criticalPathId.add(activity.getId());
+                        LOGGER.info("{} ", activity.getTitle());
+                    }
+                } else {
+                    for(Activity pre : activity.getPredecessors()) {
+                        if(criticalPath.contains(pre)) {
+                            criticalPath.add(activity);
+                            criticalPathId.add(activity.getId());
+                            LOGGER.info("{} ", activity.getTitle());
+                            break;
+                        }
+                    }
+                }
             }
         }
-        LOGGER.info("         Total duration: {}\n", list.get(list.size() - 1).getEet());
-        return criticalPath;
+        Activity last = criticalPath.get(criticalPath.size() - 1);
+        if(!plusDate(last.getStartedAt(), last.getDuration()).equals(processActivity.getEndTime())) {
+            LOGGER.info("Not end activity of the critical path");
+            return new ArrayList<>();
+        }
+        LOGGER.info("         Total duration: {}\n", criticalPath.get(criticalPath.size() - 1).getEet());
+        return criticalPathId;
+    }
+
+    private Boolean isCriticalActivity(Long startTime, Long endTime, Activity activity) {
+        return (activity.getEet() - activity.getLet() == 0) && (activity.getEst() - activity.getLst() == 0) && (subDate(startTime, activity.getStartedAt()) == activity.getEst());
+    }
+
+    private Integer subDate(Long date1, Long date2) {
+        long subDate = date2 - date1;
+        return Math.toIntExact(subDate / (24 * 60 * 60 * 1000));
+    }
+
+    private Long plusDate(Long date, Integer duration) {
+        Calendar date_end_source = Calendar.getInstance();
+        date_end_source.setTimeInMillis(date);
+        date_end_source.add(Calendar.DATE, duration == null ? 0 : duration);
+        return date_end_source.getTimeInMillis();
     }
 
     @Override
@@ -194,7 +264,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             Date sourceTime = date_end_source.getTime();
             Date targetTime = date_start_target.getTime();
             if (targetTime.compareTo(sourceTime) < 0) {
-                messageError = new MessageError("Cần ki�<83>m tra th�<9D>i gian Task {{0}} -> Task {{1}}", new ArrayList<String>() {{
+                messageError = new MessageError("Cần kiểm tra thời gian Task {{0}} -> Task {{1}}", new ArrayList<String>() {{
                     add(source.getTitle());
                     add(target.getTitle());
                 }});
