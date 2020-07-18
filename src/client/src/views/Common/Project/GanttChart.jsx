@@ -69,8 +69,21 @@ class GanttChart extends Component {
         getTasksOfProject(projectId)
             .then(response => {
                 let message = response.message;
+                let tasks = response.tasks;
+                let criticalPath = response.listGantt;
+                let data = tasks.map((task) => {
+                    return {
+                        id: task.id,
+                        text: task.title,
+                        start_date: this.convertDateToString(task.startedAt),
+                        duration: task.duration == null ? 0 : task.duration,
+                        progress: task.process,
+                        type: criticalPath.includes(task.id) ? gantt.config.types.critical : null
+                    }
+                })
+                data.message = message;
                 this.setState({
-                    data: { ...this.state.data, message: message },
+                    data: data,
                 })
             }).catch(error => {
                 console.log(error);
@@ -88,6 +101,7 @@ class GanttChart extends Component {
         getTasksOfProject(projectId)
             .then(response => {
                 let tasks = response.tasks;
+                let criticalPath = response.listGantt;
                 let data = tasks.map((task) => {
                     return {
                         id: task.id,
@@ -95,7 +109,7 @@ class GanttChart extends Component {
                         start_date: this.convertDateToString(task.startedAt),
                         duration: task.duration == null ? 0 : task.duration,
                         progress: task.process,
-                        // type: gantt.config.types.critical
+                        type: criticalPath.includes(task.id) ? gantt.config.types.critical : null
                     }
                 })
                 let message = response.message;
