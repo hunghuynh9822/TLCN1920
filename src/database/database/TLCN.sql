@@ -5,7 +5,7 @@
 -- Dumped from database version 10.11
 -- Dumped by pg_dump version 11.6 (Ubuntu 11.6-1.pgdg18.04+1)
 
--- Started on 2020-07-18 13:05:49 +07
+-- Started on 2020-07-18 13:19:58 +07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -537,9 +537,9 @@ COPY public.requests (id, employeeid, name, "position", timestart, timeend, reas
 
 COPY public.roles (id, name, created_at, updated_at) FROM stdin;
 1	ROLE_ADMIN	1567937957503	1567937957503
-2	ROLE_STAFF	1567937962314	1567937962314
-3	ROLE_LEAD	1567937962314	1567937962314
-4	ROLE_HR	1567937962314	1567937962314
+2	ROLE_LEAD	1567937962314	1567937962314
+3	ROLE_HR	1567937962314	1567937962314
+4	ROLE_STAFF	1567937962314	1567937962314
 \.
 
 
@@ -938,7 +938,7 @@ ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2020-07-18 13:05:53 +07
+-- Completed on 2020-07-18 13:20:01 +07
 
 --
 -- PostgreSQL database dump complete
