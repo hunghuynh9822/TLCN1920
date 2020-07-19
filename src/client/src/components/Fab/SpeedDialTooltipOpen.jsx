@@ -96,6 +96,6 @@ class SpeedDialTooltipOpen extends Component {
 SpeedDialTooltipOpen.propTypes = {
     classes: PropTypes.object.isRequired,
     openCreate: PropTypes.func.isRequired,
-    stylesSpeedDial: PropTypes.object.isRequired,
+    stylesSpeedDial: PropTypes.string.isRequired,
 };
 export default withStyles(styles)(SpeedDialTooltipOpen);

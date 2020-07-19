@@ -287,6 +287,14 @@ class ProjectDetails extends Component {
                                     </div>
                                     <div className={classes.divider} />
                                     <Grid item container className={classes.paraph}>
+                                        <Grid item xs={2}>Owner</Grid>
+                                        <Grid item xs={10}>
+                                            <div>
+                                                <TagMember member={projectOwner} removeMember={this.removeMember} hiddenRemove={true} />
+                                            </div>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item container className={classes.paraph}>
                                         <Grid item xs={2}>Admin</Grid>
                                         <Grid item xs={10}>
                                             <div>

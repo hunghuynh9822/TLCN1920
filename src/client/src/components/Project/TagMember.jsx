@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import classnames from 'classnames';
 
 import Avatar from 'react-avatar';
 import CloseIcon from '@material-ui/icons/Close';
@@ -12,20 +13,25 @@ const styles = theme => ({
         background: '#e6e8ec',
         borderRadius: '20px',
         marginBottom: '10px',
+        marginRight: '5px',
     },
     tag_name: {
         lineHeight: '30px',
-        padding: '0px 0px 0px 10px',
+        padding: '0px 10px 0px 10px',
     },
     icon_close: {
         minWidth: '30px',
         padding: '0px',
         borderRadius: '20px',
+        marginLeft: '-10px',
         "&:hover": {
             backgroundColor: "#e6e8ec",
             boxShadow: "none"
         }
     },
+    hidden: {
+        display: 'none'
+    }
 });
 class TagMember extends Component {
     constructor(props) {
@@ -52,7 +58,7 @@ class TagMember extends Component {
                     )
                 }
                 <div className={classes.tag_name}>{this.getName(member)}</div>
-                <Button onClick={this.handleRemove} size="medium" color="primary" className={classes.icon_close}><CloseIcon fontSize="small" /></Button>
+                <Button onClick={this.handleRemove} size="medium" color="primary" className={classnames(classes.icon_close, { [classes.hidden]: this.props.hiddenRemove })}><CloseIcon fontSize="small" /></Button>
             </div>
         );
     }
@@ -61,5 +67,6 @@ TagMember.propTypes = {
     classes: PropTypes.object.isRequired,
     member: PropTypes.object.isRequired,
     removeMember: PropTypes.func.isRequired,
+    hiddenRemove: PropTypes.bool,
 };
 export default withStyles(styles)(TagMember);
