@@ -89,20 +89,20 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 } else if(startTime > task.getStartedAt()){
                     startTime = task.getStartedAt();
                 }
-                continue;
+            } else {
+                for (String taskId : task.getPreTaskId().split(",")) {
+                    Integer preIndex = getActivity(activities, new Long(taskId));
+                    if(preIndex == null) {
+                        LOGGER.error("Not found {}", taskId);
+                        continue;
+                    }
+                    activities.get(preIndex).getSuccessors().add(activity);
+                    activity.getPredecessors().add(activities.get(preIndex));
+                }
             }
             Long temp = plusDate(task.getStartedAt(),task.getDuration());
             if(endTime.compareTo(temp) < 0) {
                 endTime = temp;
-            }
-            for (String taskId : task.getPreTaskId().split(",")) {
-                Integer preIndex = getActivity(activities, new Long(taskId));
-                if(preIndex == null) {
-                    LOGGER.error("Not found {}", taskId);
-                    continue;
-                }
-                activities.get(preIndex).getSuccessors().add(activity);
-                activity.getPredecessors().add(activities.get(preIndex));
             }
         }
         return new ProcessActivity(startTime, endTime, activities);
