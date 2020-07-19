@@ -143,6 +143,7 @@ class ProjectTasks extends Component {
             open: false,
             openAdd: false,
             scroll: 'body',
+            openCreate: false,
             openAddPrevious: false,
             previousTasks: new Array(),
             creatorTasks: new Array(),

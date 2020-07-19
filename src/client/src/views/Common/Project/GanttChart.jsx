@@ -2,44 +2,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { withAlert } from 'react-alert';
+import { connect } from 'react-redux';
 
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Gantt, Toolbar, MessageArea, Loading } from '../../../components';
 import { getTasksOfProject, updateTask, TASK_STATE } from '../../../action/task';
+import { reloadTasks } from '../../../action/task';
 const styles = theme => ({
     gantt_container: { "height": "calc(100vh - 40px - 200px)" },
     zoom_bar: { background: "#ededed", height: "40px", lineHeight: "40px", padding: "5px 10px" }
 });
-const data = {
-    data: [
-        { id: 1, text: 'Task #1', start_date: '2020/01/15', duration: 3, progress: 0.6 },
-        { id: 2, text: 'Task #2', start_date: '2020/01/18', duration: 3, progress: 0.0 },
-        { id: 3, text: 'Task #3', start_date: '2020/01/15', duration: 5, progress: 0.4 },
-        { id: 4, text: 'Task #4', start_date: '2020/01/20', duration: 3, progress: 0.0 },
-        { id: 5, text: 'Task #5', start_date: '2020/01/17', duration: 2, progress: 0.5 },
-        { id: 6, text: 'Task #6', start_date: '2020/01/19', duration: 3, progress: 0.0 },
-        { id: 7, text: 'Task #7', start_date: '2020/01/22', duration: 5, progress: 0.0 }
-    ],
-    links: [
-        { id: 1, source: 1, target: 2, type: '0' },
-        { id: 2, source: 3, target: 4, type: '0' },
-        { id: 3, source: 5, target: 6, type: '0' },
-        { id: 4, source: 6, target: 7, type: '0' }
-    ]
-};
 class GanttChart extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentZoom: 'Days',
             messages: [],
-            data: {
-                data: [],
-                links: [],
-                message: "",
-            },
             loading: false,
+            currentIndex: 0,
         }
         this.loadTasks = this.loadTasks.bind(this);
         this.reloadTaskMessage = this.reloadTaskMessage.bind(this);
@@ -82,9 +63,12 @@ class GanttChart extends Component {
                     }
                 })
                 data.message = message;
-                this.setState({
-                    data: data,
-                })
+                data.links = response.links
+                // this.setState({
+                //     data: data,
+                // })
+                console.log("[Gantt] reloadTaskMessage ", { data: data, links: response.links, message: message })
+                this.props.reloadGanttTasks({ data: data, links: response.links, message: message });
             }).catch(error => {
                 console.log(error);
                 alert.error('Oops! Something went wrong when get tasks of project. Please call check!');
@@ -113,8 +97,10 @@ class GanttChart extends Component {
                     }
                 })
                 let message = response.message;
+                console.log("[Gantt] loadTasks ", { data: data, links: response.links, message: message })
+                this.props.reloadGanttTasks({ data: data, links: response.links, message: message });
                 this.setState({
-                    data: { data: data, links: response.links, message: message },
+                    // data: { data: data, links: response.links, message: message },
                     loading: false
                 })
             }).catch(error => {
@@ -131,9 +117,12 @@ class GanttChart extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.index == 2) {
+        if (nextProps.index == 2 && this.state.currentIndex != nextProps.index) {
             this.loadTasks();
         }
+        this.setState({
+            currentIndex: nextProps.index
+        })
     }
 
     addMessage(message) {
@@ -226,8 +215,8 @@ class GanttChart extends Component {
             updateTask(request)
                 .then(response => {
                     console.log(response);
-                    // this.loadTasks();
-                    this.reloadTaskMessage();
+                    this.loadTasks();
+                    // this.reloadTaskMessage();
                 }).catch(error => {
                     console.log(error);
                     //(error && error.message) || 
@@ -251,8 +240,8 @@ class GanttChart extends Component {
                 updateTask(request)
                     .then(response => {
                         console.log(response);
-                        // this.loadTasks();
-                        this.reloadTaskMessage();
+                        this.loadTasks();
+                        // this.reloadTaskMessage();
                     }).catch(error => {
                         console.log(error);
                         //(error && error.message) || 
@@ -265,11 +254,7 @@ class GanttChart extends Component {
             console.log("[Gantt] Unsupport type " + entityType);
         }
         //
-
-
-
         this.addMessage(message);
-
     }
 
     handleZoomChange = (zoom) => {
@@ -279,7 +264,7 @@ class GanttChart extends Component {
     }
 
     renderMessage() {
-        return this.state.data.message && this.state.data.message.map((value, index) => {
+        return this.props.ganttTasks && this.props.ganttTasks.message && this.props.ganttTasks.message.map((value, index) => {
             let params = value.params;
             let message = value.message;
             params.forEach((value, index) => {
@@ -317,7 +302,6 @@ class GanttChart extends Component {
                 </div>
                 <div className={classes.gantt_container}>
                     <Gantt
-                        tasks={this.state.data}
                         zoom={currentZoom}
                         onDataUpdated={this.logDataUpdate}
                     />
@@ -333,4 +317,14 @@ GanttChart.propTypes = {
     classes: PropTypes.object.isRequired,
     projectItem: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(withAlert()(GanttChart));
+const mapStateToProps = (state, ownProps) => {
+    return {
+        ganttTasks: state.tasks.ganttTasks,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        reloadGanttTasks: (ganttTasks) => dispatch(reloadTasks(ganttTasks)),
+    }
+}
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(GanttChart)));

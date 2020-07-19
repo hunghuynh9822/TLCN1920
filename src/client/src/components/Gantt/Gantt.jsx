@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { gantt } from 'dhtmlx-gantt';
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
+import { reloadTasks } from '../../action/task';
 var count = 1;
 class Gantt extends Component {
     // instance of gantt.dataProcessor
@@ -55,26 +57,28 @@ class Gantt extends Component {
         console.log("[Gantt] initGanttDataProcessor");
         this.dataProcessor = gantt.createDataProcessor((type, action, item, id) => {
             return new Promise((resolve, reject) => {
+                const { ganttTasks } = this.props;
                 if (onDataUpdated) {
                     onDataUpdated(type, action, item, id);
                     gantt.refreshData();
+                    console.log("[Gantt] render ", ganttTasks, gantt);
                 }
 
                 // if onDataUpdated changes returns a permanent id of the created item, you can return it from here so dhtmlxGantt could apply it
                 // resolve({id: databaseId});
-                return resolve();
+                return resolve(ganttTasks);
             });
         });
     }
 
     shouldComponentUpdate(nextProps) {
-        console.log("[Gantt] shouldComponentUpdate")
+        console.log("[Gantt] shouldComponentUpdate", this.props.zoom !== nextProps.zoom, nextProps)
         return this.props.zoom !== nextProps.zoom;
     }
 
     componentDidUpdate() {
         console.log("[Gantt] componentDidUpdate")
-        gantt.refreshData();
+        gantt.render();
     }
 
     componentWillUnmount() {
@@ -88,6 +92,7 @@ class Gantt extends Component {
     }
 
     componentDidMount() {
+        const { ganttTasks } = this.props;
         count = count + 1;
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
         //
@@ -126,11 +131,10 @@ class Gantt extends Component {
             { name: "duration", label: "Duration", align: "center" },
         ];
         //
-        const { tasks } = this.props;
-        console.log("[Gantt] componentDidMount with tasks " + JSON.stringify(tasks));
+        console.log("[Gantt] componentDidMount with tasks " + JSON.stringify(ganttTasks), this.props);
         gantt.init(this.ganttContainer);
         this.initGanttDataProcessor();
-        gantt.parse(tasks);
+        gantt.parse(ganttTasks);
         gantt.render();
     }
 
@@ -144,4 +148,14 @@ class Gantt extends Component {
         );
     }
 }
-export default Gantt;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        ganttTasks: state.tasks.ganttTasks,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        reloadGanttTasks: (ganttTasks) => dispatch(reloadTasks(ganttTasks)),
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Gantt);

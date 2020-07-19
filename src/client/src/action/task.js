@@ -11,12 +11,21 @@ export const TASK_STATE = [
 ]
 
 export const UPDATE_CREATOR_TASKS = 'UPDATE_CREATOR_TASKS';
+export const RELOAD_TASKS = 'RELOAD_TASKS';
 
 //Redux
 export function updateCreatorTasks(creatorTasks) {
     return {
         type: UPDATE_CREATOR_TASKS,
         creatorTasks
+    };
+}
+
+export function reloadTasks(ganttTasks) {
+    console.log("[Gantt] reloadTasks ", ganttTasks)
+    return {
+        type: RELOAD_TASKS,
+        ganttTasks
     };
 }
 
