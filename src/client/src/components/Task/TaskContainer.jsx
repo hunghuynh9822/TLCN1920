@@ -24,7 +24,7 @@ const styles = theme => ({
         justifyContent: 'flex-start',
         width: '100%',
         height: '100%',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: 'transparent',
         overflow: 'hidden',
     },
     gridList: {
@@ -35,7 +35,7 @@ const styles = theme => ({
     slider: {
         width: '100%',
         minHeight: '100%',
-        padding: '0px 20px'
+        padding: '0px 20px',
     }
 });
 class TaskContainer extends Component {
@@ -223,7 +223,6 @@ class TaskContainer extends Component {
             centerPadding: "60px",
             slidesToShow: 5,
             swipeToSlide: true,
-            // adaptiveHeight: true,
             afterChange: function (index) {
                 console.log(
                     `Slider Changed to: ${index + 1}`

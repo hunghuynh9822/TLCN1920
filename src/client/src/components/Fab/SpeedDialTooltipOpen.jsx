@@ -57,7 +57,7 @@ class SpeedDialTooltipOpen extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, stylesSpeedDial } = this.props;
         const { open } = this.state;
         const actions = [
             { icon: <CreateIcon />, name: 'New', action: this.openCreate },
@@ -72,7 +72,7 @@ class SpeedDialTooltipOpen extends Component {
                 {/* <Backdrop open={open} /> */}
                 <SpeedDial
                     ariaLabel="SpeedDial tooltip example"
-                    className={classes.speedDial}
+                    className={stylesSpeedDial}
                     // hidden={hidden}
                     icon={<SpeedDialIcon />}
                     onClose={this.handleClose}
@@ -96,5 +96,6 @@ class SpeedDialTooltipOpen extends Component {
 SpeedDialTooltipOpen.propTypes = {
     classes: PropTypes.object.isRequired,
     openCreate: PropTypes.func.isRequired,
+    stylesSpeedDial: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(SpeedDialTooltipOpen);

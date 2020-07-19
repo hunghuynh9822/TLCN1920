@@ -13,7 +13,7 @@ import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 
 import SwipeableViews from 'react-swipeable-views';
 
-import { NewTask, Loading, CenteredTabs, TabPanel, TagMember, TagTask, DialogTitleCustom } from '../../../components';
+import { NewTask, Loading, CenteredTabs, TabPanel, TagMember, TagTask, DialogTitleCustom, SpeedDialTooltipOpen } from '../../../components';
 import {
     DatePicker
 } from '@material-ui/pickers';
@@ -59,7 +59,7 @@ function getLabelText(value) {
 
 const styles = theme => ({
     root: {
-
+        height: '100%'
     },
     header: {
         display: 'flex',
@@ -72,15 +72,17 @@ const styles = theme => ({
         flexBasis: '33%',
     },
     content: {
-
+        height: '100%'
     },
     tabpanel: {
         overflow: 'hidden',
+        height: '100%'
     },
     //Form
     buttonAdd: {
         // margin: theme.spacing(1),
-        marginLeft: theme.spacing(3)
+        marginRight: theme.spacing(3),
+        float: 'right'
     },
     paper: {
         marginTop: '0px',
@@ -116,6 +118,11 @@ const styles = theme => ({
         minWidth: 120,
         maxWidth: 300,
     },
+    speedDial: {
+        position: 'fixed',
+        top: theme.spacing(5),
+        // right: theme.spacing(2),
+    },
 });
 const background = '#f5f8ff';
 const colorWord = "#ffffff";
@@ -127,12 +134,6 @@ const mapColor = {
     "DONE": "#0026ff",
     "FINISH": "#0026ff"
 }
-const CustomSwipeableViews = withStyles(theme => ({
-    root: {
-        minHeight: '100%',
-        overflow: 'hidden',
-    }
-}))(SwipeableViews);
 class ProjectTasks extends Component {
     constructor(props) {
         super(props);
@@ -183,6 +184,8 @@ class ProjectTasks extends Component {
         this.handleCloseAddPrevious = this.handleCloseAddPrevious.bind(this);
         this.handleListItemClick = this.handleListItemClick.bind(this);
         this.removePreviousTask = this.removePreviousTask.bind(this);
+        this.handleOpenCreate = this.handleOpenCreate.bind(this);
+        this.handleCloseCreate = this.handleCloseCreate.bind(this);
     }
 
     handleChangeTabs = (event, newValue) => {
@@ -558,6 +561,19 @@ class ProjectTasks extends Component {
         return mapColor[state];
     }
 
+    handleOpenCreate() {
+        console.log("[Task] Open form create")
+        this.setState({
+            openCreate: true,
+        })
+    }
+
+    handleCloseCreate() {
+        this.setState({
+            openCreate: false,
+        })
+    }
+
     render() {
         const { classes } = this.props;
         const { projectItem } = this.props;
@@ -580,23 +596,35 @@ class ProjectTasks extends Component {
         // }
         return (
             <React.Fragment>
+                {/* <SpeedDialTooltipOpen openCreate={this.handleOpenCreate} stylesSpeedDial={classes.speedDial} /> */}
                 <div className={classes.root}>
                     <div className={classes.header}>
                         <div className={classes.header_section}>
-                            <NewTask loadTasks={this.loadTasks} loadProject={this.props.loadProject} />
+                            <NewTask loadTasks={this.loadTasks} loadProject={this.props.loadProject} openCreate={this.state.openCreate} handleCloseCreate={this.handleCloseCreate} />
                         </div>
                         <div className={classes.header_section}>
                             <CenteredTabs handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.header_section}>
                             {/* Change mode */}
+                            <Button onClick={this.handleOpenCreate} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
+                                <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
+                                        New Task
+                            </Button>
                         </div>
                     </div>
                     <div className={classes.content}>
-                        <CustomSwipeableViews
+                        <SwipeableViews
                             axis={'x'}
                             index={this.state.value}
                             onChangeIndex={this.handleChangeIndex}
+                            style={{
+                                minHeight: '100%',
+                                overflow: 'hidden'
+                            }}
+                            slideStyle={{
+                                minHeight: '100%',
+                            }}
                         >
                             {
                                 tabs.map((tab, key) => (
@@ -605,7 +633,7 @@ class ProjectTasks extends Component {
                                     </TabPanel>
                                 ))
                             }
-                        </CustomSwipeableViews>
+                        </SwipeableViews>
                     </div>
                 </div>
                 <Dialog

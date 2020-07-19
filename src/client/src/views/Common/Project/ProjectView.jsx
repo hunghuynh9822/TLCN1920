@@ -43,14 +43,9 @@ const styles = theme => ({
     },
     tabpanel: {
         overflow: 'hidden',
+        minHeight: "calc(100vh - 150px)",
     }
 });
-const CustomSwipeableViews = withStyles(theme => ({
-    root: {
-        minHeight: '100%',
-        overflow: 'hidden',
-    }
-}))(SwipeableViews);
 
 class ProjectView extends Component {
     constructor(props) {
@@ -224,10 +219,17 @@ class ProjectView extends Component {
                     </div>
                 </div> */}
                 <div className={classes.content}>
-                    <CustomSwipeableViews
+                    <SwipeableViews
                         axis={'x'}
                         index={this.state.value}
                         onChangeIndex={this.handleChangeIndex}
+                        style={{
+                            minHeight: '100%',
+                            overflow: 'hidden'
+                        }}
+                        slideStyle={{
+                            minHeight: '100%',
+                        }}
                     >
                         {
                             tabs.map((tab, key) => (
@@ -240,7 +242,7 @@ class ProjectView extends Component {
                                 </TabPanel>
                             ))
                         }
-                    </CustomSwipeableViews>
+                    </SwipeableViews>
                 </div>
             </React.Fragment>
         );

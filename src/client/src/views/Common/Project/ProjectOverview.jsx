@@ -40,7 +40,12 @@ const styles = theme => ({
         textAlign: 'center',
         lineHeight: '200px',
         color: '#bfbfbf'
-    }
+    },
+    speedDial: {
+        position: 'fixed',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+    },
 });
 
 class ProjectOverview extends Component {
@@ -211,7 +216,7 @@ class ProjectOverview extends Component {
                 {/* <div className={classes.sub_header}>
                 </div> */}
                 {this.renderProjects()}
-                <SpeedDialTooltipOpen openCreate={this.handleOpen} />
+                <SpeedDialTooltipOpen openCreate={this.handleOpen} stylesSpeedDial={classes.speedDial} />
                 <NewProject currentUser={currentUser} currentRole={currentRole} handleToProject={this.handleToProject} open={this.state.openForm} handleClose={this.handleClose} />
             </div>
         );

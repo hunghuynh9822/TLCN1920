@@ -1,3 +1,4 @@
+/* Gantt */
 .critical_class {
     border: 2px solid #BFC518;
     color: #6ba8e3;
@@ -10,4 +11,9 @@
 
 .canvasjs-chart-credit {
     display: none;
+}
+
+/* Slick */
+.slick-list {
+    min-height: 100%;
 }

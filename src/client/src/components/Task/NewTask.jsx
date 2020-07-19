@@ -89,7 +89,6 @@ class NewTask extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
             openAdd: false,
             openAddPrevious: false,
             scroll: 'body',
@@ -114,7 +113,6 @@ class NewTask extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.removeAssignee = this.removeAssignee.bind(this);
         this.handleListItemMemberClick = this.handleListItemMemberClick.bind(this);
-        this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleOpenAdd = this.handleOpenAdd.bind(this);
         this.handleCloseAdd = this.handleCloseAdd.bind(this);
@@ -193,7 +191,6 @@ class NewTask extends Component {
                 this.props.loadProject();
                 this.props.loadTasks();
                 this.setState({
-                    open: false,
                     openAdd: false,
                     assignee: null,
                     previousTasks: new Array(),
@@ -253,15 +250,10 @@ class NewTask extends Component {
         })
     }
 
-    handleOpen() {
-        this.setState({
-            open: true,
-        })
-    }
-
     handleClose() {
+        const { handleCloseCreate } = this.props;
+        handleCloseCreate();
         this.setState({
-            open: false,
             openAdd: false,
             openAddPrevious: false,
             assignee: null,
@@ -308,20 +300,16 @@ class NewTask extends Component {
     }
     render() {
         const { classes } = this.props;
-        const { projectItem } = this.props;
-        const { open, openAdd, openAddPrevious, request, scroll } = this.state;
+        const { projectItem, openCreate } = this.props;
+        const { openAdd, openAddPrevious, request, scroll } = this.state;
         let members = projectItem.members;
         let tasks = projectItem.tasks;
         // console.log(members);
         // console.log("[NewTask][projectItem][tasks] " + JSON.stringify(tasks));
         return (
             <React.Fragment>
-                <Button onClick={this.handleOpen} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
-                    <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
-                    New Task
-        </Button>
                 <Dialog
-                    open={open}
+                    open={openCreate}
                     scroll={scroll}
                     aria-labelledby="scroll-dialog-title"
                     disableBackdropClick
@@ -506,6 +494,8 @@ NewTask.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
     loadProject: PropTypes.func.isRequired,
+    openCreate: PropTypes.bool.isRequired,
+    handleCloseCreate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
