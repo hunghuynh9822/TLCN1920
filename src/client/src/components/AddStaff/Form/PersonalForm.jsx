@@ -50,8 +50,10 @@ class PersonalForm extends Component {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <KeyboardDatePicker
-                            disableToolbar
+                            // disableToolbar
                             // variant="inline"
+                            openTo="year"
+                            disableFuture
                             format="yyyy-MM-dd"
                             id="birthday"
                             name="birthday"
@@ -93,7 +95,9 @@ class PersonalForm extends Component {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <KeyboardDatePicker
-                                disableToolbar
+                                disableFuture
+                                openTo="year"
+                                // disableToolbar
                                 // variant="inline"
                                 format="yyyy-MM-dd"
                                 id="idCreated"
