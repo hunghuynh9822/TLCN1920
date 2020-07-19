@@ -61,7 +61,7 @@ class Sidebar extends Component {
                     });
                     let path = prop.path;
                     if (path.includes(':projectId')) {
-                        if(projectItem) {
+                        if (projectItem) {
                             const projectId = projectItem ? projectItem.project.id : null
                             path = this.getPathToProjectId(path, projectId);
                         } else {
@@ -107,16 +107,15 @@ class Sidebar extends Component {
         return (
             <div className={classes.logo}>
                 {this.props.desktopOpen ?
-                    <a
-                        href="https://www.creative-tim.com?ref=mdr-sidebar"
+                    <NavLink
+                        to="/"
                         className={classes.logoLink}
-                        target="_blank"
                     >
                         <div className={classes.logoImage}>
                             <img src={logo} alt="logo" className={classes.img} />
                         </div>
                         {logoText}
-                    </a> : <div className={classes.space}></div>
+                    </NavLink> : <div className={classes.space}></div>
                 }
                 <Hidden smDown className={classes.hidden}>
                     <div className={classNames(classes.toolbarIcon, {
