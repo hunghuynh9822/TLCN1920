@@ -356,21 +356,21 @@ class ProjectTasks extends Component {
         this.setState({
             task: { ...this.state.task, state: TASK_STATE[event.target.value] }
         });
-        // let request = {
-        //     taskId: this.state.task.id,
-        //     employeeId: currentUser.id,
-        //     state: event.target.value
-        // }
-        // console.log("Request update task : " + JSON.stringify(request));
-        // updateStateTasks(request)
-        //     .then(response => {
-        //         console.log(response);
-        //         this.loadTasks();
-        //     }).catch(error => {
-        //         console.log(error);
-        //         //(error && error.message) || 
-        //         alert.error('Oops! Something went wrong. Please try again!');
-        //     });
+        let request = {
+            taskId: this.state.task.id,
+            employeeId: currentUser.id,
+            state: event.target.value
+        }
+        console.log("Request update task : " + JSON.stringify(request));
+        updateStateTasks(request)
+            .then(response => {
+                console.log(response);
+                this.loadTasks();
+            }).catch(error => {
+                console.log(error);
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+            });
     }
 
     handlePointChange(event, newValue) {
@@ -379,21 +379,21 @@ class ProjectTasks extends Component {
         this.setState({
             task: { ...this.state.task, point: newValue }
         });
-        // let request = {
-        //     taskId: this.state.task.id,
-        //     employeeId: currentUser.id,
-        //     point: newValue
-        // }
-        // console.log("Request update task : " + JSON.stringify(request));
-        // updatePointTasks(request)
-        //     .then(response => {
-        //         console.log(response);
-        //         this.loadTasks();
-        //     }).catch(error => {
-        //         console.log(error);
-        //         //(error && error.message) || 
-        //         alert.error('Oops! Something went wrong. Please try again!');
-        //     });
+        let request = {
+            taskId: this.state.task.id,
+            employeeId: currentUser.id,
+            point: newValue
+        }
+        console.log("Request update task : " + JSON.stringify(request));
+        updatePointTasks(request)
+            .then(response => {
+                console.log(response);
+                this.loadTasks();
+            }).catch(error => {
+                console.log(error);
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+            });
     }
 
     handleDatePickerChange(name, date) {
@@ -654,7 +654,6 @@ class ProjectTasks extends Component {
                                         <Button onClick={this.handleOpenAddPrevious} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
                                         {this.state.previousTasks != undefined && this.state.previousTasks != null && this.state.previousTasks != [] ? (
                                             this.state.previousTasks.map((task) => {
-                                                console.log("[ProjectTasks] previousTasks ", this.state.previousTasks)
                                                 return (
                                                     <TagTask task={task} removeTask={this.removePreviousTask} key={task.id} />
                                                 )

@@ -57,6 +57,7 @@ class Gantt extends Component {
             return new Promise((resolve, reject) => {
                 if (onDataUpdated) {
                     onDataUpdated(type, action, item, id);
+                    gantt.refreshData();
                 }
 
                 // if onDataUpdated changes returns a permanent id of the created item, you can return it from here so dhtmlxGantt could apply it
@@ -73,7 +74,7 @@ class Gantt extends Component {
 
     componentDidUpdate() {
         console.log("[Gantt] componentDidUpdate")
-        gantt.render();
+        gantt.refreshData();
     }
 
     componentWillUnmount() {
