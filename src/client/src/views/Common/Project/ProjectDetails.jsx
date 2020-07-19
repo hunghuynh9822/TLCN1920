@@ -41,6 +41,7 @@ const styles = theme => ({
     },
     paraph: {
         padding: '10px',
+        marginBottom: '-15px'
     },
     divider: {
         display: 'block',
@@ -289,7 +290,7 @@ class ProjectDetails extends Component {
                                     <Grid item container className={classes.paraph}>
                                         <Grid item xs={2}>Owner</Grid>
                                         <Grid item xs={10}>
-                                            <div>
+                                            <div style={{}}>
                                                 <TagMember member={projectOwner} removeMember={this.removeMember} hiddenRemove={true} />
                                             </div>
                                         </Grid>
