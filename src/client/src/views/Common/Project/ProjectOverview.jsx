@@ -126,7 +126,7 @@ class ProjectOverview extends Component {
         const { alert } = this.props;
         const { loginRole } = this.props;
         const { projects } = this.state;
-        console.log("Render projects");
+        console.log("[Project] Render projects with login role " + loginRole);
         if (loginAsAdmin(loginRole)) {
             let recentName = "Recent Projects";
             recentName = recentName.concat(" ( ", projects !== undefined ? projects.length : 0, " )");
@@ -147,7 +147,7 @@ class ProjectOverview extends Component {
                     </CollapsibleSection>
                 </div>
             );
-        } else if (loginAsLead(loginRole) || loginAsStaff(loginRole)) {
+        } else if (loginAsLead(loginRole)) {
             let recentName = "Recent Projects";
             recentName = recentName.concat(" ( ", projects.ownProjects !== undefined ? projects.ownProjects.length : 0, " )");
             let ownName = "Owner Projects";
@@ -156,16 +156,30 @@ class ProjectOverview extends Component {
             joinName = joinName.concat(" ( ", projects.joinProjects !== undefined ? projects.joinProjects.length : 0, " )")
             return (
                 <div className={classes.wrapper}>
-                    {/* <CollapsibleSection title={recentName}>
-                        <SlideContainer>
-                            {projects.ownProjects && projects.ownProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
-                        </SlideContainer>
-                    </CollapsibleSection> */}
                     <CollapsibleSection title={ownName}>
-                        <SlideContainer>
+                        <div className={classes.viewproject}>
                             {projects.ownProjects && projects.ownProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
                             {this.renderCardAddProject()}
-                        </SlideContainer>
+                        </div>
+                    </CollapsibleSection>
+                    <CollapsibleSection title={joinName}>
+                        <div className={classes.viewproject}>
+                            {projects.joinProjects && projects.joinProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                        </div>
+                    </CollapsibleSection>
+                </div>
+            );
+        } else if (loginAsStaff(loginRole)) {
+            let ownName = "Owner Projects";
+            ownName = ownName.concat(" ( ", projects.ownProjects !== undefined ? projects.ownProjects.length : 0, " )");
+            let joinName = "Join Projects";
+            joinName = joinName.concat(" ( ", projects.joinProjects !== undefined ? projects.joinProjects.length : 0, " )")
+            return (
+                <div className={classes.wrapper}>
+                    <CollapsibleSection title={ownName}>
+                        <div className={classes.viewproject}>
+                            {projects.ownProjects && projects.ownProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                        </div>
                     </CollapsibleSection>
                     <CollapsibleSection title={joinName}>
                         <div className={classes.viewproject}>
