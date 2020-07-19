@@ -34,7 +34,7 @@ class DrilldownChart extends Component {
 					color: input.dataPoint.color,
 					name: input.dataPoint.name,
 					type: "column",
-					dataPoints: taskOfEmployee
+					dataPoints: taskOfEmployee,
 				}];
 				chart.options = optionDataDetail;
 				chart.options.data = data;

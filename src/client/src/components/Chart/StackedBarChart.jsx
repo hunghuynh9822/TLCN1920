@@ -79,7 +79,7 @@ class StackedBarChart extends Component {
 				name: value.name,
 				color: value.color,
 				showInLegend: "true",
-				dataPoints: this.createListData(value.values)
+				dataPoints: this.createListData(value.values),
 			};
 		})
 		return dataOnServer;

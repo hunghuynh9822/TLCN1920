@@ -197,10 +197,13 @@ class AdminDashboard extends Component {
         return {
             animationEnabled: true,
             theme: "light2",
+            axisX: {
+                interval: 1
+            },
             axisY: {
                 gridThickness: 0,
-                includeZero: false,
-                lineThickness: 1
+                lineThickness: 1,
+                interval: 1
             },
             data: []
         };
@@ -237,7 +240,10 @@ class AdminDashboard extends Component {
             },
             legend: {
                 cursor: "pointer",
-            }
+            },
+            axisX: {
+                interval: 1,
+            },
         }
         return options
     }
