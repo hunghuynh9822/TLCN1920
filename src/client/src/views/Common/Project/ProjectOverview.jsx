@@ -55,6 +55,7 @@ class ProjectOverview extends Component {
         this.renderCardAddProject = this.renderCardAddProject.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.renderComponentProjects = this.renderComponentProjects.bind(this);
     }
 
     handleOpen() {
@@ -121,6 +122,14 @@ class ProjectOverview extends Component {
         )
     }
 
+    renderComponentProjects(projects) {
+        const { classes } = this.props;
+        if (projects) {
+            return projects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)
+        }
+        return "No projects"
+    }
+
     renderProjects() {
         const { classes } = this.props;
         const { alert } = this.props;
@@ -164,7 +173,7 @@ class ProjectOverview extends Component {
                     </CollapsibleSection>
                     <CollapsibleSection title={joinName}>
                         <div className={classes.viewproject}>
-                            {projects.joinProjects && projects.joinProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                            {this.renderComponentProjects(projects.joinProjects)}
                         </div>
                     </CollapsibleSection>
                 </div>
@@ -178,12 +187,12 @@ class ProjectOverview extends Component {
                 <div className={classes.wrapper}>
                     <CollapsibleSection title={ownName}>
                         <div className={classes.viewproject}>
-                            {projects.ownProjects && projects.ownProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                            {this.renderComponentProjects(projects.ownProjects)}
                         </div>
                     </CollapsibleSection>
                     <CollapsibleSection title={joinName}>
                         <div className={classes.viewproject}>
-                            {projects.joinProjects && projects.joinProjects.map((item, key) => <Project key={key} projectItem={item} handleToProject={this.handleToProject} />)}
+                            {this.renderComponentProjects(projects.joinProjects)}
                         </div>
                     </CollapsibleSection>
                 </div>
