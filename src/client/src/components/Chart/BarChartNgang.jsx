@@ -32,7 +32,7 @@ class App extends Component {
 			type: "stackedBar100",
 			name: name,
 			showInLegend: true,
-			indexLabel: "{y}",
+			indexLabel: "{number}",
 			indexLabelFontColor: "white",
 			yValueFormatString: "#,###'%'",
 			dataPoints: dataPoints

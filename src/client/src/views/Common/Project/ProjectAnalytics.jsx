@@ -69,9 +69,9 @@ class ProjectAnalytics extends Component {
                 TASK_STATE.forEach((state) => {
                     if (tasksState[state]) {
                         let percent = (tasksState[state].length / totalTasks) * 100;
-                        dataState.push({ name: state, y: percent });
+                        dataState.push({ name: state, y: percent, number: totalTasks });
                     } else {
-                        dataState.push({ name: state, y: 0 });
+                        dataState.push({ name: state, y: 0, number: 0 });
                     }
                 })
                 // console.log("DATA STATE : " + JSON.stringify(dataState))
@@ -109,23 +109,31 @@ class ProjectAnalytics extends Component {
                     TASK_STATE.forEach((state) => {
                         if (tasks[state]) {
                             let percent = (tasks[state].length / totalTasks) * 100;
-                            assigneeState[state] = percent;
+                            assigneeState[state] = {
+                                percent: percent,
+                                number: totalTasks,
+                            };
                         } else {
                             // assigneeState[state] = 0;
                         }
                     })
                     paserData.push({ employee: name, assigneeState: assigneeState })
                 })
-                // console.log("PASER DATA " + JSON.stringify(paserData))
+                console.log("[Project] PASER DATA " + JSON.stringify(paserData))
 
                 TASK_STATE.forEach((state) => {
                     let dataPercent = [];
                     paserData.forEach((assignee) => {
-                        dataPercent.push({ label: assignee.employee, y: assignee.assigneeState[state] })
+                        let data = assignee.assigneeState[state];
+                        if (data != undefined) {
+                            dataPercent.push({ label: assignee.employee, y: data.percent, number: data.number })
+                        } else {
+                            dataPercent.push({ label: assignee.employee, y: 0, number: 0 })
+                        }
                     })
                     dataBarChart.push({ name: state, data: dataPercent })
                 })
-                // console.log("DATA BAR CHART" + JSON.stringify(dataBarChart))
+                console.log("[Project] DATA BAR CHART" + JSON.stringify(dataBarChart))
                 this.setState({
                     loadingBarChart: false,
                     dataBarChart: dataBarChart,
