@@ -25,8 +25,8 @@ import BarChartNgang from '../../components/Chart/BarChartNgang.jsx'
 import { Loading, DrilldownChart, StackedBarChart, DoughnutChart } from '../../components'
 import { TotalUsers } from '../../components'
 //
-import { getNumberTasksByAdmin, getNumberTasksByLead, getTasksOfEmployeeInProject } from '../../action/task';
-import { getTasksOfAllEmployeeInProject } from '../../action/project';
+import { getNumberTasksByAdmin, getNumberTasksByEmployee, getTasksOfEmployeeInProject } from '../../action/report';
+import { getTasksOfAllEmployeeInProject } from '../../action/report';
 import { loginAsAdmin, loginAsLead } from '../../action/auth';
 
 const styles = theme => ({
@@ -194,7 +194,7 @@ class AdminDashboard extends Component {
                     })
                 });
         } else if (loginAsLead(loginRole)) {
-            getNumberTasksByLead(currentUser.id)
+            getNumberTasksByEmployee(currentUser.id)
                 .then(response => {
                     console.log("[Dashboard] numberTasks ", response.data.numberTasks);
                     numberTasks = response.data.numberTasks.map((value, index) => {
@@ -360,7 +360,7 @@ class AdminDashboard extends Component {
                     alert.error('Oops! Something went wrong when get number tasks report of admin. Please try again!');
                 })
         } else if (loginAsLead(loginRole)) {
-            getNumberTasksByLead(currentUser.id)
+            getNumberTasksByEmployee(currentUser.id)
                 .then(response => {
                     console.log("[Dashboard] numberTasks ", response.data.numberTasks);
                     numberTasks = response.data.numberTasks.map((value, index) => {

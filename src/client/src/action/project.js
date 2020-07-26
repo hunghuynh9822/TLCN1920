@@ -115,11 +115,3 @@ export function remove(deleteRequest) {
         data: JSON.stringify(deleteRequest)
     });
 }
-
-
-export function getTasksOfAllEmployeeInProject() {
-    return request({
-        url: superUrl + "/report/task_of_employee_in_project",
-        method: 'GET',
-    });
-}

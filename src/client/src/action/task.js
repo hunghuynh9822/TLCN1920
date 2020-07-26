@@ -205,23 +205,3 @@ export function updateComments(updateRequest) {
         data: JSON.stringify(updateRequest)
     });
 }
-
-//Report
-export function getNumberTasksByAdmin() {
-    return request({
-        url: superUrl + "/report/number_task_on_project",
-        method: 'GET',
-    });
-}
-export function getNumberTasksByLead(employee) {
-    return request({
-        url: leadUrl + "/report/number_task_on_project" + "?employee=" + employee,
-        method: 'GET',
-    });
-}
-export function getTasksOfEmployeeInProject(project) {
-    return request({
-        url: leadUrl + "/report/task_of_employee_in_project" + "?project=" + project,
-        method: 'GET',
-    });
-}
