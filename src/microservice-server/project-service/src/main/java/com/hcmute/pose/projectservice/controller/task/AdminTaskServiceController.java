@@ -34,14 +34,4 @@ public class AdminTaskServiceController {
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-
-    @GetMapping("/report/number_task_on_project")
-    public ResponseEntity getNumberTaskOfProject(){
-        try{
-            ReportResponse response = taskServiceBuz.getNumberTaskOfProject();
-            return new ResponseEntity(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
 }

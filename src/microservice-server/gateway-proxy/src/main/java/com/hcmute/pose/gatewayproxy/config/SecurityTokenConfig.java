@@ -54,6 +54,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 // So, we need to set it to that format, so we can verify and compare roles (i.e. hasRole("ADMIN")).
                 // must be an admin if trying to access admin area (authentication is also required here)
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
+//                .antMatchers("/api/**").authenticated()
 //                .antMatchers("/emplmicro" + "/api/employees/*").authenticated()
                 // Any other request must be authenticated
 //                .anyRequest().authenticated();

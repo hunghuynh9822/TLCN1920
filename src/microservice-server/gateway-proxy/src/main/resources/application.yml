@@ -110,6 +110,12 @@ zuul:
       service-id: wiki-service
       ribbon:
         ReadTimeout: 600000
+    report:
+      path: /api/report/**
+      strip-prefix: false
+      service-id: project-service
+      ribbon:
+        ReadTimeout: 600000
   host:
     time-to-live: -1
     connect-timeout-millis: 5000

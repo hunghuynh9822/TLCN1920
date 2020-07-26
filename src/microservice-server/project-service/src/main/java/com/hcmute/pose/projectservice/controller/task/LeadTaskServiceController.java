@@ -95,24 +95,4 @@ public class LeadTaskServiceController {
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-
-    @GetMapping("/report/number_task_on_project")
-    public ResponseEntity getNumberTaskOfProject(@RequestParam(name="employee") Long employeeId){
-        try{
-            ReportResponse response = taskServiceBuz.getNumberTaskOfProjectOfEmployee(employeeId);
-            return new ResponseEntity(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/report/task_of_employee_in_project")
-    public ResponseEntity getNumberTaskOfEmployeeInProject(@RequestParam(name="project") Long projectId){
-        try{
-            ReportResponse response = taskServiceBuz.getNumberTaskOfEmployeeInProject(projectId);
-            return new ResponseEntity(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
 }
