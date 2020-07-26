@@ -10,14 +10,14 @@ export const TASK_STATE = [
     'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'DONE', 'FINISH'
 ]
 
-export const UPDATE_CREATOR_TASKS = 'UPDATE_CREATOR_TASKS';
+export const UPDATE_PROJECT_TASKS = 'UPDATE_PROJECT_TASKS';
 export const RELOAD_TASKS = 'RELOAD_TASKS';
 
 //Redux
-export function updateCreatorTasks(creatorTasks) {
+export function updateProjectTasks(projectTasks) {
     return {
-        type: UPDATE_CREATOR_TASKS,
-        creatorTasks
+        type: UPDATE_PROJECT_TASKS,
+        projectTasks
     };
 }
 
@@ -48,23 +48,9 @@ export function create(createRequest) {
     });
 }
 
-export function getTasksByAdmin(project) {
+export function getTasks(project) {
     return request({
-        url: superUrl + "/" + "?" + "project=" + project,
-        method: 'GET',
-    });
-}
-
-export function getTasksByEmployee(project, employee) {
-    return request({
-        url: url + "/" + "?" + "project=" + project + "&" + "employee=" + employee,
-        method: 'GET',
-    });
-}
-
-export function getTasksCreatedByLead(project, employee) {
-    return request({
-        url: leadUrl + "/" + "?" + "project=" + project + "&" + "employee=" + employee,
+        url: url + "/" + "?" + "project=" + project,
         method: 'GET',
     });
 }

@@ -12,7 +12,8 @@ import GridList from '@material-ui/core/GridList';
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-import { updateCreatorTasks } from '../../action/task';
+import { updateProjectTasks } from '../../action/task';
+import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../action/auth';
 
 import { changeAssignee } from '../../action/task'
 import { TaskCard } from '../../components'
@@ -42,7 +43,10 @@ class TaskContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            creatorTasks: new Array(),
+            projectTasks: {
+                projectId: null,
+                tasks: new Array(),
+            },
         }
         this.getMember = this.getMember.bind(this);
         this.move = this.move.bind(this);
@@ -51,9 +55,10 @@ class TaskContainer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { creatorTasks } = this.props;
+        const { projectTasks } = this.props;
+        console.log("[TaskContainer] componentWillReceiveProps projectTasks : ", projectTasks)
         this.setState({
-            creatorTasks: creatorTasks
+            projectTasks: projectTasks
         })
         // this.setState({
         //     reload: true
@@ -61,9 +66,9 @@ class TaskContainer extends Component {
     }
 
     componentDidMount() {
-        const { creatorTasks } = this.props;
+        const { projectTasks } = this.props;
         this.setState({
-            creatorTasks: creatorTasks
+            projectTasks: projectTasks
         })
     }
 
@@ -114,8 +119,8 @@ class TaskContainer extends Component {
 
     getList(cardId) {
         let { index } = this.props;
-        let { creatorTasks } = this.state;
-        let taskCards = creatorTasks[index].tasks;
+        let { projectTasks } = this.state;
+        let taskCards = projectTasks.tasks;
         let card = taskCards.filter((taskCard) => {
             return taskCard.assigneeId == cardId;
         })[0];
@@ -135,10 +140,8 @@ class TaskContainer extends Component {
      * }
      */
     onDragEnd(result) {
-        let { index } = this.props;
-        let { creatorTasks } = this.state;
-        // let taskCards = creatorTasks[index].tasks;
-        let taskCards = creatorTasks[index].tasks;
+        let { projectTasks } = this.state;
+        let taskCards = projectTasks.tasks;
 
         const { source, destination, draggableId } = result;
         console.log("[TaskContainer] onDragEnd ", result)
@@ -175,7 +178,10 @@ class TaskContainer extends Component {
                 if (result[card.assigneeId] == undefined) {
                     return card;
                 }
-                card.tasks = result[card.assigneeId];
+                card.tasks = result[card.assigneeId].map((task, index) => {
+                    task.employeeAssignee = card.assigneeId;
+                    return task;
+                });
                 return card;
             });
             let memberTasks = taskCards.find(card => {
@@ -190,12 +196,13 @@ class TaskContainer extends Component {
                 }
                 newTaskCards.push(card);
             }
-            console.log("New TaskCards : ", newTaskCards)
-            // console.log("Update TaskCards : " + JSON.stringify(creatorTasks[index]))
-            creatorTasks[index].tasks = newTaskCards;
+            projectTasks.tasks = newTaskCards;
+            // this.props.loadTasks(projectTasks);
             this.setState({
-                creatorTasks: creatorTasks
+                projectTasks: projectTasks
             })
+            // this.props.updateProjectTasks(projectTasks)
+            console.log("[TaskContainer] New projectTasks : ", projectTasks)
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("[TaskContainer] changeAssignee : ", response)
@@ -203,8 +210,11 @@ class TaskContainer extends Component {
                     // if(memberTasks == undefined) {
                     //     return this.props.loadTasks();
                     // }
-                    this.props.loadTasks(creatorTasks);
-                    // this.props.updateCreatorTasks(creatorTasks)
+                    // this.props.updateProjectTasks(projectTasks)
+                    // this.setState({
+                    //     projectTasks: projectTasks
+                    // })
+                    // this.props.loadTasks(projectTasks);
                 })
                 .catch(error => {
                     console.log(error);
@@ -214,8 +224,7 @@ class TaskContainer extends Component {
 
     render() {
         const { classes } = this.props;
-        let { index } = this.props;
-        let { creatorTasks } = this.state;
+        let { projectTasks } = this.state;
         let taskCards = [];
         const settings = {
             className: classNames("center", classes.slider),
@@ -255,11 +264,8 @@ class TaskContainer extends Component {
                 }
             ]
         };
-        if (creatorTasks[index]) {
-            taskCards = creatorTasks[index].tasks;
-        }
-        console.log("[TaskContainer] Render ", taskCards);
         const members = this.props.projectItem.members;
+        console.log("[TaskContainer] Render ", members, projectTasks.tasks);
         return (
             <React.Fragment>
                 <div className={classes.root}>
@@ -268,7 +274,7 @@ class TaskContainer extends Component {
                             {
                                 members.map((member) => {
                                     let title = this.getNameMember(member.id);
-                                    let card = taskCards.find((card) => {
+                                    let card = projectTasks.tasks.find((card) => {
                                         return card.assigneeId == member.id;
                                     })
                                     let tasks = card && card.tasks ? card.tasks : [];
@@ -289,10 +295,8 @@ class TaskContainer extends Component {
 TaskContainer.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
-    index: PropTypes.number.isRequired,
-    updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    // creatorTasks: PropTypes.array.isRequired,
+    // projectTasks: PropTypes.array.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -300,12 +304,12 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        creatorTasks: state.tasks.creatorTasks,
+        projectTasks: state.tasks.projectTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateCreatorTasks: (creatorTasks) => dispatch(updateCreatorTasks(creatorTasks)),
+        updateProjectTasks: (projectTasks) => dispatch(updateProjectTasks(projectTasks)),
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(TaskContainer)));

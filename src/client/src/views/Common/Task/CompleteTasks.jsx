@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert'
 
-import { getTasksByAdmin, getTasksCreatedByLead } from '../../../action/task';
+import { getTasks } from '../../../action/task';
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
-import { updateCreatorTasks } from '../../../action/task';
+import { updateProjectTasks } from '../../../action/task';
 
 import { TaskContainer, Task, NewTask, CollapsibleSection } from '../../../components'
 
@@ -52,18 +52,12 @@ class CompleteTasks extends Component {
 
     render() {
         const { classes } = this.props;
-        const { creatorTasks } = this.props;
+        const { projectTasks } = this.props;
         return (
             <React.Fragment>
-                {creatorTasks && creatorTasks.map((creator, index) => {
-                    // console.log("Creator : " + JSON.stringify(creator));
-                    let title = this.getNameMember(creator.creatorId);
-                    return (
-                        <CollapsibleSection key={index} title={title}>
-                            <TaskContainer index={index} updateTasks={this.props.updateTasks} loadTasks={this.props.loadTasks} filter="DONE" openForm={this.props.openForm} />
-                        </CollapsibleSection>
-                    )
-                })}
+                <CollapsibleSection title={"Task"}>
+                    <TaskContainer loadTasks={this.props.loadTasks} filter="DONE" openForm={this.props.openForm} />
+                </CollapsibleSection>
             </React.Fragment>
         );
     }
@@ -71,9 +65,8 @@ class CompleteTasks extends Component {
 CompleteTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
-    updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    // creatorTasks: PropTypes.array.isRequired,
+    // projectTasks: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -82,12 +75,12 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        creatorTasks: state.tasks.creatorTasks,
+        projectTasks: state.tasks.projectTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateCreatorTasks: (creatorTasks) => dispatch(updateCreatorTasks(creatorTasks)),
+        updateProjectTasks: (projectTasks) => dispatch(updateProjectTasks(projectTasks)),
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(CompleteTasks)));

@@ -6,8 +6,8 @@ import { withAlert } from 'react-alert'
 
 import { AssignTasks, CompleteTasks } from '../../';
 
-import { getTasksByAdmin, getTasksCreatedByLead, TASK_STATE, updateStateTasks, updatePointTasks } from '../../../action/task';
-import { updateCreatorTasks, updateTask } from '../../../action/task';
+import { getTasks, TASK_STATE, updateStateTasks, updatePointTasks } from '../../../action/task';
+import { updateProjectTasks, updateTask } from '../../../action/task';
 
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 
@@ -146,7 +146,6 @@ class ProjectTasks extends Component {
             openCreate: false,
             openAddPrevious: false,
             previousTasks: new Array(),
-            creatorTasks: new Array(),
             task: {
                 taskId: null,
                 projectId: null,
@@ -164,7 +163,6 @@ class ProjectTasks extends Component {
         this.handleChangeTabs = this.handleChangeTabs.bind(this);
         this.handleChangeIndex = this.handleChangeIndex.bind(this);
         this.loadTasks = this.loadTasks.bind(this);
-        this.updateTasks = this.updateTasks.bind(this);
         this.openForm = this.openForm.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
@@ -202,12 +200,6 @@ class ProjectTasks extends Component {
         })
     };
 
-    updateTasks(creatorTasks) {
-        this.setState({
-            creatorTasks: creatorTasks,
-        })
-    }
-
     //
     handleOpenAddPrevious() {
         this.setState({
@@ -222,77 +214,51 @@ class ProjectTasks extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.reload) {
+        // if (this.state.reload) {
+        //     this.setState({
+        //         reload: false,
+        //     })
+        // } else {
+        //     const { alert } = this.props;
+        //     const { loginRole, projectItem, currentUser } = this.props;
+        //     let projectId = projectItem.project.id;
+        //     getTasks(projectId)
+        //         .then(response => {
+        //             this.props.updateProjectTasks(response);
+        //             this.setState({
+        //                 projectTasks: response,
+        //                 reload: true
+        //             })
+        //         })
+        // }
+    }
+
+    loadTasks(projectTasks) {
+        if (projectTasks) {
+            console.log("[TaskContainer] loadTasks ", projectTasks)
             this.setState({
-                reload: false,
+                loading: true
+            });
+            this.props.updateProjectTasks(projectTasks);
+            this.setState({
+                loading: false,
             })
         } else {
+            console.log("Loading task");
+            this.setState({
+                loading: true
+            });
             const { alert } = this.props;
             const { loginRole, projectItem, currentUser } = this.props;
             let projectId = projectItem.project.id;
-            if (loginAsAdmin(loginRole)) {
-                getTasksByAdmin(projectId)
-                    .then(response => {
-                        this.props.updateCreatorTasks(response.creatorTasks);
-                        this.setState({
-                            creatorTasks: response.creatorTasks,
-                            reload: true
-                        })
-                    })
-            } else if (loginAsLead(loginRole)) {
-                getTasksCreatedByLead(projectId, currentUser.id)
-                    .then(response => {
-                        this.setState({
-                            creatorTasks: response.creatorTasks,
-                            reload: true
-                        })
-                    })
-            } else {
-                alert.error('Oops! Something went wrong on load task, you login on ' + loginRole + '. Please call check!');
-                this.setState({
-                    reload: true
-                })
-            }
-        }
-
-    }
-
-    loadTasks(creatorTasks) {
-        if (creatorTasks != undefined) {
-            this.props.updateCreatorTasks(response.creatorTasks);
-        }
-        console.log("Loading task");
-        this.setState({
-            loading: true
-        });
-        const { alert } = this.props;
-        const { loginRole, projectItem, currentUser } = this.props;
-        let projectId = projectItem.project.id;
-        if (loginAsAdmin(loginRole)) {
-            getTasksByAdmin(projectId)
+            getTasks(projectId)
                 .then(response => {
-                    // console.log("getTasksByAdmin : " + JSON.stringify(response));
-                    this.props.updateCreatorTasks(response.creatorTasks);
+                    console.log("[ProjectTasks] getTasks response ", response)
+                    this.props.updateProjectTasks(response);
                     this.setState({
                         loading: false,
-                        // creatorTasks: response.creatorTasks,
                     })
                 })
-        } else if (loginAsLead(loginRole)) {
-            getTasksCreatedByLead(projectId, currentUser.id)
-                .then(response => {
-                    // console.log("getTasksCreatedByLead : " + JSON.stringify(response));
-                    this.props.updateCreatorTasks(response.creatorTasks);
-                    this.setState({
-                        loading: false,
-                        // creatorTasks: response.creatorTasks,
-                    })
-                })
-        } else {
-            alert.error('Oops! Something went wrong on load task, you login on ' + loginRole + '. Please call check!');
-            this.setState({
-                loading: false
-            })
         }
     }
 
@@ -630,7 +596,7 @@ class ProjectTasks extends Component {
                             {
                                 tabs.map((tab, key) => (
                                     <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
-                                        <tab.component updateTasks={this.updateTasks} loadTasks={this.loadTasks} openForm={this.openForm} />
+                                        <tab.component loadTasks={this.loadTasks} openForm={this.openForm} />
                                     </TabPanel>
                                 ))
                             }
@@ -871,12 +837,12 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        creatorTasks: state.tasks.creatorTasks,
+        projectTasks: state.tasks.projectTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateCreatorTasks: (creatorTasks) => dispatch(updateCreatorTasks(creatorTasks)),
+        updateProjectTasks: (projectTasks) => dispatch(updateProjectTasks(projectTasks)),
     }
 }
 
