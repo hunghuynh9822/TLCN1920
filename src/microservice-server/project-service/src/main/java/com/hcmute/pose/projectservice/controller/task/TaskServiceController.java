@@ -38,30 +38,40 @@ public class TaskServiceController {
         }
     }
 
+    @GetMapping("/")
+    public ResponseEntity getTaskByProject(@RequestParam(name="project") Long projectId){
+        try{
+            ProjectTasksResponse response = taskServiceBuz.getTasksByProject(projectId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+//    @GetMapping("/")
+//    public ResponseEntity getTaskByProject(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long creatorId){
+//        try{
+//            ProjectTasksResponse response = taskServiceBuz.getTasksByCreator(projectId, creatorId);
+//            return new ResponseEntity(response, HttpStatus.OK);
+//        }catch (Exception e){
+//            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+//    @GetMapping("/")
+//    public ResponseEntity getTasksByAssignee(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long assigneeId){
+//        try{
+//            AssigneeTasksResponse response = taskServiceBuz.getTasksByAssignee(projectId, assigneeId);
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        }catch (Exception e){
+//            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
     @GetMapping("/project")
     public ResponseEntity getAllTaskByProject(@RequestParam(name="project") Long projectId){
         try{
             AllTasksProjectResponse response = taskServiceBuz.getAllTasksByProject(projectId);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/project/assignee/state")
-    public ResponseEntity getTasksWithStateByProject(@RequestParam(name="project") Long projectId){
-        try{
-            ProjectTasksAssigneeWithStateResponse response = taskServiceBuz.getTasksAssigneeWithStateByProject(projectId);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/")
-    public ResponseEntity getTasksByAssignee(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long assigneeId){
-        try{
-            AssigneeTasksResponse response = taskServiceBuz.getTasksByAssignee(projectId, assigneeId);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
@@ -142,6 +152,17 @@ public class TaskServiceController {
         }catch (Exception | TransactionException e){
             String message = String.format("Update comment of %d | %d | %s failed", request.getTaskId(), request.getEmployeeId(), request.getComment());
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Report
+    @GetMapping("/project/assignee/state")
+    public ResponseEntity getTasksWithStateByProject(@RequestParam(name="project") Long projectId){
+        try{
+            ProjectTasksAssigneeWithStateResponse response = taskServiceBuz.getTasksAssigneeWithStateByProject(projectId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

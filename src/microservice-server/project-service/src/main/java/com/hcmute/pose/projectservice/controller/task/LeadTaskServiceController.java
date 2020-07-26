@@ -27,26 +27,6 @@ public class LeadTaskServiceController {
         return new ResponseEntity("Test successfully", HttpStatus.OK);
     }
 
-    @GetMapping("/")
-    public ResponseEntity getTaskByProject(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long creatorId){
-        try{
-            ProjectTasksResponse response = taskServiceBuz.getTasksByCreator(projectId, creatorId);
-            return new ResponseEntity(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/state")
-    public ResponseEntity getTaskWithStateByProject(@RequestParam(name="project") Long projectId, @RequestParam(name="employee") Long creatorId){
-        try{
-            ProjectTasksResponse response = taskServiceBuz.getTasksByCreator(projectId, creatorId);
-            return new ResponseEntity(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @PatchMapping("/update-point")
     public ResponseEntity<String> updatePoint (@Valid @RequestBody TaskUpdateRequest request){
         try{

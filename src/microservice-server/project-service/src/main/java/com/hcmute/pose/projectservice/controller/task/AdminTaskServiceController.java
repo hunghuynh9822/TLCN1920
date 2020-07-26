@@ -24,14 +24,4 @@ public class AdminTaskServiceController {
     public ResponseEntity testApi(){
         return new ResponseEntity("Test successfully", HttpStatus.OK);
     }
-
-    @GetMapping("/")
-    public ResponseEntity getTaskByProject(@RequestParam(name="project") Long projectId){
-        try{
-            ProjectTasksResponse response = taskServiceBuz.getTasksByProject(projectId);
-            return new ResponseEntity(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
 }

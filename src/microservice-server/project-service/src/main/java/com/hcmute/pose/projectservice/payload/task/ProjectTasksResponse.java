@@ -4,14 +4,14 @@ import java.util.List;
 
 public class ProjectTasksResponse {
     private Long projectId;
-    private List<CreatorTasksResponse> creatorTasks;
+    private List<AssigneeTasksResponse> tasks;
 
     public ProjectTasksResponse() {
     }
 
-    public ProjectTasksResponse(Long projectId, List<CreatorTasksResponse> creatorTasks) {
+    public ProjectTasksResponse(Long projectId, List<AssigneeTasksResponse> tasks) {
         this.projectId = projectId;
-        this.creatorTasks = creatorTasks;
+        this.tasks = tasks;
     }
 
     public Long getProjectId() {
@@ -22,11 +22,11 @@ public class ProjectTasksResponse {
         this.projectId = projectId;
     }
 
-    public List<CreatorTasksResponse> getCreatorTasks() {
-        return creatorTasks;
+    public List<AssigneeTasksResponse> getTasks() {
+        return tasks;
     }
 
-    public void setCreatorTasks(List<CreatorTasksResponse> creatorTasks) {
-        this.creatorTasks = creatorTasks;
+    public void setTasks(List<AssigneeTasksResponse> tasks) {
+        this.tasks = tasks;
     }
 }
