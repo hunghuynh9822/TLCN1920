@@ -13,7 +13,7 @@ class App extends Component {
 					text: "Tasklists Overview"
 				},
 				toolTip: {
-					shared: true
+					shared: true,
 				},
 				legend: {
 					verticalAlign: "top"
@@ -32,7 +32,7 @@ class App extends Component {
 			type: "stackedBar100",
 			name: name,
 			showInLegend: true,
-			indexLabel: "{number}",
+			indexLabel: "{number} task",
 			indexLabelFontColor: "white",
 			yValueFormatString: "#,###'%'",
 			dataPoints: dataPoints

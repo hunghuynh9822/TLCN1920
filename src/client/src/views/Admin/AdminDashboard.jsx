@@ -61,6 +61,24 @@ const styles = theme => ({
     }
 });
 
+const mapState = {
+    "NEW": "#4f81bc",
+    "DEVELOPING": "#c0504f",
+    "DEVELOPED": "#9bbb58",
+    "TESTING": "#23bfaa",
+    "DONE": "#8064a1",
+    "FINISH": "#4aacc6"
+}
+
+const data = [
+    { state: "NEW", number: 5 },
+    { state: "DEVELOPING", number: 31 },
+    { state: "DEVELOPED", number: 40 },
+    { state: "TESTING", number: 5 },
+    { state: "DONE", number: 5 },
+    { state: "FINISH", number: 5 },
+]
+
 class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -72,8 +90,15 @@ class AdminDashboard extends Component {
             taskOfEmployeeByProject: new Array(),
             loadingStackedBarChart: false,
             stackedBarChartOption: {},
-
-            mapColor: {}
+            mapColor: {},
+            dataAssignToMe: {
+                dataPoints: [],
+                total: 0
+            },
+            dataCreateByMe: {
+                dataPoints: [],
+                total: 0
+            },
         }
         this.loadDataViewTaskChart = this.loadDataViewTaskChart.bind(this);
         this.loadDataDetail = this.loadDataDetail.bind(this);
@@ -83,11 +108,13 @@ class AdminDashboard extends Component {
         this.createDataNumberTaskOfProject = this.createDataNumberTaskOfProject.bind(this);
         this.addColorMap = this.addColorMap.bind(this);
         this.getColorMap = this.getColorMap.bind(this);
+        this.loadStatistic = this.loadStatistic.bind(this);
     }
 
     createDataNumberTaskOfProject(id, number, projectTitle) {
         let color = randomColor({
-            luminosity: 'bright',
+            // luminosity: 'bright',
+            luminosity: 'dark',
             // hue: 'blue'
         });
         let y = number;
@@ -114,7 +141,10 @@ class AdminDashboard extends Component {
             animationEnabled: true,
             theme: "light2",
             title: {
-                text: "Overview number task of project"
+                text: "Overview number task of project",
+                fontSize: 30,
+                fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                fontWeight: "normal",
             },
             // subtitles: [{
             // 	text: "Click on Any Segment to Drilldown",
@@ -126,7 +156,8 @@ class AdminDashboard extends Component {
             legend: {
                 horizontalAlign: "right", // "center" , "right"
                 verticalAlign: "center",  // "top" , "bottom"
-                fontFamily: "calibri",
+                fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                fontWeight: "normal",
                 fontSize: 14,
                 itemTextFormatter: function (e) {
                     return e.dataPoint.name + ": " + Math.round(e.dataPoint.y / total * 100) + "%";
@@ -233,10 +264,13 @@ class AdminDashboard extends Component {
             animationEnabled: true,
             theme: "light2",
             title: {
-                text: "Overview employee"
+                text: "Overview number tasks of employee",
+                fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                fontWeight: "normal",
             },
             toolTip: {
-                shared: true
+                shared: true,
+                // content: "{y} task"
             },
             legend: {
                 cursor: "pointer",
@@ -351,10 +385,35 @@ class AdminDashboard extends Component {
         }
     }
 
+    loadStatistic() {
+        let dataAssignToMe = this.state.dataAssignToMe;
+        let dataCreateByMe = this.state.dataCreateByMe;
+        data.forEach(value => {
+            dataAssignToMe.total = dataAssignToMe.total + value.number;
+        });
+        dataAssignToMe.dataPoints = data.map((value, index) => {
+            let name = value.state[0].toUpperCase() + value.state.slice(1).toLowerCase();
+            return { name: name, y: value.number, color: mapState[value.state], percent: Math.round(value.number / dataAssignToMe.total * 100 * 100) / 100 }
+        });
+        //
+        data.forEach(value => {
+            dataCreateByMe.total = dataCreateByMe.total + value.number;
+        });
+        dataCreateByMe.dataPoints = data.map((value, index) => {
+            let name = value.state[0].toUpperCase() + value.state.slice(1).toLowerCase();
+            return { name: name, y: value.number, color: mapState[value.state], percent: Math.round(value.number / dataAssignToMe.total * 100 * 100) / 100 }
+        });
+        this.setState({
+            dataAssignToMe: dataAssignToMe,
+            dataCreateByMe: dataCreateByMe
+        })
+    }
+
     componentDidMount() {
         // this.loadDataViewTaskChart();
         // this.loadStackedBarChart();
         this.loadChart();
+        this.loadStatistic();
     }
 
     render() {
@@ -377,24 +436,26 @@ class AdminDashboard extends Component {
                         </Grid>
                     </Grid>
                     <Grid xs={12} container spacing={3} direction="row">
-                        <Grid item xs={6} >
-                            {
-                                this.state.loadingViewTasksChart ? <Loading /> : <DoughnutChart title="Create by me" />
-                            }
+                        <Grid item xs={5} spacing={3} direction="column">
+                            <Grid item xs={12} >
+                                {
+                                    this.state.loadingViewTasksChart ? <Loading /> : <DoughnutChart title="Create by me" data={this.state.dataCreateByMe} />
+                                }
+                            </Grid>
+                            <Grid item xs={12}>
+                                {
+                                    this.state.loadingStackedBarChart ? <Loading /> : <DoughnutChart title="Assign to me" data={this.state.dataAssignToMe} />
+                                }
+                            </Grid>
                         </Grid>
-                        <Grid item xs={6}>
-                            {
-                                this.state.loadingStackedBarChart ? <Loading /> : <DoughnutChart title="Assign to me" />
-                            }
-                        </Grid>
-                    </Grid>
-                    <Grid xs={12} container spacing={3} direction="row">
-                        <Grid item xs={6}>
+                        <Grid item xs={7}>
                             {
                                 this.state.loadingViewTasksChart ? <Loading /> : <DrilldownChart dataOnLoad={this.state.numberTasks} options={this.state.viewTaskChartOption} loadDetail={this.loadDataDetail} />
                             }
                         </Grid>
-                        <Grid item xs={6}>
+                    </Grid>
+                    <Grid xs={12} container spacing={3} direction="row">
+                        <Grid item xs={12}>
                             {
                                 this.state.loadingStackedBarChart ? <Loading /> : <StackedBarChart dataOnLoad={this.state.taskOfEmployeeByProject} options={this.state.stackedBarChartOption} />
                             }

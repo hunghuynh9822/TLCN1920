@@ -38,7 +38,12 @@ class DrilldownChart extends Component {
 				}];
 				chart.options = optionDataDetail;
 				chart.options.data = data;
-				chart.options.title = { text: input.dataPoint.name }
+				chart.options.title = {
+					text: input.dataPoint.name,
+					fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+					fontWeight: "normal",
+					fontSize: 30,
+				}
 				chart.render();
 				$("#backButton").toggleClass("invisible");
 			})
@@ -50,7 +55,7 @@ class DrilldownChart extends Component {
 			click: this.onClickChartDrilldownHandler,
 			cursor: "pointer",
 			explodeOnClick: false,
-			innerRadius: "75%",
+			innerRadius: "0%",
 			legendMarkerType: "square",
 			// name: "New vs Returning Visitors",
 			radius: "100%",
@@ -92,25 +97,29 @@ class DrilldownChart extends Component {
 
 	render() {
 		const buttonStyle = {
+			top: '242px',
 			bordeRadius: '4px',
 			padding: '8px',
 			border: 'none',
 			fontSize: '16px',
-			backgroundColor: '#2eacd1',
-			color: 'white',
+			backgroundColor: 'white',
+			color: 'black',
 			position: 'absolute',
 			// top: '60px',
 			// left: '40px',
 			cursor: 'pointer',
-			backgroundColor: '#3f51b5',
+			// backgroundColor: '#3f51b5',
 		}
 		return (
 			<Card style={{ width: '100%', color: '#bfbfbf', marginTop: '10px' }}>
 				<CanvasJSChart options={this.options}
 					onRef={this.setWrapperRef}
+					containerProps={{
+						width: '100%', height: '510px'
+					}}
 				/>
 				{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
-				<button className="btn invisible" id="backButton" style={buttonStyle}>&lt; Back</button>
+				<button className="btn invisible" id="backButton" style={buttonStyle}>Back</button>
 			</Card>
 		);
 	}
