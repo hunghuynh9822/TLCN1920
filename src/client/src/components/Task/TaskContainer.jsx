@@ -52,6 +52,7 @@ class TaskContainer extends Component {
         this.move = this.move.bind(this);
         this.getList = this.getList.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
+        this.canDnd = this.canDnd.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -129,6 +130,31 @@ class TaskContainer extends Component {
         return tasks;
     }
 
+    canDnd(targetTask) {
+        const { loginRole, currentUser } = this.props;
+        let temp = "LOGIN ON " + loginRole;
+        if (targetTask) {
+            temp = temp.concat(" ADMIN " + loginAsAdmin(loginRole));
+            temp = temp.concat(" LEAD " + loginAsLead(loginRole));
+            temp = temp.concat(" STAFF " + loginAsStaff(loginRole));
+            console.log("[TaskContainer] ", currentUser, temp, targetTask);
+            if (loginAsAdmin(loginRole)) {
+                return { verified: true };
+            }
+            if (loginAsLead(loginRole)) {
+                if (targetTask.employeeCreator == currentUser.id) {
+                    return { verified: true };
+                }
+                return { verified: false, message: 'Oops! You do not permision to change task ' + targetTask.title };
+            }
+            if (loginAsStaff(loginRole)) {
+                return { verified: false, message: 'Oops! You do not permision to change task ' + targetTask.title };
+            }
+            return { verified: false, message: 'Oops! Can not detect login role on ' + targetTask.title };
+        }
+        return { verified: false, message: 'Oops! Undefined task !!!' };
+    }
+
     /**onDragEnd : {"draggableId":"15752273449756","type":"DEFAULT","source":{"index":0,"droppableId":"15746071512232"},"reason":"DROP","mode":"FLUID","destination":{"droppableId":"15746072843063","index":0},"combine":null} */
     /**
      * draggableId: taskId
@@ -140,16 +166,24 @@ class TaskContainer extends Component {
      * }
      */
     onDragEnd(result) {
+        const { alert } = this.props;
+        const { loginRole, currentUser } = this.props;
         let { projectTasks } = this.state;
         let taskCards = projectTasks.tasks;
-
         const { source, destination, draggableId } = result;
+        let sourceArray = this.getList(source.droppableId);
+        let destinationArray = this.getList(destination.droppableId);
+        let targetTask = Array.from(sourceArray).splice(source.index, 1)[0];
         console.log("[TaskContainer] onDragEnd ", result)
+        let resultCanDnd = this.canDnd(targetTask);
+        if (!resultCanDnd.verified) {
+            alert.error(resultCanDnd.message);
+            return;
+        }
         // dropped outside the list
         if (!destination) {
             return;
         }
-
         if (source.droppableId === destination.droppableId) {
             // console.log("Source : " + JSON.stringify(this.getList(source.droppableId)))
             // const items = reorder(
@@ -157,17 +191,14 @@ class TaskContainer extends Component {
             //     source.index,
             //     destination.index
             // );
-            // let state = { items };
-
-            // this.setState(state);
         } else {
             let requestChange = {
                 taskId: draggableId,
                 employeeId: destination.droppableId
             };
             const result = this.move(
-                this.getList(source.droppableId),
-                this.getList(destination.droppableId),
+                sourceArray,
+                destinationArray,
                 source,
                 destination
             );
@@ -179,7 +210,9 @@ class TaskContainer extends Component {
                     return card;
                 }
                 card.tasks = result[card.assigneeId].map((task, index) => {
-                    task.employeeAssignee = card.assigneeId;
+                    if (task) {
+                        task.employeeAssignee = card.assigneeId;
+                    }
                     return task;
                 });
                 return card;
@@ -197,24 +230,13 @@ class TaskContainer extends Component {
                 newTaskCards.push(card);
             }
             projectTasks.tasks = newTaskCards;
-            // this.props.loadTasks(projectTasks);
             this.setState({
                 projectTasks: projectTasks
             })
-            // this.props.updateProjectTasks(projectTasks)
             console.log("[TaskContainer] New projectTasks : ", projectTasks)
             changeAssignee(requestChange)
                 .then(response => {
                     console.log("[TaskContainer] changeAssignee : ", response)
-                    // this.props.loadTasks();
-                    // if(memberTasks == undefined) {
-                    //     return this.props.loadTasks();
-                    // }
-                    // this.props.updateProjectTasks(projectTasks)
-                    // this.setState({
-                    //     projectTasks: projectTasks
-                    // })
-                    // this.props.loadTasks(projectTasks);
                 })
                 .catch(error => {
                     console.log(error);
