@@ -28,7 +28,7 @@ import { Loading, DrilldownChart, StackedBarChart, DoughnutChart } from '../../c
 import { TotalUsers } from '../../components'
 //
 import { getNumberTasksByAdmin, getNumberTasksByEmployee, getTasksOfEmployeeInProject } from '../../action/report';
-import { getTasksOfAllEmployeeInProject, getOverviewCount } from '../../action/report';
+import { getTasksOfAllEmployeeInProject, getOverviewCount, getOverviewCountTaskState } from '../../action/report';
 import { loginAsAdmin, loginAsLead } from '../../action/auth';
 
 const styles = theme => ({
@@ -83,15 +83,6 @@ const mapState = {
     "DONE": "#8064a1",
     "FINISH": "#4aacc6"
 }
-
-const data = [
-    { state: "NEW", number: 5 },
-    { state: "DEVELOPING", number: 31 },
-    { state: "DEVELOPED", number: 40 },
-    { state: "TESTING", number: 5 },
-    { state: "DONE", number: 5 },
-    { state: "FINISH", number: 5 },
-]
 
 class AdminDashboard extends Component {
     constructor(props) {
@@ -406,23 +397,38 @@ class AdminDashboard extends Component {
     }
 
     loadStatistic() {
-        let dataAssignToMe = this.state.dataAssignToMe;
-        let dataCreateByMe = this.state.dataCreateByMe;
-        data.forEach(value => {
-            dataAssignToMe.total = dataAssignToMe.total + value.number;
-        });
-        dataAssignToMe.dataPoints = data.map((value, index) => {
-            let name = value.state[0].toUpperCase() + value.state.slice(1).toLowerCase();
-            return { name: name, y: value.number, color: mapState[value.state], percent: Math.round(value.number / dataAssignToMe.total * 100 * 100) / 100 }
-        });
-        //
-        data.forEach(value => {
-            dataCreateByMe.total = dataCreateByMe.total + value.number;
-        });
-        dataCreateByMe.dataPoints = data.map((value, index) => {
-            let name = value.state[0].toUpperCase() + value.state.slice(1).toLowerCase();
-            return { name: name, y: value.number, color: mapState[value.state], percent: Math.round(value.number / dataAssignToMe.total * 100 * 100) / 100 }
-        });
+        const { alert } = this.props;
+        const { currentUser, loginRole } = this.props;
+        getOverviewCountTaskState(currentUser.id)
+            .then((response) => {
+                console.log("[Dashboard] Count task state ", response);
+                let dataAssignToMe = this.state.dataAssignToMe;
+                let dataCreateByMe = this.state.dataCreateByMe;
+                response.data["assignToMe"].forEach(value => {
+                    dataAssignToMe.total = dataAssignToMe.total + value.number;
+                });
+                dataAssignToMe.dataPoints = response.data["assignToMe"].map((value, index) => {
+                    let name = value.state[0].toUpperCase() + value.state.slice(1).toLowerCase();
+                    return { name: name, y: value.number, color: mapState[value.state], percent: Math.round(value.number / dataAssignToMe.total * 100 * 100) / 100 }
+                });
+                //
+                response.data["createByMe"].forEach(value => {
+                    dataCreateByMe.total = dataCreateByMe.total + value.number;
+                });
+                dataCreateByMe.dataPoints = response.data["createByMe"].map((value, index) => {
+                    let name = value.state[0].toUpperCase() + value.state.slice(1).toLowerCase();
+                    return { name: name, y: value.number, color: mapState[value.state], percent: Math.round(value.number / dataCreateByMe.total * 100 * 100) / 100 }
+                });
+                this.setState({
+                    dataAssignToMe: dataAssignToMe,
+                    dataCreateByMe: dataCreateByMe
+                })
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong when get number count task state. Please try again!');
+            }).finally(() => {
+
+            });
         getOverviewCount()
             .then((response) => {
                 console.log("[Dashboard] Count report", response);
@@ -435,10 +441,7 @@ class AdminDashboard extends Component {
             }).finally(() => {
 
             });
-        this.setState({
-            dataAssignToMe: dataAssignToMe,
-            dataCreateByMe: dataCreateByMe
-        })
+
     }
 
     componentDidMount() {

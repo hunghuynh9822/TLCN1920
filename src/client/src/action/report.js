@@ -34,3 +34,10 @@ export function getOverviewCount() {
         method: 'GET',
     });
 }
+
+export function getOverviewCountTaskState(userId) {
+    return request({
+        url: url + "/count_state_task?user=" + userId,
+        method: 'GET',
+    });
+}
