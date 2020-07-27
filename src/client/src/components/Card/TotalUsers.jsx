@@ -65,7 +65,7 @@ class TotalUsers extends Component {
                             >
                                 {this.props.title}
                             </Typography>
-                            <Typography variant="h3">1,600</Typography>
+                            <Typography variant="h3">{this.props.value}</Typography>
                         </Grid>
                         <Grid item>
                             <Avatar className={classnames(classes.avatar, this.props.iconStyle)}>
@@ -74,19 +74,19 @@ class TotalUsers extends Component {
                         </Grid>
                     </Grid>
                     <div className={classes.difference}>
-                        <ArrowUpwardIcon className={classes.differenceIcon} />
+                        {/* <ArrowUpwardIcon className={classes.differenceIcon} />
                         <Typography
                             className={classes.differenceValue}
                             variant="body2"
                         >
                             16%
-          </Typography>
-                        <Typography
+          </Typography> */}
+                        {/* <Typography
                             className={classes.caption}
                             variant="caption"
                         >
                             Since last month
-          </Typography>
+          </Typography> */}
                     </div>
                 </CardContent>
             </Card>
@@ -97,6 +97,7 @@ TotalUsers.propTypes = {
     classes: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
     icon: PropTypes.element.isRequired,
-    iconStyle: PropTypes.object
+    iconStyle: PropTypes.object,
+    value: PropTypes.string.isRequired
 };
 export default withStyles(styles)(TotalUsers);

@@ -28,3 +28,9 @@ export function getNumberTasksByEmployee(employee) {
         method: 'GET',
     });
 }
+export function getOverviewCount() {
+    return request({
+        url: url + "/count",
+        method: 'GET',
+    });
+}

@@ -16,6 +16,8 @@ import Card from '@material-ui/core/Card';
 //
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
+import AssignmentLate from '@material-ui/icons/AssignmentLate';
+import Feedback from '@material-ui/icons/Feedback';
 
 //
 import { CustomLineChart } from '../../components';
@@ -26,7 +28,7 @@ import { Loading, DrilldownChart, StackedBarChart, DoughnutChart } from '../../c
 import { TotalUsers } from '../../components'
 //
 import { getNumberTasksByAdmin, getNumberTasksByEmployee, getTasksOfEmployeeInProject } from '../../action/report';
-import { getTasksOfAllEmployeeInProject } from '../../action/report';
+import { getTasksOfAllEmployeeInProject, getOverviewCount } from '../../action/report';
 import { loginAsAdmin, loginAsLead } from '../../action/auth';
 
 const styles = theme => ({
@@ -56,6 +58,18 @@ const styles = theme => ({
         color: '#bfbfbf'
     },
     iconProject: {
+        color: '#FFFFFF',
+        backgroundColor: '#e53935',
+    },
+    iconUser: {
+        color: '#FFFFFF',
+        backgroundColor: '#43a047',
+    },
+    iconRequest: {
+        color: '#FFFFFF',
+        backgroundColor: '#fb8c00',
+    },
+    iconNotification: {
         color: '#FFFFFF',
         backgroundColor: '#3f51b5',
     }
@@ -99,6 +113,12 @@ class AdminDashboard extends Component {
                 dataPoints: [],
                 total: 0
             },
+            reportCount: {
+                employee: 0,
+                notify: 0,
+                project: 0,
+                request: 0
+            }
         }
         this.loadDataViewTaskChart = this.loadDataViewTaskChart.bind(this);
         this.loadDataDetail = this.loadDataDetail.bind(this);
@@ -403,6 +423,18 @@ class AdminDashboard extends Component {
             let name = value.state[0].toUpperCase() + value.state.slice(1).toLowerCase();
             return { name: name, y: value.number, color: mapState[value.state], percent: Math.round(value.number / dataAssignToMe.total * 100 * 100) / 100 }
         });
+        getOverviewCount()
+            .then((response) => {
+                console.log("[Dashboard] Count report", response);
+                this.setState({
+                    reportCount: response
+                })
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong when get number count report. Please try again!');
+            }).finally(() => {
+
+            });
         this.setState({
             dataAssignToMe: dataAssignToMe,
             dataCreateByMe: dataCreateByMe
@@ -423,16 +455,16 @@ class AdminDashboard extends Component {
                 <Grid container spacing={3} className={classes.gridroot}>
                     <Grid xs={12} container spacing={3} direction="row">
                         <Grid item xs={3}>
-                            <TotalUsers title="TOTAL PROJECTS" icon={InsertChartIcon} iconStyle={classes.iconProject} />
+                            <TotalUsers title="TOTAL PROJECTS" icon={InsertChartIcon} iconStyle={classes.iconProject} value={this.state.reportCount.project} />
                         </Grid>
                         <Grid item xs={3}>
-                            <TotalUsers title="TOTAL USERS" icon={PeopleIcon} />
+                            <TotalUsers title="TOTAL USERS" icon={PeopleIcon} iconStyle={classes.iconUser} value={this.state.reportCount.employee} />
                         </Grid>
                         <Grid item xs={3}>
-                            <TotalUsers title="TOTAL REQUESTS" icon={PeopleIcon} />
+                            <TotalUsers title="TOTAL REQUESTS" icon={AssignmentLate} iconStyle={classes.iconRequest} value={this.state.reportCount.request} />
                         </Grid>
                         <Grid item xs={3}>
-                            <TotalUsers title="TOTAL NOTIFICATIONS" icon={PeopleIcon} />
+                            <TotalUsers title="TOTAL NOTIFICATIONS" icon={Feedback} iconStyle={classes.iconNotification} value={this.state.reportCount.notify} />
                         </Grid>
                     </Grid>
                     <Grid xs={12} container spacing={3} direction="row">

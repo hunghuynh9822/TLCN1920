@@ -176,12 +176,12 @@ class TaskContainer extends Component {
         let targetTask = Array.from(sourceArray).splice(source.index, 1)[0];
         console.log("[TaskContainer] onDragEnd ", result)
         let resultCanDnd = this.canDnd(targetTask);
-        if (!resultCanDnd.verified) {
-            alert.error(resultCanDnd.message);
-            return;
-        }
         // dropped outside the list
         if (!destination) {
+            return;
+        }
+        if (!resultCanDnd.verified) {
+            alert.error(resultCanDnd.message);
             return;
         }
         if (source.droppableId === destination.droppableId) {
