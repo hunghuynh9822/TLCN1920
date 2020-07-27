@@ -74,7 +74,7 @@ const styles = theme => ({
     label: {
         margin: 0,
         width: '100px',
-        lineHeight: '40px',
+        // lineHeight: '40px',
     }
 });
 class WikiManagement extends Component {
@@ -82,6 +82,7 @@ class WikiManagement extends Component {
         super(props);
         this.state = {
             open: false,
+            isEdit: false,
             scroll: 'body',
             request: {
                 title: "",
@@ -113,6 +114,9 @@ class WikiManagement extends Component {
 
     handleClick() {
         console.log("[WikiManagement] Click button on header");
+        this.setState({
+            isEdit: true,
+        })
     }
     handleOpen() {
         this.setState({
@@ -240,7 +244,7 @@ class WikiManagement extends Component {
         return (
             <React.Fragment>
                 <Grid container spacing={3} className={classes.wiki_page}>
-                    <Grid item xs={3} sm={3}><TreeViewCustomAnimation handleSelectItem={this.handleSelectItem} isCreate={this.state.open} data={this.state.data_wiki} /></Grid>
+                    <Grid item xs={3} sm={3}><TreeViewCustomAnimation handleSelectItem={this.handleSelectItem} isCreate={this.state.open} isEdit={this.state.isEdit} data={this.state.data_wiki} /></Grid>
                     <Grid item xs={9} sm={9}>
                         <div className={classes.sub_layout_header}>
                             <div className={classes.sub_header}>
@@ -292,7 +296,8 @@ class WikiManagement extends Component {
                                 flexWrap: 'nowrap',
                             }}>
                                 <div className={classes.label}>Parent : </div>
-                                <div><DropdownTree /></div>
+                                {/* <div><DropdownTree /></div> */}
+                                <div>{this.state.selected && this.state.selected != null ? this.state.selected.title : "No parent"}</div>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField

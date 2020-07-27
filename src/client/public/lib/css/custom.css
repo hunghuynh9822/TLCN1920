@@ -1,12 +1,12 @@
 /* Gantt */
 .critical_class {
-    border: 2px solid #BFC518;
+    border: 2px solid #f06f6c;
     color: #6ba8e3;
-    background: #F2F67E;
+    background: #e53935;
 }
 
 .critical_class .gantt_task_progress {
-    background: #D9DF29;
+    background: #9c3532;
 }
 
 .canvasjs-chart-credit {

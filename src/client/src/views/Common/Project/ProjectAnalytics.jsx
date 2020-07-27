@@ -69,7 +69,7 @@ class ProjectAnalytics extends Component {
                 TASK_STATE.forEach((state) => {
                     if (tasksState[state]) {
                         let percent = (tasksState[state].length / totalTasks) * 100;
-                        dataState.push({ name: state, y: percent, number: totalTasks });
+                        dataState.push({ name: state, y: percent, number: tasksState[state].length });
                     } else {
                         dataState.push({ name: state, y: 0, number: 0 });
                     }
@@ -111,7 +111,7 @@ class ProjectAnalytics extends Component {
                             let percent = (tasks[state].length / totalTasks) * 100;
                             assigneeState[state] = {
                                 percent: percent,
-                                number: totalTasks,
+                                number: tasks[state].length,
                             };
                         } else {
                             // assigneeState[state] = 0;

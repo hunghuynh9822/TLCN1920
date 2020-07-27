@@ -34,7 +34,7 @@ class PieChart extends Component {
 			data: [{
 				type: "doughnut",
 				showInLegend: true,
-				indexLabel: "{name}: {number}",
+				indexLabel: "{name}: {number} task",
 				yValueFormatString: "#,###'%'",
 				dataPoints: this.props.data
 

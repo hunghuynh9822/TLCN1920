@@ -82,7 +82,7 @@ class TreeViewCustomAnimation extends Component {
     handleClickOutside(event) {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             setTimeout(function () { //Start the timer
-                if (!this.props.isCreate) {
+                if (!this.props.isCreate && !this.props.isEdit) {
                     console.log("[WikiManagement] Outside tree view");
                     this.props.handleSelectItem(null, undefined);
                 } else {
@@ -138,6 +138,7 @@ TreeViewCustomAnimation.propTypes = {
     classes: PropTypes.object.isRequired,
     handleSelectItem: PropTypes.func.isRequired,
     isCreate: PropTypes.bool,
+    isEdit: PropTypes.bool,
     data: PropTypes.array.isRequired
 };
 export default withStyles(styles)(TreeViewCustomAnimation);

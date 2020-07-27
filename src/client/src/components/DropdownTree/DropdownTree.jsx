@@ -18,6 +18,7 @@ class DropdownTree extends Component {
     }
     onChange = (currentNode, selectedNodes) => {
         console.log("path::", currentNode.path);
+        console.log("path::", selectedNodes.path);
     };
     assignObjectPaths = (obj, stack) => {
         Object.keys(obj).forEach(k => {
