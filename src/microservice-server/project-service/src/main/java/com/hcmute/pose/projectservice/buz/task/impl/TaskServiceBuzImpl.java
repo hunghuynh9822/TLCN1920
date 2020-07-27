@@ -5,6 +5,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
 import com.hcmute.pose.projectservice.model.task.*;
+import com.hcmute.pose.projectservice.modelmap.CountStateReport;
 import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import com.hcmute.pose.projectservice.payload.task.*;
 import com.hcmute.pose.projectservice.service.task.TaskCommentService;
@@ -577,6 +578,20 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             List<QueryReport> numberTaskOfProject = taskService.getNumberTaskOfEmployeeInProject(projectId);
             ReportResponse reportResponse = new ReportResponse();
             reportResponse.putData("taskOfEmployee", numberTaskOfProject);
+            return reportResponse;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getCountReport(Long userId) throws SQLException {
+        try{
+            List<CountStateReport> countStateTaskCreateByMe = taskService.getCountStateTaskCreateByMe(userId);
+            List<CountStateReport> countStateTaskAssignToMe = taskService.getCountStateTaskAssignToMe(userId);
+            ReportResponse reportResponse = new ReportResponse();
+            reportResponse.putData("createByMe", countStateTaskCreateByMe);
+            reportResponse.putData("assignToMe", countStateTaskAssignToMe);
             return reportResponse;
         } finally {
             databaseHelper.closeConnection();

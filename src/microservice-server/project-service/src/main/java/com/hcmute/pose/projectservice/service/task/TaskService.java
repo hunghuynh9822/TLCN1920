@@ -3,6 +3,7 @@ package com.hcmute.pose.projectservice.service.task;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskState;
+import com.hcmute.pose.projectservice.modelmap.CountStateReport;
 import com.hcmute.pose.projectservice.modelmap.QueryReport;
 
 import java.sql.SQLException;
@@ -37,4 +38,8 @@ public interface TaskService {
     List<QueryReport> getNumberTaskOfProjectOfEmployee(Long employeeId) throws SQLException;
 
     List<QueryReport> getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
+
+    List<CountStateReport> getCountStateTaskCreateByMe(Long userId) throws SQLException;
+
+    List<CountStateReport> getCountStateTaskAssignToMe(Long userId) throws SQLException;
 }

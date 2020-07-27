@@ -4,6 +4,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.dao.task.TaskDao;
 import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskState;
+import com.hcmute.pose.projectservice.modelmap.CountStateReport;
 import com.hcmute.pose.projectservice.modelmap.LongValue;
 import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import com.hcmute.pose.projectservice.service.task.TaskService;
@@ -142,5 +143,41 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<QueryReport> getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException {
         return taskDao.selectNumberTaskOfEmployeeInProject(projectId);
+    }
+
+    @Override
+    public List<CountStateReport> getCountStateTaskCreateByMe(Long userId) throws SQLException {
+        List<CountStateReport> result = new ArrayList<>();
+        List<CountStateReport> countStateReports = taskDao.selectCountStateTaskCreateByMe(userId);
+        for (TaskState state : TaskState.values()
+             ) {
+            CountStateReport value = new CountStateReport(state, 0);
+            for (CountStateReport report : countStateReports) {
+                if(report.getState().equals(state)) {
+                    value = report;
+                    break;
+                }
+            }
+            result.add(value);
+        }
+        return result;
+    }
+
+    @Override
+    public List<CountStateReport> getCountStateTaskAssignToMe(Long userId) throws SQLException {
+        List<CountStateReport> result = new ArrayList<>();
+        List<CountStateReport> countStateReports = taskDao.selectCountStateTaskAssignToMe(userId);
+        for (TaskState state : TaskState.values()
+        ) {
+            CountStateReport value = new CountStateReport(state, 0);
+            for (CountStateReport report : countStateReports) {
+                if(report.getState().equals(state)) {
+                    value = report;
+                    break;
+                }
+            }
+            result.add(value);
+        }
+        return result;
     }
 }

@@ -39,6 +39,8 @@ public interface TaskServiceBuz {
     ReportResponse getNumberTaskOfProjectOfEmployee(Long employeeId) throws SQLException;
 
     ReportResponse getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
+
+    ReportResponse getCountReport(Long userId) throws SQLException;
 }
 
 

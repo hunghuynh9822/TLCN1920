@@ -3,6 +3,7 @@ package com.hcmute.pose.projectservice.dao.task;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskState;
+import com.hcmute.pose.projectservice.modelmap.CountStateReport;
 import com.hcmute.pose.projectservice.modelmap.LongValue;
 import com.hcmute.pose.projectservice.modelmap.QueryReport;
 
@@ -40,4 +41,8 @@ public interface TaskDao {
     List<QueryReport> selectNumberTaskOfProjectOfEmployee(Long employeeId) throws SQLException;
 
     List<QueryReport> selectNumberTaskOfEmployeeInProject(Long projectId) throws SQLException;
+
+    List<CountStateReport> selectCountStateTaskCreateByMe(Long userId) throws SQLException;
+
+    List<CountStateReport> selectCountStateTaskAssignToMe(Long userId) throws SQLException;
 }

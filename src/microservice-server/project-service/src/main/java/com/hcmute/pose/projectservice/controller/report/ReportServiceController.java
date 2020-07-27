@@ -79,4 +79,14 @@ public class ReportServiceController {
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/count_state_task")
+    public ResponseEntity getCountReportTaskState(@RequestParam(name="user") Long userId){
+        try{
+            ReportResponse response = taskServiceBuz.getCountReport(userId);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }
