@@ -29,7 +29,7 @@ import { TotalUsers } from '../../components'
 //
 import { getNumberTasksByAdmin, getNumberTasksByEmployee, getTasksOfEmployeeInProject } from '../../action/report';
 import { getTasksOfAllEmployeeInProject, getOverviewCount, getOverviewCountTaskState } from '../../action/report';
-import { loginAsAdmin, loginAsLead } from '../../action/auth';
+import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../action/auth';
 
 const styles = theme => ({
     container: {
@@ -96,10 +96,12 @@ class AdminDashboard extends Component {
             loadingStackedBarChart: false,
             stackedBarChartOption: {},
             mapColor: {},
+            loadingAssignToMe: false,
             dataAssignToMe: {
                 dataPoints: [],
                 total: 0
             },
+            loadingCreateByMe: false,
             dataCreateByMe: {
                 dataPoints: [],
                 total: 0
@@ -370,7 +372,7 @@ class AdminDashboard extends Component {
                     console.log(error);
                     alert.error('Oops! Something went wrong when get number tasks report of admin. Please try again!');
                 })
-        } else if (loginAsLead(loginRole)) {
+        } else if (loginAsLead(loginRole) || loginAsStaff(loginRole)) {
             getNumberTasksByEmployee(currentUser.id)
                 .then(response => {
                     console.log("[Dashboard] numberTasks ", response.data.numberTasks);
@@ -381,16 +383,40 @@ class AdminDashboard extends Component {
                         return b.y - a.y
                     })
                     viewTaskChartOption = this.getViewTaskChartOption(response.data.total);
+                    getTasksOfAllEmployeeInProject()
+                        .then(response => {
+                            console.log("[Dashboard] taskEmployee ", response.data.taskEmployee);
+                            // console.log("[Dashboard] mapColor ", this.state.mapColor);
+                            taskOfEmployeeByProject = response.data.taskEmployee.map((value, index) => {
+                                value.color = this.state.mapColor[value.id];
+                                // console.log("[Dashboard] mapColor id " + value.id + " color " + value.color);
+                                return value;
+                            })
+                            stackedBarChartOption = this.getStackedBarOption();
+                        }).catch(error => {
+                            console.log(error);
+                            alert.error('Oops! Something went wrong when get number tasks report of admin. Please try again!');
+                        }).finally(() => {
+                            this.setState({
+                                loadingViewTasksChart: false,
+                                numberTasks: numberTasks,
+                                viewTaskChartOption: viewTaskChartOption,
+                                loadingStackedBarChart: false,
+                                taskOfEmployeeByProject: taskOfEmployeeByProject,
+                                stackedBarChartOption: stackedBarChartOption
+                            })
+                        });
                 }).catch(error => {
                     console.log(error);
                     alert.error('Oops! Something went wrong when get number tasks report of lead ' + currentUser.id + '. Please try again!');
-                }).finally(() => {
-                    this.setState({
-                        loadingViewTasksChart: false,
-                        numberTasks: numberTasks,
-                        viewTaskChartOption: viewTaskChartOption
-                    })
-                });
+                })
+            // .finally(() => {
+            //     this.setState({
+            //         loadingViewTasksChart: false,
+            //         numberTasks: numberTasks,
+            //         viewTaskChartOption: viewTaskChartOption
+            //     })
+            // });
         } else {
             alert.error('Oops! You do not have permision !');
         }
@@ -399,6 +425,10 @@ class AdminDashboard extends Component {
     loadStatistic() {
         const { alert } = this.props;
         const { currentUser, loginRole } = this.props;
+        this.setState({
+            loadingCreateByMe: true,
+            loadingAssignToMe: true
+        })
         getOverviewCountTaskState(currentUser.id)
             .then((response) => {
                 console.log("[Dashboard] Count task state ", response);
@@ -421,7 +451,9 @@ class AdminDashboard extends Component {
                 });
                 this.setState({
                     dataAssignToMe: dataAssignToMe,
-                    dataCreateByMe: dataCreateByMe
+                    dataCreateByMe: dataCreateByMe,
+                    loadingCreateByMe: false,
+                    loadingAssignToMe: false
                 })
             }).catch(error => {
                 console.log(error);
@@ -453,33 +485,34 @@ class AdminDashboard extends Component {
 
     render() {
         const { classes } = this.props;
+        const { currentUser, loginRole } = this.props;
         return (
             <Container className={classes.container}>
                 <Grid container spacing={3} className={classes.gridroot}>
                     <Grid xs={12} container spacing={3} direction="row">
                         <Grid item xs={3}>
-                            <TotalUsers title="TOTAL PROJECTS" icon={InsertChartIcon} iconStyle={classes.iconProject} value={this.state.reportCount.project} />
+                            <TotalUsers title="TOTAL PROJECTS" icon={InsertChartIcon} iconstyle={classes.iconProject} value={this.state.reportCount.project} />
                         </Grid>
                         <Grid item xs={3}>
-                            <TotalUsers title="TOTAL USERS" icon={PeopleIcon} iconStyle={classes.iconUser} value={this.state.reportCount.employee} />
+                            <TotalUsers title="TOTAL USERS" icon={PeopleIcon} iconstyle={classes.iconUser} value={this.state.reportCount.employee} />
                         </Grid>
                         <Grid item xs={3}>
-                            <TotalUsers title="TOTAL REQUESTS" icon={AssignmentLate} iconStyle={classes.iconRequest} value={this.state.reportCount.request} />
+                            <TotalUsers title="TOTAL REQUESTS" icon={AssignmentLate} iconstyle={classes.iconRequest} value={this.state.reportCount.request} />
                         </Grid>
                         <Grid item xs={3}>
-                            <TotalUsers title="TOTAL NOTIFICATIONS" icon={Feedback} iconStyle={classes.iconNotification} value={this.state.reportCount.notify} />
+                            <TotalUsers title="TOTAL NOTIFICATIONS" icon={Feedback} iconstyle={classes.iconNotification} value={this.state.reportCount.notify} />
                         </Grid>
                     </Grid>
                     <Grid xs={12} container spacing={3} direction="row">
                         <Grid item xs={5} spacing={3} direction="column">
                             <Grid item xs={12} >
                                 {
-                                    this.state.loadingViewTasksChart ? <Loading /> : <DoughnutChart title="Create by me" data={this.state.dataCreateByMe} />
+                                    this.state.loadingCreateByMe ? <Loading /> : <DoughnutChart title="Create by me" data={this.state.dataCreateByMe} />
                                 }
                             </Grid>
                             <Grid item xs={12}>
                                 {
-                                    this.state.loadingStackedBarChart ? <Loading /> : <DoughnutChart title="Assign to me" data={this.state.dataAssignToMe} />
+                                    this.state.loadingAssignToMe ? <Loading /> : <DoughnutChart title="Assign to me" data={this.state.dataAssignToMe} />
                                 }
                             </Grid>
                         </Grid>

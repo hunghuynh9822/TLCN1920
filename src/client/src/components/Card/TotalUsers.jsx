@@ -68,7 +68,7 @@ class TotalUsers extends Component {
                             <Typography variant="h3">{this.props.value}</Typography>
                         </Grid>
                         <Grid item>
-                            <Avatar className={classnames(classes.avatar, this.props.iconStyle)}>
+                            <Avatar className={classnames(classes.avatar, this.props.iconstyle)}>
                                 <this.props.icon className={classes.icon} />
                             </Avatar>
                         </Grid>
@@ -97,7 +97,7 @@ TotalUsers.propTypes = {
     classes: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
     icon: PropTypes.element.isRequired,
-    iconStyle: PropTypes.object,
+    iconstyle: PropTypes.object,
     value: PropTypes.string.isRequired
 };
 export default withStyles(styles)(TotalUsers);
