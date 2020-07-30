@@ -27,7 +27,7 @@ public class FeignConfiguration {
 	@Bean 
 	public Request.Options timeoutConfiguration(){
 		
-		return new Request.Options(5000, 30000);
+		return new Request.Options(50000, 300000);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class FeignConfiguration {
 	@Bean
 	public Retryer retryer() {
 		
-		return new Retryer.Default(1000, 8000, 3);		
+		return new Retryer.Default(1000, 8000, 3);
 	}	
 	
 }
