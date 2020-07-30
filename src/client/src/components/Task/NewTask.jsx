@@ -190,6 +190,7 @@ class NewTask extends Component {
                 console.log(response);
                 this.props.loadProject();
                 this.props.loadTasks();
+                handleCloseCreate();
                 this.setState({
                     openAdd: false,
                     assignee: null,

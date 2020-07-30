@@ -167,7 +167,8 @@ class TaskContainer extends Component {
      */
     onDragEnd(result) {
         const { alert } = this.props;
-        const { loginRole, currentUser } = this.props;
+        const { loginRole, currentUser, projectItem } = this.props;
+        // console.log("[TaskContainer] projectItem ", projectItem)
         let { projectTasks } = this.state;
         let taskCards = projectTasks.tasks;
         const { source, destination, draggableId } = result;
@@ -194,7 +195,8 @@ class TaskContainer extends Component {
         } else {
             let requestChange = {
                 taskId: draggableId,
-                employeeId: destination.droppableId
+                employeeId: destination.droppableId,
+                projectId: projectTasks.projectId
             };
             const result = this.move(
                 sourceArray,
