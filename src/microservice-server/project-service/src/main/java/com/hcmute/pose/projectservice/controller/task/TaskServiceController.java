@@ -130,6 +130,7 @@ public class TaskServiceController {
     @PatchMapping("/update-state")
     public ResponseEntity<String> updateState(@Valid @RequestBody TaskUpdateRequest request){
         try{
+            LOGGER.info("update-state {}", GsonUtils.toJson(request));
             EmployeeResponse employee = employeeClient.getEmployee(String.valueOf(request.getEmployeeId()));
             Project project = projectService.getProject(request.getProjectId());
             taskServiceBuz.updateState(request);
@@ -141,6 +142,7 @@ public class TaskServiceController {
             });
             return new ResponseEntity<>(message, HttpStatus.OK);
         }catch (Exception | TransactionException e){
+            LOGGER.error("GOT EXCEPTION ", e);
             String message = String.format("Update state of %d failed", request.getTaskId());
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
@@ -149,6 +151,7 @@ public class TaskServiceController {
     @PutMapping("/update")
     public ResponseEntity<String> updateTask(@Valid @RequestBody TaskUpdateRequest request){
         try {
+            LOGGER.info("update-task {}", GsonUtils.toJson(request));
             EmployeeResponse employee = employeeClient.getEmployee(String.valueOf(request.getEmployeeId()));
             Project project = projectService.getProject(request.getProjectId());
             taskServiceBuz.updateTask(request);
@@ -160,6 +163,7 @@ public class TaskServiceController {
             });
             return new ResponseEntity<>(message, HttpStatus.OK);
         }catch (Exception | TransactionException e){
+            LOGGER.error("GOT EXCEPTION ", e);
             String message = String.format("Update task %d failed", request.getTaskId());
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
@@ -193,6 +197,7 @@ public class TaskServiceController {
             String message = String.format("Update comment of %d | %d | %s successfully", request.getTaskId(), request.getEmployeeId(), request.getComment());
             return new ResponseEntity<>(message, HttpStatus.OK);
         }catch (Exception | TransactionException e){
+            LOGGER.error("GOT EXCEPTION ", e);
             String message = String.format("Update comment of %d | %d | %s failed", request.getTaskId(), request.getEmployeeId(), request.getComment());
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
