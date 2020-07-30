@@ -322,14 +322,15 @@ class ProjectTasks extends Component {
 
     handleSelectStateChange(event) {
         const { alert } = this.props;
-        const { currentUser } = this.props;
+        const { currentUser, projectItem } = this.props;
         this.setState({
             task: { ...this.state.task, state: TASK_STATE[event.target.value] }
         });
         let request = {
             taskId: this.state.task.id,
             employeeId: currentUser.id,
-            state: event.target.value
+            state: event.target.value,
+            projectId: projectItem.project.id
         }
         console.log("Request update task : " + JSON.stringify(request));
         updateStateTasks(request)
@@ -345,14 +346,15 @@ class ProjectTasks extends Component {
 
     handlePointChange(event, newValue) {
         const { alert } = this.props;
-        const { currentUser } = this.props;
+        const { currentUser, projectItem } = this.props;
         this.setState({
             task: { ...this.state.task, point: newValue }
         });
         let request = {
             taskId: this.state.task.id,
             employeeId: currentUser.id,
-            point: newValue
+            point: newValue,
+            projectId: projectItem.project.id
         }
         console.log("Request update task : " + JSON.stringify(request));
         updatePointTasks(request)
@@ -544,7 +546,7 @@ class ProjectTasks extends Component {
     render() {
         const { classes } = this.props;
         const { projectItem } = this.props;
-        const { open, scroll, task, openAdd, openAddPrevious } = this.state;
+        const { open, scroll, task, openAdd, openAddPrevious, loginRole } = this.state;
         let members = projectItem.members;
         let tasks = projectItem.tasks;
         const tabs = [
@@ -701,7 +703,7 @@ class ProjectTasks extends Component {
                                 <Box component="fieldset" mb={3} borderColor="transparent">
                                     <Typography component="legend">Point</Typography>
                                     <StyledRating
-                                        readOnly={task.state !== 'DONE' && task.state !== 'FINISH'}
+                                        readOnly={task.state !== 'DONE' && task.state !== 'FINISH' && (loginAsAdmin(loginRole) || loginAsLead(loginRole))}
                                         name="customized-color"
                                         value={task.point}
                                         getLabelText={getLabelText}
