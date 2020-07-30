@@ -5,6 +5,7 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.project.ProjectServiceBuz;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
+import com.hcmute.pose.projectservice.feign.EmployeeClient;
 import com.hcmute.pose.projectservice.model.project.PerOfProject;
 import com.hcmute.pose.projectservice.model.project.Project;
 import com.hcmute.pose.projectservice.model.project.ProjectRole;
@@ -21,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -29,7 +29,6 @@ import java.util.*;
 @Service
 public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     private static Logger LOGGER = LoggerFactory.getLogger(ProjectServiceBuzImpl.class);
-    private static final String EMPLOYEE_SERVICE = "http://employee-service/api/employees";
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -40,14 +39,13 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     private PerOfProjectService perOfProjectService;
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private TaskService taskService;
 
     @Autowired
     private TaskServiceBuz taskServiceBuz;
 
+    @Autowired
+    private EmployeeClient employeeClient;
     @Override
     public ProjectDetailResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
         try{
@@ -144,10 +142,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         List<EmployeeResponse> members = new ArrayList<>();
         List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
         for (PerOfProject per : perOfProjects) {
-            String url = EMPLOYEE_SERVICE + "/{id}";
-            Map<String, String> params = new HashMap<>();
-            params.put("id", per.getEmployeeId().toString());
-            EmployeeResponse employeeResponse = restTemplate.getForObject(url, EmployeeResponse.class, params);
+            EmployeeResponse employeeResponse = employeeClient.getEmployee(per.getEmployeeId().toString());
             assert employeeResponse != null;
             employeeResponse.setRole(per.getRole());
             members.add(employeeResponse);
@@ -224,8 +219,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         try {
             Project project = projectService.getProject(projectId);
             List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
-            String url = EMPLOYEE_SERVICE + "/";
-            AllEmployeeResponse allEmployeeResponse = restTemplate.getForObject(url, AllEmployeeResponse.class);
+            AllEmployeeResponse allEmployeeResponse = employeeClient.getAllEmployee();
             List<EmployeeResponse> employeeResponses = allEmployeeResponse.getEmployees();
             List<EmployeeResponse> employees = new ArrayList<>();
             for (EmployeeResponse employee : employeeResponses) {
