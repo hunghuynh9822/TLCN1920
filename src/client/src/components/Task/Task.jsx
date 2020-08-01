@@ -53,10 +53,10 @@ const styles = theme => ({
         minWidth: '130px',
     },
     icon_rate: {
-        marginTop: '3px',
+        marginTop: '6px',
         width: '25px',
         height: '25px',
-        marginLeft: '3px'
+        marginLeft: '6px'
     }
 });
 const grid = 8;

@@ -116,7 +116,7 @@ const dropdownStyle = theme => ({
     height: "unset",
     minHeight: "unset",
     "&:hover": {
-      backgroundColor: primaryColor[0],
+      backgroundColor: '#978cfc',
       color: whiteColor,
       ...primaryBoxShadow
     }
