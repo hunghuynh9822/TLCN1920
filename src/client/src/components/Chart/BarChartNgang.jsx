@@ -36,7 +36,6 @@ class App extends Component {
 			indexLabelFontColor: "white",
 			yValueFormatString: "#,###'%'",
 			indexLabelFormatter: ((e) => {
-				console.log("[Chart] BarChartNgang ", e)
 				let number = e.dataPoint.number;
 				if (number == 0) {
 					return "";

@@ -13,8 +13,20 @@ const styles = theme => ({
 const CustomTab = withStyles(theme => ({
     root: {
         minHeight: '100%',
-    }
+    },
+    selected: {
+        backgroundColor: '#f4f6f8',
+        outline: '5px #f4f6f8'
+    },
 }))(Tab);
+const CustomTabs = withStyles(theme => ({
+    root: {
+        minHeight: '100%',
+    },
+    indicator: {
+        backgroundColor: '#f4f6f8'
+    }
+}))(Tabs);
 class CenteredTabs extends Component {
     constructor(props) {
         super(props);
@@ -24,20 +36,21 @@ class CenteredTabs extends Component {
         const { classes } = this.props;
         return (
             <React.Fragment>
-                <Tabs
+                <CustomTabs
                     value={this.props.value}
                     onChange={this.props.handleChange}
-                    indicatorColor="primary"
+                    // indicatorColor="primary"
                     textColor="primary"
                     centered
-                    style={{
-                        minHeight: '100%',
-                    }}
                 >
                     {this.props.tabs.map((tab, key) => (
-                        <CustomTab key={key} label={tab.name} />
+                        <CustomTab key={key} label={tab.name} style={{
+                            "&:focus": {
+                                outline: '5px #f4f6f8'
+                            },
+                        }} />
                     ))}
-                </Tabs>
+                </CustomTabs>
             </React.Fragment>
         );
     }
