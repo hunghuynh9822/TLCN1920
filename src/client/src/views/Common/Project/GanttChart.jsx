@@ -162,13 +162,13 @@ class GanttChart extends Component {
         let message = `${entityType} ${action}: ${id} ${text}`;
         //
         const { projectItem } = this.props;
+        let projectId = projectItem.project.id;
         let tasks = projectItem.tasks;
         console.log("[Gantt] Data change ", entityType, action, itemData, id);
 
         let request = {};
         //Update link -> apply on target
         if (entityType === 'link') {
-
             const sourceTask = tasks.find(element => element.id == itemData.source);
             console.log("[Gantt] Change task source " + JSON.stringify(sourceTask));
             const targetTask = tasks.find(element => element.id == itemData.target);
@@ -182,7 +182,8 @@ class GanttChart extends Component {
                 state: TASK_STATE.indexOf(targetTask.state),
                 startedAt: targetTask.startedAt,
                 duration: targetTask.duration,
-                preTaskId: targetTask.preTaskId
+                preTaskId: targetTask.preTaskId,
+                projectId: projectId
             }
             let preTaskId = request.preTaskId;
             if (action === 'create') {
@@ -234,7 +235,8 @@ class GanttChart extends Component {
                     state: TASK_STATE.indexOf(task.state),
                     startedAt: Date.parse(itemData.start_date),
                     duration: itemData.duration,
-                    preTaskId: task.preTaskId
+                    preTaskId: task.preTaskId,
+                    projectId: projectId
                 }
                 console.log("[Gantt][UpdateTask][Task] Request : " + JSON.stringify(request));
                 updateTask(request)
