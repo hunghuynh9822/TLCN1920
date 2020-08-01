@@ -16,7 +16,10 @@ const CustomTab = withStyles(theme => ({
     },
     selected: {
         backgroundColor: '#f4f6f8',
-        outline: '5px #f4f6f8'
+        outline: '5px #f4f6f8',
+        "&:focus": {
+            outline: 'none'
+        }
     },
 }))(Tab);
 const CustomTabs = withStyles(theme => ({
@@ -44,11 +47,7 @@ class CenteredTabs extends Component {
                     centered
                 >
                     {this.props.tabs.map((tab, key) => (
-                        <CustomTab key={key} label={tab.name} style={{
-                            "&:focus": {
-                                outline: '5px #f4f6f8'
-                            },
-                        }} />
+                        <CustomTab key={key} label={tab.name} />
                     ))}
                 </CustomTabs>
             </React.Fragment>
