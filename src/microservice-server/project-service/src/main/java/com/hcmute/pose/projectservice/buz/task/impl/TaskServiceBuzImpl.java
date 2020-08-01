@@ -272,7 +272,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             Task target = taskService.getTasksById(taskLink.getTarget());
             Calendar date_end_source = Calendar.getInstance();
             date_end_source.setTimeInMillis(source.getStartedAt());
-            date_end_source.add(Calendar.DATE, source.getDuration() == null ? 0 : source.getDuration());
+            date_end_source.add(Calendar.DATE, source.getDuration() == null ? 1 : source.getDuration());
             Calendar date_start_target = Calendar.getInstance();
             date_start_target.setTimeInMillis(target.getStartedAt());
             Date sourceTime = getDate(date_end_source);
