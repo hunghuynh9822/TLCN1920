@@ -9,6 +9,7 @@ public class TaskResponse {
     private Long employeeAssignee;
     private String title;
     private String description;
+    private String preTaskId;
     private Long startedAt;
     private Integer duration;
     private String state;
@@ -20,13 +21,14 @@ public class TaskResponse {
     public TaskResponse() {
     }
 
-    public TaskResponse(Long id, Long projectId, Long employeeCreator, Long employeeAssignee, String title, String description, Long startedAt, Integer duration, String state, Integer point, Long createdAt, Long updatedAt) {
+    public TaskResponse(Long id, Long projectId, Long employeeCreator, Long employeeAssignee, String title, String description, String preTaskId, Long startedAt, Integer duration, String state, Integer point, Long createdAt, Long updatedAt) {
         this.id = id;
         this.projectId = projectId;
         this.employeeCreator = employeeCreator;
         this.employeeAssignee = employeeAssignee;
         this.title = title;
         this.description = description;
+        this.preTaskId = preTaskId;
         this.startedAt = startedAt;
         this.duration = duration;
         this.state = state;
@@ -81,6 +83,14 @@ public class TaskResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPreTaskId() {
+        return preTaskId;
+    }
+
+    public void setPreTaskId(String preTaskId) {
+        this.preTaskId = preTaskId;
     }
 
     public Long getStartedAt() {

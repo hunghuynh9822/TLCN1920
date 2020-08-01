@@ -185,7 +185,22 @@ const manageRoutes = [
         component: Notification,
         layout: "/lead",
         breadcrumb: "Notification"
-      }, {
+      },
+      {
+        path: "/wiki",
+        name: "Wiki",
+        rtlName: "Wiki",
+        icon: LibraryBook,
+        component: WikiManagement,
+        layout: "/lead",
+        breadcrumb: "Wiki",
+        routes: [{
+          path: "/:wikiId",
+          component: WikiManagement,
+          layout: "/lead/wiki",
+        }]
+      },
+      {
         path: "/info",
         name: "Infomation",
         rtlName: "Thông tin cá nhân",
@@ -242,6 +257,20 @@ const manageRoutes = [
         component: Notification,
         layout: "/staff",
         breadcrumb: "Notification"
+      },
+      {
+        path: "/wiki",
+        name: "Wiki",
+        rtlName: "Wiki",
+        icon: LibraryBook,
+        component: WikiManagement,
+        layout: "/staff",
+        breadcrumb: "Wiki",
+        routes: [{
+          path: "/:wikiId",
+          component: WikiManagement,
+          layout: "/staff/wiki",
+        }]
       }, {
         path: "/info",
         name: "Infomation",

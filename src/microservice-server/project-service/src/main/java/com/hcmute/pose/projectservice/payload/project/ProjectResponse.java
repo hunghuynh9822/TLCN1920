@@ -1,55 +1,75 @@
 package com.hcmute.pose.projectservice.payload.project;
 
-import com.hcmute.pose.projectservice.model.project.Project;
-import com.hcmute.pose.projectservice.payload.task.TaskResponse;
-
-import java.util.List;
-import java.util.Map;
+import com.google.gson.annotations.SerializedName;
+import com.hcmute.pose.projectservice.model.project.ProjectState;
 
 public class ProjectResponse {
-    private Project project;
-    private List<EmployeeResponse> members;
-    private List<TaskResponse> tasks;
-    private Map<String, Object> more;
+    private Long id;
+    private String title;
+    private String description;
+    private ProjectState state;
+    @SerializedName("created_at")
+    private Long createdAt;
+    @SerializedName("updated_at")
+    private Long updatedAt;
 
     public ProjectResponse() {
     }
 
-    public ProjectResponse(Project project, List<EmployeeResponse> members, List<TaskResponse> tasks) {
-        this.project = project;
-        this.members = members;
-        this.tasks = tasks;
+    public ProjectResponse(Long id, String title, String description, ProjectState state, Long createdAt, Long updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public Project getProject() {
-        return project;
+    public Long getId() {
+        return id;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public List<EmployeeResponse> getMembers() {
-        return members;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMembers(List<EmployeeResponse> members) {
-        this.members = members;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public List<TaskResponse> getTasks() {
-        return tasks;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTasks(List<TaskResponse> tasks) {
-        this.tasks = tasks;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Map<String, Object> getMore() {
-        return more;
+    public ProjectState getState() {
+        return state;
     }
 
-    public void setMore(Map<String, Object> more) {
-        this.more = more;
+    public void setState(ProjectState state) {
+        this.state = state;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Long updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

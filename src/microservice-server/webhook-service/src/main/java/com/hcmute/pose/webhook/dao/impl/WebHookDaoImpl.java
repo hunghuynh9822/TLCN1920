@@ -18,7 +18,7 @@ import java.util.Optional;
 public class WebHookDaoImpl implements WebHookDao {
     private static Logger LOGGER = LoggerFactory.getLogger(WebHookDaoImpl.class);
     private static String SQL_INSERT_WEBHOOK = "INSERT INTO webhook(id_webhook, id_project, name_webhook, bot_token, chat_id, create_task, update_task, update_state) VALUES(?,?,?,?,?,?,?,?)";
-    private static String SQl_GET_LIST_WEBHOOK = "SELECT * FROM webhook";
+    private static String SQl_GET_LIST_WEBHOOK = "SELECT * FROM webhook order by id_webhook";
     private static String SQl_GET_WEBHOOK = "SELECT * FROM webhook WHERE id_project = ?";
     private static String SQL_UPDATE_WEBHOOK = "UPDATE webhook SET bot_token=?, chat_id=?,name_webhook=?, create_task=?, update_task=?, update_state=? WHERE id_webhook=?";
     private static String SQL_DELETE_WEBHOOK = "DELETE FROM webhook WHERE id_webhook=?";

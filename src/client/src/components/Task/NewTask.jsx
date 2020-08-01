@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert';
 
-import { create } from '../../action/task';
+import { create, TASK_STATE } from '../../action/task';
 
 import { TagMember, TagTask, DialogTitleCustom } from '../../components';
 import {
@@ -41,10 +41,13 @@ const styles = theme => ({
             paddingTop: '0px',
         },
         paddingTop: '0px',
+        boxShadow: 'none',
     },
     buttons: {
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
     button: {
         // marginTop: theme.spacing(3),
@@ -59,12 +62,33 @@ const styles = theme => ({
         padding: '0px',
         margin: '0px 10px',
     },
+    dialog_list: {
+        width: '350px'
+    },
+    dialog_list_item: {
+        // backgroundColor: `${background}`,
+        // boxShadow: `${background} 0px 0px 5px 2px`,
+        '&:hover': {
+            // background: '#e6e6e6',
+        },
+    }
 });
+
+const background = '#f5f8ff';
+const colorWord = "#ffffff";
+const mapColor = {
+    "NEW": "#0ac400",
+    "DEVELOPING": "#e69900",
+    "DEVELOPED": "#00d8db",
+    "TESTING": "#ff0000",
+    "DONE": "#0026ff",
+    "FINISH": "#0026ff"
+}
+
 class NewTask extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
             openAdd: false,
             openAddPrevious: false,
             scroll: 'body',
@@ -77,7 +101,7 @@ class NewTask extends Component {
                 title: '',
                 description: '',
                 startedAt: new Date(),
-                duration: '',
+                duration: 1,
                 endAt: new Date()
             }
         }
@@ -89,7 +113,6 @@ class NewTask extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.removeAssignee = this.removeAssignee.bind(this);
         this.handleListItemMemberClick = this.handleListItemMemberClick.bind(this);
-        this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleOpenAdd = this.handleOpenAdd.bind(this);
         this.handleCloseAdd = this.handleCloseAdd.bind(this);
@@ -97,6 +120,11 @@ class NewTask extends Component {
         this.handleCloseAddPrevious = this.handleCloseAddPrevious.bind(this);
         this.handleListItemClick = this.handleListItemClick.bind(this);
         this.removePreviousTask = this.removePreviousTask.bind(this);
+        this.getStartTime = this.getStartTime.bind(this);
+    }
+
+    getColor(state) {
+        return mapColor[state];
     }
 
     getName(employee) {
@@ -136,6 +164,7 @@ class NewTask extends Component {
     handleSubmit() {
         const { alert } = this.props;
         const { currentUser, projectItem } = this.props;
+        const { handleCloseCreate } = this.props;
         let projectId = projectItem.project.id;
         console.log("Assignee " + JSON.stringify(this.state.assignee));
         let preTaskId = "";
@@ -161,9 +190,10 @@ class NewTask extends Component {
         create(request)
             .then(response => {
                 console.log(response);
+                this.props.loadProject();
                 this.props.loadTasks();
+                handleCloseCreate();
                 this.setState({
-                    open: false,
                     openAdd: false,
                     assignee: null,
                     previousTasks: new Array(),
@@ -174,7 +204,7 @@ class NewTask extends Component {
                         title: '',
                         description: '',
                         startedAt: new Date(),
-                        duration: ''
+                        duration: 1
                     }
                 })
             }).catch(error => {
@@ -198,8 +228,16 @@ class NewTask extends Component {
         tasks = tasks.filter((item, index) => {
             return item.id !== task.id;
         })
+        let startAt;
+        let startTime = this.getStartTime();
+        if (startTime != null) {
+            startAt = new Date(startTime);
+        } else {
+            startAt = this.state.request.startedAt;
+        }
         this.setState({
-            previousTasks: tasks
+            previousTasks: tasks,
+            request: { ...this.state.request, startedAt: startAt }
         })
     }
 
@@ -218,20 +256,24 @@ class NewTask extends Component {
             return tasks.indexOf(item) === index;
         })
         console.log("[NewTask][previousTasks] " + JSON.stringify(tasks));
+        //
+        let startAt;
+        let startTime = this.getStartTime();
+        if (startTime != null) {
+            startAt = new Date(startTime);
+        } else {
+            startAt = this.state.request.startedAt;
+        }
         this.setState({
-            previousTasks: tasks
-        })
-    }
-
-    handleOpen() {
-        this.setState({
-            open: true,
+            previousTasks: tasks,
+            request: { ...this.state.request, startedAt: startAt }
         })
     }
 
     handleClose() {
+        const { handleCloseCreate } = this.props;
+        handleCloseCreate();
         this.setState({
-            open: false,
             openAdd: false,
             openAddPrevious: false,
             assignee: null,
@@ -243,7 +285,7 @@ class NewTask extends Component {
                 title: '',
                 description: '',
                 startedAt: new Date(),
-                duration: '',
+                duration: 1,
                 endAt: new Date()
             }
         })
@@ -276,28 +318,50 @@ class NewTask extends Component {
     getTaskId(id) {
         return "#" + id;
     }
+
+    getStartTime() {
+        if (this.state.previousTasks != undefined && this.state.previousTasks != null && this.state.previousTasks != []) {
+            let task = this.state.previousTasks[0];
+            if (task) {
+                let startTime = new Date(task.startedAt);
+                startTime.setDate(startTime.getDate() + task.duration);
+                console.log("[Task] Choose start time " + startTime);
+                this.state.previousTasks.forEach((task, index) => {
+                    console.log("[Task] previous task ", task)
+                    let temp = new Date(task.startedAt);
+                    temp.setDate(temp.getDate() + task.duration);
+                    if (startTime - temp < 0) {
+                        startTime = temp;
+                        console.log("[Task] Choose start time " + startTime);
+                    }
+                });
+                return startTime;
+            }
+        }
+        return null
+    }
+
     render() {
         const { classes } = this.props;
-        const { projectItem } = this.props;
-        const { open, openAdd, openAddPrevious, request, scroll } = this.state;
+        const { projectItem, openCreate } = this.props;
+        const { openAdd, openAddPrevious, request, scroll } = this.state;
         let members = projectItem.members;
         let tasks = projectItem.tasks;
         // console.log(members);
         // console.log("[NewTask][projectItem][tasks] " + JSON.stringify(tasks));
         return (
             <React.Fragment>
-                <Button onClick={this.handleOpen} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
-                    <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
-                    New Task
-        </Button>
                 <Dialog
-                    open={open}
+                    open={openCreate}
                     scroll={scroll}
                     aria-labelledby="scroll-dialog-title"
                     disableBackdropClick
                     disableEscapeKeyDown
                 >
-                    <DialogTitle id="scroll-dialog-title">New task</DialogTitle>
+                    {/* <DialogTitle id="scroll-dialog-title">New task</DialogTitle> */}
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleClose} style={{
+                        paddingBottom: '25px',
+                    }}>New task</DialogTitleCustom>
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
@@ -362,12 +426,27 @@ class NewTask extends Component {
                                     variant="inline"
                                     format="dd-MM-yyyy"
                                     label="Start Time"
-                                    value={request.startedAt}
+                                    value={this.state.request.startedAt}
                                     onChange={this.handleStartedAt}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <DatePicker
+                                <Grid item xs={8}>
+                                    <TextField
+                                        id="duration"
+                                        name="duration"
+                                        type="number"
+                                        inputProps={{ min: "0", max: "10", step: "1" }}
+                                        fullWidth
+                                        required
+                                        label="Duration"
+                                        placeholder="Duration"
+                                        variant="standard"
+                                        value={request.duration}
+                                        onChange={this.handleInputChange}
+                                    />
+                                </Grid>
+                                {/* <DatePicker
                                     required
                                     disableToolbar
                                     variant="inline"
@@ -375,14 +454,14 @@ class NewTask extends Component {
                                     label="End Time"
                                     value={request.endAt}
                                     onChange={this.handleDuration}
-                                />
+                                /> */}
                             </Grid>
                         </Grid>
                     </Paper>
                     <DialogActions className={classes.buttons}>
-                        <Button onClick={this.handleClose} className={classes.button}>
+                        {/* <Button onClick={this.handleClose} className={classes.button}>
                             Close
-            </Button>
+            </Button> */}
                         <Button
                             variant="contained"
                             color="primary"
@@ -394,8 +473,10 @@ class NewTask extends Component {
                     </DialogActions>
                 </Dialog>
                 <Dialog onClose={this.handleCloseAdd} aria-labelledby="simple-dialog-title" open={openAdd}>
-                    <DialogTitle id="simple-dialog-title">Select employee</DialogTitle>
-                    <List>
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAdd}>Select employee</DialogTitleCustom>
+                    <List classes={{
+                        root: classes.dialog_list
+                    }}>
                         {members.length !== 0 ? members.map((member, index) => (
                             <ListItem button onClick={() => this.handleListItemMemberClick(member)} key={index}>
                                 <ListItemAvatar>
@@ -413,17 +494,33 @@ class NewTask extends Component {
                             )}
                     </List>
                 </Dialog>
-                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious}>
+                <Dialog onClose={this.handleCloseAddPrevious} aria-labelledby="simple-dialog-title" open={openAddPrevious} >
                     <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAddPrevious}>
                         Select previous tasks :
                     </DialogTitleCustom>
-                    <List>
+                    <List classes={{
+                        root: classes.dialog_list
+                    }}>
                         {tasks.length !== 0 ? tasks.map((task, index) => (
-                            <ListItem button onClick={() => this.handleListItemClick(task)} key={index}>
+                            <ListItem button onClick={() => this.handleListItemClick(task)} key={index} classes={{
+                                root: classes.dialog_list_item
+                            }}>
                                 <ListItemText >
                                     <Grid container spacing={3}>
-                                        <Grid item xs={6} sm={6}>{this.getTaskId(task.id)}</Grid>
-                                        <Grid item xs={6} sm={6}>{task.title}</Grid>
+                                        <Grid item xs={3} sm={3}>
+                                            <Button disabled variant="outlined" size="small" color="primary" style={{
+                                                alignSelf: 'flex-start',
+                                                borderStyle: 'dashed',
+                                                fontSize: '0.6em',
+                                                marginBottom: '8px',
+                                                opacity: '0.7',
+                                                color: `${colorWord}`,
+                                                backgroundColor: `${this.getColor(task.state)}`
+                                            }}>
+                                                {task.state}
+                                            </Button>
+                                        </Grid>
+                                        <Grid item xs={9} sm={9}>{task.title}</Grid>
                                     </Grid>
                                 </ListItemText>
                             </ListItem>
@@ -439,6 +536,9 @@ class NewTask extends Component {
 NewTask.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
+    loadProject: PropTypes.func.isRequired,
+    openCreate: PropTypes.bool.isRequired,
+    handleCloseCreate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

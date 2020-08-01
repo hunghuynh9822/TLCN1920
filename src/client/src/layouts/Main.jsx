@@ -18,7 +18,7 @@ import routes from "../routes.js";
 import styles from "../assets/jss/material-react/layouts/mainStyles";
 
 import bgImage from "../assets/img/sidebar-2.jpg";
-import logo from "../assets/img/reactlogo.png";
+import logo from "../assets/img/tasks.png";
 
 let ps;
 class Main extends Component {
@@ -107,7 +107,7 @@ class Main extends Component {
                 <div className={classes.wrapper}>
                     <Sidebar
                         router={curRouter}
-                        logoText={"TLCN"}
+                        logoText={"UTE"}
                         logo={logo}
                         image={this.state.image}
                         color={this.state.color}

@@ -37,6 +37,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.hcmute.pose</groupId>
+			<artifactId>common</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 		</dependency>

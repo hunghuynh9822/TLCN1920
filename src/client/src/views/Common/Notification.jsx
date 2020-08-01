@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styles from "../../assets/jss/styles/views/notificationStyle";
-import { MaterialTable, PaginationTable, Notifi } from "../../components"
+import { MaterialTable, PaginationTable, Notifi, NewNotify } from "../../components"
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -189,7 +189,7 @@ class Notification extends Component {
         const { classes } = this.props;
         var AddNotify;
         if (this.state.isAdmin === 1) {
-            AddNotify = <Notifi addNot={this.addNot} />;
+            AddNotify = <NewNotify addNot={this.addNot} />;
         }
         return (
             <div className={classes.root}>

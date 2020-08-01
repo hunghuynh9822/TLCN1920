@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AddStafftoProject from '../AddStafftoProject/AddStafftoProject';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import Moment from 'moment';
 import axios from 'axios';
@@ -16,12 +17,9 @@ import axios from 'axios';
 import TuneIcon from '@material-ui/icons/Tune';
 const styles = theme => ({
     card: {
-        width: 245,
+        width: 275,
         height: 200,
-        marginLeft: theme.spacing(3),
-        marginRight: theme.spacing(3),
-        marginBottom: theme.spacing(1),
-        marginTop: theme.spacing(1),
+        margin: theme.spacing(2),
         position: 'relative',
     },
     font: {
@@ -30,13 +28,17 @@ const styles = theme => ({
     },
     title: {
         margin: '12px 0px 0px 15px',
-        fontSize: '1em',
+        fontSize: '0.8em',
         fontWeight: '400',
         color: '#464c59',
         '&:hover': {
             background: '#e6e6e6',
         },
-    }
+        cursor: 'pointer',
+    },
+    customTooltip: {
+        fontSize: '0.8em',
+    },
 });
 const CustomProcessBar = withStyles({
     root: {
@@ -48,6 +50,12 @@ const CustomProcessBar = withStyles({
         backgroundColor: '#30B1BD',
     }
 })(LinearProgress)
+const colorWord = "#ffffff";
+const mapColor = {
+    "NEW": "#0ac400",
+    "DEVELOPING": "#e69900",
+    "FINISH": "#0026ff"
+}
 class Project extends Component {
     constructor(props) {
         super(props);
@@ -64,6 +72,40 @@ class Project extends Component {
         console.log("Click setting");
     }
 
+    truncate(str, n, useWordBoundary) {
+        if (str.length <= n) { return str; }
+        const subString = str.substr(0, n - 1); // the original check
+        return (useWordBoundary
+            ? subString.substr(0, subString.lastIndexOf(" "))
+            : subString) + " ...";
+    };
+
+    renderStateProject(process) {
+        let state = "";
+        if (process == 0) {
+            state = "NEW";
+        } else if (process == 100) {
+            state = "FINISH"
+        } else {
+            state = "DEVELOPING"
+        }
+        let color = mapColor[state];
+        return (
+            <Button disabled variant="outlined" size="small" color="primary" style={{
+                alignSelf: 'flex-start',
+                borderStyle: 'dashed',
+                fontSize: '0.6em',
+                marginBottom: '8px',
+                opacity: '0.7',
+                backgroundColor: `${color}`,
+                color: `${colorWord}`,
+            }}>
+                {state}
+            </Button>
+        )
+
+    }
+
     render() {
         const { classes } = this.props;
         const project = this.props.projectItem.project;
@@ -72,15 +114,17 @@ class Project extends Component {
         return (
             <Card className={classes.card} >
                 <CardHeader
-                    action={
-                        <IconButton aria-label="settings" onClick={this.handleSetting} style={{ margin: '10px' }}>
-                            <TuneIcon />
-                        </IconButton>
-                    }
+                    // action={
+                    // <IconButton aria-label="settings" onClick={this.handleSetting} style={{ margin: '10px' }}>
+                    //     <TuneIcon />
+                    // </IconButton>
+                    // }
                     title={
-                        <div className={classes.title} onClick={this.handleClick} >
-                            {project.title}
-                        </div>
+                        <Tooltip title={project.title} placement="top" arrow classes={{ tooltip: classes.customTooltip }}>
+                            <div className={classes.title} onClick={this.handleClick} >
+                                {this.truncate(project.title, 25, true)}
+                            </div>
+                        </Tooltip>
                     }
                     subheader={
                         <div style={{
@@ -100,16 +144,7 @@ class Project extends Component {
                     display: 'flex', /* or inline-flex */
                     flexDirection: 'column',
                 }}>
-                    <Button disabled variant="outlined" size="small" color="primary" style={{
-                        alignSelf: 'flex-start',
-                        borderStyle: 'dashed',
-                        fontSize: '0.6em',
-                        marginBottom: '8px',
-                        opacity: '0.7',
-                        color: '#8d919a',
-                    }}>
-                        {project.state}
-                    </Button>
+                    {this.renderStateProject(moreInfo.process)}
                     <div style={{ marginBottom: '7px' }}>
                         <span className={classes.font} style={{ float: 'left' }}>
                             {moreInfo.process}% Completed

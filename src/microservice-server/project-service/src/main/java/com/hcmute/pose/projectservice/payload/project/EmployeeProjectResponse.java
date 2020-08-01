@@ -3,10 +3,10 @@ package com.hcmute.pose.projectservice.payload.project;
 import java.util.List;
 
 public class EmployeeProjectResponse {
-    private List<ProjectResponse> ownProjects;
-    private List<ProjectResponse> joinProjects;
+    private List<ProjectDetailResponse> ownProjects;
+    private List<ProjectDetailResponse> joinProjects;
 
-    public EmployeeProjectResponse(List<ProjectResponse> ownProjects, List<ProjectResponse> joinProjects) {
+    public EmployeeProjectResponse(List<ProjectDetailResponse> ownProjects, List<ProjectDetailResponse> joinProjects) {
         this.ownProjects = ownProjects;
         this.joinProjects = joinProjects;
     }
@@ -14,19 +14,19 @@ public class EmployeeProjectResponse {
     public EmployeeProjectResponse() {
     }
 
-    public List<ProjectResponse> getOwnProjects() {
+    public List<ProjectDetailResponse> getOwnProjects() {
         return ownProjects;
     }
 
-    public void setOwnProjects(List<ProjectResponse> ownProjects) {
+    public void setOwnProjects(List<ProjectDetailResponse> ownProjects) {
         this.ownProjects = ownProjects;
     }
 
-    public List<ProjectResponse> getJoinProjects() {
+    public List<ProjectDetailResponse> getJoinProjects() {
         return joinProjects;
     }
 
-    public void setJoinProjects(List<ProjectResponse> joinProjects) {
+    public void setJoinProjects(List<ProjectDetailResponse> joinProjects) {
         this.joinProjects = joinProjects;
     }
 }

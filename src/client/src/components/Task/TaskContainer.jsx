@@ -12,7 +12,8 @@ import GridList from '@material-ui/core/GridList';
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-import { updateCreatorTasks } from '../../action/task';
+import { updateProjectTasks } from '../../action/task';
+import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../action/auth';
 
 import { changeAssignee } from '../../action/task'
 import { TaskCard } from '../../components'
@@ -24,7 +25,7 @@ const styles = theme => ({
         justifyContent: 'flex-start',
         width: '100%',
         height: '100%',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: 'transparent',
         overflow: 'hidden',
     },
     gridList: {
@@ -35,32 +36,41 @@ const styles = theme => ({
     slider: {
         width: '100%',
         minHeight: '100%',
-        padding: '0px 20px'
+        padding: '0px 20px',
     }
 });
 class TaskContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            taskCards: [],
+            projectTasks: {
+                projectId: null,
+                tasks: new Array(),
+            },
         }
         this.getMember = this.getMember.bind(this);
         this.move = this.move.bind(this);
         this.getList = this.getList.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
+        this.canDnd = this.canDnd.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { projectTasks } = this.props;
+        console.log("[TaskContainer] componentWillReceiveProps projectTasks : ", projectTasks)
+        this.setState({
+            projectTasks: projectTasks
+        })
+        // this.setState({
+        //     reload: true
+        // })
     }
 
     componentDidMount() {
-        const { creatorTasks, index } = this.props;
-        if (creatorTasks[index]) {
-            this.setState({
-                taskCards: creatorTasks[index].tasks,
-            })
-        } else {
-            this.setState({
-                taskCards: [],
-            })
-        }
+        const { projectTasks } = this.props;
+        this.setState({
+            projectTasks: projectTasks
+        })
     }
 
     getMember(memberId) {
@@ -109,14 +119,40 @@ class TaskContainer extends Component {
     };
 
     getList(cardId) {
-        let { creatorTasks, index } = this.props;
-        let taskCards = creatorTasks[index].tasks;
+        let { index } = this.props;
+        let { projectTasks } = this.state;
+        let taskCards = projectTasks.tasks;
         let card = taskCards.filter((taskCard) => {
             return taskCard.assigneeId == cardId;
         })[0];
         let tasks = card && card.tasks ? card.tasks : [];
-        console.log("getList : " + JSON.stringify(tasks))
+        console.log("[TaskContainer] getList : " + JSON.stringify(tasks))
         return tasks;
+    }
+
+    canDnd(targetTask) {
+        const { loginRole, currentUser } = this.props;
+        let temp = "LOGIN ON " + loginRole;
+        if (targetTask) {
+            temp = temp.concat(" ADMIN " + loginAsAdmin(loginRole));
+            temp = temp.concat(" LEAD " + loginAsLead(loginRole));
+            temp = temp.concat(" STAFF " + loginAsStaff(loginRole));
+            console.log("[TaskContainer] ", currentUser, temp, targetTask);
+            if (loginAsAdmin(loginRole)) {
+                return { verified: true };
+            }
+            if (loginAsLead(loginRole)) {
+                if (targetTask.employeeCreator == currentUser.id) {
+                    return { verified: true };
+                }
+                return { verified: false, message: 'Oops! You do not permision to change task ' + targetTask.title };
+            }
+            if (loginAsStaff(loginRole)) {
+                return { verified: false, message: 'Oops! You do not permision to change task ' + targetTask.title };
+            }
+            return { verified: false, message: 'Oops! Can not detect login role on ' + targetTask.title };
+        }
+        return { verified: false, message: 'Oops! Undefined task !!!' };
     }
 
     /**onDragEnd : {"draggableId":"15752273449756","type":"DEFAULT","source":{"index":0,"droppableId":"15746071512232"},"reason":"DROP","mode":"FLUID","destination":{"droppableId":"15746072843063","index":0},"combine":null} */
@@ -130,17 +166,25 @@ class TaskContainer extends Component {
      * }
      */
     onDragEnd(result) {
-        let { creatorTasks, index } = this.props;
-        // let taskCards = creatorTasks[index].tasks;
-        let taskCards = creatorTasks[index].tasks;
-
+        const { alert } = this.props;
+        const { loginRole, currentUser, projectItem } = this.props;
+        // console.log("[TaskContainer] projectItem ", projectItem)
+        let { projectTasks } = this.state;
+        let taskCards = projectTasks.tasks;
         const { source, destination, draggableId } = result;
-        // console.log("onDragEnd : " + JSON.stringify(result))
+        let sourceArray = this.getList(source.droppableId);
+        let destinationArray = this.getList(destination.droppableId);
+        let targetTask = Array.from(sourceArray).splice(source.index, 1)[0];
+        console.log("[TaskContainer] onDragEnd ", result)
+        let resultCanDnd = this.canDnd(targetTask);
         // dropped outside the list
         if (!destination) {
             return;
         }
-
+        if (!resultCanDnd.verified) {
+            alert.error(resultCanDnd.message);
+            return;
+        }
         if (source.droppableId === destination.droppableId) {
             // console.log("Source : " + JSON.stringify(this.getList(source.droppableId)))
             // const items = reorder(
@@ -148,52 +192,53 @@ class TaskContainer extends Component {
             //     source.index,
             //     destination.index
             // );
-            // let state = { items };
-
-            // this.setState(state);
         } else {
             let requestChange = {
                 taskId: draggableId,
-                employeeId: destination.droppableId
+                employeeId: destination.droppableId,
+                projectId: projectTasks.projectId
             };
             const result = this.move(
-                this.getList(source.droppableId),
-                this.getList(destination.droppableId),
+                sourceArray,
+                destinationArray,
                 source,
                 destination
             );
-            // console.log("Move result : " + JSON.stringify(result));
+            console.log("[TaskContainer] Move result : ", result);
             let items = this.state.items;
             let newTaskCards = taskCards.map((card) => {
-                console.log("New TaskCards : " + JSON.stringify(result[card.assigneeId]));
+                console.log("[TaskContainer] New TaskCards : ", result[card.assigneeId]);
                 if (result[card.assigneeId] == undefined) {
                     return card;
                 }
-                card.tasks = result[card.assigneeId];
+                card.tasks = result[card.assigneeId].map((task, index) => {
+                    if (task) {
+                        task.employeeAssignee = card.assigneeId;
+                    }
+                    return task;
+                });
                 return card;
             });
             let memberTasks = taskCards.find(card => {
                 return card.assigneeId == destination.droppableId;
             });
-            console.log("Member TaskCards destination : " + JSON.stringify(memberTasks));
+            console.log("[TaskContainer] Member TaskCards destination : ", memberTasks);
             if (memberTasks == undefined) {
-                let card = { assigneeId: Number(destination.droppableId), tasks: result[destination.droppableId] }
+                console.log("[TaskContainer] ", destination)
+                let card = {
+                    assigneeId: Number(destination.droppableId),
+                    tasks: result[destination.droppableId]
+                }
                 newTaskCards.push(card);
             }
-            console.log("New TaskCards : " + JSON.stringify(newTaskCards))
+            projectTasks.tasks = newTaskCards;
             this.setState({
-                taskCards: newTaskCards,
-            });
-            // console.log("Update TaskCards : " + JSON.stringify(creatorTasks[index]))
+                projectTasks: projectTasks
+            })
+            console.log("[TaskContainer] New projectTasks : ", projectTasks)
             changeAssignee(requestChange)
                 .then(response => {
-                    console.log("changeAssignee : " + JSON.stringify(response))
-                    // this.props.loadTasks();
-                    // if(memberTasks == undefined) {
-                    //     return this.props.loadTasks();
-                    // }
-                    creatorTasks[index].tasks = newTaskCards;
-                    this.props.updateTasks(creatorTasks);
+                    console.log("[TaskContainer] changeAssignee : ", response)
                 })
                 .catch(error => {
                     console.log(error);
@@ -203,16 +248,14 @@ class TaskContainer extends Component {
 
     render() {
         const { classes } = this.props;
-        let { creatorTasks, index } = this.props;
-        const taskCards = creatorTasks[index] ? creatorTasks[index].tasks : [];
-        // const {taskCards} = this.state;
+        let { projectTasks } = this.state;
+        let taskCards = [];
         const settings = {
             className: classNames("center", classes.slider),
             infinite: false,
             centerPadding: "60px",
             slidesToShow: 5,
             swipeToSlide: true,
-            // adaptiveHeight: true,
             afterChange: function (index) {
                 console.log(
                     `Slider Changed to: ${index + 1}`
@@ -246,6 +289,7 @@ class TaskContainer extends Component {
             ]
         };
         const members = this.props.projectItem.members;
+        console.log("[TaskContainer] Render ", members, projectTasks.tasks);
         return (
             <React.Fragment>
                 <div className={classes.root}>
@@ -254,7 +298,7 @@ class TaskContainer extends Component {
                             {
                                 members.map((member) => {
                                     let title = this.getNameMember(member.id);
-                                    let card = taskCards.find((card) => {
+                                    let card = projectTasks.tasks.find((card) => {
                                         return card.assigneeId == member.id;
                                     })
                                     let tasks = card && card.tasks ? card.tasks : [];
@@ -275,9 +319,8 @@ class TaskContainer extends Component {
 TaskContainer.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
-    index: PropTypes.number.isRequired,
-    updateTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
+    // projectTasks: PropTypes.array.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -285,13 +328,12 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        creatorTasks: state.tasks.creatorTasks,
-
+        projectTasks: state.tasks.projectTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateCreatorTasks: (creatorTasks) => dispatch(updateCreatorTasks(creatorTasks)),
+        updateProjectTasks: (projectTasks) => dispatch(updateProjectTasks(projectTasks)),
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(TaskContainer)));

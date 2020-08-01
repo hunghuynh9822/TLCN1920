@@ -12,6 +12,7 @@ import color from 'color';
 const styles = theme => ({
     area: {
         marginBottom: '10px',
+        height: '100%',
     },
     bar: {
         backgroundColor: '#f7f7f7',
@@ -24,6 +25,7 @@ const styles = theme => ({
         margin: '15px 0px 15px 0px',
     },
     container: {
+        height: '100%',
         display: 'flex', /* or inline-flex */
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -56,7 +58,7 @@ class CollapsibleSection extends Component {
         }
         return (
             <div className={classes.area}>
-                <div className={classnames(classes.bar, { [classes.hiddenBar]: this.state.close })}  onClick={closeBar}>
+                <div className={classnames(classes.bar, { [classes.hiddenBar]: this.state.close })} onClick={closeBar}>
                     {this.state.close ? <ChevronRight /> : <ExpandMore />} {title}
                 </div>
                 <div className={classnames(classes.container, { [classes.hidden]: this.state.close })}>

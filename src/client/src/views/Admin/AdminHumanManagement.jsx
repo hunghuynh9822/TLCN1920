@@ -32,7 +32,7 @@ class AdminHumanManagement extends Component {
             ],
 
             rowsActive: [],
-            rowsWaiting:[],
+            rowsWaiting: [],
 
             steps: [],
             open: false,
@@ -127,8 +127,8 @@ class AdminHumanManagement extends Component {
         const { alert } = this.props;
         getAdminEmployees()
             .then(response => {
-                // console.log(response.activeEmployees);
-                // console.log(response.waitingEmployees);
+                console.log("[HumanManagement] loadData Active : ", response.activeEmployees);
+                console.log("[HumanManagement] loadData Waiting : ", response.waitingEmployees);
                 let activeEmployees = [];
                 let waitingEmployees = [];
                 response.activeEmployees.map((employee, index) => {
@@ -162,8 +162,8 @@ class AdminHumanManagement extends Component {
         const { alert } = this.props;
         getAdminEmployees()
             .then(response => {
-                // console.log(response.activeEmployees);
-                // console.log(response.waitingEmployees);
+                console.log("[HumanManagement] componentDidMount Active : ", response.activeEmployees);
+                console.log("[HumanManagement] componentDidMount Waiting : ", response.waitingEmployees);
                 let activeEmployees = [];
                 let waitingEmployees = [];
                 response.activeEmployees.map((employee, index) => {

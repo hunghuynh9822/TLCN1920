@@ -2,42 +2,29 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { withAlert } from 'react-alert';
+import { connect } from 'react-redux';
 
-import { Gantt, Toolbar, MessageArea, Loading} from '../../../components';
-import { getTasksOfProject } from '../../../action/task';
+import { Alert, AlertTitle } from '@material-ui/lab';
+
+import { Gantt, Toolbar, MessageArea, Loading } from '../../../components';
+import { getTasksOfProject, updateTask, TASK_STATE } from '../../../action/task';
+import { reloadTasks } from '../../../action/task';
 const styles = theme => ({
-    gantt_container: { "height": "calc(100vh - 40px - 200px)" }
+    gantt_container: { "height": "calc(100vh - 40px - 200px)" },
+    zoom_bar: { background: "#ededed", height: "40px", lineHeight: "40px", padding: "5px 10px" }
 });
-const data = {
-    data: [
-        { id: 1, text: 'Task #1', start_date: '2020/01/15', duration: 3, progress: 0.6 },
-        { id: 2, text: 'Task #2', start_date: '2020/01/18', duration: 3, progress: 0.0 },
-        { id: 3, text: 'Task #3', start_date: '2020/01/15', duration: 5, progress: 0.4 },
-        { id: 4, text: 'Task #4', start_date: '2020/01/20', duration: 3, progress: 0.0 },
-        { id: 5, text: 'Task #5', start_date: '2020/01/17', duration: 2, progress: 0.5 },
-        { id: 6, text: 'Task #6', start_date: '2020/01/19', duration: 3, progress: 0.0 },
-        { id: 7, text: 'Task #7', start_date: '2020/01/22', duration: 5, progress: 0.0 }
-    ],
-    links: [
-        { id: 1, source: 1, target: 2, type: '0' },
-        { id: 2, source: 3, target: 4, type: '0' },
-        { id: 3, source: 5, target: 6, type: '0' },
-        { id: 4, source: 6, target: 7, type: '0' }
-    ]
-};
 class GanttChart extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentZoom: 'Days',
             messages: [],
-            data: {
-                data: [],
-                links: []
-            },
             loading: false,
+            currentIndex: 0,
         }
         this.loadTasks = this.loadTasks.bind(this);
+        this.reloadTaskMessage = this.reloadTaskMessage.bind(this);
+        this.renderMessage = this.renderMessage.bind(this);
     }
 
     convertDateToString(milisecond) {
@@ -56,6 +43,38 @@ class GanttChart extends Component {
         return result;
     }
 
+    reloadTaskMessage() {
+        const { alert } = this.props;
+        const { projectItem } = this.props;
+        let projectId = projectItem.project.id;
+        getTasksOfProject(projectId)
+            .then(response => {
+                let message = response.message;
+                let tasks = response.tasks;
+                let criticalPath = response.listGantt;
+                let data = tasks.map((task) => {
+                    return {
+                        id: task.id,
+                        text: task.title,
+                        start_date: this.convertDateToString(task.startedAt),
+                        duration: task.duration == null ? 0 : task.duration,
+                        progress: task.process,
+                        type: criticalPath.includes(task.id) ? gantt.config.types.critical : null
+                    }
+                })
+                data.message = message;
+                data.links = response.links
+                // this.setState({
+                //     data: data,
+                // })
+                console.log("[Gantt] reloadTaskMessage ", { data: data, links: response.links, message: message })
+                this.props.reloadGanttTasks({ data: data, links: response.links, message: message });
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong when get tasks of project. Please call check!');
+            });
+    }
+
     loadTasks() {
         this.setState({
             loading: true
@@ -66,18 +85,27 @@ class GanttChart extends Component {
         getTasksOfProject(projectId)
             .then(response => {
                 let tasks = response.tasks;
+                let criticalPath = response.listGantt;
                 let data = tasks.map((task) => {
                     return {
-                        id: task.id, text: task.title, start_date: this.convertDateToString(task.startedAt), duration: task.duration == null ? 0 : task.duration, progress: 0.6
+                        id: task.id,
+                        text: task.title,
+                        start_date: this.convertDateToString(task.startedAt),
+                        duration: task.duration == null ? 0 : task.duration,
+                        progress: task.process,
+                        type: criticalPath.includes(task.id) ? gantt.config.types.critical : null
                     }
                 })
+                let message = response.message;
+                console.log("[Gantt] loadTasks ", { data: data, links: response.links, message: message })
+                this.props.reloadGanttTasks({ data: data, links: response.links, message: message });
                 this.setState({
-                    data: { data: data, links: response.links},
+                    // data: { data: data, links: response.links, message: message },
                     loading: false
                 })
             }).catch(error => {
                 console.log(error);
-                alert.error('Oops! Something went wrong. Please try again!');
+                alert.error('Oops! Something went wrong when get tasks of project. Please call check!');
                 this.setState({
                     loading: false
                 })
@@ -89,9 +117,12 @@ class GanttChart extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.index == 2) {
+        if (nextProps.index == 2 && this.state.currentIndex != nextProps.index) {
             this.loadTasks();
         }
+        this.setState({
+            currentIndex: nextProps.index
+        })
     }
 
     addMessage(message) {
@@ -108,13 +139,123 @@ class GanttChart extends Component {
         this.setState({ messages });
     }
 
+    /**
+     * 
+     */
+
+    /**
+     * type, action, item, id
+         * type: "task"|"link"
+         * action: "create"|"update"|"delete"
+         * item: data object object
+         */
+    /**
+     * link
+     * create
+     * 0 : FS
+     * 1 : SS
+     * 2 : FF
+     * 3 : SF
+     */
     logDataUpdate = (entityType, action, itemData, id) => {
-        console.log("Data change");
         let text = itemData && itemData.text ? ` (${itemData.text})` : '';
         let message = `${entityType} ${action}: ${id} ${text}`;
-        if (entityType === 'link' && action !== 'delete') {
-            message += ` ( source: ${itemData.source}, target: ${itemData.target} )`;
+        //
+        const { projectItem } = this.props;
+        let projectId = projectItem.project.id;
+        let tasks = projectItem.tasks;
+        console.log("[Gantt] Data change ", entityType, action, itemData, id);
+
+        let request = {};
+        //Update link -> apply on target
+        if (entityType === 'link') {
+            const sourceTask = tasks.find(element => element.id == itemData.source);
+            console.log("[Gantt] Change task source " + JSON.stringify(sourceTask));
+            const targetTask = tasks.find(element => element.id == itemData.target);
+            console.log("[Gantt] Change task target " + JSON.stringify(targetTask));
+            request = {
+                taskId: targetTask.id,
+                employeeId: targetTask.employeeAssignee,
+                title: targetTask.title,
+                description: targetTask.description,
+                point: targetTask.point,
+                state: TASK_STATE.indexOf(targetTask.state),
+                startedAt: targetTask.startedAt,
+                duration: targetTask.duration,
+                preTaskId: targetTask.preTaskId,
+                projectId: projectId
+            }
+            let preTaskId = request.preTaskId;
+            if (action === 'create') {
+                if (itemData.type === "0") {
+                    message += ` ( source: ${itemData.source}, target: ${itemData.target} )`;
+                    if (preTaskId == undefined || preTaskId == null || preTaskId == "") {
+                        preTaskId = "" + sourceTask.id;
+                    } else {
+                        preTaskId = preTaskId + "," + sourceTask.id;
+                    }
+                }
+            } else if (action === 'delete') {
+                if (preTaskId != null && preTaskId != "") {
+                    let preTaskIds = preTaskId.split(",");
+                    preTaskId = "";
+                    preTaskIds.forEach((task, index) => {
+                        if (task != sourceTask.id) {
+                            if (index === preTaskIds.length - 1) {
+                                preTaskId = preTaskId + task;
+                            } else {
+                                preTaskId = preTaskId + task + ","
+                            }
+                        }
+                    })
+                }
+            }
+            request.preTaskId = preTaskId;
+
+            console.log("[Gantt][UpdateTask][Link] Request : " + JSON.stringify(request));
+            updateTask(request)
+                .then(response => {
+                    console.log(response);
+                    this.loadTasks();
+                    // this.reloadTaskMessage();
+                }).catch(error => {
+                    console.log(error);
+                    //(error && error.message) || 
+                    alert.error('Oops! Something went wrong on [UpdateTask][Link] with Gantt Chart. Please call check!');
+                });
+        } else if (entityType === 'task') {
+            if (action === 'update') {
+                let task = tasks.find(element => element.id == itemData.id);
+                request = {
+                    taskId: task.id,
+                    employeeId: task.employeeAssignee,
+                    title: itemData.text,
+                    description: task.description,
+                    point: task.point,
+                    state: TASK_STATE.indexOf(task.state),
+                    startedAt: Date.parse(itemData.start_date),
+                    duration: itemData.duration,
+                    preTaskId: task.preTaskId,
+                    projectId: projectId
+                }
+                console.log("[Gantt][UpdateTask][Task] Request : " + JSON.stringify(request));
+                updateTask(request)
+                    .then(response => {
+                        console.log(response);
+                        this.loadTasks();
+                        // this.reloadTaskMessage();
+                    }).catch(error => {
+                        console.log(error);
+                        //(error && error.message) || 
+                        alert.error('Oops! Something went wrong on [UpdateTask][Task] with Gantt Chart. Please call check!');
+                    });
+            } else {
+                console.log("[Gantt] Unsupport action " + action);
+            }
+        } else {
+            console.log("[Gantt] Unsupport type " + entityType);
         }
+        //
         this.addMessage(message);
     }
 
@@ -123,21 +264,39 @@ class GanttChart extends Component {
             currentZoom: zoom
         });
     }
+
+    renderMessage() {
+        return this.props.ganttTasks && this.props.ganttTasks.message && this.props.ganttTasks.message.map((value, index) => {
+            let params = value.params;
+            let message = value.message;
+            params.forEach((value, index) => {
+                message = message.replace('{{' + index + '}}', '<strong className\"match\">' + value + '</strong>')
+            })
+            return (
+                <Alert key={index} severity="warning">
+                    <span dangerouslySetInnerHTML={{ __html: message }} />
+                </Alert>
+            )
+        })
+    }
+
     render() {
         const { classes } = this.props;
         const { currentZoom, messages } = this.state;
         const { projectItem } = this.props;
         let projectId = projectItem.project.id;
         console.log("Timeline of projectId : " + projectId);
-        if(this.state.loading) {
+        if (this.state.loading) {
             return (
                 <Loading />
             )
         }
-        console.log("TASK OF PROJECT : " + JSON.stringify(this.state.data))
         return (
             <div>
-                <div className="zoom-bar">
+                <div>
+                    {this.renderMessage()}
+                </div>
+                <div className={classes.zoom_bar}>
                     <Toolbar
                         zoom={currentZoom}
                         onZoomChange={this.handleZoomChange}
@@ -145,7 +304,6 @@ class GanttChart extends Component {
                 </div>
                 <div className={classes.gantt_container}>
                     <Gantt
-                        tasks={this.state.data}
                         zoom={currentZoom}
                         onDataUpdated={this.logDataUpdate}
                     />
@@ -159,5 +317,16 @@ class GanttChart extends Component {
 }
 GanttChart.propTypes = {
     classes: PropTypes.object.isRequired,
+    projectItem: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(withAlert()(GanttChart));
+const mapStateToProps = (state, ownProps) => {
+    return {
+        ganttTasks: state.tasks.ganttTasks,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        reloadGanttTasks: (ganttTasks) => dispatch(reloadTasks(ganttTasks)),
+    }
+}
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(withAlert()(GanttChart)));

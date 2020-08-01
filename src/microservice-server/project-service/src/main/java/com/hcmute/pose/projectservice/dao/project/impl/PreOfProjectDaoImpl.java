@@ -22,6 +22,7 @@ public class PreOfProjectDaoImpl implements PerOfProjectDao {
     private static String SQL_DELETE_POP = "DELETE FROM perofproject WHERE pro_id=? AND employee_id=? AND role != ?";
     private static String SQL_GET_PROJECT_WITH_ROLE = "SELECT * FROM perofproject WHERE employee_id = ? AND role = ?";
     private static String SQL_GET_PROJECT_WITHOUT_ROLE = "SELECT * FROM perofproject WHERE employee_id = ? AND role != ?";
+    private static String SQL_GET_PER_OF_PROJECT_WITH_ROLE = "SELECT * FROM perofproject WHERE pro_id = ? AND role = ?";
 
     @Autowired
     private DatabaseHelper databaseHelper;
@@ -68,6 +69,16 @@ public class PreOfProjectDaoImpl implements PerOfProjectDao {
     public List<PerOfProject> getListWithRole(Long employeeId, ProjectRole role) throws SQLException {
         try {
             return databaseHelper.executeQueryListObject(PerOfProject[].class, SQL_GET_PROJECT_WITH_ROLE, employeeId, role.ordinal());
+        } catch (SQLException e) {
+            LOGGER.error("[TaskDaoImpl]:[getListOwner]", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<PerOfProject> getUserWithRole(Long projectId, ProjectRole role) throws SQLException {
+        try {
+            return databaseHelper.executeQueryListObject(PerOfProject[].class, SQL_GET_PER_OF_PROJECT_WITH_ROLE, projectId, role.ordinal());
         } catch (SQLException e) {
             LOGGER.error("[TaskDaoImpl]:[getListOwner]", e);
             throw e;

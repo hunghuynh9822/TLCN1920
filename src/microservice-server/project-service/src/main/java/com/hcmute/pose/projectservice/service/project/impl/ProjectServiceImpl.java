@@ -4,12 +4,14 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.projectservice.dao.project.ProjectDao;
 import com.hcmute.pose.projectservice.model.project.Project;
 import com.hcmute.pose.projectservice.model.project.ProjectState;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import com.hcmute.pose.projectservice.service.project.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -43,5 +45,25 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project getProject(Long id) throws Exception {
         return projectDao.getProject(id).orElseThrow(()-> new Exception("Can not get project " + id));
+    }
+
+    @Override
+    public List<QueryReport> getListProSort() throws SQLException {
+        return projectDao.getListProSort();
+    }
+
+    @Override
+    public List<QueryReport> getListEmployeeSort() throws SQLException {
+        return projectDao.getListEmployeeSort();
+    }
+
+    @Override
+    public List<QueryReport> getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException {
+        return projectDao.selectNumberTaskOfEmployeeInProject(projectId);
+    }
+
+    @Override
+    public Map<String, Object> getReport() throws SQLException {
+        return projectDao.get_report();
     }
 }

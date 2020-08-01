@@ -58,6 +58,13 @@ class StyledTreeItem extends Component {
     constructor(props) {
         super(props);
     }
+    truncate(str, n, useWordBoundary) {
+        if (str.length <= n) { return str; }
+        const subString = str.substr(0, n - 1); // the original check
+        return (useWordBoundary
+            ? subString.substr(0, subString.lastIndexOf(" "))
+            : subString) + " ...";
+    };
     render() {
         const { classes, labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = this.props;
         return (
@@ -66,7 +73,7 @@ class StyledTreeItem extends Component {
                     <div className={classes.labelRoot}>
                         <LabelIcon color="inherit" className={classes.labelIcon} />
                         <Typography variant="body2" className={classes.labelText}>
-                            {labelText}
+                            {this.truncate(labelText, 25, true)}
                         </Typography>
                         <Typography variant="caption" color="inherit">
                             {labelInfo}

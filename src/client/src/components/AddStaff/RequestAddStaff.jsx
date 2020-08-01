@@ -294,7 +294,7 @@ class RequestAddStaff extends Component {
                                 Register employee successfully
                                     </Typography>
                             <Typography variant="subtitle1">
-                                Your employee id is #{this.state.request.id}. Your generate password is <strong>{this.state.request.password}</strong>
+                                Register employee success. Your generate password is <strong>{this.state.request.password}</strong>
                             </Typography>
                         </React.Fragment>
                     )

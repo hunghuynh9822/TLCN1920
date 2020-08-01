@@ -13,7 +13,7 @@ class App extends Component {
 					text: "Tasklists Overview"
 				},
 				toolTip: {
-					shared: true
+					shared: true,
 				},
 				legend: {
 					verticalAlign: "top"
@@ -32,9 +32,16 @@ class App extends Component {
 			type: "stackedBar100",
 			name: name,
 			showInLegend: true,
-			indexLabel: "{y}",
+			// indexLabel: "{number} tasks",
 			indexLabelFontColor: "white",
 			yValueFormatString: "#,###'%'",
+			indexLabelFormatter: ((e) => {
+				let number = e.dataPoint.number;
+				if (number == 0) {
+					return "";
+				}
+				return number + " tasks";
+			}),
 			dataPoints: dataPoints
 		}
 	}
@@ -52,19 +59,21 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-        this.loadData();
-    }
-
-	componentWillReceiveProps(nextProps) {
 		this.loadData();
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.index == 3) {
+			this.loadData();
+		}
+	}
+
 	render() {
-		console.log("BAR CHART DATA " + JSON.stringify(this.state.data))
+		// console.log("BAR CHART DATA " + JSON.stringify(this.state.data))
 		return (
 			<div>
 				<CanvasJSChart options={this.state.options}
-				/* onRef={ref => this.chart = ref} */
+					onRef={ref => this.chart = ref}
 				/>
 				{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
 			</div>

@@ -43,14 +43,9 @@ const styles = theme => ({
     },
     tabpanel: {
         overflow: 'hidden',
+        minHeight: "calc(100vh - 150px)",
     }
 });
-const CustomSwipeableViews = withStyles(theme => ({
-    root: {
-        minHeight: '100%',
-        overflow: 'hidden',
-    }
-}))(SwipeableViews);
 
 class ProjectView extends Component {
     constructor(props) {
@@ -123,54 +118,54 @@ class ProjectView extends Component {
         const { match } = this.props;
         const { alert } = this.props;
         const { projectItem, updateProjectItem } = this.props;
-        if (projectItem !== undefined && projectItem !== null) {
-            const projectId = projectItem.project.id;
-            if (projectId != match.params.projectId) {
-                this.handleBack();
-            }
-            getEmployeeFree(projectId)
-                .then(response => {
-                    console.log("Free employee : " + JSON.stringify(response));
-                    this.setState({
-                        projectItem: projectItem,
-                        projectId: projectId,
-                        freeEmployees: response.employees,
+        // if (projectItem !== undefined && projectItem !== null) {
+        //     const projectId = projectItem.project.id;
+        //     if (projectId != match.params.projectId) {
+        //         this.handleBack();
+        //     }
+        //     getEmployeeFree(projectId)
+        //         .then(response => {
+        //             console.log("Free employee : " + JSON.stringify(response));
+        //             this.setState({
+        //                 projectItem: projectItem,
+        //                 projectId: projectId,
+        //                 freeEmployees: response.employees,
+        //             })
+        //         })
+        //         .catch(error => {
+        //             console.log(error)
+        //             alert.error('Oops! Something went wrong on get free employee. Please call check!');
+        //         })
+        // } else {
+        // this.handleBack();
+        this.setState({
+            loading: true
+        });
+        let projectId = match.params.projectId;
+        getProject(projectId)
+            .then(response => {
+                console.log("Get project : " + JSON.stringify(response));
+                updateProjectItem(response);
+                getEmployeeFree(projectId)
+                    .then(responseEmployee => {
+                        console.log("Free employee : " + JSON.stringify(responseEmployee));
+                        this.setState({
+                            projectItem: response,
+                            projectId: projectId,
+                            freeEmployees: responseEmployee.employees,
+                            loading: false
+                        })
                     })
-                })
-                .catch(error => {
-                    console.log(error)
-                    alert.error('Oops! Something went wrong. Please try again!');
-                })
-        } else {
-            // this.handleBack();
-            this.setState({
-                loading: true
-            });
-            let projectId = match.params.projectId;
-            getProject(projectId)
-                .then(response => {
-                    console.log("Get project : " + JSON.stringify(response));
-                    updateProjectItem(response);
-                    getEmployeeFree(projectId)
-                        .then(responseEmployee => {
-                            console.log("Free employee : " + JSON.stringify(responseEmployee));
-                            this.setState({
-                                projectItem: response,
-                                projectId: projectId,
-                                freeEmployees: responseEmployee.employees,
-                                loading: false
-                            })
-                        })
-                        .catch(error => {
-                            console.log(error)
-                            alert.error('Oops! Something went wrong. Please try again!');
-                        })
-                })
-                .catch(error => {
-                    console.log(error)
-                    alert.error('Oops! Something went wrong. Please try again!');
-                })
-        }
+                    .catch(error => {
+                        console.log(error)
+                        alert.error('Oops! Something went wrong when get free employee for ' + projectId + '. Please call check!');
+                    })
+            })
+            .catch(error => {
+                console.log(error)
+                alert.error('Oops! Something went wrong when get project ' + projectId + '. Please try again!');
+            })
+        // }
     }
 
     render() {
@@ -214,7 +209,7 @@ class ProjectView extends Component {
                             <CenteredTabs handleChange={this.handleChange} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.sub_header_section}>
-                            {"WikiPage"}
+                            {/* {"WikiPage"} */}
                         </div>
                     </div>
                 </div>
@@ -224,10 +219,17 @@ class ProjectView extends Component {
                     </div>
                 </div> */}
                 <div className={classes.content}>
-                    <CustomSwipeableViews
+                    <SwipeableViews
                         axis={'x'}
                         index={this.state.value}
                         onChangeIndex={this.handleChangeIndex}
+                        style={{
+                            minHeight: '100%',
+                            overflow: 'hidden'
+                        }}
+                        slideStyle={{
+                            minHeight: '100%',
+                        }}
                     >
                         {
                             tabs.map((tab, key) => (
@@ -240,7 +242,7 @@ class ProjectView extends Component {
                                 </TabPanel>
                             ))
                         }
-                    </CustomSwipeableViews>
+                    </SwipeableViews>
                 </div>
             </React.Fragment>
         );

@@ -27,7 +27,6 @@ class TreeViewCustom extends Component {
         super(props);
         this.state = {
             defaultExpanded: [],
-            data: []
         }
         //
         this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -52,8 +51,6 @@ class TreeViewCustom extends Component {
      * Alert if clicked on outside of element
      */
     handleClickOutside(event) {
-
-
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             setTimeout(function () { //Start the timer
                 if (!this.props.isCreate) {
@@ -83,21 +80,12 @@ class TreeViewCustom extends Component {
     }
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
-        getWikiByPath("/")
-            .then(response => {
-                this.setState({
-                    data: response
-                })
-            }).catch(error => {
-                console.log(error);
-                //(error && error.message) || 
-                alert.error('Oops! Something went wrong. Please try again!');
-            });
     }
 
     render() {
         const { classes } = this.props;
-        let { defaultExpanded, data } = this.state;
+        let { defaultExpanded } = this.state;
+        let { data } = this.props;
         const { handleSelectItem } = this.props;
         const { root, ...otherClasses } = classes;
         return (
@@ -120,6 +108,7 @@ class TreeViewCustom extends Component {
 TreeViewCustom.propTypes = {
     classes: PropTypes.object.isRequired,
     handleSelectItem: PropTypes.func.isRequired,
-    isCreate: PropTypes.bool
+    isCreate: PropTypes.bool,
+    data: PropTypes.array.isRequired
 };
 export default withStyles(styles)(TreeViewCustom);

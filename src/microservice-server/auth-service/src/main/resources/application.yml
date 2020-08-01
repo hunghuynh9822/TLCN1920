@@ -39,7 +39,7 @@ eureka:
   instance:
     hostname: ${DOMAIN_NAME:localhost}
     nonSecurePort: ${NON_SECURE_PORT:8000}
-    preferIpAddress: true
+#    preferIpAddress: true
 
 #security:
 #  jwt:

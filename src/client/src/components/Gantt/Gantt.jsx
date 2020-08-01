@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { gantt } from 'dhtmlx-gantt';
+import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
+import { reloadTasks } from '../../action/task';
 var count = 1;
 class Gantt extends Component {
     // instance of gantt.dataProcessor
@@ -54,19 +57,22 @@ class Gantt extends Component {
         console.log("[Gantt] initGanttDataProcessor");
         this.dataProcessor = gantt.createDataProcessor((type, action, item, id) => {
             return new Promise((resolve, reject) => {
+                const { ganttTasks } = this.props;
                 if (onDataUpdated) {
                     onDataUpdated(type, action, item, id);
+                    gantt.refreshData();
+                    console.log("[Gantt] render ", ganttTasks, gantt);
                 }
 
                 // if onDataUpdated changes returns a permanent id of the created item, you can return it from here so dhtmlxGantt could apply it
                 // resolve({id: databaseId});
-                return resolve();
+                return resolve(ganttTasks);
             });
         });
     }
 
     shouldComponentUpdate(nextProps) {
-        console.log("[Gantt] shouldComponentUpdate")
+        console.log("[Gantt] shouldComponentUpdate", this.props.zoom !== nextProps.zoom, nextProps)
         return this.props.zoom !== nextProps.zoom;
     }
 
@@ -86,13 +92,49 @@ class Gantt extends Component {
     }
 
     componentDidMount() {
+        const { ganttTasks } = this.props;
         count = count + 1;
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
-        const { tasks } = this.props;
-        console.log("[Gantt] componentDidMount with tasks " + JSON.stringify(tasks));
+        //
+        gantt.config.types.critical = "critical";
+        gantt.locale.labels.type_critical = "Meeting";
+        gantt.config.lightbox.critical_sections = [
+            { name: "title", height: 20, map_to: "text", type: "textarea", focus: true },
+            { name: "details", height: 70, map_to: "details", type: "textarea" },
+            { name: "type", type: "typeselect", map_to: "type" },
+            { name: "time", height: 72, type: "time", map_to: "auto" }
+        ];
+        gantt.locale.labels.section_title = "Subject";
+        gantt.locale.labels.section_details = "Details";
+        gantt.templates.task_class = function (start, end, task) {
+            if (task.type == gantt.config.types.critical) {
+                return "critical_class";
+            }
+            return "";
+        };
+        gantt.templates.task_text = function (start, end, task) {
+            if (task.type == gantt.config.types.critical) {
+                return "Critical: <b>" + task.text + "</b>";
+            }
+            return task.text;
+        };
+        //
+        // gantt.config.work_time = true;
+        // gantt.config.correct_work_time = true;
+        gantt.config.drag_progress = false;
+        gantt.config.drag_links = false;
+        //
+        // default columns definition
+        gantt.config.columns = [
+            { name: "text", label: "Task name", tree: true, width: '*' },
+            { name: "start_date", label: "Start time", align: "center" },
+            { name: "duration", label: "Duration", align: "center" },
+        ];
+        //
+        console.log("[Gantt] componentDidMount with tasks " + JSON.stringify(ganttTasks), this.props);
         gantt.init(this.ganttContainer);
         this.initGanttDataProcessor();
-        gantt.parse(tasks);
+        gantt.parse(ganttTasks);
         gantt.render();
     }
 
@@ -106,4 +148,14 @@ class Gantt extends Component {
         );
     }
 }
-export default Gantt;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        ganttTasks: state.tasks.ganttTasks,
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        reloadGanttTasks: (ganttTasks) => dispatch(reloadTasks(ganttTasks)),
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Gantt);

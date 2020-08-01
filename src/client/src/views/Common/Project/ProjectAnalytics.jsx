@@ -54,7 +54,7 @@ class ProjectAnalytics extends Component {
         const { projectItem } = this.props;
         let projectId = projectItem.project.id;
         let members = projectItem.members;
-        console.log("ANALYTICS : members " + JSON.stringify(members))
+        // console.log("ANALYTICS : members " + JSON.stringify(members))
         var dataState = [];
         getTasksWithStateOfProject(projectId)
             .then(response => {
@@ -69,12 +69,12 @@ class ProjectAnalytics extends Component {
                 TASK_STATE.forEach((state) => {
                     if (tasksState[state]) {
                         let percent = (tasksState[state].length / totalTasks) * 100;
-                        dataState.push({ name: state, y: percent });
+                        dataState.push({ name: state, y: percent, number: tasksState[state].length });
                     } else {
-                        dataState.push({ name: state, y: 0 });
+                        dataState.push({ name: state, y: 0, number: 0 });
                     }
                 })
-                console.log("DATA STATE : " + JSON.stringify(dataState))
+                // console.log("DATA STATE : " + JSON.stringify(dataState))
                 this.setState({
                     loadingStateChart: false,
                     dataTaskState: dataState,
@@ -109,23 +109,31 @@ class ProjectAnalytics extends Component {
                     TASK_STATE.forEach((state) => {
                         if (tasks[state]) {
                             let percent = (tasks[state].length / totalTasks) * 100;
-                            assigneeState[state] = percent;
+                            assigneeState[state] = {
+                                percent: percent,
+                                number: tasks[state].length,
+                            };
                         } else {
                             // assigneeState[state] = 0;
                         }
                     })
                     paserData.push({ employee: name, assigneeState: assigneeState })
                 })
-                console.log("PASER DATA " + JSON.stringify(paserData))
+                console.log("[Project] PASER DATA " + JSON.stringify(paserData))
 
                 TASK_STATE.forEach((state) => {
                     let dataPercent = [];
                     paserData.forEach((assignee) => {
-                        dataPercent.push({ label: assignee.employee, y: assignee.assigneeState[state] })
+                        let data = assignee.assigneeState[state];
+                        if (data != undefined) {
+                            dataPercent.push({ label: assignee.employee, y: data.percent, number: data.number })
+                        } else {
+                            dataPercent.push({ label: assignee.employee, y: 0, number: 0 })
+                        }
                     })
                     dataBarChart.push({ name: state, data: dataPercent })
                 })
-                console.log("DATA BAR CHART" + JSON.stringify(dataBarChart))
+                console.log("[Project] DATA BAR CHART" + JSON.stringify(dataBarChart))
                 this.setState({
                     loadingBarChart: false,
                     dataBarChart: dataBarChart,
@@ -170,7 +178,7 @@ const mapStateToProps = (state, ownProps) => {
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
         loginRole: state.auth.loginRole,
-        creatorTasks: state.tasks.creatorTasks,
+        // projectTasks: state.tasks.projectTasks,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

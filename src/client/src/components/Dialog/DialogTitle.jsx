@@ -8,6 +8,8 @@ const styles = (theme) => ({
     root: {
         margin: 0,
         padding: theme.spacing(2),
+        backgroundColor: '#3f51b5',
+        color: '#ffffff'
     },
     closeButton: {
         position: 'absolute',

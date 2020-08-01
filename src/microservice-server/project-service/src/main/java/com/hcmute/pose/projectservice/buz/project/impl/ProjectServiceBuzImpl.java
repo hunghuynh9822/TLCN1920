@@ -5,33 +5,30 @@ import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.project.ProjectServiceBuz;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
+import com.hcmute.pose.projectservice.feign.EmployeeClient;
 import com.hcmute.pose.projectservice.model.project.PerOfProject;
 import com.hcmute.pose.projectservice.model.project.Project;
 import com.hcmute.pose.projectservice.model.project.ProjectRole;
 import com.hcmute.pose.projectservice.model.project.ProjectState;
-import com.hcmute.pose.projectservice.model.task.Task;
-import com.hcmute.pose.projectservice.model.task.TaskState;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
+import com.hcmute.pose.projectservice.modelmap.QueryReportItem;
 import com.hcmute.pose.projectservice.payload.project.*;
 import com.hcmute.pose.projectservice.payload.task.AllTasksProjectResponse;
-import com.hcmute.pose.projectservice.payload.task.TaskResponse;
+import com.hcmute.pose.projectservice.payload.task.ReportResponse;
 import com.hcmute.pose.projectservice.service.project.PerOfProjectService;
 import com.hcmute.pose.projectservice.service.project.ProjectService;
+import com.hcmute.pose.projectservice.service.task.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     private static Logger LOGGER = LoggerFactory.getLogger(ProjectServiceBuzImpl.class);
-    private static final String EMPLOYEE_SERVICE = "http://employee-service/api/employees";
     @Autowired
     private DatabaseHelper databaseHelper;
 
@@ -42,13 +39,15 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     private PerOfProjectService perOfProjectService;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private TaskService taskService;
 
     @Autowired
     private TaskServiceBuz taskServiceBuz;
 
+    @Autowired
+    private EmployeeClient employeeClient;
     @Override
-    public ProjectResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
+    public ProjectDetailResponse createProject(ProjectRequest projectRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
             Project project = projectService.createProject(projectRequest.getTitle(),projectRequest.getDescription());
@@ -63,7 +62,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
                     perOfProjectService.createPOP(project.getId(), employeeId, ProjectRole.MEMBER);
                 }
             }
-            ProjectResponse response = getProjectResponse(project);
+            ProjectDetailResponse response = getProjectResponse(project);
             databaseHelper.commit();
             return response;
         }catch (Exception | TransactionException e){
@@ -75,21 +74,36 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     }
 
     @Override
-    public AllProjectResponse getListProject() throws Exception {
+    public AllProjectDetailResponse getListProjectDetail() throws Exception {
         try {
-            List<ProjectResponse> projectResponses = new ArrayList<>();
+            List<ProjectDetailResponse> projectDetailResponse = new ArrayList<>();
             List<Project> projects =  projectService.getListPro();
             for(Project project : projects) {
-                projectResponses.add(getProjectResponse(project));
+                projectDetailResponse.add(getProjectResponse(project));
             }
-            return new AllProjectResponse(projectResponses);
+            return new AllProjectDetailResponse(projectDetailResponse);
         } finally {
             databaseHelper.closeConnection();
         }
     }
 
     @Override
-    public ProjectResponse getProject(Long id) throws Exception {
+    public ProjectsResponse getListProject() throws Exception {
+        try {
+            List<Project> projects =  projectService.getListPro();
+            List<ProjectResponse> projectResponses = new ArrayList<>();
+            for(Project project : projects) {
+                ProjectResponse projectResponse = new ProjectResponse(project.getId(), project.getTitle(), null,project.getState(), project.getCreatedAt(), project.getUpdatedAt());
+                projectResponses.add(projectResponse);
+            }
+            return new ProjectsResponse(projectResponses);
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ProjectDetailResponse getProject(Long id) throws Exception {
         try {
             Project project = projectService.getProject(id);
             return getProjectResponse(project);
@@ -103,16 +117,16 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         try {
             List<PerOfProject> owner = perOfProjectService.getListOwner(employeeId);
             List<PerOfProject> join = perOfProjectService.getListJoin(employeeId);
-            List<ProjectResponse> ownProjects = getProjects(owner);
-            List<ProjectResponse> joinProjects = getProjects(join);
+            List<ProjectDetailResponse> ownProjects = getProjects(owner);
+            List<ProjectDetailResponse> joinProjects = getProjects(join);
             return new EmployeeProjectResponse(ownProjects, joinProjects);
         } finally {
             databaseHelper.closeConnection();
         }
     }
 
-    private List<ProjectResponse> getProjects(List<PerOfProject> perOfProjects) throws Exception {
-        List<ProjectResponse> projects = new ArrayList<>();
+    private List<ProjectDetailResponse> getProjects(List<PerOfProject> perOfProjects) throws Exception {
+        List<ProjectDetailResponse> projects = new ArrayList<>();
         for (PerOfProject per : perOfProjects) {
             try {
                 Project project = projectService.getProject(per.getProjectId());
@@ -124,22 +138,19 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         return projects;
     }
 
-    private ProjectResponse getProjectResponse(Project project) throws Exception {
+    private ProjectDetailResponse getProjectResponse(Project project) throws Exception {
         List<EmployeeResponse> members = new ArrayList<>();
         List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
         for (PerOfProject per : perOfProjects) {
-            String url = EMPLOYEE_SERVICE + "/{id}";
-            Map<String, String> params = new HashMap<>();
-            params.put("id", per.getEmployeeId().toString());
-            EmployeeResponse employeeResponse = restTemplate.getForObject(url, EmployeeResponse.class, params);
+            EmployeeResponse employeeResponse = employeeClient.getEmployee(per.getEmployeeId().toString());
             assert employeeResponse != null;
             employeeResponse.setRole(per.getRole());
             members.add(employeeResponse);
         }
         AllTasksProjectResponse allTasksByProject = taskServiceBuz.getDataTasksOfProject(project.getId());
-        ProjectResponse projectResponse =  new ProjectResponse(project, members, allTasksByProject.getTasks());
-        projectResponse.setMore(allTasksByProject.getTasksInfo());
-        return projectResponse;
+        ProjectDetailResponse projectDetailResponse =  new ProjectDetailResponse(project, members, allTasksByProject.getTasks());
+        projectDetailResponse.setMore(allTasksByProject.getTasksInfo());
+        return projectDetailResponse;
     }
 
     @Override
@@ -188,10 +199,12 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
     }
 
     @Override
-    public void deletePOP(PerOfProjectRequest perOfProjectRequest) throws SQLException, TransactionException {
+    public void deletePOP(PerOfProjectRequest perOfProjectRequest) throws Exception, TransactionException {
         try{
             databaseHelper.beginTransaction();
+            PerOfProject owner = perOfProjectService.getOwner(perOfProjectRequest.getProjectId());
             perOfProjectService.deletePOP(perOfProjectRequest.getProjectId(), perOfProjectRequest.getEmployeeId());
+            taskService.updateTaskToOwner(perOfProjectRequest.getProjectId(), owner.getEmployeeId(), perOfProjectRequest.getEmployeeId());
             databaseHelper.commit();
         }catch (Exception | TransactionException e){
             LOGGER.error("[deletePOP]",e);
@@ -206,8 +219,7 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         try {
             Project project = projectService.getProject(projectId);
             List<PerOfProject> perOfProjects = perOfProjectService.getListPOP(project.getId());
-            String url = EMPLOYEE_SERVICE + "/";
-            AllEmployeeResponse allEmployeeResponse = restTemplate.getForObject(url, AllEmployeeResponse.class);
+            AllEmployeeResponse allEmployeeResponse = employeeClient.getAllEmployee();
             List<EmployeeResponse> employeeResponses = allEmployeeResponse.getEmployees();
             List<EmployeeResponse> employees = new ArrayList<>();
             for (EmployeeResponse employee : employeeResponses) {
@@ -230,5 +242,42 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         } finally {
             databaseHelper.closeConnection();
         }
+    }
+
+    private Integer getIndex(List<QueryReport> data, Long id) throws Exception {
+        for(int i = 0; i < data.size(); i++) {
+            if(data.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        throw new Exception("Not found id " + id);
+    }
+
+    @Override
+    public ReportResponse getNumberTaskOfEmployeeInProject() throws Exception {
+        try{
+            ReportResponse reportResponse = new ReportResponse();
+            List<QueryReport> listPro = projectService.getListProSort();
+            List<QueryReport> listEmployee = projectService.getListEmployeeSort();
+            List<QueryReportItem> listItem = new ArrayList<>();
+            for(QueryReport pro : listPro) {
+                List<QueryReport> numberTaskOfProject = projectService.getNumberTaskOfEmployeeInProject(pro.getId());
+                QueryReport[] numberTaskOfProjectSort = new QueryReport[numberTaskOfProject.size()];
+                for (QueryReport employee : numberTaskOfProject
+                     ) {
+                    numberTaskOfProjectSort[getIndex(listEmployee, employee.getId())] = employee;
+                }
+                listItem.add(new QueryReportItem(pro.getId(), pro.getName(), Arrays.asList(numberTaskOfProjectSort)));
+            }
+            reportResponse.putData("taskEmployee", listItem);
+            return reportResponse;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public Map<String, Object> getReport() throws SQLException {
+        return projectService.getReport();
     }
 }

@@ -16,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import CKEditor from 'ckeditor4-react';
 
 import { create } from '../../action/project';
+import { DialogTitleCustom } from '../../components'
 const styles = theme => ({
   buttonAdd: {
     margin: theme.spacing(1),
@@ -32,10 +33,13 @@ const styles = theme => ({
       paddingTop: '0px',
     },
     paddingTop: '0px',
+    boxShadow: 'none',
   },
   buttons: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   button: {
     // marginTop: theme.spacing(3),
@@ -115,8 +119,9 @@ class NewProject extends Component {
   }
 
   handleClose() {
+    const { handleClose } = this.props;
+    handleClose();
     this.setState({
-      open: false,
       request: {
         title: "",
         description: "",
@@ -126,13 +131,14 @@ class NewProject extends Component {
 
   render() {
     const { classes } = this.props;
-    const { open, request, scroll } = this.state;
+    const { request, scroll } = this.state;
+    const { open } = this.props;
     return (
       <React.Fragment>
-        <Button onClick={this.handleOpen} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
+        {/* <Button onClick={this.handleOpen} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
           <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
           New project
-        </Button>
+        </Button> */}
         <Dialog
           open={open}
           scroll={scroll}
@@ -140,7 +146,9 @@ class NewProject extends Component {
           disableBackdropClick
           disableEscapeKeyDown
         >
-          <DialogTitle id="scroll-dialog-title">New project</DialogTitle>
+          <DialogTitleCustom id="customized-dialog-title" onClose={this.handleClose} style={{
+            paddingBottom: '25px',
+          }}>New project</DialogTitleCustom>
           <Paper className={classes.paper}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
@@ -157,7 +165,7 @@ class NewProject extends Component {
                   onChange={this.handleInputChange}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
+              <Grid item xs={12}>
                 <TextField
                   id="description"
                   name="description"
@@ -171,20 +179,20 @@ class NewProject extends Component {
                   value={request.description}
                   onChange={this.handleInputChange}
                 />
-              </Grid> */}
-              <Grid item xs={12}>
+              </Grid>
+              {/* <Grid item xs={12}>
                 <p>Description</p>
                 <CKEditor
                   data={request.description}
                   onChange={this.onEditorChange}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Paper>
           <DialogActions className={classes.buttons}>
-            <Button onClick={this.handleClose} className={classes.button}>
+            {/* <Button onClick={this.handleClose} className={classes.button}>
               Close
-            </Button>
+            </Button> */}
             <Button
               variant="contained"
               color="primary"
@@ -204,5 +212,6 @@ NewProject.propTypes = {
   currentUser: PropTypes.object.isRequired,
   currentRole: PropTypes.array.isRequired,
   handleToProject: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(withAlert()(NewProject));

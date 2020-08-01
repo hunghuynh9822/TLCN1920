@@ -1,12 +1,13 @@
 package com.hcmute.pose.authservice.controller;
 
+import com.hcmute.pose.authservice.feign.EmployeeClient;
+import com.hcmute.pose.authservice.model.UserStatus;
 import com.hcmute.pose.authservice.payload.ApiResponse;
 import com.hcmute.pose.authservice.payload.AuthResponse;
 import com.hcmute.pose.authservice.payload.EmployeeResponse;
 import com.hcmute.pose.authservice.payload.LoginRequest;
-import com.hcmute.pose.authservice.model.UserStatus;
-import com.hcmute.pose.authservice.security.CurrentUser;
 import com.hcmute.pose.authservice.security.JwtTokenProvider;
+import com.hcmute.pose.authservice.security.CurrentUser;
 import com.hcmute.pose.common.security.JwtConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -40,7 +37,7 @@ public class AuthController {
     private JwtConfig jwtConfig;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private EmployeeClient employeeClient;
 
     @GetMapping("/test")
     public ResponseEntity<?> testCall(){
@@ -62,7 +59,6 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(jwtConfig.getPrefix(),token));
     }
 
-    private static final String EMPLOYEE_SERVICE = "http://employee-service/api/employees";
 
 //    @GetMapping("/current")
 //    public ResponseEntity<?> getCurrentUser(@RequestHeader(required = false,name=USER_ID_HEADER)String userId) {
@@ -85,10 +81,7 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
         LOGGER.info("Current Id : {}",userId);
-        String url = EMPLOYEE_SERVICE+"/{id}";
-        Map<String, String> params = new HashMap<>();
-        params.put("id", userId);
-        EmployeeResponse employeeResponse = restTemplate.getForObject(url,EmployeeResponse.class,params);
+        EmployeeResponse employeeResponse = employeeClient.getEmployee(userId);
         if(employeeResponse.getStatus().equals(UserStatus.ACCEPTED)){
             return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
         }

@@ -1,0 +1,19 @@
+/* Gantt */
+.critical_class {
+    border: 2px solid #f06f6c;
+    color: #6ba8e3;
+    background: #e53935;
+}
+
+.critical_class .gantt_task_progress {
+    background: #9c3532;
+}
+
+.canvasjs-chart-credit {
+    display: none;
+}
+
+/* Slick */
+.slick-list {
+    min-height: 100%;
+}

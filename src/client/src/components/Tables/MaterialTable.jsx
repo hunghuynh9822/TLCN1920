@@ -1,68 +1,74 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+
 import MTable from 'material-table';
+
+const styles = theme => ({
+
+});
+
 class MaterialTable extends Component {
     constructor(props) {
         super(props);
         this.state = ({
-            columns: [
-                { title: 'Name', field: 'name' },
-                { title: 'Surname', field: 'surname' },
-                { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-                {
-                    title: 'Birth Place',
-                    field: 'birthCity',
-                    lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-                },
-            ],
-            data: [
-                { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-                {
-                    name: 'Zerya Betül',
-                    surname: 'Baran',
-                    birthYear: 2017,
-                    birthCity: 34,
-                },
-            ],
+            selectRow: null,
         });
+        this.selectRow = this.selectRow.bind(this);
     }
+
+    selectRow(rowData, isEdit) {
+        this.setState({
+            selectedRow: rowData.tableData.id
+        })
+        this.props.handleSelectData(rowData, isEdit)
+    }
+
     render() {
         const { classes } = this.props;
         return (
             <MTable
-                title="Editable Example"
-                columns={this.state.columns}
-                data={this.state.data}
-                editable={{
-                    onRowAdd: newData =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                const data = [...this.state.data];
-                                data.push(newData);
-                                this.setState({ ...this.state, data });
-                            }, 600);
-                        }),
-                    onRowUpdate: (newData, oldData) =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                const data = [...this.state.data];
-                                data[data.indexOf(oldData)] = newData;
-                                this.setState({ ...this.state, data });
-                            }, 600);
-                        }),
-                    onRowDelete: oldData =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                const data = [...this.state.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                this.setState({ ...this.state, data });
-                            }, 600);
-                        }),
+                title={this.props.title}
+                columns={this.props.columns}
+                data={this.props.data}
+                actions={[
+                    {
+                        icon: 'edit',
+                        tooltip: 'Edit',
+                        onClick: (event, rowData) => {
+                            this.selectRow(rowData, true)
+                            console.log("[Table] Select row ", rowData)
+                        }
+                    },
+                    {
+                        icon: 'delete',
+                        tooltip: 'Delete',
+                        onClick: (event, rowData) => {
+                            confirm("You want to delete " + rowData.name)
+                            this.props.onDelete(rowData.id)
+                        }
+                    }
+                ]}
+                onRowClick={((event, rowData) => {
+                    this.selectRow(rowData, false)
+                    console.log("[Table] Select row ", rowData)
+                })}
+                options={{
+                    rowStyle: rowData => ({
+                        backgroundColor: (this.state.selectRow === rowData.tableData.id) ? '#EEE' : '#FFF'
+                    })
                 }}
             />
         );
     }
 }
-export default MaterialTable;
+MaterialTable.propTypes = {
+    classes: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired,
+    columns: PropTypes.array.isRequired,
+    data: PropTypes.array.isRequired,
+    handleSelectData: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
+};
+
+export default withStyles(styles)(MaterialTable);

@@ -1,12 +1,12 @@
 package com.hcmute.pose.projectservice.buz.task.impl;
 
+import com.google.gson.Gson;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
-import com.hcmute.pose.projectservice.model.task.Task;
-import com.hcmute.pose.projectservice.model.task.TaskComments;
-import com.hcmute.pose.projectservice.model.task.TaskLink;
-import com.hcmute.pose.projectservice.model.task.TaskState;
+import com.hcmute.pose.projectservice.model.task.*;
+import com.hcmute.pose.projectservice.modelmap.CountStateReport;
+import com.hcmute.pose.projectservice.modelmap.QueryReport;
 import com.hcmute.pose.projectservice.payload.task.*;
 import com.hcmute.pose.projectservice.service.task.TaskCommentService;
 import com.hcmute.pose.projectservice.service.task.TaskService;
@@ -18,6 +18,8 @@ import org.springframework.util.StringUtils;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -55,47 +57,256 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         }
     }
 
+    private Task getTask(List<Task> tasks, Long id) throws Exception {
+        for (Task task : tasks) {
+            if(task.getId().equals(id)) {
+                return task;
+            }
+        }
+        throw new Exception("Can not get task id : " + id);
+    }
+
+    public Integer getActivity(List<Activity> activities, Long id) {
+        int index = 0;
+        for (Activity activity : activities
+             ) {
+            if(activity.getId().equals(id)) {
+                return index;
+            }
+            index ++ ;
+        }
+        return null;
+    }
+
+    public ProcessActivity getActivities(List<Task> tasks) {
+        List<Activity> activities = new ArrayList<>();
+        Long startTime = 0L;
+        Long endTime = 0L;
+        for (Task task : tasks
+             ) {
+            Activity activity = new Activity(task.getId(), task.getTitle(), task.getStartedAt(), task.getDuration());
+            activities.add(activity);
+            if(StringUtils.isEmpty(task.getPreTaskId())) {
+                if(startTime.equals(0L)) {
+                    startTime = task.getStartedAt();
+                } else if(startTime > task.getStartedAt()){
+                    startTime = task.getStartedAt();
+                }
+            } else {
+                for (String taskId : task.getPreTaskId().split(",")) {
+                    Integer preIndex = getActivity(activities, new Long(taskId));
+                    if(preIndex == null) {
+                        LOGGER.error("Not found {}", taskId);
+                        continue;
+                    }
+                    activities.get(preIndex).getSuccessors().add(activity);
+                    activity.getPredecessors().add(activities.get(preIndex));
+                }
+            }
+            Long temp = plusDate(task.getStartedAt(),task.getDuration());
+            if(endTime.compareTo(temp) < 0) {
+                endTime = temp;
+            }
+        }
+        return new ProcessActivity(startTime, endTime, activities);
+    }
+
+    private ProcessActivity walkListAhead(ProcessActivity processActivity) {
+        Long startTime = processActivity.getStartTime();
+        Long endTime = processActivity.getEndTime();
+        List<Activity> list = processActivity.getActivities();
+        int na = list.size();
+        list.get(0).setEet(list.get(0).getEst() + list.get(0).getDuration());
+        for(int i = 1; i < na; i++)
+        {
+            Activity currentActivity = list.get(i);
+            if(list.get(i).getPredecessors().size() == 0) {
+                Integer subDate = subDate(startTime, currentActivity.getStartedAt());
+                list.get(i).setEst(subDate);
+            }
+            for(Activity activity : list.get(i).getPredecessors())
+            {
+                if(list.get(i).getEst() < activity.getEet()) {
+                    list.get(i).setEst(activity.getEet()); // //subDate(startTime, list.get(i).getStartedAt())
+                }
+            }
+
+            list.get(i).setEet(list.get(i).getEst() + list.get(i).getDuration());
+        }
+        processActivity.setActivities(list);
+        return processActivity;
+    }
+
+    private ProcessActivity walkListAback(ProcessActivity processActivity) {
+        List<Activity> list = processActivity.getActivities();
+        int na = list.size();
+        list.get(na - 1).setLet(list.get(na - 1).getEet());
+        list.get(na - 1).setLst(list.get(na - 1).getLet() - list.get(na - 1).getDuration());
+
+        for(int i = na - 2; i >= 0; i--)
+        {
+            for(Activity activity : list.get(i).getSuccessors())
+            {
+                if(list.get(i).getLet() == 0) {
+                    list.get(i).setLet(activity.getLst());
+                } else if(list.get(i).getLet() > activity.getLst()) {
+                    list.get(i).setLet(activity.getLst());
+                }
+            }
+            list.get(i).setLst(list.get(i).getLet() - list.get(i).getDuration());
+        }
+        processActivity.setActivities(list);
+        return processActivity;
+    }
+
+    private List<Long> getCriticalPath(List<Task> tasks) {
+        if(tasks == null || tasks.isEmpty()) {
+            LOGGER.info("No task -> Not find critical path");
+            return new ArrayList<>();
+        }
+        List<Activity> criticalPath = new ArrayList<>();
+        List<Long> criticalPathId = new ArrayList<>();
+        ProcessActivity processActivity = getActivities(tasks);
+        walkListAhead(processActivity);
+        walkListAback(processActivity);
+        List<Activity> list = processActivity.getActivities();
+        LOGGER.info("{} {} {}", processActivity.getStartTime(), processActivity.getEndTime(), subDate(processActivity.getStartTime(), processActivity.getEndTime()));
+        LOGGER.info("          Critical Path: ");
+        if(list.isEmpty()) {
+            LOGGER.info("Not find critical path");
+            return new ArrayList<>();
+        }
+        Activity firstActivity = list.get(0);
+        if(!isCriticalActivity(processActivity.getStartTime(), processActivity.getEndTime(), firstActivity)) {
+            LOGGER.info("First activity {} {} {} previous {} after {} EST {} LST {} EET {} LET {}",
+                    firstActivity.getId(), firstActivity.getTitle(), firstActivity.getDuration(), firstActivity.getPredecessors().size(), firstActivity.getSuccessors().size(), firstActivity.getEst(), firstActivity.getLst(), firstActivity.getEet(), firstActivity.getLet());
+            LOGGER.info("First activity not start the critical path");
+            return new ArrayList<>();
+        }
+        for(Activity activity : list) {
+            LOGGER.info("Activity {} {} {} previous {} after {} EST {} LST {} EET {} LET {}",
+                    activity.getId(), activity.getTitle(), activity.getDuration(), activity.getPredecessors().size(), activity.getSuccessors().size(), activity.getEst(), activity.getLst(), activity.getEet(), activity.getLet());
+            if(isCriticalActivity(processActivity.getStartTime(), processActivity.getEndTime(), activity)) {
+                if(activity.getPredecessors().size() == 0) {
+                    if(activity.getEst() == 0) {
+                        criticalPath.add(activity);
+                        criticalPathId.add(activity.getId());
+                        LOGGER.info("{} ", activity.getTitle());
+                    }
+                } else {
+                    for(Activity pre : activity.getPredecessors()) {
+                        if(criticalPath.contains(pre)) {
+                            criticalPath.add(activity);
+                            criticalPathId.add(activity.getId());
+                            LOGGER.info("{} ", activity.getTitle());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        Activity last = criticalPath.get(criticalPath.size() - 1);
+        if(!plusDate(last.getStartedAt(), last.getDuration()).equals(processActivity.getEndTime())) {
+            LOGGER.info("Not end activity of the critical path");
+            return new ArrayList<>();
+        }
+        LOGGER.info("         Total duration: {}\n", criticalPath.get(criticalPath.size() - 1).getEet());
+        return criticalPathId;
+    }
+
+    private Boolean isCriticalActivity(Long startTime, Long endTime, Activity activity) {
+        return (activity.getEet() - activity.getLet() == 0) && (activity.getEst() - activity.getLst() == 0) && (subDate(startTime, activity.getStartedAt()) == activity.getEst());
+    }
+
+    private Integer subDate(Long date1, Long date2) {
+        long subDate = date2 - date1;
+        return Math.toIntExact(subDate / (24 * 60 * 60 * 1000));
+    }
+
+    private Long plusDate(Long date, Integer duration) {
+        Calendar date_end_source = Calendar.getInstance();
+        date_end_source.setTimeInMillis(date);
+        date_end_source.add(Calendar.DATE, duration == null ? 0 : duration);
+        return date_end_source.getTimeInMillis();
+    }
+
+    public Date getDate(Calendar time) throws ParseException {
+        Date date = time.getTime();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String date1 = format1.format(date);
+        return format1.parse(date1);
+    }
+
     @Override
     public AllTasksProjectResponse getDataOfProject(Long projectId) throws Exception {
         List<Task> tasks = taskService.getTasksByProject(projectId);
         List<TaskResponse> taskResponses = new ArrayList<>();
         List<TaskLink> links = new ArrayList<>();
-        List<String> messages = new ArrayList<>();
         long index = 1L;
+        List<MessageError> messages = new ArrayList<>();
+        MessageError messageError;
         for (Task task : tasks
         ) {
-            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
-            taskResponse.setProcess(0.2*task.getState().ordinal());
+            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getPreTaskId(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
+            taskResponse.setProcess(0.2 * task.getState().ordinal());
             taskResponses.add(taskResponse);
             String preTaskIds = task.getPreTaskId();
             if (StringUtils.isEmpty(preTaskIds)) {
                 continue;
             }
             for (String taskId : preTaskIds.split(",")) {
+                if (StringUtils.isEmpty(taskId)) {
+                    continue;
+                }
                 TaskLink taskLink = null;
                 taskLink = new TaskLink(index, new Long(taskId), task.getId(), 0, System.currentTimeMillis(), System.currentTimeMillis());
                 links.add(taskLink);
                 index = index + 1;
+                //
             }
         }
+
+//      =========================================
         for (TaskLink taskLink : links) {
             Task source = taskService.getTasksById(taskLink.getSource());
             Task target = taskService.getTasksById(taskLink.getTarget());
             Calendar date_end_source = Calendar.getInstance();
             date_end_source.setTimeInMillis(source.getStartedAt());
-            date_end_source.add(Calendar.DATE , source.getDuration());
+            date_end_source.add(Calendar.DATE, source.getDuration() == null ? 1 : source.getDuration());
             Calendar date_start_target = Calendar.getInstance();
             date_start_target.setTimeInMillis(target.getStartedAt());
-            Date sourceTime = date_end_source.getTime();
-            Date targetTime = date_start_target.getTime();
-//            LOGGER.info("Source : {}" ,sourceTime);
-//            LOGGER.info("Target: {}", targetTime);
-            if (targetTime.compareTo(sourceTime) <= 0) {
-                String message = String.format("Cần kiểm tra thời gian Task %s và Task %s", source.getTitle(), target.getTitle());
-                messages.add(message);
+            Date sourceTime = getDate(date_end_source);
+            Date targetTime = getDate(date_start_target);
+            if (targetTime.compareTo(sourceTime) < 0) {
+                messageError = new MessageError("Cần kiểm tra thời gian Task {{0}} -> Task {{1}}", new ArrayList<String>() {{
+                    add(source.getTitle());
+                    add(target.getTitle());
+                }});
+                messages.add(messageError);
             }
         }
-        return new AllTasksProjectResponse(projectId, taskResponses, links, messages);
+//      Find list gantt
+        List<Long> criticalPath = new ArrayList<>();
+        if(messages.isEmpty()) {
+            criticalPath = getCriticalPath(tasks);
+        }
+//      ===================================
+        return new AllTasksProjectResponse(projectId, taskResponses, links, messages, criticalPath);
+    }
+
+    List<Task> getPreTasks(List<Task> tasks, Task task) throws Exception {
+        List<Task> listPreTasks = new ArrayList<>();
+        if (StringUtils.isEmpty(task.getPreTaskId())){
+            return listPreTasks;
+        }
+        for (String taskId : task.getPreTaskId().split(",")) {
+            if (StringUtils.isEmpty(taskId)) {
+                continue;
+            }
+            Task preTask = getTask(tasks, new Long(taskId));
+            listPreTasks.add(preTask);
+        }
+        return listPreTasks;
     }
 
     private static DecimalFormat df = new DecimalFormat("0.00");
@@ -110,7 +321,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         Double process = 0D;
         for (Task task : tasks
         ) {
-            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getStartedAt(), task.getDuration(), task.getState().name(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
+            TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getPreTaskId(), task.getStartedAt(), task.getDuration(), task.getState().name(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
             taskResponse.setProcess(new Double(df.format(0.2*task.getState().ordinal())));
             taskResponses.add(taskResponse);
             number = taskState.get(task.getState());
@@ -155,14 +366,9 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
 
     @Override
     public ProjectTasksResponse getTasksByProject(Long projectId) throws SQLException {
-        List<CreatorTasksResponse> creatorTasks = new ArrayList<>();
         try{
-            List<Long> creatorIds = taskService.getCreatorByProject(projectId);
-            for(Long creatorId : creatorIds) {
-                List<AssigneeTasksResponse> assigneeTasks = getAssigneeTasks(projectId, creatorId);
-                creatorTasks.add(new CreatorTasksResponse(creatorId, assigneeTasks));
-            }
-            return new ProjectTasksResponse(projectId, creatorTasks);
+            List<AssigneeTasksResponse> assigneeTasks = getAssigneeTasks(projectId);
+            return new ProjectTasksResponse(projectId, assigneeTasks);
         } finally {
             databaseHelper.closeConnection();
         }
@@ -207,49 +413,15 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         databaseHelper.commit();
     }
 
-    @Override
-    public CreatorTasksResponse getTasksByCreator(Long projectId, Long creatorId) throws SQLException {
-        try{
-            List<AssigneeTasksResponse> assigneeTasks = getAssigneeTasks(projectId, creatorId);
-            return new CreatorTasksResponse(creatorId, assigneeTasks);
-        } finally {
-            databaseHelper.closeConnection();
-        }
-    }
-
-    private List<AssigneeTasksResponse> getAssigneeTasks(Long projectId, Long creatorId) throws SQLException {
+    private List<AssigneeTasksResponse> getAssigneeTasks(Long projectId) throws SQLException {
         List<AssigneeTasksResponse> assigneeTasksResponses = new ArrayList<>();
         try{
-            List<Long> assigneeIds = taskService.getAssigneeByCreator(projectId, creatorId);
+            List<Long> assigneeIds = taskService.getAssigneeByProject(projectId);
             for(Long assigneeId : assigneeIds) {
                 List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
                 assigneeTasksResponses.add(new AssigneeTasksResponse(assigneeId, tasks));
             }
             return assigneeTasksResponses;
-        } finally {
-            databaseHelper.closeConnection();
-        }
-    }
-
-    private List<AssigneeTasksWithStateResponse> getAssigneeTasksWithState(Long projectId, Long creatorId) throws SQLException {
-        List<AssigneeTasksWithStateResponse> assigneeTasksWithStateResponses = new ArrayList<>();
-        try{
-            List<Long> assigneeIds = taskService.getAssigneeByCreator(projectId, creatorId);
-            for(Long assigneeId : assigneeIds) {
-                List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
-                assigneeTasksWithStateResponses.add(new AssigneeTasksWithStateResponse(assigneeId, getTasksWithState(tasks)));
-            }
-            return assigneeTasksWithStateResponses;
-        } finally {
-            databaseHelper.closeConnection();
-        }
-    }
-
-    @Override
-    public AssigneeTasksResponse getTasksByAssignee(Long projectId, Long assigneeId) throws SQLException {
-        try{
-            List<Task> tasks = taskService.getTasksByAssignee(projectId, assigneeId);
-            return new AssigneeTasksResponse(assigneeId, tasks);
         } finally {
             databaseHelper.closeConnection();
         }
@@ -372,6 +544,68 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             databaseHelper.beginTransaction();
             taskCommentService.updateTaskComment(request.getTaskId(), request.getEmployeeId(), request.getComment());
             databaseHelper.commit();
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getNumberTaskOfProject() throws SQLException {
+        try{
+            List<QueryReport> numberTaskOfProject = taskService.getNumberTaskOfProject();
+            ReportResponse reportResponse = new ReportResponse();
+            int total = 0;
+            for (QueryReport report:numberTaskOfProject
+            ) {
+                total += report.getNumber();
+            }
+            reportResponse.putData("numberTasks", numberTaskOfProject);
+            reportResponse.putData("total", total);
+            return reportResponse;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getNumberTaskOfProjectOfEmployee(Long employeeId) throws SQLException {
+        try{
+            List<QueryReport> numberTaskOfProject = taskService.getNumberTaskOfProjectOfEmployee(employeeId);
+            ReportResponse reportResponse = new ReportResponse();
+            int total = 0;
+            for (QueryReport report:numberTaskOfProject
+            ) {
+                total += report.getNumber();
+            }
+            reportResponse.putData("numberTasks", numberTaskOfProject);
+            reportResponse.putData("total", total);
+            return reportResponse;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getNumberTaskOfEmployeeInProject(Long projectId) throws SQLException {
+        try{
+            List<QueryReport> numberTaskOfProject = taskService.getNumberTaskOfEmployeeInProject(projectId);
+            ReportResponse reportResponse = new ReportResponse();
+            reportResponse.putData("taskOfEmployee", numberTaskOfProject);
+            return reportResponse;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
+    public ReportResponse getCountReport(Long userId) throws SQLException {
+        try{
+            List<CountStateReport> countStateTaskCreateByMe = taskService.getCountStateTaskCreateByMe(userId);
+            List<CountStateReport> countStateTaskAssignToMe = taskService.getCountStateTaskAssignToMe(userId);
+            ReportResponse reportResponse = new ReportResponse();
+            reportResponse.putData("createByMe", countStateTaskCreateByMe);
+            reportResponse.putData("assignToMe", countStateTaskAssignToMe);
+            return reportResponse;
         } finally {
             databaseHelper.closeConnection();
         }

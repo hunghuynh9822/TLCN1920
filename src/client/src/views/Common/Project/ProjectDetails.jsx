@@ -18,7 +18,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 
-import { TagMember } from '../../../components';
+import { TagMember, DialogTitleCustom } from '../../../components';
 
 import { invite, remove } from '../../../action/project'
 
@@ -41,6 +41,7 @@ const styles = theme => ({
     },
     paraph: {
         padding: '10px',
+        marginBottom: '-15px'
     },
     divider: {
         display: 'block',
@@ -82,7 +83,9 @@ const styles = theme => ({
         padding: '0px',
         margin: '0px 10px',
     },
-
+    dialog_list: {
+        width: '350px'
+    },
 });
 class ProjectDetails extends Component {
     constructor(props) {
@@ -285,6 +288,14 @@ class ProjectDetails extends Component {
                                     </div>
                                     <div className={classes.divider} />
                                     <Grid item container className={classes.paraph}>
+                                        <Grid item xs={2}>Owner</Grid>
+                                        <Grid item xs={10}>
+                                            <div style={{}}>
+                                                <TagMember member={projectOwner} removeMember={this.removeMember} hiddenRemove={true} />
+                                            </div>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item container className={classes.paraph}>
                                         <Grid item xs={2}>Admin</Grid>
                                         <Grid item xs={10}>
                                             <div>
@@ -320,8 +331,12 @@ class ProjectDetails extends Component {
                     </Grid>
                 </Grid>
                 <Dialog onClose={this.handleCloseAdd} aria-labelledby="simple-dialog-title" open={this.state.openAdd}>
-                    <DialogTitle id="simple-dialog-title">Select employee</DialogTitle>
-                    <List>
+                    <DialogTitleCustom id="customized-dialog-title" onClose={this.handleCloseAdd}>
+                        Select employee
+                    </DialogTitleCustom>
+                    <List classes={{
+                        root: classes.dialog_list
+                    }}>
                         {freeEmployees.length !== 0 ? freeEmployees.map((member, index) => (
                             <ListItem button onClick={() => this.handleListItemClick(member, this.state.roleAdd)} key={index}>
                                 <ListItemAvatar>

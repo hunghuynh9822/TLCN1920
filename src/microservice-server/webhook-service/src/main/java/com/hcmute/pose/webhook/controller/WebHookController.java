@@ -23,7 +23,7 @@ import java.util.List;
 import static java.lang.Thread.*;
 
 @RestController
-@RequestMapping("/api/webhook")
+@RequestMapping("/api/admin/webhook")
 public class WebHookController {
     private static Logger LOGGER = LoggerFactory.getLogger(WebHookController.class);
 
@@ -56,6 +56,16 @@ public class WebHookController {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteWebhook(@RequestParam("id") Long webHookId){
+        try{
+            webHookBuz.deleteWebhook(webHookId);
+            return new ResponseEntity("Delete success", HttpStatus.OK);
+        }catch (Exception | TransactionException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity createWebhook(@Valid @RequestBody WebHookRequest webHookRequest){
         try{
@@ -76,108 +86,5 @@ public class WebHookController {
             String message = String.format("Update project %d failed", request.getId());
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @PostMapping("/send/create_task")
-    public ResponseEntity SendCreateTask(@Valid @RequestBody WebHookRequestSendNotify webHookRequestSendNotify) throws IOException {
-        try {
-            AllWebHookReponse allWebHookReponse = webHookBuz.getWebhook(webHookRequestSendNotify.getIdPro());
-            List<Response> responses = new ArrayList<>();
-            for (WebHookData webHookData: allWebHookReponse.getWebHookReponseList()) {
-                LOGGER.info(webHookData.getName()+" abc");
-                if (webHookData.isCreateTask() == true) {
-                    String BASE_URL = "https://api.telegram.org/" + webHookData.getBotToken();
-                    okhttp3.RequestBody formBody = new FormBody.Builder()
-                            .add("chat_id", webHookData.getChatId())
-                            .add("parse_mode" , "HTML")
-                            .add("text", "Project : " +webHookRequestSendNotify.getProName()+ "\nUser : "+webHookRequestSendNotify.getUser()+"\nText : "+webHookRequestSendNotify.getData()).build();
-
-                    final Request request = new Request.Builder()
-                            .url(BASE_URL + "/sendMessage")
-                            .post(formBody).build();
-
-                    final Call call = client.newCall(request);
-                    final Response response = call.execute();
-                    Thread.sleep(3000);
-                    responses.add(response);
-                }
-            }
-            if (responses.isEmpty()){
-                return new ResponseEntity("Not webhook register", HttpStatus.OK);
-            }else{
-                return new ResponseEntity(responses, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @PostMapping("/send/update_task")
-    public ResponseEntity SendUpdateTask(@Valid @RequestBody WebHookRequestSendNotify webHookRequestSendNotify) throws IOException {
-        try {
-            AllWebHookReponse allWebHookReponse = webHookBuz.getWebhook(webHookRequestSendNotify.getIdPro());
-            List<Response> responses = new ArrayList<>();
-            for (WebHookData webHookData: allWebHookReponse.getWebHookReponseList()) {
-                if (webHookData.isUpdateTask() == true) {
-                    String BASE_URL = "https://api.telegram.org/" + webHookData.getBotToken();
-                    okhttp3.RequestBody formBody = new FormBody.Builder()
-                            .add("chat_id", webHookData.getChatId())
-                            .add("parse_mode" , "HTML")
-                            .add("text", "Project : " +webHookRequestSendNotify.getProName()+ "\nUser : "+webHookRequestSendNotify.getUser()+"\nText : "+webHookRequestSendNotify.getData()).build();
-
-                    final Request request = new Request.Builder()
-                            .url(BASE_URL + "/sendMessage")
-                            .post(formBody).build();
-
-                    final Call call = client.newCall(request);
-                    final Response response = call.execute();
-                    Thread.sleep(3000);
-                    responses.add(response);
-                }
-            }
-            if (responses.isEmpty()){
-                return new ResponseEntity("Not webhook register", HttpStatus.OK);
-            }else{
-                return new ResponseEntity(responses, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @PostMapping("/send/update_state")
-    public ResponseEntity SendUpdateState(@Valid @RequestBody WebHookRequestSendNotify webHookRequestSendNotify) throws IOException {
-        try {
-            AllWebHookReponse allWebHookReponse = webHookBuz.getWebhook(webHookRequestSendNotify.getIdPro());
-            List<Response> responses = new ArrayList<>();
-            for (WebHookData webHookData: allWebHookReponse.getWebHookReponseList()) {
-                if (webHookData.isUpdateState() == true) {
-                    String BASE_URL = "https://api.telegram.org/" + webHookData.getBotToken();
-                    okhttp3.RequestBody formBody = new FormBody.Builder()
-                            .add("chat_id", webHookData.getChatId())
-                            .add("parse_mode" , "HTML")
-                            .add("text", "Project : " +webHookRequestSendNotify.getProName()+ "\nUser : "+webHookRequestSendNotify.getUser()+"\nText : "+webHookRequestSendNotify.getData()).build();
-
-                    final Request request = new Request.Builder()
-                            .url(BASE_URL + "/sendMessage")
-                            .post(formBody).build();
-
-                    final Call call = client.newCall(request);
-                    final Response response = call.execute();
-                    Thread.sleep(3000);
-                    responses.add(response);
-                }
-            }
-            if (responses.isEmpty()){
-                return new ResponseEntity("Not webhook register", HttpStatus.OK);
-            }else{
-                return new ResponseEntity(responses, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

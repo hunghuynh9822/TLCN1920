@@ -1,5 +1,12 @@
-import { LOG_IN, LOG_OUT, UPDATE_USER, LOGIN_ROLE } from '../action/auth';
-import {ROUTER_MAP} from '../constants'
+import {
+    LOG_IN,
+    LOG_OUT,
+    UPDATE_USER,
+    LOGIN_ROLE
+} from '../action/auth';
+import {
+    ROUTER_MAP
+} from '../constants'
 const initState = {
     authenticated: false,
     currentUser: null,
@@ -16,7 +23,11 @@ const reducer = (state = initState, action) => {
             if (action.currentUser) {
                 let user = action.currentUser;
                 let roles = user.roles;
+                roles = roles.sort(function (a, b) {
+                    return a.id - b.id;
+                });
                 let maxRole = roles[0];
+                console.log("[Auth] Max role ", maxRole, roles)
                 paths = user.roles.map((role) => {
                     currentRole.push(role.name);
                     if (maxRole.id > role.id) {
@@ -30,20 +41,20 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 authenticated: action.authenticated,
-                currentUser: action.currentUser,
-                paths: paths,
-                defaultPath: path,
-                currentRole: currentRole
+                    currentUser: action.currentUser,
+                    paths: paths,
+                    defaultPath: path,
+                    currentRole: currentRole
             };
         case LOG_OUT:
             console.log(LOG_OUT)
             return {
                 ...state,
                 authenticated: false,
-                currentUser: null,
-                paths: null,
-                defaultPath: null,
-                currentRole: null
+                    currentUser: null,
+                    paths: null,
+                    defaultPath: null,
+                    currentRole: null
             };
         case UPDATE_USER:
             console.log(UPDATE_USER)
@@ -51,13 +62,13 @@ const reducer = (state = initState, action) => {
                 ...state,
                 currentUser: action.user
             }
-        case LOGIN_ROLE:
-            return {
-                ...state,
-                loginRole: action.role
-            }
-        default:
-            return state;
+            case LOGIN_ROLE:
+                return {
+                    ...state,
+                    loginRole: action.role
+                }
+                default:
+                    return state;
     }
 };
 export default reducer;

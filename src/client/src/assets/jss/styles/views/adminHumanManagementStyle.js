@@ -5,7 +5,7 @@ const adminHumanManagementStyle = theme => ({
         width: '100%',
         // minHeight: 'calc(100vh - 110px)',
         minHeight: '100%',
-        backgroundColor: '#f2f2f2'
+        // backgroundColor: '#f2f2f2'
     },
     area: {
         marginBottom: '10px',
@@ -19,8 +19,9 @@ const adminHumanManagementStyle = theme => ({
         padding: '12px 0px 12px 15px',
         margin: '15px 0px 15px 0px',
     },
-    container:{
-        display: 'flex', /* or inline-flex */
+    container: {
+        display: 'flex',
+        /* or inline-flex */
         flexDirection: 'row',
         justifyContent: 'flex-start',
     },
