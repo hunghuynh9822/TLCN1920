@@ -32,9 +32,17 @@ class App extends Component {
 			type: "stackedBar100",
 			name: name,
 			showInLegend: true,
-			indexLabel: "{number} task",
+			// indexLabel: "{number} tasks",
 			indexLabelFontColor: "white",
 			yValueFormatString: "#,###'%'",
+			indexLabelFormatter: ((e) => {
+				console.log("[Chart] BarChartNgang ", e)
+				let number = e.dataPoint.number;
+				if (number == 0) {
+					return "";
+				}
+				return number + " tasks";
+			}),
 			dataPoints: dataPoints
 		}
 	}
