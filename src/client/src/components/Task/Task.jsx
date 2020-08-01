@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert';
 
-import { changeAssignee, updatePointTasks } from '../../action/task';
+import { changeAssignee, updatePointTasks, TASK_STATE_COLOR } from '../../action/task';
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -81,14 +81,6 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 const _dragEl = document.getElementById('draggable');
 
 const colorWord = "#ffffff";
-const mapColor = {
-    "NEW": "#0ac400",
-    "DEVELOPING": "#e69900",
-    "DEVELOPED": "#00d8db",
-    "TESTING": "#ff0000",
-    "DONE": "#0026ff",
-    "FINISH": "#0026ff"
-}
 
 const mapRate = {
     1: angry,
@@ -161,7 +153,7 @@ class Task extends Component {
     }
 
     getColor(state) {
-        return mapColor[state];
+        return TASK_STATE_COLOR[state];
     }
 
     renderIcon(point) {

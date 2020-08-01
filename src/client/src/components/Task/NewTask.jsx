@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert';
 
-import { create, TASK_STATE } from '../../action/task';
+import { create, TASK_STATE, TASK_STATE_COLOR } from '../../action/task';
 
 import { TagMember, TagTask, DialogTitleCustom } from '../../components';
 import {
@@ -76,14 +76,6 @@ const styles = theme => ({
 
 const background = '#f5f8ff';
 const colorWord = "#ffffff";
-const mapColor = {
-    "NEW": "#0ac400",
-    "DEVELOPING": "#e69900",
-    "DEVELOPED": "#00d8db",
-    "TESTING": "#ff0000",
-    "DONE": "#0026ff",
-    "FINISH": "#0026ff"
-}
 
 class NewTask extends Component {
     constructor(props) {
@@ -124,7 +116,7 @@ class NewTask extends Component {
     }
 
     getColor(state) {
-        return mapColor[state];
+        return TASK_STATE_COLOR[state];
     }
 
     getName(employee) {

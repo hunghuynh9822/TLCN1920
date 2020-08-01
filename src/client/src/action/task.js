@@ -10,6 +10,15 @@ export const TASK_STATE = [
     'NEW', 'DEVELOPING', 'DEVELOPED', 'TESTING', 'DONE', 'FINISH'
 ]
 
+export const TASK_STATE_COLOR = {
+    "NEW": "#0ac400",
+    "DEVELOPING": "#e69900",
+    "DEVELOPED": "#00d8db",
+    "TESTING": "#ff0000",
+    "DONE": "#0026ff",
+    "FINISH": "#0026ff"
+}
+
 export const UPDATE_PROJECT_TASKS = 'UPDATE_PROJECT_TASKS';
 export const RELOAD_TASKS = 'RELOAD_TASKS';
 

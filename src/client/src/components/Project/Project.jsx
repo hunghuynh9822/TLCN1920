@@ -14,6 +14,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Moment from 'moment';
 import axios from 'axios';
 
+import { TASK_STATE_COLOR } from '../../action/task'
+
 import TuneIcon from '@material-ui/icons/Tune';
 const styles = theme => ({
     card: {
@@ -51,11 +53,7 @@ const CustomProcessBar = withStyles({
     }
 })(LinearProgress)
 const colorWord = "#ffffff";
-const mapColor = {
-    "NEW": "#0ac400",
-    "DEVELOPING": "#e69900",
-    "FINISH": "#0026ff"
-}
+
 class Project extends Component {
     constructor(props) {
         super(props);
@@ -89,7 +87,7 @@ class Project extends Component {
         } else {
             state = "DEVELOPING"
         }
-        let color = mapColor[state];
+        let color = TASK_STATE_COLOR[state];
         return (
             <Button disabled variant="outlined" size="small" color="primary" style={{
                 alignSelf: 'flex-start',

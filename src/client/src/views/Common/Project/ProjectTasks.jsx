@@ -7,7 +7,7 @@ import { withAlert } from 'react-alert'
 import { AssignTasks, CompleteTasks } from '../../';
 
 import { getTasks, TASK_STATE, updateStateTasks, updatePointTasks } from '../../../action/task';
-import { updateProjectTasks, updateTask } from '../../../action/task';
+import { updateProjectTasks, updateTask, TASK_STATE_COLOR } from '../../../action/task';
 
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 
@@ -126,14 +126,6 @@ const styles = theme => ({
 });
 const background = '#f5f8ff';
 const colorWord = "#ffffff";
-const mapColor = {
-    "NEW": "#0ac400",
-    "DEVELOPING": "#e69900",
-    "DEVELOPED": "#00d8db",
-    "TESTING": "#ff0000",
-    "DONE": "#0026ff",
-    "FINISH": "#0026ff"
-}
 class ProjectTasks extends Component {
     constructor(props) {
         super(props);
@@ -527,7 +519,7 @@ class ProjectTasks extends Component {
     }
 
     getColor(state) {
-        return mapColor[state];
+        return TASK_STATE_COLOR[state];
     }
 
     handleOpenCreate() {
