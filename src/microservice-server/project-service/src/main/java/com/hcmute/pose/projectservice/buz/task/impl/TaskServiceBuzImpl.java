@@ -158,6 +158,10 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     }
 
     private List<Long> getCriticalPath(List<Task> tasks) {
+        if(tasks == null || tasks.isEmpty()) {
+            LOGGER.info("No task -> Not find critical path");
+            return new ArrayList<>();
+        }
         List<Activity> criticalPath = new ArrayList<>();
         List<Long> criticalPathId = new ArrayList<>();
         ProcessActivity processActivity = getActivities(tasks);
