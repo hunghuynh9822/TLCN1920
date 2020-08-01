@@ -18,6 +18,8 @@ import org.springframework.util.StringUtils;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -228,6 +230,13 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         return date_end_source.getTimeInMillis();
     }
 
+    public Date getDate(Calendar time) throws ParseException {
+        Date date = time.getTime();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String date1 = format1.format(date);
+        return format1.parse(date1);
+    }
+
     @Override
     public AllTasksProjectResponse getDataOfProject(Long projectId) throws Exception {
         List<Task> tasks = taskService.getTasksByProject(projectId);
@@ -266,8 +275,8 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             date_end_source.add(Calendar.DATE, source.getDuration() == null ? 0 : source.getDuration());
             Calendar date_start_target = Calendar.getInstance();
             date_start_target.setTimeInMillis(target.getStartedAt());
-            Date sourceTime = date_end_source.getTime();
-            Date targetTime = date_start_target.getTime();
+            Date sourceTime = getDate(date_end_source);
+            Date targetTime = getDate(date_start_target);
             if (targetTime.compareTo(sourceTime) < 0) {
                 messageError = new MessageError("Cần kiểm tra thời gian Task {{0}} -> Task {{1}}", new ArrayList<String>() {{
                     add(source.getTitle());
