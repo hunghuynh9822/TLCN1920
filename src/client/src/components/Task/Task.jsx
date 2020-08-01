@@ -233,7 +233,7 @@ class Task extends Component {
         let end = new Date(task.startedAt + (1000 * 60 * 60 * 24) * task.duration);
         // console.log("[Task] Data ", task)
         return (
-            <div className={classes.title}>
+            <div className={classes.title} onClick={this.handleOpen}>
                 <div style={{ float: 'left' }}>
                     {this.truncate(task.title, 25, true)}
                     <div style={{ fontSize: '10px' }}>
@@ -257,7 +257,7 @@ class Task extends Component {
         const { task, index } = this.props;
         if (this.props.mode && this.props.mode === 'READONLY') {
             return (
-                <div onClick={this.handleOpen}>
+                <div>
                     <div
                         style={getItemStyle(
                             false, {}
@@ -275,7 +275,7 @@ class Task extends Component {
                 draggableId={task.id.toString()}
                 index={index}>
                 {(provided, snapshot) => (
-                    <div onClick={this.handleOpen}>
+                    <div>
                         {this.optionalPortal(provided.draggableProps.style, (
                             <div
                                 ref={provided.innerRef}
@@ -288,6 +288,7 @@ class Task extends Component {
                             >
                                 {this.renderTitle(task)}
                                 {this.renderState(task)}
+
                             </div>
                         ))}
                         {provided.placeholder}

@@ -543,12 +543,12 @@ class ProjectTasks extends Component {
         let tasks = projectItem.tasks;
         const tabs = [
             {
-                name: "Assign Task",
-                component: AssignTasks,
-            },
-            {
                 name: "Complete Task",
                 component: CompleteTasks,
+            },
+            {
+                name: "Assign Task",
+                component: AssignTasks,
             }
         ]
         // if (this.state.loading) {
