@@ -24,8 +24,8 @@ public class TaskDaoImpl implements TaskDao {
     private static String SQL_INSERT_TASK = "INSERT INTO tasks(id,project_id,employee_creator,employee_assignee,title,description,started_at,duration,state,point,created_at,updated_at,pre_task_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static String SQl_SELECT_TASK_BY_ID = "SELECT * FROM tasks WHERE id = ?";
     private static String SQl_SELECT_ASSIGNEE_BY_CREATOR = "SELECT employee_assignee as value FROM tasks WHERE employee_creator = ? AND project_id = ? GROUP BY employee_assignee";
-    private static String SQl_SELECT_TASK_BY_ASSIGNEE = "SELECT * FROM tasks WHERE employee_assignee = ? AND project_id = ?";
-    private static String SQl_SELECT_TASK_BY_ASSIGNEE_AND_CREATOR = "SELECT * FROM tasks WHERE employee_assignee = ? AND employee_creator = ? AND project_id = ?";
+    private static String SQl_SELECT_TASK_BY_ASSIGNEE = "SELECT * FROM tasks WHERE employee_assignee = ? AND project_id = ? order by id";
+    private static String SQl_SELECT_TASK_BY_ASSIGNEE_AND_CREATOR = "SELECT * FROM tasks WHERE employee_assignee = ? AND employee_creator = ? AND project_id = ? order by id";
     private static String SQl_SELECT_TASK_BY_PROJECT = "SELECT * FROM tasks WHERE project_id = ? order by id"; //id
     private static String SQl_SELECT_CREATOR_BY_PROJECT = "SELECT employee_creator as value FROM tasks WHERE project_id = ? GROUP BY employee_creator";
     private static String SQl_SELECT_ASSIGNEE_BY_PROJECT = "SELECT employee_assignee as value FROM tasks WHERE project_id = ? GROUP BY employee_assignee";
