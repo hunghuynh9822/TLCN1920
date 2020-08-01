@@ -101,7 +101,7 @@ class NewTask extends Component {
                 title: '',
                 description: '',
                 startedAt: new Date(),
-                duration: '',
+                duration: 1,
                 endAt: new Date()
             }
         }
@@ -120,6 +120,7 @@ class NewTask extends Component {
         this.handleCloseAddPrevious = this.handleCloseAddPrevious.bind(this);
         this.handleListItemClick = this.handleListItemClick.bind(this);
         this.removePreviousTask = this.removePreviousTask.bind(this);
+        this.getStartTime = this.getStartTime.bind(this);
     }
 
     getColor(state) {
@@ -163,6 +164,7 @@ class NewTask extends Component {
     handleSubmit() {
         const { alert } = this.props;
         const { currentUser, projectItem } = this.props;
+        const { handleCloseCreate } = this.props;
         let projectId = projectItem.project.id;
         console.log("Assignee " + JSON.stringify(this.state.assignee));
         let preTaskId = "";
@@ -202,7 +204,7 @@ class NewTask extends Component {
                         title: '',
                         description: '',
                         startedAt: new Date(),
-                        duration: ''
+                        duration: 1
                     }
                 })
             }).catch(error => {
@@ -226,8 +228,16 @@ class NewTask extends Component {
         tasks = tasks.filter((item, index) => {
             return item.id !== task.id;
         })
+        let startAt;
+        let startTime = this.getStartTime();
+        if (startTime != null) {
+            startAt = new Date(startTime);
+        } else {
+            startAt = this.state.request.startedAt;
+        }
         this.setState({
-            previousTasks: tasks
+            previousTasks: tasks,
+            request: { ...this.state.request, startedAt: startAt }
         })
     }
 
@@ -246,8 +256,17 @@ class NewTask extends Component {
             return tasks.indexOf(item) === index;
         })
         console.log("[NewTask][previousTasks] " + JSON.stringify(tasks));
+        //
+        let startAt;
+        let startTime = this.getStartTime();
+        if (startTime != null) {
+            startAt = new Date(startTime);
+        } else {
+            startAt = this.state.request.startedAt;
+        }
         this.setState({
-            previousTasks: tasks
+            previousTasks: tasks,
+            request: { ...this.state.request, startedAt: startAt }
         })
     }
 
@@ -266,7 +285,7 @@ class NewTask extends Component {
                 title: '',
                 description: '',
                 startedAt: new Date(),
-                duration: '',
+                duration: 1,
                 endAt: new Date()
             }
         })
@@ -299,6 +318,29 @@ class NewTask extends Component {
     getTaskId(id) {
         return "#" + id;
     }
+
+    getStartTime() {
+        if (this.state.previousTasks != undefined && this.state.previousTasks != null && this.state.previousTasks != []) {
+            let task = this.state.previousTasks[0];
+            if (task) {
+                let startTime = new Date(task.startedAt);
+                startTime.setDate(startTime.getDate() + task.duration);
+                console.log("[Task] Choose start time " + startTime);
+                this.state.previousTasks.forEach((task, index) => {
+                    console.log("[Task] previous task ", task)
+                    let temp = new Date(task.startedAt);
+                    temp.setDate(temp.getDate() + task.duration);
+                    if (startTime - temp < 0) {
+                        startTime = temp;
+                        console.log("[Task] Choose start time " + startTime);
+                    }
+                });
+                return startTime;
+            }
+        }
+        return null
+    }
+
     render() {
         const { classes } = this.props;
         const { projectItem, openCreate } = this.props;
@@ -384,7 +426,7 @@ class NewTask extends Component {
                                     variant="inline"
                                     format="dd-MM-yyyy"
                                     label="Start Time"
-                                    value={request.startedAt}
+                                    value={this.state.request.startedAt}
                                     onChange={this.handleStartedAt}
                                 />
                             </Grid>
