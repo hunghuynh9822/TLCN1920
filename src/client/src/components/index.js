@@ -240,3 +240,8 @@ export {
     default as TotalUsers
 }
 from './Card/TotalUsers.jsx'
+//Background
+export {
+    default as Background
+}
+from './Background/Background.jsx'

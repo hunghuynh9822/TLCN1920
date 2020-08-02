@@ -20,7 +20,7 @@ import Container from '@material-ui/core/Container';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import styles from '../assets/jss/styles/layouts/signinStyles';
+// import styles from '../assets/jss/styles/layouts/signinStyles';
 import { Copyright } from '../components';
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN } from '../constants';
 
@@ -29,6 +29,57 @@ import { RequestAddStaff } from "../components"
 import googleLogo from '../assets/img/google-logo.png';
 
 import { login, authenticate } from '../action/auth';
+
+import { Background } from '../components'
+const styles = theme => ({
+    '@global': {
+        body: {
+            backgroundColor: theme.palette.common.white,
+        },
+    },
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+    orSeparator: {
+        textAlign: 'center',
+    },
+    socialLogin: {
+
+    },
+    socialBtn: {
+        width: '100%',
+        marginBottom: '15px',
+        fontWeight: 400,
+        fontSize: '16px',
+    },
+    socialBtnText: {
+        marginTop: '5px',
+        marginBottom: '5px',
+    },
+    socialImg: {
+        height: '32px',
+        float: 'left',
+        marginTop: '5px',
+        marginBottom: '5px',
+    },
+    google: {
+        marginTop: '7px',
+    },
+});
 
 class SignIn extends Component {
     constructor(props) {
@@ -167,11 +218,11 @@ class SignIn extends Component {
                         </Grid>
 
                     </form>
-
+                    <Background />
                 </div>
-                <Box mt={8}>
+                {/* <Box mt={8}>
                     <Copyright />
-                </Box>
+                </Box> */}
             </Container>
         );
     }

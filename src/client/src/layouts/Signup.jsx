@@ -24,6 +24,8 @@ import Typography from '@material-ui/core/Typography';
 
 import { AccountForm, PersonalForm, Review } from '../components/AddStaff/Form';
 
+import { Background } from '../components'
+
 import { create } from '../action/employee'
 
 import { generatePassword } from '../action';
@@ -336,6 +338,7 @@ class SignUp extends Component {
                 <Button variant="contained" color="primary" onClick={handleOpen} className={classes.button}>
                     Add Staff
                 </Button>
+                <Background />
                 <Dialog
                     open={open}
                     onClose={handleClose}
