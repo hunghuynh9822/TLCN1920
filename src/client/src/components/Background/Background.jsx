@@ -10,7 +10,7 @@ const styles = theme => ({
     background_1: {
         position: 'absolute',
         background: `url(${login_task_3}) no-repeat`,
-        width: '1000px',
+        width: '960px',
         height: '700px',
         bottom: 0,
         right: 0,
@@ -20,10 +20,10 @@ const styles = theme => ({
     background_2: {
         position: 'absolute',
         background: `url(${login_task_4}) no-repeat`,
-        width: '1000px',
-        height: '700px',
-        top: 0,
-        left: 0,
+        top: '4%',
+        left: '2%',
+        width: '1100px',
+        height: '800px',
         zIndex: -1,
         opacity: '0.5'
     },
@@ -43,7 +43,7 @@ class Background extends Component {
         return (
             <React.Fragment>
                 <div className={classes.background_1}></div>
-                {/* <div className={classes.background_2}></div> */}
+                <div className={classes.background_2}></div>
                 <div className={classes.copy_right}><Copyright /></div>
             </React.Fragment>
         );
