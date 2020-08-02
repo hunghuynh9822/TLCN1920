@@ -131,7 +131,7 @@ class TaskCard extends Component {
                                     </div>
                                 </li>
                                 {doTasks.map((item, index) => (
-                                    <Task key={item.id} task={item} index={index} openForm={this.props.openForm} />
+                                    <Task loadTasks={this.props.loadTasks} key={item.id} task={item} index={index} openForm={this.props.openForm} />
                                 ))}
                                 <li className={classNames("list-group-item", classes.group_header)}>
                                     <div className="row" style={{ height: '20px' }}>
@@ -139,7 +139,7 @@ class TaskCard extends Component {
                                     </div>
                                 </li>
                                 {finishTasks.map((item, index) => (
-                                    <Task key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
+                                    <Task loadTasks={this.props.loadTasks} key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
                                 ))}
                             </ul>
                             {provided.placeholder}
@@ -156,6 +156,7 @@ TaskCard.propTypes = {
     tasks: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
     openForm: PropTypes.func.isRequired,
+    loadTasks: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {

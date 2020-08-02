@@ -304,7 +304,7 @@ class TaskContainer extends Component {
                                     let tasks = card && card.tasks ? card.tasks : [];
                                     if (title != "UnknownMember")
                                         return (
-                                            <TaskCard filter={this.props.filter} key={member.id} title={title} cardId={member.id} tasks={tasks} openForm={this.props.openForm} />
+                                            <TaskCard loadTasks={this.props.loadTasks} filter={this.props.filter} key={member.id} title={title} cardId={member.id} tasks={tasks} openForm={this.props.openForm} />
                                         )
                                 })
                             }
