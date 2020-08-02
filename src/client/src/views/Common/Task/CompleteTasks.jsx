@@ -25,7 +25,7 @@ class CompleteTasks extends Component {
     }
 
     componentDidMount() {
-
+        this.props.loadTasks();
     }
 
     getName(employee) {
@@ -66,7 +66,7 @@ CompleteTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    // projectTasks: PropTypes.array.isRequired,
+    projectTasks: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {

@@ -105,7 +105,7 @@ class TaskContainer extends Component {
  * Moves an item from one list to another list.
  */
     move(source, destination, droppableSource, droppableDestination) {
-        console.log("[Dnd] Move ", "source", source, "destination", destination, "drop source", droppableSource, "drop destination", droppableDestination)
+        console.log("[dnd] Move ", "source", source, "destination", destination, "drop source", droppableSource, "drop destination", droppableDestination)
         const sourceClone = Array.from(source);
         const destClone = Array.from(destination);
         const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -127,8 +127,17 @@ class TaskContainer extends Component {
             return taskCard.assigneeId == cardId;
         })[0];
         let tasks = card && card.tasks ? card.tasks : [];
-        console.log("[TaskContainer] getList : " + JSON.stringify(tasks))
-        return tasks;
+        let doTasks = tasks.filter((task) => {
+            return task.state != 'FINISH' && task.state != 'DONE';
+        });
+        let finishTasks = tasks.filter((task) => {
+            return task.state == 'FINISH';
+        });
+        let doneTasks = tasks.filter((task) => {
+            return task.state == 'DONE';
+        });
+        console.log("[dnd] getList : ", doTasks, doneTasks, finishTasks)
+        return { doTasks, doneTasks, finishTasks };
     }
 
     canDnd(targetTask) {
@@ -173,10 +182,12 @@ class TaskContainer extends Component {
         let { projectTasks } = this.state;
         let taskCards = projectTasks.tasks;
         const { source, destination, draggableId } = result;
-        let sourceArray = this.getList(source.droppableId);
-        let destinationArray = this.getList(destination.droppableId);
+        let sourceTasks = this.getList(source.droppableId);
+        let sourceArray = sourceTasks.doTasks;
+        let destinationTasks = this.getList(destination.droppableId);
+        let destinationArray = destinationTasks.doTasks;
         let targetTask = Array.from(sourceArray).splice(source.index, 1)[0];
-        console.log("[TaskContainer] onDragEnd ", result)
+        console.log("[dnd] onDragEnd ", result)
         let resultCanDnd = this.canDnd(targetTask);
         // dropped outside the list
         if (!destination) {
@@ -205,10 +216,10 @@ class TaskContainer extends Component {
                 source,
                 destination
             );
-            console.log("[TaskContainer] Move result : ", result);
+            console.log("[dnd] Move result : ", result);
             let items = this.state.items;
             let newTaskCards = taskCards.map((card) => {
-                console.log("[TaskContainer] New TaskCards : ", result[card.assigneeId]);
+                console.log("[dnd] New TaskCards : ", result[card.assigneeId]);
                 if (result[card.assigneeId] == undefined) {
                     return card;
                 }
@@ -218,14 +229,30 @@ class TaskContainer extends Component {
                     }
                     return task;
                 });
+                if (card.assigneeId == destination.droppableId) {
+                    destinationTasks.doneTasks.forEach((task, index) => {
+                        card.tasks.push(task);
+                    })
+                    destinationTasks.finishTasks.forEach((task, index) => {
+                        card.tasks.push(task);
+                    })
+                }
+                if (card.assigneeId == source.droppableId) {
+                    sourceTasks.doneTasks.forEach((task, index) => {
+                        card.tasks.push(task);
+                    })
+                    sourceTasks.finishTasks.forEach((task, index) => {
+                        card.tasks.push(task);
+                    })
+                }
                 return card;
             });
             let memberTasks = taskCards.find(card => {
                 return card.assigneeId == destination.droppableId;
             });
-            console.log("[TaskContainer] Member TaskCards destination : ", memberTasks);
+            console.log("[dnd] Member TaskCards destination : ", memberTasks);
             if (memberTasks == undefined) {
-                console.log("[TaskContainer] ", destination)
+                console.log("[dnd] ", destination)
                 let card = {
                     assigneeId: Number(destination.droppableId),
                     tasks: result[destination.droppableId]
@@ -233,13 +260,13 @@ class TaskContainer extends Component {
                 newTaskCards.push(card);
             }
             projectTasks.tasks = newTaskCards;
+            console.log("[dnd] Data render : ", projectTasks);
             this.setState({
                 projectTasks: projectTasks
             })
-            console.log("[TaskContainer] New projectTasks : ", projectTasks)
             changeAssignee(requestChange)
                 .then(response => {
-                    console.log("[TaskContainer] changeAssignee : ", response)
+                    console.log("[dnd] changeAssignee : ", response)
                 })
                 .catch(error => {
                     console.log(error);
@@ -290,7 +317,7 @@ class TaskContainer extends Component {
             ]
         };
         const members = this.props.projectItem.members;
-        console.log("[TaskContainer] Render ", members, projectTasks.tasks);
+        console.log("[TaskContainer] Render ", members, projectTasks);
         return (
             <React.Fragment>
                 <div className={classes.root}>
@@ -305,7 +332,7 @@ class TaskContainer extends Component {
                                     let tasks = card && card.tasks ? card.tasks : [];
                                     if (title != "UnknownMember")
                                         return (
-                                            <TaskCard loadTasks={this.props.loadTasks} filter={this.props.filter} key={member.id} title={title} cardId={member.id} tasks={tasks} openForm={this.props.openForm} />
+                                            <TaskCard loadTasks={this.props.loadTasks} filter={this.props.filter} key={member.id} title={title} cardId={member.id} member={member} tasks={tasks} openForm={this.props.openForm} />
                                         )
                                 })
                             }

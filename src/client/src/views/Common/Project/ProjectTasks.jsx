@@ -138,6 +138,10 @@ class ProjectTasks extends Component {
             openCreate: false,
             openAddPrevious: false,
             previousTasks: new Array(),
+            projectTasks: {
+                projectId: null,
+                tasks: []
+            },
             task: {
                 taskId: null,
                 projectId: null,
@@ -248,6 +252,7 @@ class ProjectTasks extends Component {
                     console.log("[ProjectTasks] getTasks response ", response)
                     this.props.updateProjectTasks(response);
                     this.setState({
+                        projectTasks: response,
                         loading: false,
                     })
                 })
@@ -564,7 +569,7 @@ class ProjectTasks extends Component {
                             <NewTask loadTasks={this.loadTasks} loadProject={this.props.loadProject} openCreate={this.state.openCreate} handleCloseCreate={this.handleCloseCreate} />
                         </div>
                         <div className={classes.header_section}>
-                            <CenteredTabs handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
+                            <CenteredTabs projectTasks={this.state.projectTasks} handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.header_section}>
                             {/* Change mode */}
