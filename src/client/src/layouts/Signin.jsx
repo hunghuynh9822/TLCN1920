@@ -166,7 +166,6 @@ class SignIn extends Component {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-
                     {/* {this.renderError()} */}
                     <form className={classes.form} onSubmit={this.handleSubmit}>
                         <div className="social-login">
@@ -242,8 +241,8 @@ class SignIn extends Component {
                         </Grid> */}
 
                     </form>
-                    <Background />
                 </div>
+                <Background />
                 {/* <Box mt={8}>
                     <Copyright />
                 </Box> */}

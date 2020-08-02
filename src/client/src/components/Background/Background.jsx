@@ -30,7 +30,8 @@ const styles = theme => ({
     copy_right: {
         width: '100%',
         position: 'absolute',
-        bottom: '30px'
+        bottom: '30px',
+        left: 0
     }
 });
 class Background extends Component {
@@ -42,7 +43,7 @@ class Background extends Component {
         return (
             <React.Fragment>
                 <div className={classes.background_1}></div>
-                <div className={classes.background_2}></div>
+                {/* <div className={classes.background_2}></div> */}
                 <div className={classes.copy_right}><Copyright /></div>
             </React.Fragment>
         );
