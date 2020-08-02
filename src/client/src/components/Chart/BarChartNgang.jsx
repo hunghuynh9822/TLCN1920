@@ -1,6 +1,7 @@
 /* App.js */
 import React, { Component } from 'react';
 import CanvasJSReact from './canvasjs.react'
+import Card from '@material-ui/core/Card';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 class App extends Component {
@@ -10,7 +11,10 @@ class App extends Component {
 			data: [],
 			options: {
 				title: {
-					text: "Tasklists Overview"
+					// text: "Tasklists Overview",
+					fontSize: 30,
+					fontWeight: "normal",
+					fontFamily: "Roboto, Helvetica, Arial, sans-serif",
 				},
 				toolTip: {
 					shared: true,
@@ -31,7 +35,7 @@ class App extends Component {
 		return {
 			type: "stackedBar100",
 			name: name,
-			showInLegend: true,
+			// showInLegend: true,
 			// indexLabel: "{number} tasks",
 			indexLabelFontColor: "white",
 			yValueFormatString: "#,###'%'",
@@ -72,10 +76,12 @@ class App extends Component {
 		// console.log("BAR CHART DATA " + JSON.stringify(this.state.data))
 		return (
 			<div>
+				{/* <Card style={{ color: '#bfbfbf', marginTop: '10px', display: 'flex' }}> */}
 				<CanvasJSChart options={this.state.options}
 					onRef={ref => this.chart = ref}
 				/>
 				{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
+				{/* </Card> */}
 			</div>
 		);
 	}
