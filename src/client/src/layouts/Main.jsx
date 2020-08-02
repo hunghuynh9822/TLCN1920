@@ -11,7 +11,7 @@ import Hidden from "@material-ui/core/Hidden";
 // import PerfectScrollbar from "perfect-scrollbar";
 // import "perfect-scrollbar/css/perfect-scrollbar.css";
 // core components
-import { Navbar, Footer, Sidebar } from "../components";
+import { Navbar, Footer, Sidebar, Background } from "../components";
 
 import routes from "../routes.js";
 

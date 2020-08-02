@@ -336,7 +336,7 @@ class SignUp extends Component {
                     Back to home
                 </Button>
                 <Button variant="contained" color="primary" onClick={handleOpen} className={classes.button}>
-                    Add Staff
+                    New account
                 </Button>
                 <Background />
                 <Dialog
@@ -347,7 +347,7 @@ class SignUp extends Component {
                     disableBackdropClick
                     disableEscapeKeyDown
                 >
-                    <DialogTitle id="scroll-dialog-title">Add Staff</DialogTitle>
+                    <DialogTitle id="scroll-dialog-title">New account</DialogTitle>
                     <Paper className={classes.paper}>
 
                         <Stepper activeStep={activeStep} className={classes.stepper}>

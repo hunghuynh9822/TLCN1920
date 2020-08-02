@@ -54,6 +54,9 @@ const styles = theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    to_new: {
+        margin: theme.spacing(0, 0, 2),
+    },
     orSeparator: {
         textAlign: 'center',
     },
@@ -78,7 +81,11 @@ const styles = theme => ({
     },
     google: {
         marginTop: '7px',
+        backgroundColor: '#fafafa'
     },
+    new_employee: {
+        width: '100%',
+    }
 });
 
 class SignIn extends Component {
@@ -91,6 +98,7 @@ class SignIn extends Component {
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleToNew = this.handleToNew.bind(this);
     }
     handleInputChange(event) {
         const target = event.target;
@@ -132,6 +140,11 @@ class SignIn extends Component {
     //     }
     // }
 
+    handleToNew() {
+        console.log("Go to new");
+        this.props.history.push("/new");
+    }
+
     render() {
         const { classes } = this.props;
         const { authenticated, currentUser } = this.props;
@@ -153,8 +166,18 @@ class SignIn extends Component {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
+
                     {/* {this.renderError()} */}
                     <form className={classes.form} onSubmit={this.handleSubmit}>
+                        <div className="social-login">
+                            <Button className={classnames(classes.socialBtn, classes.google)} href={GOOGLE_AUTH_URL}>
+                                <img className={classes.socialImg} src={googleLogo} alt="Google" />
+                                <span className={classes.socialBtnText}>Log in with Google</span>
+                            </Button>
+                        </div>
+                        <div className={classes.orSeparator}>
+                            <span className="orText">OR</span>
+                        </div>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -194,28 +217,29 @@ class SignIn extends Component {
                         >
                             Sign In
                         </Button>
-                        <div className={classes.orSeparator}>
-                            <span className="orText">OR</span>
-                        </div>
-                        <div className="social-login">
-                            <Button className={classnames(classes.socialBtn, classes.google)} href={GOOGLE_AUTH_URL}>
-                                <img className={classes.socialImg} src={googleLogo} alt="Google" />
-                                <span className={classes.socialBtnText}>Log in with Google</span>
+
+                        {/* <div className={classes.orSeparator}>
+                            <span className="orText">IF NOT</span>
+                        </div> */}
+                        <div >
+                            <Button fullWidth variant="contained" color="primary" onClick={this.handleToNew} className={classes.to_new}>
+                                Register new acount ?
                             </Button>
                         </div>
-                        <Grid container>
+                        {/* <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>
+                            
                             <Grid item>
                                 <NavLink
                                     to="/new"
                                     variant="body2"
                                 >New employee</NavLink>
                             </Grid>
-                        </Grid>
+                        </Grid> */}
 
                     </form>
                     <Background />
