@@ -32,7 +32,7 @@ public class TaskDaoImpl implements TaskDao {
 
 //    private static String SQL_UPDATE_POINT = "UPDATE tasks SET point=?, updated_at=? WHERE id=? AND employee_creator=?";
     private static String SQL_UPDATE_POINT = "UPDATE tasks SET point=?, updated_at=? WHERE id=?";
-    private static String SQL_UPDATE_STATE = "UPDATE tasks SET state=?, updated_at=? WHERE id=? AND ( employee_creator=? OR employee_assignee=? )";
+    private static String SQL_UPDATE_STATE = "UPDATE tasks SET state=?, updated_at=? WHERE id=? ";
     private static String SQL_UPDATE_TASK = "UPDATE tasks SET employee_assignee=?, title=?, description=?, pre_task_id=?, started_at=?, duration=?, state=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_TASK_TIME = "UPDATE tasks SET started_at=?, duration=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_ASSIGNEE = "UPDATE tasks SET employee_assignee=?, updated_at=? WHERE id=?";
@@ -160,7 +160,7 @@ public class TaskDaoImpl implements TaskDao {
 
     @Override
     public void updateState(Long taskId, Long employeeId, TaskState state) throws SQLException, TransactionException {
-        databaseHelper.executeNonQuery(SQL_UPDATE_STATE, state.ordinal(), System.currentTimeMillis(), taskId, employeeId, employeeId);
+        databaseHelper.executeNonQuery(SQL_UPDATE_STATE, state.ordinal(), System.currentTimeMillis(), taskId);
     }
 
     @Override
