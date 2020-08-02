@@ -105,6 +105,7 @@ class TaskContainer extends Component {
  * Moves an item from one list to another list.
  */
     move(source, destination, droppableSource, droppableDestination) {
+        console.log("[Dnd] Move ", "source", source, "destination", destination, "drop source", droppableSource, "drop destination", droppableDestination)
         const sourceClone = Array.from(source);
         const destClone = Array.from(destination);
         const [removed] = sourceClone.splice(droppableSource.index, 1);
