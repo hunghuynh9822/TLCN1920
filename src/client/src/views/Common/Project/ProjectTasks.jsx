@@ -210,23 +210,25 @@ class ProjectTasks extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // if (this.state.reload) {
-        //     this.setState({
-        //         reload: false,
-        //     })
-        // } else {
-        //     const { alert } = this.props;
-        //     const { loginRole, projectItem, currentUser } = this.props;
-        //     let projectId = projectItem.project.id;
-        //     getTasks(projectId)
-        //         .then(response => {
-        //             this.props.updateProjectTasks(response);
-        //             this.setState({
-        //                 projectTasks: response,
-        //                 reload: true
-        //             })
-        //         })
-        // }
+        if (this.state.reload) {
+            this.setState({
+                reload: false,
+            })
+        } else {
+            const { alert } = this.props;
+            const { loginRole, projectItem, currentUser } = this.props;
+            let projectId = projectItem.project.id;
+            if (nextProps.index == 1) {
+                getTasks(projectId)
+                .then(response => {
+                    this.props.updateProjectTasks(response);
+                    this.setState({
+                        projectTasks: response,
+                        reload: true
+                    })
+                })
+            }
+        }
     }
 
     loadTasks(projectTasks) {
@@ -699,6 +701,9 @@ class ProjectTasks extends Component {
                             <Grid item xs={12} sm={6}>
                                 <Box component="fieldset" mb={3} borderColor="transparent">
                                     <Typography component="legend">Point</Typography>
+                                    {() => {
+                                        console.log("[ProjectTasks][View] Condition open point ", task.state !== 'DONE' && task.state !== 'FINISH' && (loginAsAdmin(loginRole) || loginAsLead(loginRole)), "task state", task)
+                                    }}
                                     <StyledRating
                                         readOnly={task.state !== 'DONE' && task.state !== 'FINISH' && (loginAsAdmin(loginRole) || loginAsLead(loginRole))}
                                         name="customized-color"
