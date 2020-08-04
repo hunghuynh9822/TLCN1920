@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceBuzImpl implements TaskServiceBuz {
@@ -139,12 +140,27 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
 
     private ProcessActivity walkListAback(ProcessActivity processActivity) {
         List<Activity> list = processActivity.getActivities();
+        list = list
+                .stream()
+                .sorted((t1, t2) -> {
+                    if(t1.getEet() > t2.getEet() && t1.getEst() > t2.getEst()) {
+                        return 1;
+                    } else if(t1.getEet() < t2.getEet() && t1.getEst() < t2.getEst()) {
+                        return -1;
+                    }
+                    return 0;
+                })
+                .collect(Collectors.toList());
         int na = list.size();
         list.get(na - 1).setLet(list.get(na - 1).getEet());
         list.get(na - 1).setLst(list.get(na - 1).getLet() - list.get(na - 1).getDuration());
 
         for(int i = na - 2; i >= 0; i--)
         {
+            if(list.get(i).getSuccessors().size() == 0) {
+                list.get(i).setLet(list.get(i).getEet());
+                list.get(i).setLst(list.get(i).getLet() - list.get(i).getDuration());
+            }
             for(Activity activity : list.get(i).getSuccessors())
             {
                 if(list.get(i).getLet() == 0) {
