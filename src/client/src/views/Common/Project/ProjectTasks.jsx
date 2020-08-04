@@ -220,13 +220,13 @@ class ProjectTasks extends Component {
             let projectId = projectItem.project.id;
             if (nextProps.index == 1) {
                 getTasks(projectId)
-                .then(response => {
-                    this.props.updateProjectTasks(response);
-                    this.setState({
-                        projectTasks: response,
-                        reload: true
+                    .then(response => {
+                        this.props.updateProjectTasks(response);
+                        this.setState({
+                            projectTasks: response,
+                            reload: true
+                        })
                     })
-                })
             }
         }
     }
@@ -678,7 +678,7 @@ class ProjectTasks extends Component {
                                         labelId="state-label"
                                         id="state"
                                         name="state"
-                                        value={TASK_STATE.indexOf(task.state)}
+                                        value={task.state != 0 ? TASK_STATE.indexOf(task.state) : 0}
                                         onChange={this.handleSelectStateChange}
                                     >
                                         {

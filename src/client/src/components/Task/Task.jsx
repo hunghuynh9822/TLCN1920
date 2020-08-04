@@ -153,6 +153,14 @@ class Task extends Component {
         })
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { task } = nextProps;
+        console.log("[Task] componentWillReceiveProps task : ", task)
+        this.setState({
+            task: task
+        })
+    }
+
     handleOpen() {
         console.log("Open")
         this.props.openForm(this.state.task);

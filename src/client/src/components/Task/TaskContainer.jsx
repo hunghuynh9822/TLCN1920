@@ -179,7 +179,7 @@ class TaskContainer extends Component {
         const { alert } = this.props;
         const { loginRole, currentUser, projectItem } = this.props;
         // console.log("[TaskContainer] projectItem ", projectItem)
-        let { projectTasks } = this.state;
+        let { projectTasks } = this.props;
         let taskCards = projectTasks.tasks;
         const { source, destination, draggableId } = result;
         let sourceTasks = this.getList(source.droppableId);

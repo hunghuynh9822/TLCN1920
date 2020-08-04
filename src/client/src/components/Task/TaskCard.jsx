@@ -50,6 +50,7 @@ const getListStyle = isDraggingOver => ({
     width: 250,
     marginLeft: grid,
     marginRight: grid,
+    marginBottom: '200px'
 });
 
 class TaskCard extends Component {
@@ -65,7 +66,7 @@ class TaskCard extends Component {
     render() {
         const { classes } = this.props;
         const { cardId, tasks, title } = this.props;
-        // console.log("TaskCard : " + JSON.stringify(tasks));
+        console.log("[TaskCard] Render : ", tasks);
         let finishTasks = tasks.filter((task) => {
             return task.state == 'FINISH';
         });
