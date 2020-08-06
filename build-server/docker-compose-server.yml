@@ -45,7 +45,7 @@ services:
       - ./logs/auth-service:/server/auth-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
+      - PSQL_URL=jdbc:postgresql://docker-postgres:5432/postgres
       - DOMAIN_NAME=auth
       - NON_SECURE_PORT=8000
     links:
@@ -69,7 +69,7 @@ services:
       - ./logs/employee-service:/server/employee-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
+      - PSQL_URL=jdbc:postgresql://docker-postgres:5432/postgres
       - DOMAIN_NAME=employee
       - NON_SECURE_PORT=8001
     links:
@@ -80,30 +80,6 @@ services:
       - gateway
     ports:
       - "8001:8001"
-    networks:
-      - ute
-  tasks:
-    build:
-      context: ./server/task-service
-      dockerfile: Dockerfile
-    image: hcmute/server/task
-    container_name: tasks
-    restart: unless-stopped
-    volumes:
-      - ./logs/task-service:/server/task-service/logs
-    environment:
-      - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
-      - DOMAIN_NAME=tasks
-      - NON_SECURE_PORT=8002
-    links:
-      - discovery
-      - gateway
-    depends_on:
-      - discovery
-      - gateway
-    ports:
-      - "8002:8002"
     networks:
       - ute
   projects:
@@ -117,7 +93,7 @@ services:
       - ./logs/project-service:/server/project-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
+      - PSQL_URL=jdbc:postgresql://docker-postgres:5432/postgres
       - DOMAIN_NAME=projects
       - NON_SECURE_PORT=8003
     links:
@@ -141,7 +117,7 @@ services:
       - ./logs/notify-service:/server/notify-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
+      - PSQL_URL=jdbc:postgresql://docker-postgres:5432/postgres
       - DOMAIN_NAME=notify
       - NON_SECURE_PORT=8004
     links:
@@ -154,19 +130,19 @@ services:
       - "8004:8004"
     networks:
       - ute
-  request:
+  webhook:
     build:
-      context: ./server/request-service
+      context: ./server/webhook-service
       dockerfile: Dockerfile
-    image: hcmute/server/request
-    container_name: request
+    image: hcmute/server/webhook
+    container_name: webhook
     restart: unless-stopped
     volumes:
-      - ./logs/request-service:/server/request-service/logs
+      - ./logs/webhook-service:/server/webhook-service/logs
     environment:
       - EUREKA_URI=http://discovery:8761
-      - PSQL_URL=jdbc:postgresql://192.168.1.114:5432/postgres
-      - DOMAIN_NAME=request
+      - PSQL_URL=jdbc:postgresql://docker-postgres:5432/postgres
+      - DOMAIN_NAME=webhook
       - NON_SECURE_PORT=8005
     links:
       - discovery
@@ -178,6 +154,31 @@ services:
       - "8005:8005"
     networks:
       - ute
+  wiki:
+    build:
+      context: ./server/wiki-service
+      dockerfile: Dockerfile
+    image: hcmute/server/wiki
+    container_name: wiki
+    restart: unless-stopped
+    volumes:
+      - ./logs/wiki-service:/server/wiki-service/logs
+    environment:
+      - EUREKA_URI=http://discovery:8761
+      - PSQL_URL=jdbc:postgresql://docker-postgres:5432/postgres
+      - DOMAIN_NAME=wiki
+      - NON_SECURE_PORT=8006
+    links:
+      - discovery
+      - gateway
+    depends_on:
+      - discovery
+      - gateway
+    ports:
+      - "8006:8006"
+    networks:
+      - ute
 networks:
   ute:
     driver: bridge
+  
