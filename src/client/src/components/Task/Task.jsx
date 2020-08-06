@@ -155,7 +155,7 @@ class Task extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { task } = nextProps;
-        console.log("[Task] componentWillReceiveProps task : ", task)
+        // console.log("[Task] componentWillReceiveProps task : ", task)
         this.setState({
             task: task
         })

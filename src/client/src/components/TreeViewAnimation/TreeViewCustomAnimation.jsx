@@ -80,16 +80,16 @@ class TreeViewCustomAnimation extends Component {
      * Alert if clicked on outside of element
      */
     handleClickOutside(event) {
-        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            setTimeout(function () { //Start the timer
-                if (!this.props.isCreate && !this.props.isEdit) {
-                    console.log("[WikiManagement] Outside tree view");
-                    this.props.handleSelectItem(null, undefined);
-                } else {
-                    console.log("[WikiManagement] Is creating...");
-                }
-            }.bind(this), 1000)
-        }
+        // if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+        //     setTimeout(function () { //Start the timer
+        //         if (!this.props.isCreate && !this.props.isEdit) {
+        //             console.log("[WikiManagement] Outside tree view");
+        //             this.props.handleSelectItem(null, undefined);
+        //         } else {
+        //             console.log("[WikiManagement] Is creating...");
+        //         }
+        //     }.bind(this), 1000)
+        // }
     }
 
     getData(path) {

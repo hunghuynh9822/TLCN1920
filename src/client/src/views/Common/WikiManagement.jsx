@@ -17,7 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import CKEditor from 'ckeditor4-react';
 //
-import { TreeViewCustom, TreeViewCustomAnimation, DropdownTree, DialogTitleCustom } from '../../components';
+import { TreeViewCustom, TreeViewCustomAnimation, DropdownTree, DialogTitleCustom, TagProject } from '../../components';
 //
 import { create, getWikiByPath } from '../../action/wiki.js';
 const styles = theme => ({
@@ -75,6 +75,9 @@ const styles = theme => ({
         margin: 0,
         width: '100px',
         // lineHeight: '40px',
+    },
+    float_right: {
+        flexBasis: "20%"
     }
 });
 class WikiManagement extends Component {
@@ -102,13 +105,17 @@ class WikiManagement extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSelectItem = this.handleSelectItem.bind(this);
         this.renderContent = this.renderContent.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.removeSelected = this.removeSelected.bind(this);
+        this.handleSaveChange = this.handleSaveChange.bind(this);
     }
 
     handleSelectItem(item, handleReloadData) {
         console.log("[WikiManagement] Select item " + JSON.stringify(item));
         this.setState({
             selected: item,
-            handleReloadData: handleReloadData
+            handleReloadData: handleReloadData,
+            isEdit: false,
         })
     }
 
@@ -152,6 +159,18 @@ class WikiManagement extends Component {
             request["content"] = evt.editor.getData();
             return { request };
         });
+    }
+
+    removeSelected() {
+        this.setState({
+            selected: null
+        })
+    }
+
+    handleSaveChange() {
+        this.setState({
+            isEdit: false
+        })
     }
 
     handleSubmit() {
@@ -252,23 +271,49 @@ class WikiManagement extends Component {
                                     {/* <Button onClick={this.handleClick} variant="contained" size="medium" color="primary" className={classNames(classes.margin, classes.button)}>
                                         Left
                                     </Button> */}
-                                    <div className={classes.wiki_title}>
-                                        {this.state.selected == null ? "Select wiki" : this.state.selected.title}
-                                    </div>
+                                    {this.state.isEdit ? (
+                                        <TextField
+                                            id="title"
+                                            name="title"
+                                            label="Title"
+                                            required
+                                            fullWidth
+                                            placeholder="Title"
+                                            autoComplete="title"
+                                            value={request.title}
+                                            onChange={this.handleInputChange}
+                                            style={{
+                                                marginTop: '-10px'
+                                            }}
+                                        />
+                                    ) : (
+                                            <div className={classes.wiki_title}>
+                                                {this.state.selected == null ? "Select wiki" : this.state.selected.title}
+                                            </div>
+                                        )}
                                 </div>
                                 <div className={classes.sub_header_section}>
                                     {/* Center */}
                                 </div>
-                                <div className={classes.sub_header_section}>
-                                    <Button onClick={this.handleOpen} variant="contained" size="medium" color="primary" className={classNames(classes.margin, classes.button, classes.button_create)}>
-                                        <AddIcon style={{ fontSize: 20 }} />
+                                {this.state.isEdit ? (
+                                    <div className={classNames(classes.sub_header_section, classes.float_right)}>
+                                        <Button onClick={this.handleSaveChange} variant="contained" size="medium" className={classNames(classes.margin, classes.button)}>
+                                            <CreateIcon style={{ fontSize: 20 }} />
+                                           Save change
+                                        </Button>
+                                    </div>
+                                ) : (
+                                        <div className={classes.sub_header_section}>
+                                            <Button onClick={this.handleOpen} variant="contained" size="medium" color="primary" className={classNames(classes.margin, classes.button, classes.button_create)}>
+                                                <AddIcon style={{ fontSize: 20 }} />
                                         Create Wiki
-                                    </Button>
-                                    <Button onClick={this.handleClick} variant="contained" size="medium" className={classNames(classes.margin, classes.button)}>
-                                        <CreateIcon style={{ fontSize: 20 }} />
+                                            </Button>
+                                            <Button onClick={this.handleClick} variant="contained" size="medium" className={classNames(classes.margin, classes.button)}>
+                                                <CreateIcon style={{ fontSize: 20 }} />
                                            Edit
-                                    </Button>
-                                </div>
+                                            </Button>
+                                        </div>
+                                    )}
                             </div>
                         </div>
                         <div className={classes.content}>
@@ -297,7 +342,7 @@ class WikiManagement extends Component {
                             }}>
                                 <div className={classes.label}>Parent : </div>
                                 {/* <div><DropdownTree /></div> */}
-                                <div>{this.state.selected && this.state.selected != null ? this.state.selected.title : "No parent"}</div>
+                                <div>{this.state.selected && this.state.selected != null ? (<TagProject project={this.state.selected} removeProject={this.removeSelected} />) : "No parent"}</div>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -314,7 +359,7 @@ class WikiManagement extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <p>Centent</p>
+                                <p>Content</p>
                                 <CKEditor
                                     data={request.description}
                                     onChange={this.onEditorChange}
