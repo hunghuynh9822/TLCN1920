@@ -123,6 +123,9 @@ const styles = theme => ({
         top: theme.spacing(5),
         // right: theme.spacing(2),
     },
+    dialog_list: {
+        width: '350px'
+    },
 });
 const background = '#f5f8ff';
 const colorWord = "#ffffff";
@@ -544,8 +547,8 @@ class ProjectTasks extends Component {
 
     render() {
         const { classes } = this.props;
-        const { projectItem } = this.props;
-        const { open, scroll, task, openAdd, openAddPrevious, loginRole } = this.state;
+        const { open, scroll, task, openAdd, openAddPrevious } = this.state;
+        const { loginRole, projectItem, currentUser } = this.props;
         let members = projectItem.members;
         let tasks = projectItem.tasks;
         const tabs = [
@@ -562,6 +565,7 @@ class ProjectTasks extends Component {
         //     // return <Loading />
         //     return null;
         // }
+        console.log("[ProjectTasks][View] Condition open point ", task.state !== 'DONE' && task.state !== 'FINISH' && (loginAsAdmin(loginRole) || loginAsLead(loginRole)), "task state", task, task.state !== 'DONE' && task.state !== 'FINISH', loginRole, (loginAsAdmin(loginRole) || loginAsLead(loginRole)))
         return (
             <React.Fragment>
                 {/* <SpeedDialTooltipOpen openCreate={this.handleOpenCreate} stylesSpeedDial={classes.speedDial} /> */}
@@ -701,9 +705,6 @@ class ProjectTasks extends Component {
                             <Grid item xs={12} sm={6}>
                                 <Box component="fieldset" mb={3} borderColor="transparent">
                                     <Typography component="legend">Point</Typography>
-                                    {() => {
-                                        console.log("[ProjectTasks][View] Condition open point ", task.state !== 'DONE' && task.state !== 'FINISH' && (loginAsAdmin(loginRole) || loginAsLead(loginRole)), "task state", task)
-                                    }}
                                     <StyledRating
                                         readOnly={task.state !== 'DONE' && task.state !== 'FINISH' && (loginAsAdmin(loginRole) || loginAsLead(loginRole))}
                                         name="customized-color"

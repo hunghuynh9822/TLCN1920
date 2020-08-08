@@ -101,7 +101,7 @@ class TaskCard extends Component {
                                 </div>
                             </li>
                             {doneTasks.map((item, index) => (
-                                <Task key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
+                                <Task loadTasks={this.props.loadTasks} key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
                             ))}
                         </ul>
                     </CardContent>

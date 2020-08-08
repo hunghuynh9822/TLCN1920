@@ -25,6 +25,14 @@ export function create(createRequest) {
     });
 }
 
+export function update(updateRequest) {
+    return request({
+        url: url + "/",
+        method: 'PUT',
+        data: JSON.stringify(updateRequest)
+    });
+}
+
 export function getWikiById(wikiId) {
     return request({
         url: url + "/" + "?" + "id=" + wikiId,

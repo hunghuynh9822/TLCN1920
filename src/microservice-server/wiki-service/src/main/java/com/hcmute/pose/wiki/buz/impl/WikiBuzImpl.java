@@ -45,6 +45,23 @@ public class WikiBuzImpl implements WikiBuz {
     }
 
     @Override
+    public WikiResponse updateWiki(WikiRequest wikiRequest) throws Exception, TransactionException {
+        try {
+            databaseHelper.beginTransaction();
+            Long id = wikiRequest.getId();
+            String title = wikiRequest.getTitle();
+            String content = wikiRequest.getContent();
+            wikiService.updateWikiPage(id, title, content);
+            databaseHelper.commit();
+            WikiResponse wikiResponse = new WikiResponse();
+            wikiResponse.setId(id);
+            return wikiResponse;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
+
+    @Override
     public ListWikiResponse getWiki(Long id, Long projectId, String path) throws Exception {
         try {
             if(id != null) {

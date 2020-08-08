@@ -162,6 +162,10 @@ export {
     default as TagTask
 }
 from './Project/TagTask.jsx';
+export {
+    default as TagProject
+}
+from './Project/TagProject.jsx';
 //Task
 export {
     default as NewTask
