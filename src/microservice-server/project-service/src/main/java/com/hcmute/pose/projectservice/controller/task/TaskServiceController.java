@@ -10,6 +10,7 @@ import com.hcmute.pose.projectservice.feign.dto.WebHookRequestSendNotify;
 import com.hcmute.pose.projectservice.model.project.Project;
 import com.hcmute.pose.projectservice.model.task.Task;
 import com.hcmute.pose.projectservice.model.task.TaskComments;
+import com.hcmute.pose.projectservice.model.task.TaskState;
 import com.hcmute.pose.projectservice.payload.project.EmployeeResponse;
 import com.hcmute.pose.projectservice.payload.task.*;
 import com.hcmute.pose.projectservice.service.project.ProjectService;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -131,14 +133,19 @@ public class TaskServiceController {
     public ResponseEntity<String> updateState(@Valid @RequestBody TaskUpdateRequest request){
         try{
             LOGGER.info("update-state {}", GsonUtils.toJson(request));
-            EmployeeResponse employee = employeeClient.getEmployee(String.valueOf(request.getEmployeeId()));
-            Project project = projectService.getProject(request.getProjectId());
             taskServiceBuz.updateState(request);
             String message = String.format("Update state of %d successfully", request.getTaskId());
             executor.execute(() -> {
-                NotifyResponse notifyResponse = webHookClient.sendUpdateState(new WebHookRequestSendNotify(request.getProjectId(), employee.getFirstName() + " " + employee.getLastName(), project.getTitle(), message));
-                LOGGER.info("Call webhook [updateState] result {} message {}", notifyResponse.getMessages(), message);
-
+                try {
+                    EmployeeResponse employeeUpdate = employeeClient.getEmployee(String.valueOf(request.getUpdateEmployeeId()));
+                    Project project = projectService.getProject(request.getProjectId());
+                    Task task = taskServiceBuz.getTasksById(request.getTaskId());
+                    String messageNotify = String.format("[Update state] User %s update state task %s to %s", employeeUpdate.getFirstName() + " " + employeeUpdate.getLastName(), task.getTitle(), TaskState.values()[request.getState()]);
+                    NotifyResponse notifyResponse = webHookClient.sendUpdateState(new WebHookRequestSendNotify(request.getProjectId(), employeeUpdate.getFirstName() + " " + employeeUpdate.getLastName(), project.getTitle(), messageNotify));
+                    LOGGER.info("Call webhook [updateState] result {} message {}", notifyResponse.getMessages(), message);
+                } catch (Exception e) {
+                    LOGGER.error("[updateState] Got exception ", e);
+                }
             });
             return new ResponseEntity<>(message, HttpStatus.OK);
         }catch (Exception | TransactionException e){
@@ -152,14 +159,19 @@ public class TaskServiceController {
     public ResponseEntity<String> updateTask(@Valid @RequestBody TaskUpdateRequest request){
         try {
             LOGGER.info("update-task {}", GsonUtils.toJson(request));
-            EmployeeResponse employee = employeeClient.getEmployee(String.valueOf(request.getEmployeeId()));
-            Project project = projectService.getProject(request.getProjectId());
             taskServiceBuz.updateTask(request);
             String message = String.format("Update task %d successfully", request.getTaskId());
             executor.execute(() -> {
-                NotifyResponse notifyResponse = webHookClient.sendUpdateTask(new WebHookRequestSendNotify(request.getProjectId(), employee.getFirstName() + " " + employee.getLastName(), project.getTitle(), message));
-                LOGGER.info("Call webhook [updateTask] result {} message {}", notifyResponse.getMessages(), message);
-
+                try {
+                    EmployeeResponse employeeUpdate = employeeClient.getEmployee(String.valueOf(request.getUpdateEmployeeId()));
+                    Project project = projectService.getProject(request.getProjectId());
+                    Task task = taskServiceBuz.getTasksById(request.getTaskId());
+                    String messageNotify = String.format("[Update task] User %s update task %s", employeeUpdate.getFirstName() + " " + employeeUpdate.getLastName(), task.getTitle());
+                    NotifyResponse notifyResponse = webHookClient.sendUpdateTask(new WebHookRequestSendNotify(request.getProjectId(), employeeUpdate.getFirstName() + " " + employeeUpdate.getLastName(), project.getTitle(), messageNotify));
+                    LOGGER.info("Call webhook [updateTask] result {} message {}", notifyResponse.getMessages(), message);
+                } catch (Exception e) {
+                    LOGGER.error("[updateTask] Got exception ", e);
+                }
             });
             return new ResponseEntity<>(message, HttpStatus.OK);
         }catch (Exception | TransactionException e){

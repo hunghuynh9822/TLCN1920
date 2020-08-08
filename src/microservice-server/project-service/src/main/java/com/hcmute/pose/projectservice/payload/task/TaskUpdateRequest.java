@@ -4,6 +4,7 @@ public class TaskUpdateRequest {
     private Long taskId;
     private Long projectId;
     private Long employeeId;
+    private Long updateEmployeeId;
     private String title;
     private String description;
     private Integer point;
@@ -105,5 +106,13 @@ public class TaskUpdateRequest {
 
     public void setPreTaskId(String preTaskId) {
         this.preTaskId = preTaskId;
+    }
+
+    public Long getUpdateEmployeeId() {
+        return updateEmployeeId;
+    }
+
+    public void setUpdateEmployeeId(Long updateEmployeeId) {
+        this.updateEmployeeId = updateEmployeeId;
     }
 }
