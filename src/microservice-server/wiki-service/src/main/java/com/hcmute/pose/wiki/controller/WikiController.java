@@ -37,6 +37,16 @@ public class WikiController {
         }
     }
 
+    @PutMapping("/")
+    public ResponseEntity updateWiki(@Valid @RequestBody WikiRequest wikiRequest) {
+        try {
+            WikiResponse wikiResponse = wikiBuz.updateWiki(wikiRequest);
+            return new ResponseEntity(wikiResponse, HttpStatus.OK);
+        } catch (Exception | TransactionException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/")
     public ResponseEntity getWiki(@Nullable @RequestParam(name="id") Long id,@Nullable @RequestParam(name="projectId") Long projectId, @Nullable @RequestParam(name="path") String path) {
         try {

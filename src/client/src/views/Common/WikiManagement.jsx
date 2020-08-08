@@ -19,7 +19,7 @@ import CKEditor from 'ckeditor4-react';
 //
 import { TreeViewCustom, TreeViewCustomAnimation, DropdownTree, DialogTitleCustom, TagProject } from '../../components';
 //
-import { create, getWikiByPath } from '../../action/wiki.js';
+import { create, getWikiByPath, update } from '../../action/wiki.js';
 const styles = theme => ({
     wiki_page: {
         padding: '10px',
@@ -32,7 +32,7 @@ const styles = theme => ({
         justifyContent: 'space-between',
         minHeight: '35px',
         lineHeight: '35px',
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
     },
     sub_header_section: {
         flexBasis: '33%',
@@ -95,7 +95,6 @@ class WikiManagement extends Component {
                 path: ""
             },
             selected: null,
-            data_wiki: new Array(),
             handleReloadData: undefined
         }
         this.handleOpen = this.handleOpen.bind(this);
@@ -120,10 +119,23 @@ class WikiManagement extends Component {
     }
 
     handleClick() {
+        const { currentUser } = this.props;
         console.log("[WikiManagement] Click button on header");
-        this.setState({
-            isEdit: true,
-        })
+        const selected = this.state.selected;
+        if (selected) {
+            const request = {
+                id: selected.id,
+                title: selected.title,
+                content: selected.content,
+                createdUser: currentUser.id,
+                projectId: selected.projectId,
+                path: selected.path
+            }
+            this.setState({
+                isEdit: true,
+                request: request
+            })
+        }
     }
     handleOpen() {
         this.setState({
@@ -168,9 +180,43 @@ class WikiManagement extends Component {
     }
 
     handleSaveChange() {
-        this.setState({
-            isEdit: false
-        })
+        const { handleReloadData } = this.state;
+        const { alert } = this.props;
+        const request = this.state.request;
+        console.log("[WikiManagement] Request update wiki : " + JSON.stringify(request));
+        update(request)
+            .then(response => {
+                if (handleReloadData != undefined) {
+                    handleReloadData();
+                }
+                this.setState({
+                    isEdit: false,
+                    selected: request,
+                    request: {
+                        id: null,
+                        title: "",
+                        content: "",
+                        projectId: null,
+                        createdUser: null,
+                        path: ""
+                    }
+                })
+            }).catch(error => {
+                this.setState({
+                    isEdit: false,
+                    selected: null,
+                    request: {
+                        id: null,
+                        title: "",
+                        content: "",
+                        projectId: null,
+                        createdUser: null,
+                        path: ""
+                    }
+                })
+                console.log(error);
+                alert.error('Oops! Something went wrong when create wiki. Please call check!');
+            });
     }
 
     handleSubmit() {
@@ -194,9 +240,6 @@ class WikiManagement extends Component {
         console.log("[WikiManagement] Request create wiki : " + JSON.stringify(request));
         create(request)
             .then(response => {
-                if (handleReloadData != undefined) {
-                    handleReloadData();
-                }
                 this.setState({
                     open: false,
                     request: {
@@ -225,15 +268,15 @@ class WikiManagement extends Component {
 
     componentDidMount() {
         const { alert } = this.props;
-        getWikiByPath("/")
-            .then(response => {
-                this.setState({
-                    data_wiki: response
-                })
-            }).catch(error => {
-                console.log(error);
-                alert.error('Oops! Something went wrong when get wiki with path /. Please call check!');
-            });
+        // getWikiByPath("/")
+        //     .then(response => {
+        //         this.setState({
+        //             data_wiki: response
+        //         })
+        //     }).catch(error => {
+        //         console.log(error);
+        //         alert.error('Oops! Something went wrong when get wiki with path /. Please call check!');
+        //     });
     }
 
     truncate(str, n, useWordBoundary) {
@@ -250,11 +293,22 @@ class WikiManagement extends Component {
         if (wiki != null) {
             content = wiki.content;
         }
+        if (this.state.isEdit) {
+            return (
+                <div>
+                    <CKEditor
+                        data={content}
+                        onChange={this.onEditorChange}
+                    />
+                </div>
+            )
+        }
         return (
             <div>
                 <div dangerouslySetInnerHTML={{ __html: content }} ></div>
             </div>
         )
+
     }
 
     render() {
@@ -263,7 +317,7 @@ class WikiManagement extends Component {
         return (
             <React.Fragment>
                 <Grid container spacing={3} className={classes.wiki_page}>
-                    <Grid item xs={3} sm={3}><TreeViewCustomAnimation handleSelectItem={this.handleSelectItem} isCreate={this.state.open} isEdit={this.state.isEdit} data={this.state.data_wiki} /></Grid>
+                    <Grid item xs={3} sm={3}><TreeViewCustomAnimation handleSelectItem={this.handleSelectItem} isCreate={this.state.open} isEdit={this.state.isEdit} /></Grid>
                     <Grid item xs={9} sm={9}>
                         <div className={classes.sub_layout_header}>
                             <div className={classes.sub_header}>
@@ -306,12 +360,14 @@ class WikiManagement extends Component {
                                         <div className={classes.sub_header_section}>
                                             <Button onClick={this.handleOpen} variant="contained" size="medium" color="primary" className={classNames(classes.margin, classes.button, classes.button_create)}>
                                                 <AddIcon style={{ fontSize: 20 }} />
-                                        Create Wiki
+                                                Create Wiki
                                             </Button>
-                                            <Button onClick={this.handleClick} variant="contained" size="medium" className={classNames(classes.margin, classes.button)}>
-                                                <CreateIcon style={{ fontSize: 20 }} />
-                                           Edit
-                                            </Button>
+                                            {this.state.selected && (
+                                                <Button onClick={this.handleClick} variant="contained" size="medium" className={classNames(classes.margin, classes.button)}>
+                                                    <CreateIcon style={{ fontSize: 20 }} />
+                                                    Edit
+                                                </Button>
+                                            )}
                                         </div>
                                     )}
                             </div>

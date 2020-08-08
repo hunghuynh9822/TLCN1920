@@ -29,7 +29,8 @@ class TreeItemCustomAnimation extends Component {
     };
     handleIconClick() {
         console.log("[WikiManagement] Item tree click -> icon");
-        const { dataCurrent, setExpanded } = this.props;
+        const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
+        handleSelectItem(dataCurrent, this.handleReloadData);
     }
     handleReloadData() {
         const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
@@ -48,6 +49,20 @@ class TreeItemCustomAnimation extends Component {
         const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
         handleSelectItem(dataCurrent, this.handleReloadData);
     }
+    componentWillReceiveProps() {
+        const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
+        console.log("[WikiManagement] componentWillReceiveProps DataCurrent ", dataCurrent);
+        getData(dataCurrent.path + dataCurrent.id + "/")
+            .then(response => {
+                this.setState({
+                    dataChild: response
+                })
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong on get child on componentDidMount. Please try again!');
+            });
+    }
+
     componentDidMount() {
         const { dataCurrent, getData, setExpanded, handleSelectItem } = this.props;
         console.log("[WikiManagement] componentDidMount DataCurrent ", dataCurrent);

@@ -56,6 +56,7 @@ class TreeViewCustomAnimation extends Component {
         super(props);
         this.state = {
             defaultExpanded: [],
+            dataRoot: [],
         }
         //
         this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -69,6 +70,20 @@ class TreeViewCustomAnimation extends Component {
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
+
+    componentWillReceiveProps(nextProps) {
+        console.log("[Wiki] Reload tree ", nextProps)
+        getWikiByPath("/")
+            .then(response => {
+                this.setState({
+                    dataRoot: response
+                })
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong on get child on componentWillReceiveProps. Please try again!');
+            });
+    }
+
     /**
  * Set the wrapper ref
  */
@@ -109,12 +124,20 @@ class TreeViewCustomAnimation extends Component {
     }
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
+        getWikiByPath("/")
+            .then(response => {
+                this.setState({
+                    dataRoot: response
+                })
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong on get child on componentWillReceiveProps. Please try again!');
+            });
     }
 
     render() {
         const { classes } = this.props;
         let { defaultExpanded } = this.state;
-        let { data } = this.props;
         const { handleSelectItem } = this.props;
         const { root, ...otherClasses } = classes;
         return (
@@ -126,7 +149,7 @@ class TreeViewCustomAnimation extends Component {
                     defaultExpandIcon={<PlusSquare />}
                     defaultEndIcon={<CloseSquare />}
                 >
-                    {data.map((item, index) =>
+                    {this.state.dataRoot && this.state.dataRoot.map((item, index) =>
                         <TreeItemCustomAnimation classes={otherClasses} key={item.id} dataCurrent={item} getData={this.getData} setExpanded={this.setExpanded} handleSelectItem={handleSelectItem}></TreeItemCustomAnimation>
                     )}
                 </TreeView >
@@ -139,6 +162,6 @@ TreeViewCustomAnimation.propTypes = {
     handleSelectItem: PropTypes.func.isRequired,
     isCreate: PropTypes.bool,
     isEdit: PropTypes.bool,
-    data: PropTypes.array.isRequired
+    // data: PropTypes.array.isRequired
 };
 export default withStyles(styles)(TreeViewCustomAnimation);

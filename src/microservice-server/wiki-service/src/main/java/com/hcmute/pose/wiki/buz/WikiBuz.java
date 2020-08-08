@@ -8,5 +8,7 @@ import com.hcmute.pose.wiki.payload.response.WikiResponse;
 public interface WikiBuz {
     WikiResponse createWiki(WikiRequest wikiRequest) throws Exception, TransactionException;
 
+    WikiResponse updateWiki(WikiRequest wikiRequest) throws Exception, TransactionException;
+
     ListWikiResponse getWiki(Long id, Long projectId, String path) throws Exception;
 }
