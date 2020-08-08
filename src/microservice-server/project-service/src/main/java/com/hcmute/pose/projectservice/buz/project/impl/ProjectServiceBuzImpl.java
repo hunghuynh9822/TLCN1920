@@ -182,6 +182,19 @@ public class ProjectServiceBuzImpl implements ProjectServiceBuz {
         }
     }
 
+    @Override
+    public void deleteProject(Long id) throws SQLException, TransactionException {
+        try {
+            databaseHelper.beginTransaction();
+            projectService.deleteProject(id);
+            databaseHelper.commit();
+        } catch (Exception | TransactionException e) {
+            LOGGER.error("[updateState]",e);
+            throw e;
+        } finally {
+            databaseHelper.closeConnection();
+        }
+    }
 
 
     @Override

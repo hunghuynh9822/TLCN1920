@@ -48,6 +48,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public void deleteProject(Long id) throws SQLException, TransactionException {
+        projectDao.deleteProject(id);
+    }
+
+    @Override
     public List<QueryReport> getListProSort() throws SQLException {
         return projectDao.getListProSort();
     }

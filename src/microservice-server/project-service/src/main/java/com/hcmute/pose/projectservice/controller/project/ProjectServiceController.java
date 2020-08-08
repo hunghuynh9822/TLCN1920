@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.Map;
 
 @RestController
@@ -130,5 +131,17 @@ public class ProjectServiceController {
         }catch (Exception | TransactionException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @DeleteMapping("/delete/{projectId}")
+    public ResponseEntity<String> deleteProject(@PathVariable("projectId") Long projectId){
+        try {
+            projectServiceBuz.deleteProject(projectId);
+            String message = String.format("Update project %d successfully", projectId);
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } catch (Exception | TransactionException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

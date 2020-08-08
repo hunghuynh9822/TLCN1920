@@ -16,6 +16,7 @@ public interface ProjectDao {
     List<Project> getListPro () throws SQLException;
     void updateProject(Project project) throws SQLException, TransactionException;
     void updateState(Long id, ProjectState state) throws SQLException, TransactionException;
+    void deleteProject(Long id) throws SQLException, TransactionException;
     Optional<Project> getProject(Long id);
     Map<String,Object> get_report () throws SQLException;
     List<QueryReport> getListProSort() throws SQLException;

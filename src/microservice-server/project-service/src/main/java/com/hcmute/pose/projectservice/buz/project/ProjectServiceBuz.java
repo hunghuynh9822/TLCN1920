@@ -13,7 +13,7 @@ public interface ProjectServiceBuz {
     EmployeeProjectResponse getProjectsOfEmployee(Long employeeId) throws Exception;
     void updateProject(ProjectUpdateRequest projectUpdateRequest) throws Exception, TransactionException;
     void updateState(Long id, ProjectState state) throws SQLException, TransactionException;
-
+    void deleteProject(Long id) throws SQLException, TransactionException;
     AllProjectDetailResponse getListProjectDetail() throws Exception;
 
     ProjectsResponse getListProject() throws Exception;

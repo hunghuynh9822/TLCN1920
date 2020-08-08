@@ -26,6 +26,7 @@ public class ProjectDaoImpl implements ProjectDao {
     private static String SQl_GET_PROJECT = "SELECT * FROM projects WHERE id = ?";
     private static String SQL_UPDATE_PROJECT = "UPDATE projects SET title=?, description=?, state=?, updated_at=? WHERE id=?";
     private static String SQL_UPDATE_PROJECT_STATE = "UPDATE projects SET state=? WHERE id=?";
+    private static String SQL_DELETE_PROJECT = "DELETE FROM projects WHERE id=?;";
     //report
     private static String SQl_GET_LIST_EMPLOYEE_SORT = "select employees.id as id,NULLIF(case when num is null then 0 else num end,-1) as number from employees LEFT JOIN (select employee_assignee,sum(1) as num from tasks group by employee_assignee) as aa on employees.id = aa.employee_assignee ORDER BY number asc;";
     private static String SQl_GET_LIST_PRO_SORT = "select projects.id as id,title as name ,NULLIF(case when num is null then 0 else num end,-1) as number from projects LEFT JOIN (select project_id,sum(1) as num from tasks group by project_id) as aa on projects.id = aa.project_id ORDER BY number desc;";
@@ -102,6 +103,11 @@ public class ProjectDaoImpl implements ProjectDao {
             LOGGER.error("[ProjectDaoImpl]:[updateState]", e);
             throw e;
         }
+    }
+
+    @Override
+    public void deleteProject(Long id) throws SQLException, TransactionException {
+        databaseHelper.executeNonQuery(SQL_DELETE_PROJECT, id);
     }
 
     @Override
