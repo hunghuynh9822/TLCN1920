@@ -39,7 +39,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
     public Optional<Task> createTask(TaskRequest taskRequest) throws TransactionException {
         try{
             databaseHelper.beginTransaction();
-            Task task = taskService.createTask(taskRequest.getPreTaskId(),taskRequest.getProjectId(),taskRequest.getEmployeeCreator(),taskRequest.getEmployeeAssignee(), taskRequest.getTitle(), taskRequest.getDescription(), taskRequest.getStartedAt().getTime(), taskRequest.getDuration());
+            Task task = taskService.createTask(taskRequest.getPreTaskId(),taskRequest.getProjectId(),taskRequest.getEmployeeCreator(),taskRequest.getEmployeeAssignee(), taskRequest.getTitle(), taskRequest.getDescription(), validateDate(taskRequest.getStartedAt().getTime()), taskRequest.getDuration());
             databaseHelper.commit();
             return Optional.of(task);
         }catch (Exception e) {
@@ -79,7 +79,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         return null;
     }
 
-    public ProcessActivity getActivities(List<Task> tasks) {
+    public ProcessActivity getActivities(List<Task> tasks) throws ParseException {
         List<Activity> activities = new ArrayList<>();
         Long startTime = 0L;
         Long endTime = 0L;
@@ -109,7 +109,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                 endTime = temp;
             }
         }
-        return new ProcessActivity(startTime, endTime, activities);
+        return new ProcessActivity(validateDate(startTime), validateDate(endTime), activities);
     }
 
     private ProcessActivity walkListAhead(ProcessActivity processActivity) {
@@ -120,9 +120,8 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         list.get(0).setEet(list.get(0).getEst() + list.get(0).getDuration());
         for(int i = 1; i < na; i++)
         {
-            Activity currentActivity = list.get(i);
             if(list.get(i).getPredecessors().size() == 0) {
-                Integer subDate = subDate(startTime, currentActivity.getStartedAt());
+                Integer subDate = subDate(startTime, list.get(i).getStartedAt());
                 list.get(i).setEst(subDate);
             }
             for(Activity activity : list.get(i).getPredecessors())
@@ -175,7 +174,7 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         return processActivity;
     }
 
-    private List<Long> getCriticalPath(List<Task> tasks) {
+    private List<Long> getCriticalPath(List<Task> tasks) throws ParseException {
         if(tasks == null || tasks.isEmpty()) {
             LOGGER.info("No task -> Not find critical path");
             return new ArrayList<>();
@@ -208,6 +207,8 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                         criticalPath.add(activity);
                         criticalPathId.add(activity.getId());
                         LOGGER.info("{} ", activity.getTitle());
+                    } else {
+                        LOGGER.info("Activity {} {} {} not start at 0", activity.getId(), activity.getTitle(), activity.getDuration());
                     }
                 } else {
                     for(Activity pre : activity.getPredecessors()) {
@@ -216,9 +217,13 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
                             criticalPathId.add(activity.getId());
                             LOGGER.info("{} ", activity.getTitle());
                             break;
+                        } else {
+                            LOGGER.info("Activity {} {} {} with pre task {} not in critical path", activity.getId(), activity.getTitle(), activity.getDuration(), pre.getTitle());
                         }
                     }
                 }
+            } else {
+                LOGGER.info("Activity {} {} {} not in critical path because end {} start {} check start at {} {} {} start {}", activity.getId(), activity.getTitle(), activity.getDuration(), activity.getEet() - activity.getLet(), activity.getEst() - activity.getLst(), processActivity.getStartTime(), activity.getStartedAt(), subDate(processActivity.getStartTime(), activity.getStartedAt()), activity.getEst());
             }
         }
         Activity last = criticalPath.get(criticalPath.size() - 1);
@@ -251,6 +256,13 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         String date1 = format1.format(date);
         return format1.parse(date1);
+    }
+
+    public Long validateDate(Long time) throws ParseException {
+        Date date = new Date(time);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String date1 = format1.format(date);
+        return format1.parse(date1).getTime();
     }
 
     @Override
@@ -506,10 +518,10 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
 
     @Override
     //Long taskId, String title, String description, Long startedAt, Integer duration, TaskState state
-    public void updateTask(TaskUpdateRequest request) throws SQLException, TransactionException {
+    public void updateTask(TaskUpdateRequest request) throws SQLException, TransactionException, ParseException {
         try{
             databaseHelper.beginTransaction();
-            taskService.updateTask(request.getTaskId(),request.getPreTaskId(), request.getEmployeeId(), request.getTitle(), request.getDescription(), request.getStartedAt(), request.getDuration(), TaskState.values()[request.getState()]);
+            taskService.updateTask(request.getTaskId(),request.getPreTaskId(), request.getEmployeeId(), request.getTitle(), request.getDescription(), validateDate(request.getStartedAt()), request.getDuration(), TaskState.values()[request.getState()]);
             databaseHelper.commit();
         } finally {
             databaseHelper.closeConnection();

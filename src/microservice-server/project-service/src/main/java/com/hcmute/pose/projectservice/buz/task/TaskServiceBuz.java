@@ -6,6 +6,7 @@ import com.hcmute.pose.projectservice.model.task.TaskComments;
 import com.hcmute.pose.projectservice.payload.task.*;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public interface TaskServiceBuz {
     void updatePoint(TaskUpdateRequest request) throws TransactionException, SQLException;
     void updateState(TaskUpdateRequest request) throws SQLException, TransactionException;
     void updateAssignee(TaskUpdateRequest request) throws SQLException, TransactionException;
-    void updateTask(TaskUpdateRequest request) throws SQLException, TransactionException;
+    void updateTask(TaskUpdateRequest request) throws SQLException, TransactionException, ParseException;
     void updateTaskTime(TaskUpdateRequest request) throws SQLException, TransactionException;
 
     Optional<TaskComments> createTaskComment(TaskCommentRequest taskCommentRequest);
