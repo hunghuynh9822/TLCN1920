@@ -1,0 +1,15 @@
+version: "3"
+services:
+  postgresql:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    image: pose/docker-postgres
+    container_name: docker-postgres
+    restart: unless-stopped
+    volumes:
+      - ./docker/database/postgresql:/var/lib/postgresql
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
