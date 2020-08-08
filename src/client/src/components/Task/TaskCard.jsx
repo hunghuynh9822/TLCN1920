@@ -44,13 +44,27 @@ const styles = theme => ({
 });
 
 const grid = 8;
-const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? 'lightblue' : '#e6e6e6',
+// const getListStyle = isDraggingOver => ({
+//     background: isDraggingOver ? 'lightblue' : '#e6e6e6',
+//     padding: '0px',
+//     width: 250,
+//     marginLeft: grid,
+//     marginRight: grid,
+//     marginBottom: '200px'
+// });
+const getListStyle = () => ({
+    background: '#e6e6e6',
     padding: '0px',
     width: 250,
     marginLeft: grid,
     marginRight: grid,
     marginBottom: '200px'
+});
+const getListStyleContent = isDraggingOver => ({
+    display: 'flex', /* or inline-flex */
+    flexDirection: 'column',
+    padding: '3px 5px 0px 5px',
+    backgroundColor: isDraggingOver ? 'lightblue' : `${background}`
 });
 
 class TaskCard extends Component {
@@ -109,21 +123,22 @@ class TaskCard extends Component {
             );
         }
         return (
-            <Droppable droppableId={cardId.toString()}>
-                {(provided, snapshot) => (
-                    <Card style={getListStyle(snapshot.isDraggingOver)} className={classes.card} ref={provided.innerRef}>
-                        <CardHeader
-                            title={
-                                <div className={classes.title} >
-                                    {title}
-                                </div>
-                            }
-                            style={{
-                                margin: '0px',
-                                padding: '8px',
-                                backgroundColor: '#3f51b5'
-                            }} />
-                        <CardContent className={classes.content}>
+
+            <Card style={getListStyle()} className={classes.card}>
+                <CardHeader
+                    title={
+                        <div className={classes.title} >
+                            {title}
+                        </div>
+                    }
+                    style={{
+                        margin: '0px',
+                        padding: '8px',
+                        backgroundColor: '#3f51b5'
+                    }} />
+                <Droppable droppableId={cardId.toString()}>
+                    {(provided, snapshot) => (
+                        <CardContent style={getListStyleContent(snapshot.isDraggingOver)} ref={provided.innerRef}>
                             <ul className="list-group">
                                 <li className={classNames("list-group-item", classes.group_header)}>
                                     <div className="row">
@@ -144,10 +159,11 @@ class TaskCard extends Component {
                                 ))}
                             </ul>
                             {provided.placeholder}
+
                         </CardContent>
-                    </Card>
-                )}
-            </Droppable>
+                    )}
+                </Droppable>
+            </Card>
         );
     }
 }
