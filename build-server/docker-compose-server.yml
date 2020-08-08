@@ -1,5 +1,20 @@
 version: "3"
 services:
+  docker-postgres:
+    build:
+      context: ./database/database
+      dockerfile: Dockerfile
+    image: postgres
+    container_name: docker-postgres
+    restart: unless-stopped
+    volumes:
+      - ./logs/database/postgresql:/var/lib/postgresql
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - ute
   discovery:
     build:
       context: ./server/discovery-server
@@ -51,9 +66,11 @@ services:
     links:
       - discovery
       - gateway
+      - docker-postgres
     depends_on:
       - discovery
       - gateway
+      - docker-postgres
     ports:
       - "8000:8000"
     networks:
@@ -75,9 +92,11 @@ services:
     links:
       - discovery
       - gateway
+      - docker-postgres
     depends_on:
       - discovery
       - gateway
+      - docker-postgres
     ports:
       - "8001:8001"
     networks:
@@ -99,9 +118,11 @@ services:
     links:
       - discovery
       - gateway
+      - docker-postgres
     depends_on:
       - discovery
       - gateway
+      - docker-postgres
     ports:
       - "8003:8003"
     networks:
@@ -123,9 +144,11 @@ services:
     links:
       - discovery
       - gateway
+      - docker-postgres
     depends_on:
       - discovery
       - gateway
+      - docker-postgres
     ports:
       - "8004:8004"
     networks:
@@ -147,9 +170,11 @@ services:
     links:
       - discovery
       - gateway
+      - docker-postgres
     depends_on:
       - discovery
       - gateway
+      - docker-postgres
     ports:
       - "8005:8005"
     networks:
@@ -171,13 +196,32 @@ services:
     links:
       - discovery
       - gateway
+      - docker-postgres
     depends_on:
       - discovery
       - gateway
+      - docker-postgres
     ports:
       - "8006:8006"
     networks:
       - ute
+  # client:
+  #   build:
+  #     context: ../src/client/
+  #     dockerfile: Dockerfile
+  #   image: hcmute/client-reactjs
+  #   container_name: client-reactjs
+  #   restart: unless-stopped
+  #   links:
+  #     - auth.com
+  #     - gateway
+  #   depends_on:
+  #     - auth.com
+  #     - gateway
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - ute
 networks:
   ute:
     driver: bridge
