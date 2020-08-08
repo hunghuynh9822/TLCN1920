@@ -109,6 +109,7 @@ public class LeadTaskServiceController {
     @DeleteMapping("/delete")
     public ResponseEntity deleteTaskByProject(@RequestParam(name="employee") Long employeeId, @RequestParam(name="project") Long projectId, @RequestParam(name="taskId") Long taskId){
         try{
+            Long name = employeeId;
             taskServiceBuz.deleteTask(taskId, projectId);
             return new ResponseEntity("Delete task success", HttpStatus.OK);
         }catch (Exception | TransactionException e){
