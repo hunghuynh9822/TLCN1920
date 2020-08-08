@@ -26,6 +26,13 @@ export function create(createRequest) {
     });
 }
 
+export function deleteProject(project) {
+    return request({
+        url: url + "/delete/" + project,
+        method: 'DELETE',
+    });
+}
+
 export function getProjects(employeeId) {
     return request({
         url: url + "/" + employeeId + "/all",

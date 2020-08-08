@@ -18,9 +18,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 
-import { TagMember, DialogTitleCustom } from '../../../components';
+import { TagMember, DialogTitleCustom, ConfirmDialog } from '../../../components';
 
-import { invite, remove } from '../../../action/project'
+import { invite, remove, deleteProject } from '../../../action/project'
 
 const styles = theme => ({
     root: {
@@ -86,6 +86,16 @@ const styles = theme => ({
     dialog_list: {
         width: '350px'
     },
+    header_closeButton: {
+        float: 'right',
+        marginTop: '-40px',
+        color: 'white',
+        backgroundColor: '#DC3545',
+        '&:hover': {
+            color: 'white',
+            backgroundColor: '#DC3545',
+        }
+    },
 });
 class ProjectDetails extends Component {
     constructor(props) {
@@ -96,11 +106,16 @@ class ProjectDetails extends Component {
             projectOwner: null,
             projectAdmin: [],
             projectMembers: [],
+            openConfirmDelete: false,
         }
         this.removeMember = this.removeMember.bind(this);
         this.handleOpenAdd = this.handleOpenAdd.bind(this);
         this.handleCloseAdd = this.handleCloseAdd.bind(this);
         this.handleListItemClick = this.handleListItemClick.bind(this);
+        //
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
+        this.handleSubmitConfirm = this.handleSubmitConfirm.bind(this);
     }
 
     filterRole(projectMembers, role) {
@@ -239,6 +254,32 @@ class ProjectDetails extends Component {
         })
     }
 
+    handleDelete() {
+        this.setState({
+            openConfirmDelete: true,
+        })
+    }
+
+    handleCloseConfirm() {
+        this.setState({
+            openConfirmDelete: false,
+        })
+    }
+
+    handleSubmitConfirm(event) {
+        const { loginRole, projectItem, currentUser, handleBack } = this.props;
+        const { alert } = this.props;
+        event.preventDefault();
+        handleBack();
+        deleteProject(projectItem.project.id)
+            .then(() => {
+                alert.success(`Delete project ${projectItem.project.title} success`, { timeout: 1000, });
+            })
+            .catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong. Please try again!')
+            })
+    }
 
     render() {
         const { classes } = this.props;
@@ -258,6 +299,14 @@ class ProjectDetails extends Component {
                                     <span>Created by </span>
                                     <span className={classes.highlight}>{projectOwner ? this.getName(projectOwner) : ""}</span>
                                 </div>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.header_closeButton}
+                                    onClick={this.handleDelete}
+                                >
+                                    DELETE
+                                    </Button>
                             </div>
                             <div className={classes.divider} />
                             <div className={classes.description}>
@@ -354,6 +403,13 @@ class ProjectDetails extends Component {
                             )}
                     </List>
                 </Dialog>
+                <ConfirmDialog
+                    open={this.state.openConfirmDelete}
+                    title={`Delete project ?`}
+                    content={`Do you want to delete '${project.title}' with ....`}
+                    handleClose={this.handleCloseConfirm}
+                    handleSubmit={this.handleSubmitConfirm}
+                />
             </React.Fragment>
         );
     }

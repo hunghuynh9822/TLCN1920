@@ -118,25 +118,12 @@ class ProjectView extends Component {
         const { match } = this.props;
         const { alert } = this.props;
         const { projectItem, updateProjectItem } = this.props;
-        // if (projectItem !== undefined && projectItem !== null) {
-        //     const projectId = projectItem.project.id;
-        //     if (projectId != match.params.projectId) {
-        //         this.handleBack();
-        //     }
-        //     getEmployeeFree(projectId)
-        //         .then(response => {
-        //             console.log("Free employee : " + JSON.stringify(response));
-        //             this.setState({
-        //                 projectItem: projectItem,
-        //                 projectId: projectId,
-        //                 freeEmployees: response.employees,
-        //             })
-        //         })
-        //         .catch(error => {
-        //             console.log(error)
-        //             alert.error('Oops! Something went wrong on get free employee. Please call check!');
-        //         })
-        // } else {
+        if (projectItem !== undefined && projectItem !== null) {
+            const projectId = projectItem.project.id;
+            if (projectId != match.params.projectId) {
+                this.handleBack();
+            }
+        }
         // this.handleBack();
         this.setState({
             loading: true
@@ -163,7 +150,7 @@ class ProjectView extends Component {
             })
             .catch(error => {
                 console.log(error)
-                alert.error('Oops! Something went wrong when get project ' + projectId + '. Please try again!');
+                this.handleBack();
             })
         // }
     }
@@ -236,7 +223,7 @@ class ProjectView extends Component {
                                 <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
                                     {
                                         projectItem && (
-                                            <tab.component index={this.state.value} loadProject={this.loadProject} projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} updateProjectItem={updateProjectItem} />
+                                            <tab.component index={this.state.value} loadProject={this.loadProject} projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} updateProjectItem={updateProjectItem} handleBack={this.handleBack} />
                                         )
                                     }
                                 </TabPanel>

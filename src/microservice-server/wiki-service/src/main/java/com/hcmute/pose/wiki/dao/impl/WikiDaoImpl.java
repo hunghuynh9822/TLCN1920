@@ -21,10 +21,10 @@ public class WikiDaoImpl implements WikiDao {
     private static String SQL_INSERT_WIKI = "INSERT INTO wiki(wiki_id, wiki_title, project_id, created_by, path, content, state, created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?)";
     private static String SQL_UPDATE_WIKI = "UPDATE wiki SET wiki_title = ?, content = ?, updated_at = ? WHERE wiki_id = ?";
     private static String SQL_DELETE_WIKI = "UPDATE wiki SET state = ? WHERE wiki_id = ?";
-    private static String SQL_SELECT_WIKI_ACTIVE = "SELECT * FROM wiki WHERE wiki_id = ? AND state = ?";
-    private static String SQL_SELECT_WIKI_BY_PROJECT = "SELECT * FROM wiki WHERE project_id = ? AND state = ?";
-    private static String SQL_SELECT_WIKI_BY_PATH = "SELECT * FROM wiki WHERE path = ? AND state = ?";
-    private static String SQL_SELECT_ALL_WIKI = "SELECT * FROM wiki";
+    private static String SQL_SELECT_WIKI_ACTIVE = "SELECT * FROM wiki WHERE wiki_id = ? AND state = ? ORDER BY wiki_id";
+    private static String SQL_SELECT_WIKI_BY_PROJECT = "SELECT * FROM wiki WHERE project_id = ? AND state = ? ORDER BY wiki_id";
+    private static String SQL_SELECT_WIKI_BY_PATH = "SELECT * FROM wiki WHERE path = ? AND state = ? ORDER BY wiki_id";
+    private static String SQL_SELECT_ALL_WIKI = "SELECT * FROM wiki ORDER BY wiki_id";
     @Autowired
     private DatabaseHelper databaseHelper;
 
