@@ -200,3 +200,10 @@ export function updateComments(updateRequest) {
         data: JSON.stringify(updateRequest)
     });
 }
+
+export function deleteTask(employee, project, task) {
+    return request({
+        url: leadUrl + "/delete?employee=" + employee + "&project=" + project + "&taskId=" + task,
+        method: 'DELETE',
+    });
+}

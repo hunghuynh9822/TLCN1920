@@ -7,13 +7,13 @@ import { withAlert } from 'react-alert'
 import { AssignTasks, CompleteTasks } from '../../';
 
 import { getTasks, TASK_STATE, updateStateTasks, updatePointTasks } from '../../../action/task';
-import { updateProjectTasks, updateTask, TASK_STATE_COLOR } from '../../../action/task';
+import { updateProjectTasks, updateTask, TASK_STATE_COLOR, deleteTask } from '../../../action/task';
 
 import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 
 import SwipeableViews from 'react-swipeable-views';
 
-import { NewTask, Loading, CenteredTabs, TabPanel, TagMember, TagTask, DialogTitleCustom, SpeedDialTooltipOpen } from '../../../components';
+import { NewTask, Loading, CenteredTabs, TabPanel, TagMember, TagTask, DialogTitleCustom, SpeedDialTooltipOpen, ConfirmDialog } from '../../../components';
 import {
     DatePicker
 } from '@material-ui/pickers';
@@ -42,6 +42,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
 
 const StyledRating = withStyles({
     iconFilled: {
@@ -126,6 +130,23 @@ const styles = theme => ({
     dialog_list: {
         width: '350px'
     },
+    form_header: {
+        margin: 0,
+        padding: theme.spacing(2),
+        backgroundColor: '#3f51b5',
+        color: '#ffffff'
+    },
+    form_header_closeButton: {
+        position: 'absolute',
+        right: '13px',
+        top: '13px',
+        color: 'white',
+        backgroundColor: '#DC3545',
+        '&:hover': {
+            color: 'white',
+            backgroundColor: '#DC3545',
+        }
+    },
 });
 const background = '#f5f8ff';
 const colorWord = "#ffffff";
@@ -158,6 +179,7 @@ class ProjectTasks extends Component {
                 state: 0,
                 point: 0
             },
+            openConfirmDelete: false,
         }
         this.handleChangeTabs = this.handleChangeTabs.bind(this);
         this.handleChangeIndex = this.handleChangeIndex.bind(this);
@@ -184,6 +206,10 @@ class ProjectTasks extends Component {
         this.removePreviousTask = this.removePreviousTask.bind(this);
         this.handleOpenCreate = this.handleOpenCreate.bind(this);
         this.handleCloseCreate = this.handleCloseCreate.bind(this);
+        //
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
+        this.handleSubmitConfirm = this.handleSubmitConfirm.bind(this);
     }
 
     handleChangeTabs = (event, newValue) => {
@@ -545,6 +571,74 @@ class ProjectTasks extends Component {
         })
     }
 
+    handleDelete() {
+        this.setState({
+            openConfirmDelete: true,
+        })
+    }
+
+    handleCloseConfirm() {
+        this.setState({
+            openConfirmDelete: false,
+        })
+    }
+
+    handleSubmitConfirm(event) {
+        const { loginRole, projectItem, currentUser } = this.props;
+        const { alert } = this.props;
+        event.preventDefault();
+        deleteTask(currentUser.id, projectItem.project.id, this.state.task.id)
+            .then(() => {
+                alert.success(`Delete task ${this.state.task.title} success`, { timeout: 1000, });
+                this.setState({
+                    openConfirmDelete: false,
+                })
+                this.setState({
+                    open: false,
+                    previousTasks: new Array(),
+                    task: {
+                        taskId: null,
+                        projectId: null,
+                        employeeCreator: null,
+                        employeeAssignee: null,
+                        title: null,
+                        description: null,
+                        startedAt: new Date(),
+                        duration: null,
+                        endAt: new Date(),
+                        state: 0,
+                        point: 0
+                    },
+                })
+                this.loadTasks();
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({
+                    openConfirmDelete: false,
+                })
+                this.setState({
+                    open: false,
+                    previousTasks: new Array(),
+                    task: {
+                        taskId: null,
+                        projectId: null,
+                        employeeCreator: null,
+                        employeeAssignee: null,
+                        title: null,
+                        description: null,
+                        startedAt: new Date(),
+                        duration: null,
+                        endAt: new Date(),
+                        state: 0,
+                        point: 0
+                    },
+                })
+                this.loadTasks();
+                alert.error('Oops! Something went wrong when update task. Please call check!');
+            })
+    }
+
     render() {
         const { classes } = this.props;
         const { open, scroll, task, openAdd, openAddPrevious } = this.state;
@@ -615,7 +709,19 @@ class ProjectTasks extends Component {
                 // disableBackdropClick
                 // disableEscapeKeyDown
                 >
-                    <DialogTitle id="scroll-dialog-title">Task</DialogTitle>
+                    <MuiDialogTitle disableTypography className={classes.form_header} id="customized-dialog-title" style={{
+                        paddingBottom: '25px',
+                    }}>
+                        <Typography variant="h6">Task</Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.form_header_closeButton}
+                            onClick={this.handleDelete}
+                        >
+                            DELETE
+                        </Button>
+                    </MuiDialogTitle>
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
@@ -826,6 +932,13 @@ class ProjectTasks extends Component {
                             )}
                     </List>
                 </Dialog>
+                <ConfirmDialog
+                    open={this.state.openConfirmDelete}
+                    title={`Delete task ?`}
+                    content={`Do you want to delete '${task.title}' with ....`}
+                    handleClose={this.handleCloseConfirm}
+                    handleSubmit={this.handleSubmitConfirm}
+                />
             </React.Fragment>
         );
     }
