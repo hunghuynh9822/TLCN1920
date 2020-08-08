@@ -356,7 +356,8 @@ class ProjectTasks extends Component {
         });
         let request = {
             taskId: this.state.task.id,
-            employeeId: currentUser.id,
+            updateEmployeeId: currentUser.id,
+            employeeId: this.state.task.employeeAssignee,
             state: event.target.value,
             projectId: projectItem.project.id
         }
@@ -380,7 +381,8 @@ class ProjectTasks extends Component {
         });
         let request = {
             taskId: this.state.task.id,
-            employeeId: currentUser.id,
+            updateEmployeeId: currentUser.id,
+            employeeId: this.state.task.employeeAssignee,
             point: newValue,
             projectId: projectItem.project.id
         }
@@ -438,6 +440,7 @@ class ProjectTasks extends Component {
             taskId: task.id,
             projectId: projectId,
             preTaskId: preTaskId,
+            updateEmployeeId: currentUser.id,
             employeeCreator: task.employeeCreator,
             employeeId: task.employeeAssignee,
             title: task.title,

@@ -185,7 +185,8 @@ class Task extends Component {
         });
         let request = {
             taskId: this.state.task.id,
-            employeeId: currentUser.id,
+            updateEmployeeId: currentUser.id,
+            employeeId: this.state.task.employeeAssignee,
             state: TASK_STATE.indexOf(state),
             projectId: projectItem.project.id
         }

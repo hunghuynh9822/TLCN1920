@@ -161,7 +161,7 @@ class GanttChart extends Component {
         let text = itemData && itemData.text ? ` (${itemData.text})` : '';
         let message = `${entityType} ${action}: ${id} ${text}`;
         //
-        const { projectItem } = this.props;
+        const { projectItem, currentUser } = this.props;
         let projectId = projectItem.project.id;
         let tasks = projectItem.tasks;
         console.log("[Gantt] Data change ", entityType, action, itemData, id);
@@ -175,6 +175,7 @@ class GanttChart extends Component {
             console.log("[Gantt] Change task target " + JSON.stringify(targetTask));
             request = {
                 taskId: targetTask.id,
+                updateEmployeeId: currentUser.id,
                 employeeId: targetTask.employeeAssignee,
                 title: targetTask.title,
                 description: targetTask.description,
@@ -322,6 +323,7 @@ GanttChart.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     return {
         ganttTasks: state.tasks.ganttTasks,
+        currentUser: state.auth.currentUser,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
