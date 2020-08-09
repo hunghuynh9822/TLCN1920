@@ -14,7 +14,8 @@ import { ProjectDetails, ProjectTasks, GanttChart, ProjectAnalytics } from '../.
 import Button from '@material-ui/core/Button';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
-import { updateProjectItem, getEmployeeFree, getProject } from '../../../action/project'
+import { updateProjectItem, getEmployeeFree, getProject } from '../../../action/project';
+import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 
 const styles = theme => ({
     sub_layout_header: {
@@ -223,7 +224,7 @@ class ProjectView extends Component {
                                 <TabPanel key={key} value={this.state.value} index={key} className={classes.tabpanel}>
                                     {
                                         projectItem && (
-                                            <tab.component index={this.state.value} loadProject={this.loadProject} projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} updateProjectItem={updateProjectItem} handleBack={this.handleBack} />
+                                            <tab.component loginRole={this.props.loginRole} index={this.state.value} loadProject={this.loadProject} projectItem={projectItem} freeEmployees={this.state.freeEmployees} updateFreeEmployee={this.updateFreeEmployee} updateProjectItem={updateProjectItem} handleBack={this.handleBack} />
                                         )
                                     }
                                 </TabPanel>
@@ -244,6 +245,7 @@ const mapStateToProps = (state, ownProps) => {
         projectItem: state.project.projectItem,
         currentUser: state.auth.currentUser,
         currentRole: state.auth.currentRole,
+        loginRole: state.auth.loginRole,
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

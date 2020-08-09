@@ -20,7 +20,8 @@ import Dialog from '@material-ui/core/Dialog';
 
 import { TagMember, DialogTitleCustom, ConfirmDialog } from '../../../components';
 
-import { invite, remove, deleteProject } from '../../../action/project'
+import { invite, remove, deleteProject } from '../../../action/project';
+import { loginAsAdmin, loginAsLead, loginAsStaff } from '../../../action/auth';
 
 const styles = theme => ({
     root: {
@@ -116,6 +117,7 @@ class ProjectDetails extends Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
         this.handleSubmitConfirm = this.handleSubmitConfirm.bind(this);
+        //
     }
 
     filterRole(projectMembers, role) {
@@ -283,6 +285,7 @@ class ProjectDetails extends Component {
 
     render() {
         const { classes } = this.props;
+        const { loginRole } = this.props;
         const { projectItem, freeEmployees } = this.props;
         // console.log("Project free employee : " + JSON.stringify(projectItem));
         const { projectOwner, projectAdmin, projectMembers } = this.state;
@@ -299,14 +302,16 @@ class ProjectDetails extends Component {
                                     <span>Created by </span>
                                     <span className={classes.highlight}>{projectOwner ? this.getName(projectOwner) : ""}</span>
                                 </div>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.header_closeButton}
-                                    onClick={this.handleDelete}
-                                >
-                                    DELETE
+                                {loginAsAdmin(loginRole) && loginAsLead(loginRole) && (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.header_closeButton}
+                                        onClick={this.handleDelete}
+                                    >
+                                        DELETE
                                     </Button>
+                                )}
                             </div>
                             <div className={classes.divider} />
                             <div className={classes.description}>
@@ -348,10 +353,19 @@ class ProjectDetails extends Component {
                                         <Grid item xs={2}>Admin</Grid>
                                         <Grid item xs={10}>
                                             <div>
-                                                <Button onClick={() => this.handleOpenAdd('ADMIN')} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
-                                                {projectAdmin.map((member, index) => (
-                                                    <TagMember key={index} member={member} removeMember={this.removeMember} />
-                                                ))}
+                                                {loginAsAdmin(loginRole) && (
+                                                    <Button onClick={() => this.handleOpenAdd('ADMIN')} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
+                                                )}
+                                                {projectAdmin.map((member, index) => {
+                                                    if (loginAsAdmin(loginRole)) {
+                                                        return (
+                                                            <TagMember key={index} member={member} removeMember={this.removeMember} hiddenRemove={false} />
+                                                        )
+                                                    }
+                                                    return (
+                                                        <TagMember key={index} member={member} removeMember={this.removeMember} hiddenRemove={true} />
+                                                    )
+                                                })}
                                             </div>
                                         </Grid>
                                     </Grid>
@@ -359,10 +373,19 @@ class ProjectDetails extends Component {
                                         <Grid item xs={2}>Members</Grid>
                                         <Grid item xs={10}>
                                             <div>
-                                                <Button onClick={() => this.handleOpenAdd('MEMBER')} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
-                                                {projectMembers.map((member, index) => (
-                                                    <TagMember key={index} member={member} removeMember={this.removeMember} />
-                                                ))}
+                                                {(loginAsAdmin(loginRole) || loginAsLead(loginRole)) && (
+                                                    <Button onClick={() => this.handleOpenAdd('MEMBER')} size="medium" color="primary" className={classes.icon_add}><AddIcon /></Button>
+                                                )}
+                                                {projectMembers.map((member, index) => {
+                                                    if (loginAsAdmin(loginRole) || loginAsLead(loginRole)) {
+                                                        return (
+                                                            <TagMember key={index} member={member} removeMember={this.removeMember} hiddenRemove={false} />
+                                                        )
+                                                    }
+                                                    return (
+                                                        <TagMember key={index} member={member} removeMember={this.removeMember} hiddenRemove={true} />
+                                                    )
+                                                })}
                                             </div>
                                         </Grid>
                                     </Grid>
@@ -420,5 +443,6 @@ ProjectDetails.propTypes = {
     freeEmployees: PropTypes.array.isRequired,
     updateFreeEmployee: PropTypes.func.isRequired,
     loadProject: PropTypes.func.isRequired,
+    loginRole: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(withAlert()(ProjectDetails));

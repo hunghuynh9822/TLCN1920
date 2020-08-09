@@ -216,8 +216,12 @@ class ProjectOverview extends Component {
                 {/* <div className={classes.sub_header}>
                 </div> */}
                 {this.renderProjects()}
-                <SpeedDialTooltipOpen openCreate={this.handleOpen} stylesSpeedDial={classes.speedDial} />
-                <NewProject currentUser={currentUser} currentRole={currentRole} handleToProject={this.handleToProject} open={this.state.openForm} handleClose={this.handleClose} />
+                {(loginAsAdmin(loginRole) || loginAsLead(loginRole)) && (
+                    <React.Fragment>
+                        <SpeedDialTooltipOpen openCreate={this.handleOpen} stylesSpeedDial={classes.speedDial} />
+                        <NewProject currentUser={currentUser} currentRole={currentRole} handleToProject={this.handleToProject} open={this.state.openForm} handleClose={this.handleClose} />
+                    </React.Fragment>
+                )}
             </div>
         );
     }

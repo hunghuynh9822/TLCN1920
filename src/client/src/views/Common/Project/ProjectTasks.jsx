@@ -676,10 +676,12 @@ class ProjectTasks extends Component {
                         </div>
                         <div className={classes.header_section}>
                             {/* Change mode */}
-                            <Button onClick={this.handleOpenCreate} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
-                                <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
+                            {(loginAsAdmin(loginRole) || loginAsLead(loginRole)) && (
+                                <Button onClick={this.handleOpenCreate} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
+                                    <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
                                         New Task
-                            </Button>
+                                </Button>
+                            )}
                         </div>
                     </div>
                     <div className={classes.content}>
@@ -716,14 +718,16 @@ class ProjectTasks extends Component {
                         paddingBottom: '25px',
                     }}>
                         <Typography variant="h6">Task</Typography>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.form_header_closeButton}
-                            onClick={this.handleDelete}
-                        >
-                            DELETE
-                        </Button>
+                        {(loginAsAdmin(loginRole) || loginAsLead(loginRole)) && (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.form_header_closeButton}
+                                onClick={this.handleDelete}
+                            >
+                                DELETE
+                            </Button>
+                        )}
                     </MuiDialogTitle>
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
