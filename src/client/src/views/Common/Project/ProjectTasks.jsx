@@ -676,12 +676,16 @@ class ProjectTasks extends Component {
                         </div>
                         <div className={classes.header_section}>
                             {/* Change mode */}
-                            {(loginAsAdmin(loginRole) || loginAsLead(loginRole)) && (
+                            {/* {(loginAsAdmin(loginRole) || loginAsLead(loginRole)) && (
                                 <Button onClick={this.handleOpenCreate} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
                                     <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
                                         New Task
                                 </Button>
-                            )}
+                            )} */}
+                            <Button onClick={this.handleOpenCreate} size="medium" color="primary" variant="contained" className={classes.buttonAdd}>
+                                <AddIcon className={classes.addIcon} style={{ fontSize: 20 }} />
+                                        New Task
+                                </Button>
                         </div>
                     </div>
                     <div className={classes.content}>
