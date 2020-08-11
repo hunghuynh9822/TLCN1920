@@ -207,6 +207,7 @@ class TaskContainer extends Component {
         } else {
             let requestChange = {
                 taskId: draggableId,
+                updateEmployeeId: currentUser.id,
                 employeeId: destination.droppableId,
                 projectId: projectTasks.projectId
             };

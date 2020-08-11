@@ -890,17 +890,14 @@ class ProjectTasks extends Component {
                         <Button onClick={this.handleClose} className={classes.button}>
                             Close
                         </Button>
-                        {loginAsAdmin(loginRole) || loginAsLead(loginRole) && (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.button}
-                                onClick={this.handleSubmit}
-                            >
-                                Update
-                            </Button>
-                        )}
-
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                            onClick={this.handleSubmit}
+                        >
+                            Update
+                        </Button>
                     </DialogActions>
                 </Dialog>
                 <Dialog onClose={this.handleCloseAdd} aria-labelledby="simple-dialog-title" open={openAdd}>

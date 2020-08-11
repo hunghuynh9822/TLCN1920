@@ -229,6 +229,7 @@ class GanttChart extends Component {
                 let task = tasks.find(element => element.id == itemData.id);
                 request = {
                     taskId: task.id,
+                    updateEmployeeId: currentUser.id,
                     employeeId: task.employeeAssignee,
                     title: itemData.text,
                     description: task.description,
