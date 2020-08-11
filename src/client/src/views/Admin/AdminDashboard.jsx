@@ -145,8 +145,15 @@ class AdminDashboard extends Component {
     }
 
     getColorMap(id) {
+        let color = randomColor({
+            // luminosity: 'bright',
+            luminosity: 'dark',
+            // hue: 'blue'
+        });
         let mapColor = this.state.mapColor;
-        return mapColor[id];
+        let targetColor = mapColor[id];
+        console.log("[getColorMap] ", targetColor)
+        return mapColor[id] ? mapColor[id] : color;
     }
 
     getViewTaskChartOption(total) {
@@ -350,7 +357,7 @@ class AdminDashboard extends Component {
                             console.log("[Dashboard] taskEmployee ", response.data.taskEmployee);
                             // console.log("[Dashboard] mapColor ", this.state.mapColor);
                             taskOfEmployeeByProject = response.data.taskEmployee.map((value, index) => {
-                                value.color = this.state.mapColor[value.id];
+                                value.color = this.getColorMap(value.id);
                                 // console.log("[Dashboard] mapColor id " + value.id + " color " + value.color);
                                 return value;
                             })
@@ -388,7 +395,7 @@ class AdminDashboard extends Component {
                             console.log("[Dashboard] taskEmployee ", response.data.taskEmployee);
                             // console.log("[Dashboard] mapColor ", this.state.mapColor);
                             taskOfEmployeeByProject = response.data.taskEmployee.map((value, index) => {
-                                value.color = this.state.mapColor[value.id];
+                                value.color = this.getColorMap(value.id);
                                 // console.log("[Dashboard] mapColor id " + value.id + " color " + value.color);
                                 return value;
                             })

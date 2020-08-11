@@ -45,7 +45,7 @@ const styles = theme => ({
     },
     buttons: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         marginRight: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
@@ -451,9 +451,9 @@ class NewTask extends Component {
                         </Grid>
                     </Paper>
                     <DialogActions className={classes.buttons}>
-                        {/* <Button onClick={this.handleClose} className={classes.button}>
+                        <Button onClick={this.handleClose} className={classes.button}>
                             Close
-            </Button> */}
+            </Button>
                         <Button
                             variant="contained"
                             color="primary"
