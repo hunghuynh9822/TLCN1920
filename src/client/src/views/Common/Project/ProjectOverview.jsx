@@ -190,11 +190,11 @@ class ProjectOverview extends Component {
             joinName = joinName.concat(" ( ", projects.joinProjects !== undefined ? projects.joinProjects.length : 0, " )")
             return (
                 <div className={classes.wrapper}>
-                    <CollapsibleSection title={ownName}>
+                    {/* <CollapsibleSection title={ownName}>
                         <div className={classes.viewproject}>
                             {this.renderComponentProjects(projects.ownProjects)}
                         </div>
-                    </CollapsibleSection>
+                    </CollapsibleSection> */}
                     <CollapsibleSection title={joinName}>
                         <div className={classes.viewproject}>
                             {this.renderComponentProjects(projects.joinProjects)}
