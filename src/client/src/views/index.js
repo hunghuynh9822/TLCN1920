@@ -32,6 +32,10 @@ export {
     default as AdminDashboard
 }
 from './Admin/AdminDashboard.jsx';
+export {
+    default as HrDashboard
+}
+from './Admin/HrDashboard.jsx';
 //Project
 export {
     default as ProjectsManagement

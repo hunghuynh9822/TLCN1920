@@ -313,9 +313,9 @@ class RequestAddStaff extends Component {
                 <Button variant="contained" color="primary" onClick={handleOpen} className={classes.button}>
                     Add Staff
                 </Button>
-                <Link variant="body2" onClick={handleOpen}>
+                {/* <Link variant="body2" onClick={handleOpen}>
                     Add new
-                                </Link>
+                                </Link> */}
 
                 <Dialog
                     open={open}

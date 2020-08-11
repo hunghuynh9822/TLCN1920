@@ -38,6 +38,7 @@ import {
   Information,
   AdminHumanManagement,
   AdminDashboard,
+  HrDashboard,
   ProjectOverview,
   ProjectView,
   WikiManagement,
@@ -289,7 +290,7 @@ const manageRoutes = [
         name: "Dashboard",
         rtlName: "Tổng quan",
         icon: Dashboard,
-        component: AdminDashboard,
+        component: HrDashboard,
         layout: "/hr",
         breadcrumb: "Dashboard"
       },

@@ -180,26 +180,32 @@ class Task extends Component {
     handleStateChange(state) {
         const { alert } = this.props;
         const { currentUser, projectItem } = this.props;
-        this.setState({
-            task: { ...this.state.task, state: state }
-        });
-        let request = {
-            taskId: this.state.task.id,
-            updateEmployeeId: currentUser.id,
-            employeeId: this.state.task.employeeAssignee,
-            state: TASK_STATE.indexOf(state),
-            projectId: projectItem.project.id
-        }
-        console.log("Request update state task : " + JSON.stringify(request));
-        return updateStateTasks(request)
-            .then(response => {
-                console.log(response);
-                this.props.loadTasks();
-                return response;
-            }).catch(error => {
-                console.log(error);
-                alert.error('Oops! Something went wrong when update state task. Please try again!');
+
+        if (this.state.task.employeeAssignee == currentUser.id || loginAsAdmin(loginRole) || loginAsLead(loginRole)) {
+            this.setState({
+                task: { ...this.state.task, state: state }
             });
+            let request = {
+                taskId: this.state.task.id,
+                updateEmployeeId: currentUser.id,
+                employeeId: this.state.task.employeeAssignee,
+                state: TASK_STATE.indexOf(state),
+                projectId: projectItem.project.id
+            }
+            console.log("Request update state task : " + JSON.stringify(request));
+            return updateStateTasks(request)
+                .then(response => {
+                    console.log(response);
+                    this.props.loadTasks();
+                    return response;
+                }).catch(error => {
+                    console.log(error);
+                    alert.error('Oops! Something went wrong when update state task. Please try again!');
+                });
+        } else {
+            alert.error('Oops! You do not have permision to change state of task ' + this.state.task.title + '!');
+        }
+
     }
 
     renderState(task, mode) {

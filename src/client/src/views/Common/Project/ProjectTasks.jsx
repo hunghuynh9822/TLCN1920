@@ -350,52 +350,60 @@ class ProjectTasks extends Component {
 
     handleSelectStateChange(event) {
         const { alert } = this.props;
-        const { currentUser, projectItem } = this.props;
-        this.setState({
-            task: { ...this.state.task, state: TASK_STATE[event.target.value] }
-        });
-        let request = {
-            taskId: this.state.task.id,
-            updateEmployeeId: currentUser.id,
-            employeeId: this.state.task.employeeAssignee,
-            state: event.target.value,
-            projectId: projectItem.project.id
-        }
-        console.log("Request update task : " + JSON.stringify(request));
-        updateStateTasks(request)
-            .then(response => {
-                console.log(response);
-                this.loadTasks();
-            }).catch(error => {
-                console.log(error);
-                //(error && error.message) || 
-                alert.error('Oops! Something went wrong. Please try again!');
+        const { currentUser, projectItem, loginRole } = this.props;
+        if (currentUser.id == this.state.task.employeeAssignee || loginAsAdmin(loginRole) || loginAsLead(loginRole)) {
+            this.setState({
+                task: { ...this.state.task, state: TASK_STATE[event.target.value] }
             });
+            let request = {
+                taskId: this.state.task.id,
+                updateEmployeeId: currentUser.id,
+                employeeId: this.state.task.employeeAssignee,
+                state: event.target.value,
+                projectId: projectItem.project.id
+            }
+            console.log("Request update task : " + JSON.stringify(request));
+            updateStateTasks(request)
+                .then(response => {
+                    console.log(response);
+                    this.loadTasks();
+                }).catch(error => {
+                    console.log(error);
+                    //(error && error.message) || 
+                    alert.error('Oops! Something went wrong. Please try again!');
+                });
+        } else {
+            alert.error('Oops! You do not have permision to change state of task ' + this.state.task.title + '!');
+        }
     }
 
     handlePointChange(event, newValue) {
         const { alert } = this.props;
-        const { currentUser, projectItem } = this.props;
-        this.setState({
-            task: { ...this.state.task, point: newValue }
-        });
-        let request = {
-            taskId: this.state.task.id,
-            updateEmployeeId: currentUser.id,
-            employeeId: this.state.task.employeeAssignee,
-            point: newValue,
-            projectId: projectItem.project.id
-        }
-        console.log("Request update task : " + JSON.stringify(request));
-        updatePointTasks(request)
-            .then(response => {
-                console.log(response);
-                this.loadTasks();
-            }).catch(error => {
-                console.log(error);
-                //(error && error.message) || 
-                alert.error('Oops! Something went wrong. Please try again!');
+        const { currentUser, projectItem, loginRole } = this.props;
+        if (loginAsAdmin(loginRole) || loginAsLead(loginRole)) {
+            this.setState({
+                task: { ...this.state.task, point: newValue }
             });
+            let request = {
+                taskId: this.state.task.id,
+                updateEmployeeId: currentUser.id,
+                employeeId: this.state.task.employeeAssignee,
+                point: newValue,
+                projectId: projectItem.project.id
+            }
+            console.log("Request update task : " + JSON.stringify(request));
+            updatePointTasks(request)
+                .then(response => {
+                    console.log(response);
+                    this.loadTasks();
+                }).catch(error => {
+                    console.log(error);
+                    //(error && error.message) || 
+                    alert.error('Oops! Something went wrong. Please try again!');
+                });
+        } else {
+            alert.error('Oops! You do not have permision to change state of task ' + this.state.task.title + '!');
+        }
     }
 
     handleDatePickerChange(name, date) {
@@ -420,86 +428,90 @@ class ProjectTasks extends Component {
 
     handleSubmit(event) {
         const { alert } = this.props;
-        const { currentUser, projectItem } = this.props;
+        const { currentUser, projectItem, loginRole } = this.props;
         const { task } = this.state;
         event.preventDefault();
-        let projectId = projectItem.project.id;
-        let preTaskId = "";
-        let previousTasks = this.state.previousTasks;
-        if (previousTasks != undefined && previousTasks != null && previousTasks != []) {
-            previousTasks.forEach((task, index) => {
-                if (index === previousTasks.length - 1) {
-                    preTaskId = preTaskId + task.id;
-                } else {
-                    preTaskId = preTaskId + task.id + ","
-                }
-            })
-        }
-        console.log("[UpdateTask] Task : " + JSON.stringify(task));
-        const request = {
-            taskId: task.id,
-            projectId: projectId,
-            preTaskId: preTaskId,
-            updateEmployeeId: currentUser.id,
-            employeeCreator: task.employeeCreator,
-            employeeId: task.employeeAssignee,
-            title: task.title,
-            description: task.description,
-            state: TASK_STATE.indexOf(task.state),
-            point: task.point,
-            startedAt: task.startedAt,
-            duration: task.duration
-        }
-        if (request.state === TASK_STATE.indexOf("FINISH")) {
-            if (request.point === 0) {
-                alert.error('Oops! Please set point to task before update task finish!');
-                this.setState({
-                    open: false,
-                    previousTasks: new Array(),
-                    task: {
-                        taskId: null,
-                        projectId: null,
-                        employeeCreator: null,
-                        employeeAssignee: null,
-                        title: null,
-                        description: null,
-                        startedAt: new Date(),
-                        duration: null,
-                        endAt: new Date(),
-                        state: 0,
-                        point: 0
-                    },
+        if (loginAsAdmin(loginRole) || loginAsLead(loginRole)) {
+            let projectId = projectItem.project.id;
+            let preTaskId = "";
+            let previousTasks = this.state.previousTasks;
+            if (previousTasks != undefined && previousTasks != null && previousTasks != []) {
+                previousTasks.forEach((task, index) => {
+                    if (index === previousTasks.length - 1) {
+                        preTaskId = preTaskId + task.id;
+                    } else {
+                        preTaskId = preTaskId + task.id + ","
+                    }
                 })
-                return;
             }
+            console.log("[UpdateTask] Task : " + JSON.stringify(task));
+            const request = {
+                taskId: task.id,
+                projectId: projectId,
+                preTaskId: preTaskId,
+                updateEmployeeId: currentUser.id,
+                employeeCreator: task.employeeCreator,
+                employeeId: task.employeeAssignee,
+                title: task.title,
+                description: task.description,
+                state: TASK_STATE.indexOf(task.state),
+                point: task.point,
+                startedAt: task.startedAt,
+                duration: task.duration
+            }
+            if (request.state === TASK_STATE.indexOf("FINISH")) {
+                if (request.point === 0) {
+                    alert.error('Oops! Please set point to task before update task finish!');
+                    this.setState({
+                        open: false,
+                        previousTasks: new Array(),
+                        task: {
+                            taskId: null,
+                            projectId: null,
+                            employeeCreator: null,
+                            employeeAssignee: null,
+                            title: null,
+                            description: null,
+                            startedAt: new Date(),
+                            duration: null,
+                            endAt: new Date(),
+                            state: 0,
+                            point: 0
+                        },
+                    })
+                    return;
+                }
+            }
+            console.log("[UpdateTask] Request : " + JSON.stringify(request));
+            updateTask(request)
+                .then(response => {
+                    console.log(response);
+                    this.setState({
+                        open: false,
+                        previousTasks: new Array(),
+                        task: {
+                            taskId: null,
+                            projectId: null,
+                            employeeCreator: null,
+                            employeeAssignee: null,
+                            title: null,
+                            description: null,
+                            startedAt: new Date(),
+                            duration: null,
+                            endAt: new Date(),
+                            state: 0,
+                            point: 0
+                        },
+                    })
+                    this.loadTasks();
+                }).catch(error => {
+                    console.log(error);
+                    //(error && error.message) || 
+                    alert.error('Oops! Something went wrong when update task. Please call check!');
+                });
+        } else {
+            alert.error('Oops! You do not have permision to change state of task ' + task.title + '!');
         }
-        console.log("[UpdateTask] Request : " + JSON.stringify(request));
-        updateTask(request)
-            .then(response => {
-                console.log(response);
-                this.setState({
-                    open: false,
-                    previousTasks: new Array(),
-                    task: {
-                        taskId: null,
-                        projectId: null,
-                        employeeCreator: null,
-                        employeeAssignee: null,
-                        title: null,
-                        description: null,
-                        startedAt: new Date(),
-                        duration: null,
-                        endAt: new Date(),
-                        state: 0,
-                        point: 0
-                    },
-                })
-                this.loadTasks();
-            }).catch(error => {
-                console.log(error);
-                //(error && error.message) || 
-                alert.error('Oops! Something went wrong when update task. Please call check!');
-            });
     }
 
     removeAssignee(member) {
@@ -877,15 +889,18 @@ class ProjectTasks extends Component {
                     <DialogActions className={classes.buttons}>
                         <Button onClick={this.handleClose} className={classes.button}>
                             Close
-            </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            onClick={this.handleSubmit}
-                        >
-                            Update
-            </Button>
+                        </Button>
+                        {loginAsAdmin(loginRole) || loginAsLead(loginRole) && (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.button}
+                                onClick={this.handleSubmit}
+                            >
+                                Update
+                            </Button>
+                        )}
+
                     </DialogActions>
                 </Dialog>
                 <Dialog onClose={this.handleCloseAdd} aria-labelledby="simple-dialog-title" open={openAdd}>
