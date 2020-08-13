@@ -1,6 +1,5 @@
 package com.hcmute.pose.projectservice.buz.task.impl;
 
-import com.google.gson.Gson;
 import com.hcmute.pose.database.connector.exception.TransactionException;
 import com.hcmute.pose.database.connector.helper.DatabaseHelper;
 import com.hcmute.pose.projectservice.buz.task.TaskServiceBuz;
@@ -174,10 +173,12 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         return processActivity;
     }
 
-    private List<Long> getCriticalPath(List<Task> tasks) throws ParseException {
+    private GanttResponse getCriticalPath(List<Task> tasks) throws ParseException {
+        GanttResponse ganttResponse = new GanttResponse();
         if(tasks == null || tasks.isEmpty()) {
             LOGGER.info("No task -> Not find critical path");
-            return new ArrayList<>();
+            ganttResponse.getMessageError().add(new Message("No task -> Not find critical path", new ArrayList<>()));
+            return ganttResponse;
         }
         List<Activity> criticalPath = new ArrayList<>();
         List<Long> criticalPathId = new ArrayList<>();
@@ -189,14 +190,16 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         LOGGER.info("          Critical Path: ");
         if(list.isEmpty()) {
             LOGGER.info("Not find critical path");
-            return new ArrayList<>();
+            ganttResponse.getMessageError().add(new Message("List activity is empty -> Not find critical path", new ArrayList<>()));
+            return ganttResponse;
         }
         Activity firstActivity = list.get(0);
         if(!isCriticalActivity(processActivity.getStartTime(), processActivity.getEndTime(), firstActivity)) {
             LOGGER.info("First activity {} {} {} previous {} after {} EST {} LST {} EET {} LET {}",
                     firstActivity.getId(), firstActivity.getTitle(), firstActivity.getDuration(), firstActivity.getPredecessors().size(), firstActivity.getSuccessors().size(), firstActivity.getEst(), firstActivity.getLst(), firstActivity.getEet(), firstActivity.getLet());
             LOGGER.info("First activity not start the critical path");
-            return new ArrayList<>();
+            ganttResponse.getMessageError().add(new Message("First activity not start the critical path -> Not find critical path", new ArrayList<>()));
+            return ganttResponse;
         }
         for(Activity activity : list) {
             LOGGER.info("Activity {} {} {} previous {} after {} EST {} LST {} EET {} LET {}",
@@ -229,10 +232,15 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         Activity last = criticalPath.get(criticalPath.size() - 1);
         if(!plusDate(last.getStartedAt(), last.getDuration()).equals(processActivity.getEndTime())) {
             LOGGER.info("Not end activity of the critical path");
-            return new ArrayList<>();
+            ganttResponse.getMessageError().add(new Message("Not end activity of the critical path -> Not find critical path", new ArrayList<>()));
+            return ganttResponse;
         }
         LOGGER.info("         Total duration: {}\n", criticalPath.get(criticalPath.size() - 1).getEet());
-        return criticalPathId;
+        ganttResponse.setDuration(criticalPath.get(criticalPath.size() - 1).getEet());
+        ganttResponse.setStart(processActivity.getStartTime());
+        ganttResponse.setEnd(processActivity.getEndTime());
+        ganttResponse.setListGantt(criticalPathId);
+        return ganttResponse;
     }
 
     private Boolean isCriticalActivity(Long startTime, Long endTime, Activity activity) {
@@ -271,8 +279,8 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
         List<TaskResponse> taskResponses = new ArrayList<>();
         List<TaskLink> links = new ArrayList<>();
         long index = 1L;
-        List<MessageError> messages = new ArrayList<>();
-        MessageError messageError;
+        List<Message> messages = new ArrayList<>();
+        Message message;
         for (Task task : tasks
         ) {
             TaskResponse taskResponse = new TaskResponse(task.getId(), task.getProjectId(), task.getEmployeeCreator(), task.getEmployeeAssignee(), task.getTitle(), task.getDescription(), task.getPreTaskId(), task.getStartedAt(), task.getDuration(), task.getDescription(), task.getPoint(), task.getCreatedAt(), task.getUpdatedAt());
@@ -306,15 +314,15 @@ public class TaskServiceBuzImpl implements TaskServiceBuz {
             Date sourceTime = getDate(date_end_source);
             Date targetTime = getDate(date_start_target);
             if (targetTime.compareTo(sourceTime) < 0) {
-                messageError = new MessageError("Cần kiểm tra thời gian Task {{0}} -> Task {{1}}", new ArrayList<String>() {{
+                message = new Message("Cần kiểm tra thời gian Task {{0}} -> Task {{1}}", new ArrayList<String>() {{
                     add(source.getTitle());
                     add(target.getTitle());
                 }});
-                messages.add(messageError);
+                messages.add(message);
             }
         }
 //      Find list gantt
-        List<Long> criticalPath = new ArrayList<>();
+        GanttResponse criticalPath = new GanttResponse();
         if(messages.isEmpty()) {
             criticalPath = getCriticalPath(tasks);
         }

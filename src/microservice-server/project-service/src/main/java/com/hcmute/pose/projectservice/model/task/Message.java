@@ -3,14 +3,14 @@ package com.hcmute.pose.projectservice.model.task;
 import java.io.Serializable;
 import java.util.List;
 
-public class MessageError implements Serializable {
+public class Message implements Serializable {
     private String message;
     private List<String> params;
 
-    public MessageError() {
+    public Message() {
     }
 
-    public MessageError(String message, List<String> params) {
+    public Message(String message, List<String> params) {
         this.message = message;
         this.params = params;
     }

@@ -287,7 +287,7 @@ class ProjectDetails extends Component {
         const { classes } = this.props;
         const { loginRole } = this.props;
         const { projectItem, freeEmployees } = this.props;
-        // console.log("Project free employee : " + JSON.stringify(projectItem));
+        // console.log("Login role : ", loginAsAdmin(loginRole), loginAsLead(loginRole));
         const { projectOwner, projectAdmin, projectMembers } = this.state;
         let project = projectItem.project;
 
@@ -302,7 +302,7 @@ class ProjectDetails extends Component {
                                     <span>Created by </span>
                                     <span className={classes.highlight}>{projectOwner ? this.getName(projectOwner) : ""}</span>
                                 </div>
-                                {loginAsAdmin(loginRole) && loginAsLead(loginRole) && (
+                                {(loginAsAdmin(loginRole) || loginAsLead(loginRole)) && (
                                     <Button
                                         variant="contained"
                                         color="primary"

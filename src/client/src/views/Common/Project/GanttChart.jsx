@@ -13,6 +13,20 @@ const styles = theme => ({
     gantt_container: { "height": "calc(100vh - 40px - 200px)" },
     zoom_bar: { background: "#ededed", height: "40px", lineHeight: "40px", padding: "5px 10px" }
 });
+const month = {
+    0: "Jan",
+    1: "Feb",
+    2: "Mar",
+    3: "Apr",
+    4: "May",
+    5: "Jun",
+    6: "Jul",
+    7: "Aug",
+    8: "Sep",
+    9: "Oct",
+    10: "Nov",
+    11: "Dec",
+}
 class GanttChart extends Component {
     constructor(props) {
         super(props);
@@ -25,6 +39,7 @@ class GanttChart extends Component {
         this.loadTasks = this.loadTasks.bind(this);
         this.reloadTaskMessage = this.reloadTaskMessage.bind(this);
         this.renderMessage = this.renderMessage.bind(this);
+        this.renderDateString = this.renderDateString.bind(this);
     }
 
     convertDateToString(milisecond) {
@@ -67,8 +82,13 @@ class GanttChart extends Component {
                 // this.setState({
                 //     data: data,
                 // })
-                console.log("[Gantt] reloadTaskMessage ", { data: data, links: response.links, message: message })
-                this.props.reloadGanttTasks({ data: data, links: response.links, message: message });
+                let messageGantt = response.gantt.message;
+                let messageGanttError = response.gantt.messageError;
+                let start = response.gantt.start;
+                let end = response.gantt.end;
+                let duration = response.gantt.duration;
+                console.log("[Gantt] reloadTaskMessage ", { data: data, links: response.links, message: message, messageGantt, messageGanttError, start, end, duration })
+                this.props.reloadGanttTasks({ data: data, links: response.links, message: message, messageGantt, messageGanttError, start, end, duration });
             }).catch(error => {
                 console.log(error);
                 alert.error('Oops! Something went wrong when get tasks of project. Please call check!');
@@ -85,7 +105,7 @@ class GanttChart extends Component {
         getTasksOfProject(projectId)
             .then(response => {
                 let tasks = response.tasks;
-                let criticalPath = response.listGantt;
+                let criticalPath = response.gantt.listGantt;
                 let data = tasks.map((task) => {
                     return {
                         id: task.id,
@@ -97,8 +117,13 @@ class GanttChart extends Component {
                     }
                 })
                 let message = response.message;
-                console.log("[Gantt] loadTasks ", { data: data, links: response.links, message: message })
-                this.props.reloadGanttTasks({ data: data, links: response.links, message: message });
+                let messageGantt = response.gantt.message;
+                let messageGanttError = response.gantt.messageError;
+                let start = response.gantt.start;
+                let end = response.gantt.end;
+                let duration = response.gantt.duration;
+                console.log("[Gantt] loadTasks ", { data: data, links: response.links, message: message, messageGantt, messageGanttError, start, end, duration })
+                this.props.reloadGanttTasks({ data: data, links: response.links, message: message, messageGantt, messageGanttError, start, end, duration });
                 this.setState({
                     // data: { data: data, links: response.links, message: message },
                     loading: false
@@ -267,19 +292,53 @@ class GanttChart extends Component {
         });
     }
 
+    renderDateString(date) {
+        return date.getDate() + " " + month[date.getMonth()] + " " + date.getFullYear();
+    }
+
     renderMessage() {
-        return this.props.ganttTasks && this.props.ganttTasks.message && this.props.ganttTasks.message.map((value, index) => {
-            let params = value.params;
-            let message = value.message;
-            params.forEach((value, index) => {
-                message = message.replace('{{' + index + '}}', '<strong className\"match\">' + value + '</strong>')
-            })
+        console.log("[GanttChart] ", this.props.ganttTasks)
+        if (this.props.ganttTasks) {
+            if (this.props.ganttTasks.message && this.props.ganttTasks.message.length != 0) {
+                return this.props.ganttTasks.message.map((value, index) => {
+                    let params = value.params;
+                    let message = value.message;
+                    params.forEach((value, index) => {
+                        message = message.replace('{{' + index + '}}', '<strong className\"match\">' + value + '</strong>')
+                    })
+                    return (
+                        <Alert key={index} severity="warning">
+                            <span dangerouslySetInnerHTML={{ __html: message }} />
+                        </Alert>
+                    )
+                })
+            }
+            console.log("[GanttChart] messageGanttError ", this.props.ganttTasks.messageGanttError && this.props.ganttTasks.messageGanttError.length != 0)
+            if (this.props.ganttTasks.messageGanttError && this.props.ganttTasks.messageGanttError.length != 0) {
+                return this.props.ganttTasks.messageGanttError.map((value, index) => {
+                    let params = value.params;
+                    let message = value.message;
+                    params.forEach((value, index) => {
+                        message = message.replace('{{' + index + '}}', '<strong className\"match\">' + value + '</strong>')
+                    })
+                    return (
+                        <Alert key={index} severity="warning">
+                            <span dangerouslySetInnerHTML={{ __html: message }} />
+                        </Alert>
+                    )
+                })
+            }
+            let start = new Date(this.props.ganttTasks.start);
+            let end = new Date(this.props.ganttTasks.end);
+            let message = 'Gantt start at <strong className\"match\">' + this.renderDateString(start) + '</strong> and end at <strong className\"match\">' + this.renderDateString(end) + '</strong> with duration : <strong className\"match\">' + this.props.ganttTasks.duration + '</strong> days';
+            console.log("[GanttChart] ", message)
             return (
-                <Alert key={index} severity="warning">
+                <Alert severity="success">
                     <span dangerouslySetInnerHTML={{ __html: message }} />
                 </Alert>
             )
-        })
+        }
+
     }
 
     render() {

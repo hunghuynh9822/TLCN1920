@@ -1,7 +1,6 @@
 package com.hcmute.pose.projectservice.payload.task;
 
-import com.hcmute.pose.projectservice.model.task.MessageError;
-import com.hcmute.pose.projectservice.model.task.Task;
+import com.hcmute.pose.projectservice.model.task.Message;
 import com.hcmute.pose.projectservice.model.task.TaskLink;
 
 import java.util.ArrayList;
@@ -12,24 +11,23 @@ public class AllTasksProjectResponse {
     private Long projectId;
     private List<TaskResponse> tasks;
     private List<TaskLink> links;
-    private List<MessageError> message;
+    private List<Message> message;
     private Map<String, Object> tasksInfo;
-    private List<Long> listGantt;
+    private GanttResponse gantt;
 
-    public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks, List<TaskLink> links, List<MessageError> message) {
+    public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks, List<TaskLink> links, List<Message> message) {
         this.projectId = projectId;
         this.tasks = tasks;
         this.links = links;
         this.message = message;
-        this.listGantt = new ArrayList<>();
     }
 
-    public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks, List<TaskLink> links, List<MessageError> message, List<Long> listGantt) {
+    public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks, List<TaskLink> links, List<Message> message, GanttResponse gantt) {
         this.projectId = projectId;
         this.tasks = tasks;
         this.links = links;
         this.message = message;
-        this.listGantt = listGantt;
+        this.gantt = gantt;
     }
 
     public AllTasksProjectResponse(Long projectId, List<TaskResponse> tasks) {
@@ -78,19 +76,19 @@ public class AllTasksProjectResponse {
         this.tasksInfo = tasksInfo;
     }
 
-    public List<MessageError> getMessage() {
+    public List<Message> getMessage() {
         return message;
     }
 
-    public void setMessage(List<MessageError> message) {
+    public void setMessage(List<Message> message) {
         this.message = message;
     }
 
-    public List<Long> getListGantt() {
-        return listGantt;
+    public GanttResponse getGantt() {
+        return gantt;
     }
 
-    public void setListGantt(List<Long> listGantt) {
-        this.listGantt = listGantt;
+    public void setGantt(GanttResponse gantt) {
+        this.gantt = gantt;
     }
 }
