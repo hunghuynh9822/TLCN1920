@@ -42,6 +42,14 @@ export function updateState(requestUpdate) {
     });
 }
 
+export function resetPassword(requestReset) {
+    return request({
+        url: superUrl + "/password",
+        method: 'PATCH',
+        data: JSON.stringify(requestReset)
+    });
+}
+
 
 export function getEmployee(employeeId) {
     return request({

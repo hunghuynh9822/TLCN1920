@@ -83,6 +83,8 @@ class PaginationTable extends Component {
                     return this.showBtnConfirm(action.method, row);
                 case 'delete':
                     return this.showBtnDelete(action.method, row);
+                case 'reset':
+                    return this.showBtnReset(action.method, row);
             }
         })
     }
@@ -145,6 +147,27 @@ class PaginationTable extends Component {
                 }}
             >
                 Delete
+            </Button>
+        )
+    }
+    showBtnReset(method, row) {
+        return (
+            <Button
+                key='reset'
+                type="submit"
+                fullWidth
+                variant="contained"
+                onClick={() => {
+                    method('reset', row);
+                }}
+                style={{
+                    width: '80px',
+                    margin: '0px 3px',
+                    backgroundColor: '#DC3545',
+                    color: 'white',
+                }}
+            >
+                Reset
             </Button>
         )
     }

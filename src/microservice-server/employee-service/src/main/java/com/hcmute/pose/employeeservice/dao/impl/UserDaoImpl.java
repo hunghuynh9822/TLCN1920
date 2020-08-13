@@ -25,9 +25,9 @@ public class UserDaoImpl implements UserDao {
     private static String SQL_INSERT_USER_ROLE = "INSERT INTO user_roles(user_id, role_id, created_at, updated_at) VALUES( ?, ?, ?, ?)";
     private static String SQL_DELETE_USER_ROLE = "DELETE FROM user_roles WHERE user_id = ? AND role_id = ?";
 
-    private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users WHERE status = ?",DATA_USER);
+    private static String SQL_SELECT_ALL_USER = String.format("SELECT %s FROM users WHERE status = ? ORDER BY id ASC",DATA_USER);
 
-    private static String SQL_SELECT_ALL_USER_WAITING = String.format("SELECT %s FROM users WHERE status = ?",DATA_USER);
+    private static String SQL_SELECT_ALL_USER_WAITING = String.format("SELECT %s FROM users WHERE status = ? ORDER BY id ASC",DATA_USER);
 
     private static String SQL_SELECT_EXIST_USER_BY_EMAIL = "SELECT id as value FROM users WHERE email = ?";
     private static String SQL_SELECT_EXIST_USER_BY_PHONE = "SELECT id as value FROM users WHERE phone = ?";

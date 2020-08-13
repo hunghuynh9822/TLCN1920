@@ -6,11 +6,16 @@ import styles from "../../assets/jss/styles/views/adminHumanManagementStyle";
 import { withAlert } from 'react-alert'
 
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 
 import { PaginationTable, CollapsibleSection } from "../../components";
-import { CustomDialog, ViewEmployee, SetupAccount, ConfirmDialog } from '../../components';
+import { CustomDialog, ViewEmployee, SetupAccount, ConfirmDialog, ConfirmDialogInput } from '../../components';
 
-import { getAdminEmployees, updateState, getRoles } from '../../action/employee';
+import { getAdminEmployees, updateState, resetPassword, getRoles } from '../../action/employee';
+import { generatePassword } from '../../action';
+
 
 const CustomPaginationTable = withStyles(theme => ({
     root: {
@@ -51,6 +56,12 @@ class AdminHumanManagement extends Component {
 
             roles: [],
             rolesMap: null,
+
+            openReset: false,
+            requestReset: {
+                password: '',
+                curEmployee: null,
+            }
         }
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -68,6 +79,14 @@ class AdminHumanManagement extends Component {
         this.handleOpenConfirm = this.handleOpenConfirm.bind(this);
         this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
         this.handleSubmitConfirm = this.handleSubmitConfirm.bind(this);
+
+        this.handleOpenReset = this.handleOpenReset.bind(this);
+        this.handleCloseReset = this.handleCloseReset.bind(this);
+        this.handleSubmitReset = this.handleSubmitReset.bind(this);
+        this.renderFormReset = this.renderFormReset.bind(this);
+        this.handleInputPasswordChange = this.handleInputPasswordChange.bind(this);
+        this.callActionReset = this.callActionReset.bind(this);
+        this.getGeneratePassword = this.getGeneratePassword.bind(this);
     }
 
     callActionCofirm(method, row) {
@@ -96,6 +115,13 @@ class AdminHumanManagement extends Component {
         this.handleOpenConfirm();
     }
 
+    callActionReset(method, row) {
+        this.setState({
+            requestReset: { ...this.state.requestReset, method: method, curEmployee: row.data },
+        })
+        this.handleOpenReset();
+    }
+
     createData(no, name, position, phone, address, data) {
         const action = [{
             name: 'view',
@@ -103,6 +129,9 @@ class AdminHumanManagement extends Component {
         }, {
             name: 'delete',
             method: this.callActionDelete
+        }, {
+            name: 'reset',
+            method: this.callActionReset
         }];
         return { no, name, position, phone, address, action, data };
     }
@@ -323,12 +352,97 @@ class AdminHumanManagement extends Component {
 
     }
 
+    handleOpenReset() {
+        this.setState({
+            openReset: true
+        })
+    }
+
+    handleCloseReset() {
+        this.setState({
+            openReset: false,
+            error: null,
+        })
+    }
+
+    handleSubmitReset(event) {
+        const { alert } = this.props;
+        event.preventDefault();
+        const request = {
+            id: this.state.requestReset.curEmployee.id,
+            password: this.state.requestReset.password,
+        }
+        resetPassword(request)
+            .then((response) => {
+                console.log(response);
+                this.loadData();
+                alert.success("Reset password successfully", { timeout: 1000, });
+                this.handleCloseReset();
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({
+                    error: error,
+                })
+                //(error && error.message) || 
+                alert.error('Oops! Something went wrong. Please try again!');
+                this.handleCloseReset();
+            });
+
+    }
+
+    handleInputPasswordChange(event) {
+        const { name, value } = event.target;
+        this.setState({
+            requestReset: { ...this.state.requestReset, password: value }
+        })
+
+    }
+
+    getGeneratePassword() {
+        let password = generatePassword(8);
+        this.setState({
+            requestReset: { ...this.state.requestReset, password }
+        })
+    }
+
+    renderFormReset() {
+        const { classes } = this.props;
+        const { requestReset } = this.state;
+        return (
+            <Grid container spacing={3}>
+                <Grid item xs={10}>
+                    <TextField
+                        id="password"
+                        name="password"
+                        label="Password"
+                        required
+                        fullWidth
+                        placeholder="Enter new password here..."
+                        variant="outlined"
+                        value={requestReset.password}
+                        onChange={this.handleInputPasswordChange}
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <Button onClick={this.getGeneratePassword} style={{
+                        margin: '10px -10px',
+                        backgroundColor: '#DC3545',
+                        color: 'white',
+                    }}>
+                        AUTO
+                    </Button>
+                </Grid>
+            </Grid>
+        )
+    }
+
     render() {
         const { classes } = this.props;
         const { routes } = this.props;
         const { columns, rowsActive, rowsWaiting } = this.state;
         const { open, steps, request } = this.state;
-        const { openConfirm } = this.state;
+        const { openConfirm, openReset } = this.state;
         return (
             <div className={classes.root}>
                 <CollapsibleSection title="New Employees">
@@ -353,6 +467,13 @@ class AdminHumanManagement extends Component {
                     content={'Do you want to delete employee with ....'}
                     handleClose={this.handleCloseConfirm}
                     handleSubmit={this.handleSubmitConfirm}
+                />
+                <ConfirmDialogInput
+                    open={openReset}
+                    title={'Reset password ?'}
+                    content={() => this.renderFormReset()}
+                    handleClose={this.handleCloseReset}
+                    handleSubmit={this.handleSubmitReset}
                 />
             </div>
         );

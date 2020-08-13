@@ -127,6 +127,10 @@ export {
     default as ConfirmDialog
 }
 from './Dialog/ConfirmDialog.jsx';
+export {
+    default as ConfirmDialogInput
+}
+from './Dialog/ConfirmDialogInput.jsx';
 //Information
 export {
     default as Avartar
