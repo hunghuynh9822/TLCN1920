@@ -282,7 +282,7 @@ class TaskContainer extends Component {
         const settings = {
             className: classNames("center", classes.slider),
             infinite: false,
-            centerPadding: "60px",
+            centerPadding: "20px",
             slidesToShow: 5,
             swipeToSlide: true,
             afterChange: function (index) {

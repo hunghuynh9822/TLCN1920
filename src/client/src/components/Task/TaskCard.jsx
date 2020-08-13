@@ -34,7 +34,8 @@ const styles = theme => ({
         backgroundColor: `${background}`
     },
     card: {
-        backgroundColor: `${background}`
+        backgroundColor: `${background}`,
+        width: '280px !important'
     },
     group_header: {
         backgroundColor: `${background}`,
