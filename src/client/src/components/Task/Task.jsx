@@ -179,9 +179,9 @@ class Task extends Component {
 
     handleStateChange(state) {
         const { alert } = this.props;
-        const { currentUser, projectItem } = this.props;
+        const { currentUser, projectItem,loginRole } = this.props;
 
-        if (this.state.task.employeeAssignee == currentUser.id || loginAsAdmin(loginRole) || loginAsLead(loginRole)) {
+        // if (this.state.task.employeeAssignee == currentUser.id || loginAsAdmin(loginRole) || loginAsLead(loginRole)) {
             this.setState({
                 task: { ...this.state.task, state: state }
             });
@@ -202,9 +202,9 @@ class Task extends Component {
                     console.log(error);
                     alert.error('Oops! Something went wrong when update state task. Please try again!');
                 });
-        } else {
-            alert.error('Oops! You do not have permision to change state of task ' + this.state.task.title + '!');
-        }
+        // } else {
+        //     alert.error('Oops! You do not have permision to change state of task ' + this.state.task.title + '!');
+        // }
 
     }
 
