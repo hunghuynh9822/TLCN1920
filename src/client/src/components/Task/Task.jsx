@@ -5,9 +5,11 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert';
 
-import { changeAssignee, updatePointTasks, TASK_STATE_COLOR } from '../../action/task';
+import { changeAssignee, updatePointTasks, TASK_STATE_COLOR, TASK_STATE, updateStateTasks } from '../../action/task';
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+import { ButtonDropdown } from '../../components';
 
 import classNames from "classnames";
 import Rating from '@material-ui/lab/Rating';
@@ -108,6 +110,7 @@ class Task extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            task: undefined,
             expanded: false,
             request: {
                 taskId: '',
@@ -120,6 +123,7 @@ class Task extends Component {
         this.renderIcon = this.renderIcon.bind(this);
         this.getMember = this.getMember.bind(this);
         this.renderTitle = this.renderTitle.bind(this);
+        this.handleStateChange = this.handleStateChange.bind(this);
     }
 
     getMember(memberId) {
@@ -144,12 +148,22 @@ class Task extends Component {
     }
 
     componentDidMount() {
+        this.setState({
+            task: this.props.task
+        })
+    }
 
+    componentWillReceiveProps(nextProps) {
+        const { task } = nextProps;
+        console.log("[Task] componentWillReceiveProps task : ", task)
+        this.setState({
+            task: task
+        })
     }
 
     handleOpen() {
         console.log("Open")
-        this.props.openForm(this.props.task);
+        this.props.openForm(this.state.task);
     }
 
     getColor(state) {
@@ -163,23 +177,51 @@ class Task extends Component {
         }
     }
 
-    renderState(task) {
+    handleStateChange(state) {
+        const { alert } = this.props;
+        const { currentUser, projectItem } = this.props;
+        this.setState({
+            task: { ...this.state.task, state: state }
+        });
+        let request = {
+            taskId: this.state.task.id,
+            employeeId: currentUser.id,
+            state: TASK_STATE.indexOf(state),
+            projectId: projectItem.project.id
+        }
+        console.log("Request update state task : " + JSON.stringify(request));
+        return updateStateTasks(request)
+            .then(response => {
+                console.log(response);
+                this.props.loadTasks();
+                return response;
+            }).catch(error => {
+                console.log(error);
+                alert.error('Oops! Something went wrong when update state task. Please try again!');
+            });
+    }
+
+    renderState(task, mode) {
         const { classes } = this.props;
         // console.log("[Task] ", task)
         return (
             <div style={{ borderTop: '1px solid #d0d3d9', paddingTop: '5px', height: '35px' }}>
                 <div style={{ float: 'left' }}>
-                    <Button disabled variant="outlined" size="small" color="primary" style={{
-                        alignSelf: 'flex-start',
-                        borderStyle: 'dashed',
-                        fontSize: '0.6em',
-                        marginBottom: '8px',
-                        opacity: '0.7',
-                        color: `${colorWord}`,
-                        backgroundColor: `${this.getColor(task.state)}`
-                    }}>
-                        {task.state}
-                    </Button>
+                    {mode === 'READONLY' ? (
+                        <Button disabled variant="outlined" size="small" color="primary" style={{
+                            alignSelf: 'flex-start',
+                            borderStyle: 'dashed',
+                            fontSize: '0.6em',
+                            marginBottom: '8px',
+                            opacity: '0.7',
+                            color: `${colorWord}`,
+                            backgroundColor: `${this.getColor(task.state)}`
+                        }}>
+                            {task.state}
+                        </Button>
+                    ) : (
+                            <ButtonDropdown task={task} handleStateChange={this.handleStateChange} name={task.state} colorWord={colorWord} backgroundColor={this.getColor(task.state)}></ButtonDropdown>
+                        )}
                 </div>
                 <div style={{ float: 'left' }}>
                     {this.checkDealine(task)}
@@ -254,48 +296,52 @@ class Task extends Component {
 
     render() {
         const { classes } = this.props;
-        const { task, index } = this.props;
-        if (this.props.mode && this.props.mode === 'READONLY') {
-            return (
-                <div>
-                    <div
-                        style={getItemStyle(
-                            false, {}
-                        )}
-                    >
-                        {this.renderTitle(task)}
-                        {this.renderState(task)}
-                    </div>
-                </div>
-            )
-        }
-        return (
-            <Draggable
-                key={task.id}
-                draggableId={task.id.toString()}
-                index={index}>
-                {(provided, snapshot) => (
+        const { index } = this.props;
+        const { task } = this.state;
+        if (task) {
+            if (this.props.mode && this.props.mode === 'READONLY') {
+                return (
                     <div>
-                        {this.optionalPortal(provided.draggableProps.style, (
-                            <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={getItemStyle(
-                                    snapshot.isDragging,
-                                    provided.draggableProps.style
-                                )}
-                            >
-                                {this.renderTitle(task)}
-                                {this.renderState(task)}
-
-                            </div>
-                        ))}
-                        {provided.placeholder}
+                        <div
+                            style={getItemStyle(
+                                false, {}
+                            )}
+                        >
+                            {this.renderTitle(task)}
+                            {this.renderState(task, this.props.mode)}
+                        </div>
                     </div>
-                )}
-            </Draggable>
-        );
+                )
+            }
+            return (
+                <Draggable
+                    key={task.id}
+                    draggableId={task.id.toString()}
+                    index={index}>
+                    {(provided, snapshot) => (
+                        <div>
+                            {this.optionalPortal(provided.draggableProps.style, (
+                                <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={getItemStyle(
+                                        snapshot.isDragging,
+                                        provided.draggableProps.style
+                                    )}
+                                >
+                                    {this.renderTitle(task)}
+                                    {this.renderState(task, this.props.mode)}
+
+                                </div>
+                            ))}
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Draggable>
+            );
+        }
+        return null
     }
 }
 
@@ -304,6 +350,7 @@ Task.propTypes = {
     task: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     openForm: PropTypes.func.isRequired,
+    loadTasks: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {

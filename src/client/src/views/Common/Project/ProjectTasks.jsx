@@ -138,6 +138,10 @@ class ProjectTasks extends Component {
             openCreate: false,
             openAddPrevious: false,
             previousTasks: new Array(),
+            projectTasks: {
+                projectId: null,
+                tasks: []
+            },
             task: {
                 taskId: null,
                 projectId: null,
@@ -206,23 +210,25 @@ class ProjectTasks extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // if (this.state.reload) {
-        //     this.setState({
-        //         reload: false,
-        //     })
-        // } else {
-        //     const { alert } = this.props;
-        //     const { loginRole, projectItem, currentUser } = this.props;
-        //     let projectId = projectItem.project.id;
-        //     getTasks(projectId)
-        //         .then(response => {
-        //             this.props.updateProjectTasks(response);
-        //             this.setState({
-        //                 projectTasks: response,
-        //                 reload: true
-        //             })
-        //         })
-        // }
+        if (this.state.reload) {
+            this.setState({
+                reload: false,
+            })
+        } else {
+            const { alert } = this.props;
+            const { loginRole, projectItem, currentUser } = this.props;
+            let projectId = projectItem.project.id;
+            if (nextProps.index == 1) {
+                getTasks(projectId)
+                    .then(response => {
+                        this.props.updateProjectTasks(response);
+                        this.setState({
+                            projectTasks: response,
+                            reload: true
+                        })
+                    })
+            }
+        }
     }
 
     loadTasks(projectTasks) {
@@ -248,6 +254,7 @@ class ProjectTasks extends Component {
                     console.log("[ProjectTasks] getTasks response ", response)
                     this.props.updateProjectTasks(response);
                     this.setState({
+                        projectTasks: response,
                         loading: false,
                     })
                 })
@@ -564,7 +571,7 @@ class ProjectTasks extends Component {
                             <NewTask loadTasks={this.loadTasks} loadProject={this.props.loadProject} openCreate={this.state.openCreate} handleCloseCreate={this.handleCloseCreate} />
                         </div>
                         <div className={classes.header_section}>
-                            <CenteredTabs handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
+                            <CenteredTabs projectTasks={this.state.projectTasks} handleChange={this.handleChangeTabs} value={this.state.value} tabs={tabs} />
                         </div>
                         <div className={classes.header_section}>
                             {/* Change mode */}
@@ -671,7 +678,7 @@ class ProjectTasks extends Component {
                                         labelId="state-label"
                                         id="state"
                                         name="state"
-                                        value={TASK_STATE.indexOf(task.state)}
+                                        value={task.state != 0 ? TASK_STATE.indexOf(task.state) : 0}
                                         onChange={this.handleSelectStateChange}
                                     >
                                         {
@@ -694,6 +701,9 @@ class ProjectTasks extends Component {
                             <Grid item xs={12} sm={6}>
                                 <Box component="fieldset" mb={3} borderColor="transparent">
                                     <Typography component="legend">Point</Typography>
+                                    {() => {
+                                        console.log("[ProjectTasks][View] Condition open point ", task.state !== 'DONE' && task.state !== 'FINISH' && (loginAsAdmin(loginRole) || loginAsLead(loginRole)), "task state", task)
+                                    }}
                                     <StyledRating
                                         readOnly={task.state !== 'DONE' && task.state !== 'FINISH' && (loginAsAdmin(loginRole) || loginAsLead(loginRole))}
                                         name="customized-color"

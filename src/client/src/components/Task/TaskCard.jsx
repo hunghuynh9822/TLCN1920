@@ -50,6 +50,7 @@ const getListStyle = isDraggingOver => ({
     width: 250,
     marginLeft: grid,
     marginRight: grid,
+    marginBottom: '200px'
 });
 
 class TaskCard extends Component {
@@ -65,7 +66,7 @@ class TaskCard extends Component {
     render() {
         const { classes } = this.props;
         const { cardId, tasks, title } = this.props;
-        // console.log("TaskCard : " + JSON.stringify(tasks));
+        console.log("[TaskCard] Render : ", tasks);
         let finishTasks = tasks.filter((task) => {
             return task.state == 'FINISH';
         });
@@ -131,7 +132,7 @@ class TaskCard extends Component {
                                     </div>
                                 </li>
                                 {doTasks.map((item, index) => (
-                                    <Task key={item.id} task={item} index={index} openForm={this.props.openForm} />
+                                    <Task loadTasks={this.props.loadTasks} key={item.id} task={item} index={index} openForm={this.props.openForm} />
                                 ))}
                                 <li className={classNames("list-group-item", classes.group_header)}>
                                     <div className="row" style={{ height: '20px' }}>
@@ -139,7 +140,7 @@ class TaskCard extends Component {
                                     </div>
                                 </li>
                                 {finishTasks.map((item, index) => (
-                                    <Task key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
+                                    <Task loadTasks={this.props.loadTasks} key={item.id} task={item} index={index} openForm={this.props.openForm} mode="READONLY" />
                                 ))}
                             </ul>
                             {provided.placeholder}
@@ -156,6 +157,7 @@ TaskCard.propTypes = {
     tasks: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
     openForm: PropTypes.func.isRequired,
+    loadTasks: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state, ownProps) => {
     return {

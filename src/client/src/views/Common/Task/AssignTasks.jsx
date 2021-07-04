@@ -52,6 +52,7 @@ class AssignTasks extends Component {
 
     render() {
         const { classes } = this.props;
+        const { projectTasks } = this.props;
         return (
             <React.Fragment>
                 <CollapsibleSection title={"Task"}>
@@ -65,7 +66,7 @@ AssignTasks.propTypes = {
     classes: PropTypes.object.isRequired,
     loadTasks: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    // projectTasks: PropTypes.array.isRequired,
+    projectTasks: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
